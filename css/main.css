@@ -166,7 +166,7 @@
         font-family: var(--font);
       }
       html {
-        height: 100%;
+        min-height: 100%;
         background: #0a0a0f;
         overscroll-behavior: none;
       }
