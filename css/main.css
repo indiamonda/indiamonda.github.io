@@ -169,6 +169,7 @@
         min-height: 100%;
         background: #0a0a0f;
         overscroll-behavior: none;
+        overflow-y: auto;
       }
       body {
         margin: 0;
@@ -2005,8 +2006,9 @@ body {
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        flex-direction: column;
         padding: 120px 20px 80px;
-        overflow-y: auto;
+        overflow: visible;
       }
 
       .strategies-shell {
