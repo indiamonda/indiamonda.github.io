@@ -2008,6 +2008,13 @@ body {
         width: 100%;
       }
 
+      /* ---------- Games page (jqrg-games) - full-page scroll ---------- */
+      body.games-page {
+        display: block;
+        overflow-y: auto;
+        width: 100%;
+      }
+
       .strategies-shell {
         width: 100%;
         max-width: 780px;

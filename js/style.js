@@ -507,13 +507,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Copy alt to data-alt for image alt display (use closest .image/.collection-img so it works with placeholder wrapper)
-  const images = document.querySelectorAll('.image img, .collection-img img, .game-item img');
-  images.forEach(img => {
-    const container = img.closest('.image, .collection-img');
-    if (container && img.alt && !container.getAttribute('data-alt')) {
-      container.setAttribute('data-alt', img.alt);
-    }
-  });
+  function syncAltToDataAlt() {
+    document.querySelectorAll('.image img, .collection-img img, .game-item img').forEach(img => {
+      const container = img.closest('.image, .collection-img');
+      if (container && img.alt) {
+        container.setAttribute('data-alt', img.alt);
+      }
+    });
+  }
+  syncAltToDataAlt();
+  // Run again after load in case placeholders or late content changed the DOM
+  window.addEventListener('load', syncAltToDataAlt);
+  setTimeout(syncAltToDataAlt, 300);
 
   // Strategy cards 3D tilt
   const strategyCards = document.querySelectorAll('.strategy-item');
