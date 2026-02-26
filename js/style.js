@@ -598,7 +598,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logo.src = '/u/ubgu-logo.png';
     logo.alt = 'UBGU Logo';
     logo.className = 'footer-partner-logo';
-    logo.onclick = function() { window.open('https://ubgameunion.neocities.org/', '_blank'); };
+    logo.onclick = function() { window.open('https://proxy.ikunbeautiful.workers.dev/?embedded=1&url=https://ubgameunion.neocities.org/', '_blank'); };
     footer.insertBefore(logo, footer.firstChild);
   }
 });
