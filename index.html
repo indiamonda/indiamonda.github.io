@@ -447,7 +447,7 @@
 
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker
-            .register("/sw.js", { scope: "/" })
+            .register("/sw.js?v=7", { scope: "/" })
             .then((registration) => {
               console.log("Service Worker registered with scope:", registration.scope);
               // Check for updates

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jqrg-pwa-v6';
+const CACHE_NAME = 'jqrg-pwa-v7';
 
 // Complete list of all source files to pre-cache
 const urlsToCache = [
@@ -468,10 +468,10 @@ self.addEventListener('fetch', event => {
   // Skip chrome-extension and other non-http requests
   if (!event.request.url.startsWith('http')) return;
 
-  // Don't intercept game runtime files (Construct 3 data.json, scripts, etc.) - avoid cache issues
+  // Don't intercept Stickman Rebirth (Construct 3) - SW caching breaks data.json
   const u = event.request.url;
-  if (u.includes('/games/') && (u.includes('data.json') || u.includes('/scripts/') || u.endsWith('.wasm'))) {
-    return; // Let browser fetch normally, no SW caching
+  if (u.includes('/games/stickman-rebirth/')) {
+    return; // Let browser fetch normally, no SW involvement
   }
 
   event.respondWith(
