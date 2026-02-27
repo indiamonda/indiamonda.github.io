@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stickman Fight Visual Edition</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- UI Overlay -->
+        <div id="ui-layer">
+            <div id="main-menu">
+                <h1 class="game-title">STICKMAN<br><span>ARENA</span></h1>
+                <div class="menu-options">
+                    <button id="btn-start-pve" class="menu-btn">SOLO VS BOTS</button>
+                    <button id="btn-start-pvp-local" class="menu-btn">LOCAL DUEL</button>
+                    <button id="btn-start-pvp-controller" class="menu-btn">CONTROLLER PARTY</button>
+                </div>
+                <div class="settings">
+                    <label>DIFFICULTY
+                        <select id="bot-difficulty">
+                            <option value="easy">ROOKIE</option>
+                            <option value="medium" selected>WARRIOR</option>
+                            <option value="hard">LEGEND</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="credits">Tap anywhere to enable audio</div>
+            </div>
+
+            <div id="hud" style="display: none;">
+                <div id="player-stats"></div>
+                <div id="level-info" style="display: none;">Level: <span id="level-display">1</span></div>
+                <div id="message-area"></div>
+                <button id="btn-pause-mobile" style="display: none;">||</button>
+            </div>
+
+            <div id="pause-menu" style="display: none;">
+                <h1 class="game-title">PAUSED</h1>
+                <div class="menu-options">
+                    <button id="btn-resume" class="menu-btn">CONTINUE</button>
+                    <button id="btn-quit" class="menu-btn">END TOUR</button>
+                </div>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div id="mobile-controls" style="display: none;">
+                <div id="joystick-left" class="joystick-area">
+                    <div class="joystick-knob"></div>
+                </div>
+                <div id="joystick-right" class="joystick-area">
+                    <div class="joystick-knob"></div>
+                </div>
+                <div id="mobile-buttons">
+                    <button id="btn-attack" class="action-btn">Attack</button>
+                    <button id="btn-shield" class="action-btn">Shield</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/graphics.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/weapon.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/bot.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

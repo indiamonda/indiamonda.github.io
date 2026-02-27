@@ -1,0 +1,285 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    overflow: hidden;
+    background-color: #1a1a1a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #203a43, #2c5364); /* Default bg */
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#ui-layer > * {
+    pointer-events: auto;
+}
+
+#main-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #2b32b2, #1488cc);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 100;
+}
+
+.game-title {
+    font-size: 5rem;
+    line-height: 0.9;
+    text-transform: uppercase;
+    font-style: italic;
+    transform: skew(-10deg);
+    text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+    background: linear-gradient(to bottom, #fff, #ccc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+    animation: pulse 2s infinite;
+}
+
+.game-title span {
+    font-size: 7rem;
+    color: #ffeb3b;
+    background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes pulse {
+    0% { transform: skew(-10deg) scale(1); }
+    50% { transform: skew(-10deg) scale(1.05); }
+    100% { transform: skew(-10deg) scale(1); }
+}
+
+.menu-btn {
+    width: 300px;
+    padding: 20px;
+    font-size: 1.5rem;
+    background: rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.5);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    text-shadow: 1px 1px 2px black;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn:hover {
+    background: #fff;
+    color: #000;
+    text-shadow: none;
+    transform: skew(-10deg) translateX(10px);
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+}
+
+.settings {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    background: rgba(0,0,0,0.2);
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+select {
+    background: transparent;
+    border: none;
+    color: #ffeb3b;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.credits {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.settings {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+select {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-family: inherit;
+}
+
+select option {
+    background: #333;
+}
+
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+}
+
+#btn-pause-mobile {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#pause-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(32, 58, 67, 0.9); /* Semi-transparent version of game bg */
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 2000;
+}
+
+#pause-menu h1 {
+    margin-bottom: 2rem;
+}
+
+/* Mobile Controls */
+#mobile-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none; /* Hidden by default */
+}
+
+.joystick-area {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    pointer-events: auto;
+    touch-action: none;
+    backdrop-filter: blur(2px);
+}
+
+#joystick-left {
+    bottom: 40px;
+    left: 40px;
+}
+
+#joystick-right {
+    bottom: 40px;
+    right: 40px;
+    display: none; /* Hide right joystick for now if we use buttons for actions, or use it for aim */
+}
+
+.joystick-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#mobile-buttons {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    pointer-events: auto;
+}
+
+.action-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.action-btn:active {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0.95);
+}
+
+#btn-jump { grid-column: 1; grid-row: 2; background: rgba(76, 175, 80, 0.6); }
+#btn-attack { grid-column: 2; grid-row: 1; background: rgba(244, 67, 54, 0.6); }
+#btn-shield { grid-column: 1; grid-row: 1; background: rgba(33, 150, 243, 0.6); }
