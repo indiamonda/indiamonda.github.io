@@ -209,7 +209,7 @@ class InputManager {
             if (this.keys['KeyW']) input.jump = true;
             if (this.keys['KeyS']) input.y = 1;
             if (this.keys['KeyQ']) input.attack = true;
-            if (this.keys['KeyE']) input.shield = true; // E for Shield
+            if (this.keys['KeyE'] || this.keys['ShiftLeft']) input.shield = true; // E or Shift for Shield
             if (this.keys['Space']) input.jump = true;
         } else if (inputType === 'keyboard_arrows') {
             if (this.keys['ArrowLeft']) input.x = -1;
@@ -217,7 +217,7 @@ class InputManager {
             if (this.keys['ArrowUp']) input.jump = true;
             if (this.keys['ArrowDown']) input.y = 1;
             if (this.keys['Slash'] || this.keys['ShiftRight']) input.attack = true;
-            if (this.keys['Period'] || this.keys['Comma']) input.shield = true; // . or , for Shield
+            if (this.keys['Period'] || this.keys['Comma'] || this.keys['Numpad0']) input.shield = true; // . or , or Numpad0 for Shield
             if (this.keys['ControlRight']) input.jump = true;
         } else if (inputType === 'universal') {
             // WASD
@@ -226,7 +226,7 @@ class InputManager {
             if (this.keys['KeyW']) input.jump = true;
             if (this.keys['KeyS']) input.y = 1;
             if (this.keys['KeyQ']) input.attack = true;
-            if (this.keys['KeyE']) input.shield = true;
+            if (this.keys['KeyE'] || this.keys['ShiftLeft']) input.shield = true;
             if (this.keys['Space']) input.jump = true;
             
             // Arrows
@@ -257,7 +257,8 @@ class InputManager {
             if (gp) {
                 if (Math.abs(gp.axes[0]) > 0.1) input.x = gp.axes[0];
                 if (gp.buttons[0].pressed) input.jump = true;
-                if (gp.buttons[7].pressed) input.attack = true;
+                if (gp.buttons[7].pressed || (gp.buttons[7].value > 0.5) || gp.buttons[5].pressed) input.attack = true; // RT or RB
+                if (gp.buttons[6].pressed || (gp.buttons[6].value > 0.5) || gp.buttons[4].pressed) input.shield = true; // LT or LB
             }
         } else if (inputType.startsWith('gamepad')) {
             this.pollGamepads();
@@ -280,8 +281,12 @@ class InputManager {
                 // Standard mapping: 0=A, 1=B, 2=X, 3=Y, 4=LB, 5=RB, 6=LT, 7=RT
                 if (gp.buttons[0].pressed) input.join = true; // A to join
                 if (gp.buttons[0].pressed) input.jump = true; // A to jump
-                if (gp.buttons[7].pressed) input.attack = true; // RT
-                if (gp.buttons[6].pressed) input.shield = true; // LT
+                
+                // Attack: RT (7) or RB (5)
+                if (gp.buttons[7].pressed || (gp.buttons[7].value > 0.5) || gp.buttons[5].pressed) input.attack = true; 
+                
+                // Shield: LT (6) or LB (4)
+                if (gp.buttons[6].pressed || (gp.buttons[6].value > 0.5) || gp.buttons[4].pressed) input.shield = true; 
             }
         } else if (inputType === 'touch') {
             input.x = this.touchState.leftStick.x;

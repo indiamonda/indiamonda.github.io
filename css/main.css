@@ -12,6 +12,41 @@
         --panel-radius: 12px;
       }
 
+      /* ---------- Scrollbar ---------- */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(20, 20, 30, 0.6);
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #4d8cff, #8a4dff);
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #6ba3ff, #a06dff);
+      }
+      ::-webkit-scrollbar-corner {
+        background: rgba(20, 20, 30, 0.6);
+      }
+      /* Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #8a4dff rgba(20, 20, 30, 0.6);
+      }
+
+      /* ---------- Text Selection ---------- */
+      ::selection {
+        background: rgba(77, 140, 255, 0.4);
+        color: white;
+      }
+      ::-moz-selection {
+        background: rgba(77, 140, 255, 0.4);
+        color: white;
+      }
+
       /* Title class - uses Josefin Sans for main titles */
       .page-title,
       h1.page-title,

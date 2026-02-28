@@ -1,4 +1,3 @@
-
 class Player {
     constructor(id, x, y, color, inputType) {
         this.id = id;

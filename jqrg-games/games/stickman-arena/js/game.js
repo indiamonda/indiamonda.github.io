@@ -105,7 +105,7 @@ class Game {
             this.players.push(new Player(0, 100, 100, '#FF0000', 'keyboard_wasd'));
             this.players.push(new Player(1, this.canvas.width - 100, 100, '#0000FF', 'keyboard_arrows'));
             
-            this.showMessage("P1: WASD + Q(Atk) + E(Shield) | P2: Arrows + Shift(Atk) + .(Shield)");
+            this.showMessage("P1: WASD + Q(Atk) + E/Shift(Shield) | P2: Arrows + Shift(Atk) + ./Numpad0(Shield)");
         } else if (mode === 'pvp_controller') {
             this.state = 'LOBBY';
             this.showMessage("Press 'A' on Controller to Join!");
