@@ -877,6 +877,62 @@
         });
       }
       addGameLabels();
+
+      // Right-click context menu for games (not collections)
+      (function() {
+        const menu = document.createElement('div');
+        menu.id = 'gameContextMenu';
+        menu.style.cssText = 'display:none;position:fixed;z-index:9999;background:rgba(15,15,25,0.95);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:8px 0;min-width:180px;box-shadow:0 10px 40px rgba(0,0,0,0.5);backdrop-filter:blur(10px);';
+        menu.innerHTML = '<div class="ctx-item" data-action="popup">Open in popup</div><div class="ctx-item" data-action="newtab">Open in new tab</div><div class="ctx-item" data-action="direct">Open directly</div>';
+        document.body.appendChild(menu);
+        const items = menu.querySelectorAll('.ctx-item');
+        items.forEach(i => {
+          i.style.cssText = 'padding:10px 16px;cursor:pointer;color:rgba(255,255,255,0.9);font-size:0.9rem;transition:background 0.15s;';
+          i.addEventListener('mouseenter', () => { i.style.background = 'rgba(77,140,255,0.25)'; });
+          i.addEventListener('mouseleave', () => { i.style.background = 'transparent'; });
+        });
+
+        function getGameUrl(el) {
+          const item = el.closest('.game-item');
+          if (!item || item.closest('.collection-img')) return null;
+          const img = item.querySelector('img');
+          const onclick = (item.getAttribute('onclick') || img?.getAttribute('onclick') || '').trim();
+          const m = onclick.match(/openGame\s*\(\s*['"]([^'"]+)['"]\s*\)|window\.open\s*\(\s*['"]([^'"]+)['"]/);
+          return m ? (m[1] || m[2]) : null;
+        }
+
+        function hideMenu() {
+          menu.style.display = 'none';
+          document.removeEventListener('click', hideMenu);
+        }
+
+        document.addEventListener('contextmenu', function(e) {
+          const url = getGameUrl(e.target);
+          if (!url) {
+            hideMenu();
+            return;
+          }
+          e.preventDefault();
+          menu.style.display = 'block';
+          menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+          menu.style.top = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+          menu._url = url;
+          setTimeout(() => document.addEventListener('click', hideMenu), 0);
+        });
+
+        menu.addEventListener('click', function(e) {
+          const action = e.target.dataset.action;
+          const url = menu._url;
+          if (!action || !url) return;
+          hideMenu();
+          if (action === 'direct') {
+            const fullUrl = url.startsWith('http') ? url : (window.location.origin + (url.startsWith('/') ? '' : '/') + url);
+            window.open(fullUrl, '_blank');
+          } else {
+            openGame(url, action);
+          }
+        });
+      })();
     </script>
 
   </body>

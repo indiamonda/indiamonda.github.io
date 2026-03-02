@@ -148,12 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Save reference to original function if it exists
   const originalopenGame = typeof window.openGame === 'function' ? window.openGame : null;
 
-  // Define our openGame function
-  window.openGame = function(url) {
+  // Define our openGame function. Optional second arg: forceType = "popup"|"newtab"|"sametab"
+  window.openGame = function(url, forceType) {
     if (!url) return;
 
     const OPEN_GAME_TYPE_KEY = "openGameType";
-    const openType = localStorage.getItem(OPEN_GAME_TYPE_KEY) || "popup";
+    const openType = forceType || localStorage.getItem(OPEN_GAME_TYPE_KEY) || "popup";
     const target = "/loader/?content=" + encodeURIComponent(url);
 
     let win = null;
