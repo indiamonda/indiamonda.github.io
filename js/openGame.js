@@ -10,17 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
       ===================================================== */
   const OPEN_GAME_TYPE_KEY = "openGameType";
   const openGameTypeSelect = document.getElementById("openGameType");
+  const openGameTypeSelectGames = document.getElementById("openGameTypeGames");
 
-  if (openGameTypeSelect) {
-    // Load saved type (default: popup)
+  function initOpenGameTypeSelect(select) {
+    if (!select) return;
     const savedType = localStorage.getItem(OPEN_GAME_TYPE_KEY) || "popup";
-    openGameTypeSelect.value = savedType;
-
-    // Save on change
-    openGameTypeSelect.addEventListener("change", () => {
-      localStorage.setItem(OPEN_GAME_TYPE_KEY, openGameTypeSelect.value);
+    select.value = savedType;
+    select.addEventListener("change", () => {
+      localStorage.setItem(OPEN_GAME_TYPE_KEY, select.value);
     });
   }
+  initOpenGameTypeSelect(openGameTypeSelect);
+  initOpenGameTypeSelect(openGameTypeSelectGames);
 
   const cloakTitleInput = document.getElementById("cloakTitle");
   const iconOptions = document.querySelectorAll(".cloakIconOption");
@@ -151,19 +152,19 @@ document.addEventListener("DOMContentLoaded", () => {
   window.openGame = function(url) {
     if (!url) return;
 
-    // Get user's preferred open type
-    const openType = localStorage.getItem("openGameType") || "popup";
-    const target = "/loader/?content=" + encodeURIComponent(url)
-
-    console.log("Opening game with type:", openType, "URL:", url);
+    const OPEN_GAME_TYPE_KEY = "openGameType";
+    const openType = localStorage.getItem(OPEN_GAME_TYPE_KEY) || "popup";
+    const target = "/loader/?content=" + encodeURIComponent(url);
 
     let win = null;
 
+    if (openType === "sametab") {
+      window.location.href = target;
+      return;
+    }
     if (openType === "newtab") {
-      // Open in new tab
       win = window.open(target, "_blank");
     } else {
-      // Default: open in popup
       const popupFeatures = [
         "popup=yes",
         "toolbar=no",
@@ -177,12 +178,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "left=" + (window.screenX + 80),
         "top=" + (window.screenY + 60)
       ].join(",");
-
       win = window.open(target, "_blank", popupFeatures);
     }
 
-    // If popup blocked
-    if (!win) {
+    if (!win && openType !== "sametab") {
       alert("Please enable popups to open the game.");
       return;
     }

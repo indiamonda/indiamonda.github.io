@@ -492,6 +492,14 @@
     <div class="tab-content active" id="all-games">
       <!-- Search & Filter -->
       <div class="search-filter-container">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label for="openGameTypeGames" style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Open as:</label>
+          <select id="openGameTypeGames" style="padding: 8px 14px; cursor: pointer; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">
+            <option value="popup">Popup</option>
+            <option value="newtab">New Tab</option>
+            <option value="sametab">Same Tab</option>
+          </select>
+        </div>
         <div class="search-bar">
           <i class="fas fa-search search-icon"></i>
           <input type="text" id="searchInput" placeholder="Search games..." autocomplete="off">
