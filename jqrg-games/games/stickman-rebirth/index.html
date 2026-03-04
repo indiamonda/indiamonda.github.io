@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
+    <script src="sdk.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Stickman Project</title>
@@ -24,6 +25,18 @@
       </div>
     </div>
     <script>
+      
+      // Prevent checkIsOnCrazyGames from crashing the game
+      if (!window.CrazyGames) {
+        window.CrazyGames = {
+          SDK: {
+            init: () => Promise.resolve(),
+            game: { gameplayStart: () => {}, gameplayStop: () => {} },
+            user: { getUser: () => Promise.resolve(null) },
+            data: { getItem: () => null }
+          }
+        };
+      }
 
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
