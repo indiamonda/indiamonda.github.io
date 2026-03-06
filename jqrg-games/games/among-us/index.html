@@ -1,28 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <script src="/js/panicKey.js"></script>
-  <script src="/js/openGame.js"></script>
-
     <meta charset="UTF-8">
     <title>Among Us</title>
-    <style>
-        html, body {
-            margin: 0;
-            height: 100%;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        /* Custom Cursor */
-      * {
-        cursor: url('/cursor/cursor.png') 24 24, auto !important;
-      }
-</style>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" name="viewport">
+    <link href="../../images/ico.ico" rel="shortcut icon">
+    <link href="style.css" rel="stylesheet">
+    <script src="../../storage/js/cloak.js"></script>
 </head>
+
 <body>
-    <iframe src="https://pausd-games.github.io/games/amongus/"></iframe>
+<noscript>
+    <div id="notSupportedWrap">
+        <h2 id="notSupportedTitle">this game requires javascript</h2>
+        <p class="notSupportedMessage">javascript doesn't seem to be enabled for this website. </p>
+    </div>
+</noscript>
+
+<script src="scripts/supportcheck.js"></script>
+<script src="scripts/offlineclient.js" type="module"></script>
+<script src="scripts/main.js" type="module"></script>
+<script src="scripts/register-sw.js" type="module"></script>
 </body>
 </html>
