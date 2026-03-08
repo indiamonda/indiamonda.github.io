@@ -1,5 +1,7 @@
 # Announcements
 
+**03/22/2026** Added Minecraft (other than eaglercraft). Added fixed 2048 back. In total 92 games.
+
 **03/05/2026** Fixed bugs.
 
 **02/27/2026** Added Stickman Arena. Updated Drift Boss. In total 95 games.
