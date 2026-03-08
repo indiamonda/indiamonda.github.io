@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>Schedule | Infinite Campus</title>
+<link rel="icon" href="infinite-campus.ico">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#00ffff" />
+<meta name="description" content="Jump from platform to platform and travel as far as possible!" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="manifest.json" />
+<script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Schedule | Infinite Campus';
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.href = 'infinite-campus.ico';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'Bridd Jump - Play Online For Free';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+
+<!-- Pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #000;
+    --accent: #0ff;
+    --accent-glow: rgba(0, 255, 255, 0.8);
+    --panel: rgba(0, 0, 0, 0.95);
+    --muted: #88f7ff;
+    --text: #fff;
+  }
+  
+  * { 
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body { 
+    min-height: 110%; 
+    margin: 0; 
+    background: var(--bg);
+    color: var(--text); 
+    font-family: "Press Start 2P", monospace;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-y: auto;
+  }
+  
+  canvas { 
+    display: block; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 110%; 
+    z-index: 1; 
+    background: #000; 
+  }
+  
+  hr { 
+    border: 2px solid var(--accent); 
+    width: 90%;
+    margin: 16px 0;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  
+  /* Menu overlay - Retro pixel style */
+  #menu {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: 94vw;
+    padding: 32px 28px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    border-radius: 0;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    z-index: 1200;
+    pointer-events: all;
+    animation: menuFadeIn 0.4s ease-out;
+  }
+  
+  @keyframes menuFadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  #menu h1 { 
+    margin: 0; 
+    font-size: 28px; 
+    color: var(--accent);
+    text-shadow: 
+      0 0 10px var(--accent-glow),
+      0 0 20px var(--accent-glow),
+      0 0 30px var(--accent-glow);
+    text-align: center;
+    line-height: 1.4;
+    letter-spacing: 2px;
+  }
+  
+  #menu h3 {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 8px 0;
+    text-shadow: 0 0 5px rgba(136, 247, 255, 0.5);
+    text-align: center;
+  }
+  
+  .btn {
+    appearance: none;
+    border: 3px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    padding: 14px 24px;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: "Press Start 2P", monospace;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 110%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+  
+  .btn:hover {
+    color: #000;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+  
+  .btn:hover::before {
+    width: 100%;
+  }
+  
+  .btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 5px var(--accent-glow);
+  }
+  
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .btn:disabled:hover::before {
+    width: 0;
+  }
+  
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 3px solid var(--accent);
+    background: var(--panel);
+    color: var(--accent);
+    padding: 14px 24px;
+    border-radius: 0;
+    font-size: 11px;
+    font-family: "Press Start 2P", monospace;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    text-align-last: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300ffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 40px;
+  }
+  
+  select:hover {
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+  
+  select:focus {
+    outline: none;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+  
+  select option {
+    background: var(--panel);
+    color: var(--accent);
+    padding: 10px;
+  }
+  
+  #subVersionSelect {
+    display: none;
+  }
+  
+  #subVersionSelect.show {
+    display: block;
+  }
+  
+  @media (max-width: 560px) {
+    #menu { 
+      width: 92vw; 
+      padding: 24px 20px; 
+    }
+    .btn, select { 
+      width: 100%; 
+      font-size: 10px; 
+      padding: 12px 20px;
+      max-width: none;
+    }
+    #menu h1 { 
+      font-size: 22px; 
+    }
+    #menu h3 {
+      font-size: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="menu" role="dialog" aria-label="start menu">
+    <h1>BRIDD JUMP</h1>
+
+    <select id="versionSelect">
+      <option value="">Choose Version</option>
+      <option value="V1.3">V1.3</option>
+      <option value="V1.2">V1.2</option>
+      <option value="V1.1">V1.1</option>
+      <option value="V1.0">V1.0</option>
+      <option value="V0.0">V0.0</option>
+    </select>
+
+    <select id="subVersionSelect">
+      <option value="">Choose</option>
+    </select>
+
+    <button id="playBtn" class="btn" disabled>PLAY</button>
+    <hr>
+    <button id="installBtn" class="btn">INSTALL APP</button>
+  </div>
+
+  <script>
+    // Version structure with sub-versions (ordered from highest to lowest)
+    const versionStructure = {
+      'V1.3': ['V1.3.1', 'V1.3.0'],
+      'V1.2': ['V1.2.8', 'V1.2.7', 'V1.2.6', 'V1.2.5', 'V1.2.4', 'V1.2.3', 'V1.2.2', 'V1.2.1', 'V1.2.0'],
+      'V1.1': ['V1.1.4', 'V1.1.3', 'V1.1.2', 'V1.1.1', 'V1.1.0'],
+      'V1.0': ['V1.0.0'],
+      'V0.0': ['V0.0.0'] // No sub-versions
+    };
+
+    const versionSelect = document.getElementById('versionSelect');
+    const subVersionSelect = document.getElementById('subVersionSelect');
+    const playBtn = document.getElementById('playBtn');
+
+    // Auto-select highest version (V1.2) on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      versionSelect.value = 'V1.3';
+      versionSelect.dispatchEvent(new Event('change'));
+    });
+
+    // Function to enable sound and navigate (for V1.2.3)
+    function enableSoundAndNavigate(path) {
+      // Enable audio by creating and playing a silent sound
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      gainNode.gain.value = 0; // Silent
+      
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.001);
+      
+      // Store flag that sound is enabled
+      localStorage.setItem('soundEnabled', 'true');
+      
+      // Navigate to version
+      window.location.href = path;
+    }
+
+    // Handle version selection
+    versionSelect.addEventListener('change', function() {
+      const selectedVersion = this.value;
+      
+      // Clear sub-version select
+      subVersionSelect.innerHTML = '<option value="">Choose</option>';
+      subVersionSelect.classList.remove('show');
+      delete subVersionSelect.dataset.autoSelected;
+      playBtn.disabled = true;
+      
+      if (!selectedVersion) {
+        return;
+      }
+      
+      const subVersions = versionStructure[selectedVersion];
+      
+      // If version has sub-versions
+      if (subVersions && subVersions.length > 0) {
+        // Only show second dropdown if there are multiple sub-versions
+        if (subVersions.length > 1) {
+          subVersions.forEach(subVersion => {
+            const option = document.createElement('option');
+            option.value = subVersion;
+            option.textContent = subVersion;
+            subVersionSelect.appendChild(option);
+          });
+          subVersionSelect.classList.add('show');
+          // Auto-select the lowest sub-version (last in array, e.g., V1.2.0)
+          const lowestSubVersion = subVersions[subVersions.length - 1];
+          subVersionSelect.value = lowestSubVersion;
+          playBtn.disabled = false;
+        } else {
+          // Only one sub-version (e.g., V1.0.0), don't show dropdown, auto-select it
+          const singleSubVersion = subVersions[0];
+          playBtn.disabled = false;
+          // Store the single sub-version for play button
+          subVersionSelect.dataset.autoSelected = singleSubVersion;
+        }
+      } else {
+        // No sub-versions, enable play button directly
+        playBtn.disabled = false;
+      }
+    });
+
+    // Handle sub-version selection
+    subVersionSelect.addEventListener('change', function() {
+      const selectedSubVersion = this.value;
+      playBtn.disabled = !selectedSubVersion;
+    });
+
+    // Handle play button click
+    playBtn.addEventListener('click', function() {
+      const selectedVersion = versionSelect.value;
+      let selectedSubVersion = subVersionSelect.value;
+      
+      if (!selectedVersion) {
+        return;
+      }
+      
+      // If sub-version select is hidden but has auto-selected value (single sub-version case)
+      if (!selectedSubVersion && subVersionSelect.dataset.autoSelected) {
+        selectedSubVersion = subVersionSelect.dataset.autoSelected;
+      }
+      
+      let path = '';
+      
+      // Determine path based on selection
+      if (selectedSubVersion) {
+        // Sub-version selected
+        path = selectedSubVersion + '/';
+        
+        // Special handling for versions that have sound
+        if (selectedSubVersion === 'V1.2.3' || selectedSubVersion === 'V1.2.4' || selectedSubVersion === 'V1.2.5' || selectedSubVersion === 'V1.2.6' || selectedSubVersion === 'V1.2.7' || selectedSubVersion === 'V1.2.8' || selectedSubVersion === 'V1.3.0') {
+          enableSoundAndNavigate(path);
+          return;
+        }
+      } else {
+        // No sub-versions, use main version
+        path = selectedVersion + '/';
+      }
+      
+      // Navigate to selected version
+      window.location.href = path;
+    });
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // PWA Install functionality
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    // Check if app is already installed (on iOS, check standalone mode)
+    if (window.matchMedia('(display-mode: standalone)').matches || 
+        window.navigator.standalone === true) {
+      if (installBtn) {
+        installBtn.style.display = 'none';
+      }
+    }
+
+    // Show install button when app can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBtn) {
+        installBtn.style.display = 'block';
+      }
+    });
+
+    // Handle install button click
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+          if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            alert('To install on iOS:\n1. Tap the Share button\n2. Select "Add to Home Screen"');
+          } else if (navigator.userAgent.match(/Android/i)) {
+            alert('To install on Android:\n1. Tap the menu (3 dots)\n2. Select "Install app" or "Add to Home screen"');
+          } else {
+            alert('Installation is not available. The app may already be installed or your browser does not support PWA installation.');
+          }
+          return;
+        }
+
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+
+        if (outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+
+        deferredPrompt = null;
+        if (installBtn) {
+          installBtn.style.display = 'none';
+        }
+      });
+    }
+
+    // Hide install button if app is already installed
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA was installed');
+      if (installBtn) {
+        installBtn.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  </script>
+</body>
+</html>

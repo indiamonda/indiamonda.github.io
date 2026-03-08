@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+<title>Bridd Jump</title>
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#00ffff" />
+<meta name="description" content="Jump from platform to platform and travel as far as possible!" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="../manifest.json" />
+<script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Schedule | Infinite Campus';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = 'infinite-campus.png';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'V0.0.0 | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+<style>
+body { margin:0; overflow:hidden; background:black; font-family:sans-serif; }
+canvas { display:block; }
+#ui { position:absolute; top:0; left:0; width:100%; height:100%; text-align:center; pointer-events:none; }
+#startScreen {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:400px; padding:40px; background:rgba(0,0,0,0.9);
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    pointer-events:all; font-size:30px; color:#0ff; text-shadow:0 0 20px #0ff;
+    border:3px solid #0ff; border-radius:20px;
+}
+button { font-size:32px; padding:15px 40px; cursor:pointer; margin-top:30px; color:#0ff; background:black; border:3px solid #0ff; border-radius:12px; transition:0.3s; }
+button:hover { color:black; background:#0ff; }
+h1 { font-size:60px; margin-bottom:20px; text-shadow: 0 0 20px #0ff, 0 0 40px #0ff, 0 0 60px #0ff; animation: glow 1.5s infinite alternate; }
+@keyframes glow { 0% { text-shadow:0 0 10px #0ff,0 0 20px #0ff;} 100% {text-shadow:0 0 40px #0ff,0 0 80px #0ff;} }
+
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { overflow-y: auto; }
+    #menu { width: 92vw; max-width: none; padding: 20px 16px; }
+    .btn, select { width: 100%; max-width: none; font-size: 10px; padding: 12px 16px; }
+    #menu h1 { font-size: 20px; }
+    #menu h3 { font-size: 11px; }
+    #bestScore { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="ui">
+  <div id="startScreen">
+    <h1>BRIDD JUMP</h1>
+    <div id="bestScore">Best Score: 0</div>
+    <button id="startBtn">START</button>
+    <button onclick="window.location.href='../'">HOME</button>
+  </div>
+  </div>
+
+<script src="game.js"></script>
+
+<script>
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('../sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
+</script>
+</body>
+</html>

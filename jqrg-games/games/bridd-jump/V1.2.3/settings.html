@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings | BRIDD JUMP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#00ffff" />
+  <meta name="description" content="Bridd Jump Game Settings" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Settings | Infinite Campus';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = 'infinite-campus.ico';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'Settings | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000;
+      --accent: #0ff;
+      --accent-glow: rgba(0, 255, 255, 0.8);
+      --panel: rgba(0, 0, 0, 0.95);
+      --muted: #88f7ff;
+      --text: #fff;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Press Start 2P', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .container {
+      background: var(--panel);
+      border: 4px solid var(--accent);
+      border-radius: 0;
+      padding: 30px;
+      width: 680px;
+      max-width: 95%;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 
+        0 0 30px var(--accent-glow),
+        inset 0 0 30px rgba(0, 255, 255, 0.1);
+      animation: containerFadeIn 0.4s ease-out;
+    }
+    
+    @keyframes containerFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .container::-webkit-scrollbar {
+      width: 12px;
+    }
+    
+    .container::-webkit-scrollbar-track {
+      background: rgba(0, 255, 255, 0.1);
+    }
+    
+    .container::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border: 2px solid #000;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--accent);
+      text-shadow: 
+        0 0 10px var(--accent-glow),
+        0 0 20px var(--accent-glow);
+    }
+    
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-size: 11px;
+      color: var(--accent);
+      text-align: left;
+    }
+    
+    select, input[type=range] {
+      width: 100%;
+      margin-bottom: 4px;
+    }
+    
+    select {
+      background: #000;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%2300ffff' d='M4 6L1 3h6z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    
+    select:hover {
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(0, 255, 255, 0.2);
+      border: 1px solid var(--accent);
+      outline: none;
+      margin: 10px 0;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border: 2px solid #000;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-glow);
+      transition: all 0.2s ease;
+    }
+    
+    input[type=range]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 15px var(--accent-glow);
+      transform: scale(1.1);
+    }
+    
+    input[type=range]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border: 2px solid #000;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    
+    input[type=checkbox] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    
+    .range-value {
+      font-size: 9px;
+      margin-top: -2px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+    
+    button {
+      margin: 12px 8px;
+      padding: 12px 24px;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--accent);
+      background: transparent;
+      border: 3px solid var(--accent);
+      border-radius: 0;
+      font-family: 'Press Start 2P', monospace;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    
+    button:hover {
+      color: #000;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    
+    button:hover::before {
+      width: 100%;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    #saveBtn {
+      border-color: var(--accent);
+    }
+    
+    #cancelBtn {
+      border-color: var(--muted);
+      color: var(--muted);
+    }
+    
+    #cancelBtn:hover {
+      color: #000;
+      background: var(--muted);
+    }
+    
+    #advancedSettings, #generalSettings, #deathSettings {
+      display: none;
+      margin-top: 16px;
+      border-top: 2px solid var(--accent);
+      padding-top: 16px;
+      animation: slideDown 0.3s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    #toggleAdvanced, #toggleGeneral, #toggleDeath {
+      font-size: 10px;
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 16px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+      width: 100%;
+      font-family: 'Press Start 2P', monospace;
+    }
+    
+    #toggleAdvanced:hover, #toggleGeneral:hover, #toggleDeath:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 12px 0;
+      padding: 10px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+    }
+    
+    .checkbox-container label {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 9px;
+      color: var(--accent);
+    }
+    
+    .settings-section {
+      margin: 20px 0;
+      border: 2px dashed var(--accent);
+      padding: 16px;
+      background: rgba(0, 255, 255, 0.05);
+    }
+    
+    .section-title {
+      font-size: 12px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      text-decoration: underline;
+      text-align: left;
+      text-shadow: 0 0 5px var(--accent-glow);
+    }
+    
+    .preset-info {
+      font-size: 8px;
+      color: var(--muted);
+      margin-top: -12px;
+      margin-bottom: 16px;
+      padding: 6px 10px;
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      text-align: left;
+    }
+    
+    .warning {
+      color: #ff0000;
+      font-size: 9px;
+      margin: 6px 0;
+      text-shadow: 0 0 5px #ff0000;
+      padding: 6px 10px;
+      background: rgba(255, 0, 0, 0.1);
+      border-left: 3px solid #ff0000;
+    }
+  
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { padding: 10px; }
+    .container { width: 92vw; max-width: none; padding: 20px; max-height: 92vh; }
+    h1 { font-size: 18px; }
+    label { font-size: 9px; }
+    select, input[type=range], button { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>SETTINGS</h1>
+    
+    <div class="preset-info">Warning: Ultra++ and Highest presets may cause significant lag</div>
+
+    <label for="fps">Max FPS:</label>
+    <select id="fps">
+      <option value="0">Unlimited</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+      <option value="30">30</option>
+      <option value="35">35</option>
+      <option value="40">40</option>
+      <option value="45">45</option>
+      <option value="50">50</option>
+      <option value="60">60</option>
+      <option value="70">70</option>
+      <option value="80">80</option>
+      <option value="90">90</option>
+      <option value="100">100</option>
+      <option value="110">110</option>
+      <option value="120">120</option>
+      <option value="130">130</option>
+      <option value="140">140</option>
+      <option value="150">150</option>
+      <option value="160">160</option>
+      <option value="180">180</option>
+      <option value="200">200</option>
+      <option value="250">250</option>
+      <option value="300">300</option>
+    </select>
+
+    <label for="quality">Quality Preset:</label>
+    <select id="quality">
+      <option>Potato</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Medium+</option>
+      <option>High</option>
+      <option>High+</option>
+      <option>Extreme</option>
+      <option selected>Extreme+</option>
+      <option>Ultra</option>
+      <option>Ultra+</option>
+      <option>Ultra++</option>
+      <option>Highest</option>
+    </select>
+
+    <button id="toggleGeneral">General Effects Settings ▼</button>
+    
+    <div id="generalSettings" style="display: none;">
+      <div class="settings-section">
+        <div class="section-title">General Effects Settings</div>
+        
+        <div class="checkbox-container" id="showKeyboardContainer" style="display: none;">
+          <label>
+            <input type="checkbox" id="showKeyboard" checked>
+            Show Keyboard
+          </label>
+        </div>
+        
+        <div class="checkbox-container">
+          <label>
+            <input type="checkbox" id="blockTexture" checked>
+            Enable Block Texture
+          </label>
+        </div>
+
+        <label>Jump Particles</label>
+        <input type="range" id="jumpEffect" min="0" max="200" value="100">
+        <div class="range-value" id="jumpEffectVal">100%</div>
+
+        <label>Walk Particles</label>
+        <input type="range" id="walkEffect" min="0" max="200" value="100">
+        <div class="range-value" id="walkEffectVal">100%</div>
+
+        <label>Horizontal Lines</label>
+        <input type="range" id="horizontalLines" min="0" max="200" value="100">
+        <div class="range-value" id="horizontalLinesVal">100%</div>
+
+        <label>Player Trail</label>
+        <input type="range" id="trail" min="0" max="100" value="100">
+        <div class="range-value" id="trailVal">100%</div>
+
+        <label>Glow</label>
+        <input type="range" id="glow" min="0" max="200" value="100">
+        <div class="range-value" id="glowVal">100%</div>
+      </div>
+    </div>
+
+    <button id="toggleDeath">Death Effects Settings ▼</button>
+    
+    <div id="deathSettings" style="display: none;">
+      <div class="settings-section">
+        <div class="section-title">Death Effects Settings</div>
+        
+        <label>Death Particles</label>
+        <input type="range" id="dieEffect" min="0" max="200" value="100">
+        <div class="range-value" id="dieEffectVal">100%</div>
+
+        <label>Death Explode</label>
+        <input type="range" id="deathImplode" min="0" max="250" value="100">
+        <div class="range-value" id="deathImplodeVal">100%</div>
+
+        <label>Death Glitch</label>
+        <input type="range" id="deathGlitch" min="0" max="250" value="100">
+        <div class="range-value" id="deathGlitchVal">100%</div>
+
+        <label>Death Vaporize</label>
+        <input type="range" id="deathVaporize" min="0" max="250" value="100">
+        <div class="range-value" id="deathVaporizeVal">100%</div>
+      </div>
+    </div>
+
+    <button id="toggleAdvanced">Advanced Settings ▼</button>
+    
+    <div id="advancedSettings" style="display: none;">
+      <div class="settings-section">
+        <div class="section-title">Advanced Settings</div>
+        
+        <label>Screen Shake Intensity</label>
+        <input type="range" id="screenShake" min="0" max="400" value="100">
+        <div class="range-value" id="screenShakeVal">100%</div>
+        
+        <label>Motion Blur Intensity</label>
+        <input type="range" id="motionBlur" min="0" max="100" value="0">
+        <div class="range-value" id="motionBlurVal">0%</div>
+        
+        <label>Expanding Rings</label>
+        <input type="range" id="shockwaves" min="0" max="200" value="100">
+        <div class="range-value" id="shockwavesVal">100%</div>
+
+        <label>Glow Particles</label>
+        <input type="range" id="bloomParticles" min="0" max="200" value="100">
+        <div class="range-value" id="bloomParticlesVal">100%</div>
+
+        <label>Particle Trails</label>
+        <input type="range" id="particleTrails" min="0" max="200" value="100">
+        <div class="range-value" id="particleTrailsVal">100%</div>
+
+        <label>Screen Distortion</label>
+        <input type="range" id="screenDistortion" min="0" max="200" value="100">
+        <div class="range-value" id="screenDistortionVal">100%</div>
+        
+        <label>Particle Count</label>
+        <input type="range" id="particleCount" min="0" max="200" value="100">
+        <div class="range-value" id="particleCountVal">100%</div>
+        
+        <label>Trail Length</label>
+        <input type="range" id="trailLength" min="0" max="200" value="100">
+        <div class="range-value" id="trailLengthVal">100%</div>
+        
+        <label>Screen Reflections</label>
+        <input type="range" id="screenReflections" min="0" max="200" value="100">
+        <div class="range-value" id="screenReflectionsVal">100%</div>
+        
+        <label>Light Rays</label>
+        <input type="range" id="lightRays" min="0" max="200" value="100">
+        <div class="range-value" id="lightRaysVal">100%</div>
+
+        <label>Moving Layers</label>
+        <input type="range" id="parallaxLayers" min="0" max="200" value="100">
+        <div class="range-value" id="parallaxLayersVal">100%</div>
+
+        <label>Velocity Streaks</label>
+        <input type="range" id="velocityStreaks" min="0" max="200" value="100">
+        <div class="range-value" id="velocityStreaksVal">100%</div>
+
+        <label>Wind Particles</label>
+        <input type="range" id="windParticles" min="0" max="200" value="100">
+        <div class="range-value" id="windParticlesVal">100%</div>
+
+        <label>Speed Lines</label>
+        <input type="range" id="speedLines" min="0" max="200" value="100">
+        <div class="range-value" id="speedLinesVal">100%</div>
+
+        <label>Radial Blur</label>
+        <input type="range" id="radialBlur" min="0" max="200" value="100">
+        <div class="range-value" id="radialBlurVal">100%</div>
+
+        <label>Star Rush</label>
+        <input type="range" id="starRush" min="0" max="250" value="100">
+        <div class="range-value" id="starRushVal">100%</div>
+
+        <label>Nebula Dust</label>
+        <input type="range" id="nebulaDust" min="0" max="250" value="100">
+        <div class="range-value" id="nebulaDustVal">100%</div>
+
+        <label>Tunnel Rings</label>
+        <input type="range" id="warpTunnel" min="0" max="250" value="100">
+        <div class="range-value" id="warpTunnelVal">100%</div>
+
+        <label>Bright Flashes</label>
+        <input type="range" id="boostFlash" min="0" max="250" value="100">
+        <div class="range-value" id="boostFlashVal">100%</div>
+
+        <label>Contrail Jets</label>
+        <input type="range" id="contrailJets" min="0" max="250" value="100">
+        <div class="range-value" id="contrailJetsVal">100%</div>
+
+        <label>Edge Lightning</label>
+        <input type="range" id="edgeLightning" min="0" max="250" value="100">
+        <div class="range-value" id="edgeLightningVal">100%</div>
+
+        <label>Compression Rings</label>
+        <input type="range" id="compressionRings" min="0" max="250" value="100">
+        <div class="range-value" id="compressionRingsVal">100%</div>
+
+        <label>Platform Pulse</label>
+        <input type="range" id="platformPulse" min="0" max="200" value="100">
+        <div class="range-value" id="platformPulseVal">100%</div>
+
+        <label>Impact Waves</label>
+        <input type="range" id="impactWaves" min="0" max="200" value="100">
+        <div class="range-value" id="impactWavesVal">100%</div>
+
+        <label>Color Bleed</label>
+        <input type="range" id="colorBleed" min="0" max="200" value="100">
+        <div class="range-value" id="colorBleedVal">100%</div>
+
+        <label>Depth of Field</label>
+        <input type="range" id="depthOfField" min="0" max="200" value="100">
+        <div class="range-value" id="depthOfFieldVal">100%</div>
+
+        <label>Time Dilation</label>
+        <input type="range" id="timeDilation" min="0" max="200" value="100">
+        <div class="range-value" id="timeDilationVal">100%</div>
+
+        <label>Lens Flare</label>
+        <input type="range" id="lensFlare" min="0" max="200" value="100">
+        <div class="range-value" id="lensFlareVal">100%</div>
+
+        <label>Screen Tear</label>
+        <input type="range" id="screenTear" min="0" max="200" value="100">
+        <div class="range-value" id="screenTearVal">100%</div>
+
+        <label>Dynamic Fog</label>
+        <input type="range" id="dynamicFog" min="0" max="200" value="100">
+        <div class="range-value" id="dynamicFogVal">100%</div>
+
+        <label>Heat Distortion</label>
+        <input type="range" id="heatDistortion" min="0" max="200" value="100">
+        <div class="range-value" id="heatDistortionVal">100%</div>
+
+        <label>Starbursts</label>
+        <input type="range" id="starbursts" min="0" max="200" value="100">
+        <div class="range-value" id="starburstsVal">100%</div>
+
+        <label>After Images</label>
+        <input type="range" id="afterImages" min="0" max="200" value="100">
+        <div class="range-value" id="afterImagesVal">100%</div>
+
+        <label>Gravity Waves</label>
+        <input type="range" id="gravityWaves" min="0" max="200" value="100">
+        <div class="range-value" id="gravityWavesVal">100%</div>
+
+        <label>Energy Ripples</label>
+        <input type="range" id="energyRipples" min="0" max="200" value="100">
+        <div class="range-value" id="energyRipplesVal">100%</div>
+
+        <label>Pixel Displacement</label>
+        <input type="range" id="pixelDisplacement" min="0" max="200" value="100">
+        <div class="range-value" id="pixelDisplacementVal">100%</div>
+
+        <label>Ambient Occlusion</label>
+        <input type="range" id="ambientOcclusion" min="0" max="200" value="100">
+        <div class="range-value" id="ambientOcclusionVal">100%</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button id="cancelBtn">CANCEL</button>
+      <button id="saveBtn">SAVE</button>
+    </div>
+  </div>
+
+  <script>
+    // Load settings from localStorage with the correct key
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem("briddSettings");
+        if (!saved) return;
+        
+        const settings = JSON.parse(saved);
+        
+        // Set FPS
+        document.getElementById("fps").value = settings.maxFPS || 0;
+        
+        // Set quality preset
+        document.getElementById("quality").value = settings.qualityPreset || "Extreme+";
+        
+        // Show keyboard checkbox (only show if device has keyboard)
+        function hasKeyboard() {
+          if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) {
+            return true;
+          }
+          return !('ontouchstart' in window) || window.navigator.maxTouchPoints === 0;
+        }
+        
+        const showKeyboardContainer = document.getElementById("showKeyboardContainer");
+        if (showKeyboardContainer) {
+          if (hasKeyboard()) {
+            showKeyboardContainer.style.display = "block";
+            document.getElementById("showKeyboard").checked = settings.showKeyboard !== undefined ? settings.showKeyboard : true;
+          } else {
+            showKeyboardContainer.style.display = "none";
+          }
+        }
+        
+        // Set basic effects if they exist
+        if (settings.quality) {
+          // Block texture is now a checkbox - convert numeric to boolean
+          // In game.js: 0 = off, 1 or more = on
+          const blockTextureValue = settings.quality.blockTexture || 100;
+          document.getElementById("blockTexture").checked = blockTextureValue >= 1;
+          
+          document.getElementById("jumpEffect").value = settings.quality.jumpEffect || 100;
+          document.getElementById("walkEffect").value = settings.quality.walkEffect || 100;
+          document.getElementById("dieEffect").value = settings.quality.dieEffect || 100;
+          document.getElementById("horizontalLines").value = settings.quality.horizontalLines || 100;
+          document.getElementById("trail").value = settings.quality.trail || 100;
+          document.getElementById("glow").value = settings.quality.glow || 100;
+        }
+        
+        // Set advanced effects if they exist
+        if (settings.advanced) {
+          // Original advanced effects
+          document.getElementById("shockwaves").value = settings.advanced.shockwaves || 100;
+          document.getElementById("screenShake").value = settings.advanced.screenShake || 100;
+          document.getElementById("bloomParticles").value = settings.advanced.bloomParticles || 100;
+          document.getElementById("particleTrails").value = settings.advanced.particleTrails || 100;
+          document.getElementById("screenDistortion").value = settings.advanced.screenDistortion || 100;
+          
+          // New advanced effects
+          document.getElementById("particleCount").value = settings.advanced.particleCount || 100;
+          document.getElementById("trailLength").value = settings.advanced.trailLength || 100;
+          document.getElementById("screenReflections").value = settings.advanced.screenReflections || 100;
+          document.getElementById("motionBlur").value = settings.advanced.motionBlur !== undefined ? settings.advanced.motionBlur : 0;
+          document.getElementById("lightRays").value = settings.advanced.lightRays || 100;
+          
+          // Forward motion effects
+          document.getElementById("parallaxLayers").value = settings.advanced.parallaxLayers || 100;
+          document.getElementById("velocityStreaks").value = settings.advanced.velocityStreaks || 100;
+          document.getElementById("windParticles").value = settings.advanced.windParticles || 100;
+          document.getElementById("speedLines").value = settings.advanced.speedLines || 100;
+          document.getElementById("radialBlur").value = settings.advanced.radialBlur || 100;
+          document.getElementById("starRush").value = settings.advanced.starRush || 100;
+          document.getElementById("nebulaDust").value = settings.advanced.nebulaDust || 100;
+          document.getElementById("warpTunnel").value = settings.advanced.warpTunnel || 100;
+          document.getElementById("boostFlash").value = settings.advanced.boostFlash || 100;
+          document.getElementById("contrailJets").value = settings.advanced.contrailJets || 100;
+          document.getElementById("edgeLightning").value = settings.advanced.edgeLightning || 100;
+          document.getElementById("compressionRings").value = settings.advanced.compressionRings || 100;
+          
+          // Visual enhancement effects
+          document.getElementById("platformPulse").value = settings.advanced.platformPulse || 100;
+          document.getElementById("impactWaves").value = settings.advanced.impactWaves || 100;
+          document.getElementById("colorBleed").value = settings.advanced.colorBleed || 100;
+          document.getElementById("depthOfField").value = settings.advanced.depthOfField || 100;
+          document.getElementById("timeDilation").value = settings.advanced.timeDilation || 100;
+          document.getElementById("lensFlare").value = settings.advanced.lensFlare || 100;
+          document.getElementById("screenTear").value = settings.advanced.screenTear || 100;
+          document.getElementById("dynamicFog").value = settings.advanced.dynamicFog || 100;
+          document.getElementById("heatDistortion").value = settings.advanced.heatDistortion || 100;
+          document.getElementById("starbursts").value = settings.advanced.starbursts || 100;
+          document.getElementById("afterImages").value = settings.advanced.afterImages || 100;
+          document.getElementById("gravityWaves").value = settings.advanced.gravityWaves || 100;
+          document.getElementById("energyRipples").value = settings.advanced.energyRipples || 100;
+          document.getElementById("pixelDisplacement").value = settings.advanced.pixelDisplacement || 100;
+          document.getElementById("ambientOcclusion").value = settings.advanced.ambientOcclusion || 100;
+          
+          // Death animations
+          document.getElementById("deathImplode").value = settings.advanced.deathImplode || 100;
+          document.getElementById("deathGlitch").value = settings.advanced.deathGlitch || 100;
+          document.getElementById("deathVaporize").value = settings.advanced.deathVaporize || 100;
+        }
+        
+        // Update all range value displays
+        updateAllRangeValues();
+        
+      } catch (e) {
+        console.error("Failed to load settings:", e);
+      }
+    }
+
+    // Update all range value displays
+    function updateAllRangeValues() {
+      const rangeIds = [
+        // Basic effects
+        "jumpEffect", "walkEffect", "dieEffect", "horizontalLines", 
+        "trail", "glow",
+        
+        // Original advanced
+        "shockwaves", "screenShake", "bloomParticles", "particleTrails", 
+        "screenDistortion", "particleCount", "trailLength", "screenReflections",
+        "motionBlur", "lightRays",
+        
+        // Forward motion effects
+        "parallaxLayers", "velocityStreaks", "windParticles", "speedLines",
+        "radialBlur", "starRush", "nebulaDust", "warpTunnel", "boostFlash",
+        "contrailJets", "edgeLightning", "compressionRings",
+        
+        // Visual enhancement effects
+        "platformPulse", "impactWaves", "colorBleed", "depthOfField",
+        "timeDilation", "lensFlare", "screenTear", "dynamicFog",
+        "heatDistortion", "starbursts", "afterImages", "gravityWaves",
+        "energyRipples", "pixelDisplacement", "ambientOcclusion",
+        
+        // Death animations
+        "deathImplode", "deathGlitch", "deathVaporize"
+      ];
+      
+      rangeIds.forEach(id => {
+        updateRangeValue(id);
+      });
+    }
+
+    // Update range value display
+    function updateRangeValue(id) {
+      const input = document.getElementById(id);
+      const display = document.getElementById(id + "Val");
+      if (input && display) {
+        display.textContent = input.value + "%";
+      }
+    }
+
+    // Quality presets mapping (updated with all 20+ effects)
+    const qualityPresets = {
+      "Potato": {
+        quality: {
+          blockTexture: false, jumpEffect: 0, walkEffect: 0, dieEffect: 0, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0,
+          particleCount: 10, trailLength: 10, screenReflections: 0,
+          motionBlur: 0, lightRays: 0, parallaxLayers: 0,
+          velocityStreaks: 0, windParticles: 0, speedLines: 0,
+          radialBlur: 0, platformPulse: 0, impactWaves: 0,
+          colorBleed: 0, depthOfField: 0, timeDilation: 0,
+          lensFlare: 0, screenTear: 0, dynamicFog: 0,
+          heatDistortion: 0, starbursts: 0, afterImages: 0,
+          gravityWaves: 0, energyRipples: 0, pixelDisplacement: 0,
+          ambientOcclusion: 0,
+          starRush: 0, nebulaDust: 0, warpTunnel: 0, boostFlash: 0,
+          contrailJets: 0, edgeLightning: 0, compressionRings: 0,
+          deathImplode: 0, deathGlitch: 0, deathVaporize: 0
+        }
+      },
+      "Low": {
+        quality: {
+          blockTexture: false, jumpEffect: 5, walkEffect: 0, dieEffect: 0, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0,
+          particleCount: 25, trailLength: 25, screenReflections: 0,
+          motionBlur: 0, lightRays: 0, parallaxLayers: 10,
+          velocityStreaks: 0, windParticles: 10, speedLines: 10,
+          radialBlur: 0, platformPulse: 0, impactWaves: 0,
+          colorBleed: 0, depthOfField: 0, timeDilation: 0,
+          lensFlare: 0, screenTear: 0, dynamicFog: 0,
+          heatDistortion: 0, starbursts: 0, afterImages: 0,
+          gravityWaves: 0, energyRipples: 0, pixelDisplacement: 0,
+          ambientOcclusion: 0,
+          starRush: 10, nebulaDust: 5, warpTunnel: 0, boostFlash: 0,
+          contrailJets: 10, edgeLightning: 0, compressionRings: 0,
+          deathImplode: 5, deathGlitch: 5, deathVaporize: 5
+        }
+      },
+      "Medium": {
+        quality: {
+          blockTexture: true, jumpEffect: 10, walkEffect: 0, dieEffect: 10, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0,
+          particleCount: 50, trailLength: 50, screenReflections: 10,
+          motionBlur: 0, lightRays: 0, parallaxLayers: 25,
+          velocityStreaks: 10, windParticles: 25, speedLines: 25,
+          radialBlur: 0, platformPulse: 10, impactWaves: 10,
+          colorBleed: 0, depthOfField: 10, timeDilation: 0,
+          lensFlare: 0, screenTear: 0, dynamicFog: 0,
+          heatDistortion: 0, starbursts: 0, afterImages: 0,
+          gravityWaves: 0, energyRipples: 0, pixelDisplacement: 0,
+          ambientOcclusion: 0,
+          starRush: 25, nebulaDust: 15, warpTunnel: 10, boostFlash: 10,
+          contrailJets: 25, edgeLightning: 10, compressionRings: 10,
+          deathImplode: 15, deathGlitch: 15, deathVaporize: 15
+        }
+      },
+      "Medium+": {
+        quality: {
+          blockTexture: true, jumpEffect: 15, walkEffect: 15, dieEffect: 15, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0,
+          particleCount: 75, trailLength: 75, screenReflections: 25,
+          motionBlur: 10, lightRays: 10, parallaxLayers: 50,
+          velocityStreaks: 25, windParticles: 50, speedLines: 50,
+          radialBlur: 10, platformPulse: 25, impactWaves: 25,
+          colorBleed: 10, depthOfField: 25, timeDilation: 10,
+          lensFlare: 10, screenTear: 0, dynamicFog: 10,
+          heatDistortion: 10, starbursts: 10, afterImages: 10,
+          gravityWaves: 0, energyRipples: 0, pixelDisplacement: 0,
+          ambientOcclusion: 10,
+          starRush: 50, nebulaDust: 35, warpTunnel: 25, boostFlash: 25,
+          contrailJets: 50, edgeLightning: 25, compressionRings: 25,
+          deathImplode: 25, deathGlitch: 25, deathVaporize: 25
+        }
+      },
+      "High": {
+        quality: {
+          blockTexture: true, jumpEffect: 15, walkEffect: 15, dieEffect: 15, 
+          horizontalLines: 15, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 10, screenShake: 10, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0,
+          particleCount: 100, trailLength: 100, screenReflections: 50,
+          motionBlur: 25, lightRays: 25, parallaxLayers: 75,
+          velocityStreaks: 50, windParticles: 75, speedLines: 75,
+          radialBlur: 25, platformPulse: 50, impactWaves: 50,
+          colorBleed: 25, depthOfField: 50, timeDilation: 25,
+          lensFlare: 25, screenTear: 10, dynamicFog: 25,
+          heatDistortion: 25, starbursts: 25, afterImages: 25,
+          gravityWaves: 10, energyRipples: 10, pixelDisplacement: 10,
+          ambientOcclusion: 25,
+          starRush: 75, nebulaDust: 50, warpTunnel: 50, boostFlash: 50,
+          contrailJets: 75, edgeLightning: 50, compressionRings: 50,
+          deathImplode: 50, deathGlitch: 50, deathVaporize: 50
+        }
+      },
+      "High+": {
+        quality: {
+          blockTexture: true, jumpEffect: 33, walkEffect: 33, dieEffect: 33, 
+          horizontalLines: 33, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 25, screenShake: 25, bloomParticles: 10, 
+          particleTrails: 10, screenDistortion: 0,
+          particleCount: 125, trailLength: 125, screenReflections: 75,
+          motionBlur: 50, lightRays: 50, parallaxLayers: 100,
+          velocityStreaks: 75, windParticles: 100, speedLines: 100,
+          radialBlur: 50, platformPulse: 75, impactWaves: 75,
+          colorBleed: 50, depthOfField: 75, timeDilation: 50,
+          lensFlare: 50, screenTear: 25, dynamicFog: 50,
+          heatDistortion: 50, starbursts: 50, afterImages: 50,
+          gravityWaves: 25, energyRipples: 25, pixelDisplacement: 25,
+          ambientOcclusion: 50,
+          starRush: 100, nebulaDust: 75, warpTunnel: 75, boostFlash: 75,
+          contrailJets: 100, edgeLightning: 75, compressionRings: 75,
+          deathImplode: 75, deathGlitch: 75, deathVaporize: 75
+        }
+      },
+      "Extreme": {
+        quality: {
+          blockTexture: true, jumpEffect: 60, walkEffect: 60, dieEffect: 60, 
+          horizontalLines: 60, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 50, screenShake: 50, bloomParticles: 25, 
+          particleTrails: 25, screenDistortion: 10,
+          particleCount: 150, trailLength: 150, screenReflections: 100,
+          motionBlur: 75, lightRays: 75, parallaxLayers: 125,
+          velocityStreaks: 100, windParticles: 125, speedLines: 125,
+          radialBlur: 75, platformPulse: 100, impactWaves: 100,
+          colorBleed: 75, depthOfField: 100, timeDilation: 75,
+          lensFlare: 75, screenTear: 50, dynamicFog: 75,
+          heatDistortion: 75, starbursts: 75, afterImages: 75,
+          gravityWaves: 50, energyRipples: 50, pixelDisplacement: 50,
+          ambientOcclusion: 75,
+          starRush: 125, nebulaDust: 100, warpTunnel: 100, boostFlash: 100,
+          contrailJets: 125, edgeLightning: 100, compressionRings: 100,
+          deathImplode: 100, deathGlitch: 100, deathVaporize: 100
+        }
+      },
+      "Extreme+": {
+        quality: {
+          blockTexture: true, jumpEffect: 64, walkEffect: 64, dieEffect: 64, 
+          horizontalLines: 64, trail: 100, glow: 100
+        },
+        advanced: {
+          shockwaves: 75, screenShake: 75, bloomParticles: 50, 
+          particleTrails: 50, screenDistortion: 25,
+          particleCount: 175, trailLength: 175, screenReflections: 125,
+          motionBlur: 100, lightRays: 100, parallaxLayers: 150,
+          velocityStreaks: 125, windParticles: 150, speedLines: 150,
+          radialBlur: 100, platformPulse: 125, impactWaves: 125,
+          colorBleed: 100, depthOfField: 125, timeDilation: 100,
+          lensFlare: 100, screenTear: 75, dynamicFog: 100,
+          heatDistortion: 100, starbursts: 100, afterImages: 100,
+          gravityWaves: 75, energyRipples: 75, pixelDisplacement: 75,
+          ambientOcclusion: 100,
+          starRush: 150, nebulaDust: 125, warpTunnel: 125, boostFlash: 125,
+          contrailJets: 150, edgeLightning: 125, compressionRings: 125,
+          deathImplode: 125, deathGlitch: 125, deathVaporize: 125
+        }
+      },
+      "Ultra": {
+        quality: {
+          blockTexture: true, jumpEffect: 100, walkEffect: 100, dieEffect: 100, 
+          horizontalLines: 100, trail: 0, glow: 100
+        },
+        advanced: {
+          shockwaves: 100, screenShake: 100, bloomParticles: 75, 
+          particleTrails: 75, screenDistortion: 50,
+          particleCount: 200, trailLength: 200, screenReflections: 150,
+          motionBlur: 125, lightRays: 125, parallaxLayers: 175,
+          velocityStreaks: 150, windParticles: 175, speedLines: 175,
+          radialBlur: 125, platformPulse: 150, impactWaves: 150,
+          colorBleed: 125, depthOfField: 150, timeDilation: 125,
+          lensFlare: 125, screenTear: 100, dynamicFog: 125,
+          heatDistortion: 125, starbursts: 125, afterImages: 125,
+          gravityWaves: 100, energyRipples: 100, pixelDisplacement: 100,
+          ambientOcclusion: 125,
+          starRush: 175, nebulaDust: 150, warpTunnel: 150, boostFlash: 150,
+          contrailJets: 175, edgeLightning: 150, compressionRings: 150,
+          deathImplode: 150, deathGlitch: 150, deathVaporize: 150
+        }
+      },
+      "Ultra+": {
+        quality: {
+          blockTexture: true, jumpEffect: 120, walkEffect: 120, dieEffect: 120, 
+          horizontalLines: 120, trail: 100, glow: 100
+        },
+        advanced: {
+          shockwaves: 120, screenShake: 120, bloomParticles: 100, 
+          particleTrails: 100, screenDistortion: 75,
+          particleCount: 250, trailLength: 250, screenReflections: 175,
+          motionBlur: 150, lightRays: 150, parallaxLayers: 200,
+          velocityStreaks: 175, windParticles: 200, speedLines: 200,
+          radialBlur: 150, platformPulse: 175, impactWaves: 175,
+          colorBleed: 150, depthOfField: 175, timeDilation: 150,
+          lensFlare: 150, screenTear: 125, dynamicFog: 150,
+          heatDistortion: 150, starbursts: 150, afterImages: 150,
+          gravityWaves: 125, energyRipples: 125, pixelDisplacement: 125,
+          ambientOcclusion: 150,
+          starRush: 200, nebulaDust: 175, warpTunnel: 175, boostFlash: 175,
+          contrailJets: 200, edgeLightning: 175, compressionRings: 175,
+          deathImplode: 175, deathGlitch: 175, deathVaporize: 175
+        }
+      },
+      "Ultra++": {
+        quality: {
+          blockTexture: true, jumpEffect: 200, walkEffect: 200, dieEffect: 200, 
+          horizontalLines: 200, trail: 100, glow: 150
+        },
+        advanced: {
+          shockwaves: 150, screenShake: 150, bloomParticles: 150, 
+          particleTrails: 150, screenDistortion: 100,
+          particleCount: 300, trailLength: 300, screenReflections: 200,
+          motionBlur: 175, lightRays: 175, parallaxLayers: 225,
+          velocityStreaks: 200, windParticles: 225, speedLines: 225,
+          radialBlur: 175, platformPulse: 200, impactWaves: 200,
+          colorBleed: 175, depthOfField: 200, timeDilation: 175,
+          lensFlare: 175, screenTear: 150, dynamicFog: 175,
+          heatDistortion: 175, starbursts: 175, afterImages: 175,
+          gravityWaves: 150, energyRipples: 150, pixelDisplacement: 150,
+          ambientOcclusion: 175,
+          starRush: 225, nebulaDust: 200, warpTunnel: 200, boostFlash: 200,
+          contrailJets: 225, edgeLightning: 200, compressionRings: 200,
+          deathImplode: 200, deathGlitch: 200, deathVaporize: 200
+        }
+      },
+      "Highest": {
+        quality: {
+          blockTexture: true, jumpEffect: 200, walkEffect: 200, dieEffect: 200, 
+          horizontalLines: 200, trail: 100, glow: 200
+        },
+        advanced: {
+          shockwaves: 200, screenShake: 200, bloomParticles: 200, 
+          particleTrails: 200, screenDistortion: 200,
+          particleCount: 500, trailLength: 500, screenReflections: 200,
+          motionBlur: 200, lightRays: 200, parallaxLayers: 250,
+          velocityStreaks: 250, windParticles: 250, speedLines: 250,
+          radialBlur: 200, platformPulse: 250, impactWaves: 250,
+          colorBleed: 200, depthOfField: 250, timeDilation: 200,
+          lensFlare: 200, screenTear: 200, dynamicFog: 200,
+          heatDistortion: 200, starbursts: 200, afterImages: 200,
+          gravityWaves: 200, energyRipples: 200, pixelDisplacement: 200,
+          ambientOcclusion: 200,
+          starRush: 250, nebulaDust: 225, warpTunnel: 225, boostFlash: 225,
+          contrailJets: 250, edgeLightning: 225, compressionRings: 225,
+          deathImplode: 225, deathGlitch: 225, deathVaporize: 225
+        }
+      }
+    };
+
+    // Setup event listeners for range inputs
+    const allRangeIds = [
+      // Basic effects
+      "jumpEffect", "walkEffect", "dieEffect", "horizontalLines", 
+      "trail", "glow",
+      
+      // Original advanced
+      "shockwaves", "screenShake", "bloomParticles", "particleTrails", 
+      "screenDistortion", "particleCount", "trailLength", "screenReflections",
+      "motionBlur", "lightRays",
+      
+      // Forward motion effects
+        "parallaxLayers", "velocityStreaks", "windParticles", "speedLines",
+        "radialBlur", "starRush", "nebulaDust", "warpTunnel", "boostFlash",
+        "contrailJets", "edgeLightning", "compressionRings",
+      
+      // Visual enhancement effects
+      "platformPulse", "impactWaves", "colorBleed", "depthOfField",
+      "timeDilation", "lensFlare", "screenTear", "dynamicFog",
+      "heatDistortion", "starbursts", "afterImages", "gravityWaves",
+        "energyRipples", "pixelDisplacement", "ambientOcclusion",
+        
+        // Death animations
+        "deathImplode", "deathGlitch", "deathVaporize"
+    ];
+
+    allRangeIds.forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener("input", () => updateRangeValue(id));
+        // When manually adjusting sliders, switch to custom mode
+        input.addEventListener("change", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+        // Also switch to custom when user starts dragging (mousedown)
+        input.addEventListener("mousedown", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+        // For touch devices
+        input.addEventListener("touchstart", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+      }
+    });
+
+    // When show keyboard checkbox changes, switch to custom mode
+    const showKeyboardCheckbox = document.getElementById("showKeyboard");
+    if (showKeyboardCheckbox) {
+      showKeyboardCheckbox.addEventListener("change", () => {
+        if (document.getElementById("quality").value !== "Custom") {
+          document.getElementById("quality").value = "Custom";
+        }
+      });
+    }
+    
+    // When block texture checkbox changes, switch to custom mode
+    document.getElementById("blockTexture").addEventListener("change", () => {
+      document.getElementById("quality").value = "Custom";
+    });
+
+    // When FPS dropdown changes, switch to custom mode
+    document.getElementById("fps").addEventListener("change", () => {
+      document.getElementById("quality").value = "Custom";
+    });
+
+    // Toggle general effects settings
+    document.getElementById("toggleGeneral").addEventListener("click", function() {
+      const general = document.getElementById("generalSettings");
+      if (general.style.display === "none" || general.style.display === "") {
+        general.style.display = "block";
+        this.textContent = "General Effects Settings ▲";
+      } else {
+        general.style.display = "none";
+        this.textContent = "General Effects Settings ▼";
+      }
+    });
+
+    // Toggle death effects settings
+    document.getElementById("toggleDeath").addEventListener("click", function() {
+      const death = document.getElementById("deathSettings");
+      if (death.style.display === "none" || death.style.display === "") {
+        death.style.display = "block";
+        this.textContent = "Death Effects Settings ▲";
+      } else {
+        death.style.display = "none";
+        this.textContent = "Death Effects Settings ▼";
+      }
+    });
+
+    // Toggle advanced settings
+    document.getElementById("toggleAdvanced").addEventListener("click", function() {
+      const adv = document.getElementById("advancedSettings");
+      if (adv.style.display === "none" || adv.style.display === "") {
+        adv.style.display = "block";
+        this.textContent = "Advanced Settings ▲";
+      } else {
+        adv.style.display = "none";
+        this.textContent = "Advanced Settings ▼";
+      }
+    });
+
+    // When quality preset changes, update sliders
+    document.getElementById("quality").addEventListener("change", function() {
+      const preset = qualityPresets[this.value];
+      if (preset) {
+        // Update basic effects
+        if (preset.quality) {
+          for (const [key, value] of Object.entries(preset.quality)) {
+            const input = document.getElementById(key);
+            if (input) {
+              if (key === "blockTexture") {
+                // Special handling for checkbox
+                input.checked = Boolean(value);
+              } else {
+                input.value = value;
+                updateRangeValue(key);
+              }
+            }
+          }
+        }
+        
+        // Update advanced effects (except motionBlur, which is not affected by presets)
+        if (preset.advanced) {
+          for (const [key, value] of Object.entries(preset.advanced)) {
+            if (key === 'motionBlur') continue; // Skip motion blur - not affected by presets
+            const input = document.getElementById(key);
+            if (input) {
+              input.value = value;
+              updateRangeValue(key);
+            }
+          }
+        }
+        
+          // Auto-expand sections for high presets
+          if (["Ultra", "Ultra+", "Ultra++", "Highest"].includes(this.value)) {
+            const adv = document.getElementById("advancedSettings");
+            const advToggle = document.getElementById("toggleAdvanced");
+            adv.style.display = "block";
+            advToggle.textContent = "Advanced Settings ▲";
+          }
+      }
+    });
+
+    // Save settings and go back to game
+    document.getElementById("saveBtn").addEventListener("click", function() {
+      const settings = {
+        maxFPS: parseInt(document.getElementById("fps").value) || 0,
+        qualityPreset: document.getElementById("quality").value === "Custom" ? "Extreme+" : document.getElementById("quality").value,
+        showKeyboard: document.getElementById("showKeyboard") ? document.getElementById("showKeyboard").checked : true,
+        quality: {
+          blockTexture: document.getElementById("blockTexture").checked ? 100 : 0,
+          jumpEffect: parseInt(document.getElementById("jumpEffect").value) || 0,
+          walkEffect: parseInt(document.getElementById("walkEffect").value) || 0,
+          dieEffect: parseInt(document.getElementById("dieEffect").value) || 0,
+          horizontalLines: parseInt(document.getElementById("horizontalLines").value) || 0,
+          trail: parseInt(document.getElementById("trail").value) || 0,
+          glow: parseInt(document.getElementById("glow").value) || 0
+        },
+        advanced: {
+          // Original advanced effects
+          shockwaves: parseInt(document.getElementById("shockwaves").value) || 0,
+          screenShake: parseInt(document.getElementById("screenShake").value) || 0,
+          bloomParticles: parseInt(document.getElementById("bloomParticles").value) || 0,
+          particleTrails: parseInt(document.getElementById("particleTrails").value) || 0,
+          screenDistortion: parseInt(document.getElementById("screenDistortion").value) || 0,
+          
+          // New advanced effects
+          particleCount: parseInt(document.getElementById("particleCount").value) || 0,
+          trailLength: parseInt(document.getElementById("trailLength").value) || 0,
+          screenReflections: parseInt(document.getElementById("screenReflections").value) || 0,
+          motionBlur: parseInt(document.getElementById("motionBlur").value) || 0,
+          lightRays: parseInt(document.getElementById("lightRays").value) || 0,
+          
+          // Forward motion effects
+          parallaxLayers: parseInt(document.getElementById("parallaxLayers").value) || 0,
+          velocityStreaks: parseInt(document.getElementById("velocityStreaks").value) || 0,
+          windParticles: parseInt(document.getElementById("windParticles").value) || 0,
+          speedLines: parseInt(document.getElementById("speedLines").value) || 0,
+          radialBlur: parseInt(document.getElementById("radialBlur").value) || 0,
+          starRush: parseInt(document.getElementById("starRush").value) || 0,
+          nebulaDust: parseInt(document.getElementById("nebulaDust").value) || 0,
+          warpTunnel: parseInt(document.getElementById("warpTunnel").value) || 0,
+          boostFlash: parseInt(document.getElementById("boostFlash").value) || 0,
+          contrailJets: parseInt(document.getElementById("contrailJets").value) || 0,
+          edgeLightning: parseInt(document.getElementById("edgeLightning").value) || 0,
+          compressionRings: parseInt(document.getElementById("compressionRings").value) || 0,
+          
+          // Visual enhancement effects
+          platformPulse: parseInt(document.getElementById("platformPulse").value) || 0,
+          impactWaves: parseInt(document.getElementById("impactWaves").value) || 0,
+          colorBleed: parseInt(document.getElementById("colorBleed").value) || 0,
+          depthOfField: parseInt(document.getElementById("depthOfField").value) || 0,
+          timeDilation: parseInt(document.getElementById("timeDilation").value) || 0,
+          lensFlare: parseInt(document.getElementById("lensFlare").value) || 0,
+          screenTear: parseInt(document.getElementById("screenTear").value) || 0,
+          dynamicFog: parseInt(document.getElementById("dynamicFog").value) || 0,
+          heatDistortion: parseInt(document.getElementById("heatDistortion").value) || 0,
+          starbursts: parseInt(document.getElementById("starbursts").value) || 0,
+          afterImages: parseInt(document.getElementById("afterImages").value) || 0,
+          gravityWaves: parseInt(document.getElementById("gravityWaves").value) || 0,
+          energyRipples: parseInt(document.getElementById("energyRipples").value) || 0,
+          pixelDisplacement: parseInt(document.getElementById("pixelDisplacement").value) || 0,
+          ambientOcclusion: parseInt(document.getElementById("ambientOcclusion").value) || 0,
+          
+          // Death animations
+          deathImplode: parseInt(document.getElementById("deathImplode").value) || 0,
+          deathGlitch: parseInt(document.getElementById("deathGlitch").value) || 0,
+          deathVaporize: parseInt(document.getElementById("deathVaporize").value) || 0
+        }
+      };
+      
+      try {
+        localStorage.setItem("briddSettings", JSON.stringify(settings));
+        // Play save sound
+        const saveSound = new Audio('../sounds/apply-save.mp3');
+        saveSound.volume = 0.6;
+        saveSound.play().catch(err => console.log('Sound play prevented:', err));
+        // Go back to the game
+        setTimeout(() => {
+        window.location.href = "index.html";
+        }, 100); // Small delay to let sound play
+      } catch (e) {
+        console.error("Failed to save settings:", e);
+        alert("Failed to save settings!");
+      }
+    });
+
+    // Cancel button - just go back without saving
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+      window.location.href = "index.html";
+    });
+
+    // Load settings on page load
+    window.addEventListener("load", function() {
+      loadSettings();
+      
+      // Show visual effects settings by default if any advanced setting is > 0
+      const saved = localStorage.getItem("briddSettings");
+      if (saved) {
+        try {
+          const settings = JSON.parse(saved);
+          let hasEffects = false;
+          
+          // Check basic effects
+          if (settings.quality) {
+            const basicEffects = Object.values(settings.quality);
+            hasEffects = basicEffects.some(val => val > 0);
+          }
+          
+          // Check advanced effects
+          if (settings.advanced) {
+            const advancedEffects = Object.values(settings.advanced);
+            hasEffects = hasEffects || advancedEffects.some(val => val > 0);
+          }
+          
+          if (hasEffects) {
+            const toggle = document.getElementById("toggleGeneral");
+            const general = document.getElementById("generalSettings");
+            general.style.display = "block";
+            toggle.textContent = "General Effects Settings ▲";
+          }
+          
+          // Auto-expand advanced for high presets
+          const preset = settings.qualityPreset;
+          if (["Ultra", "Ultra+", "Ultra++", "Highest"].includes(preset)) {
+            const adv = document.getElementById("advancedSettings");
+            const advToggle = document.getElementById("toggleAdvanced");
+            adv.style.display = "block";
+            advToggle.textContent = "Advanced Settings ▲";
+          }
+        } catch (e) {
+          console.error("Error checking settings:", e);
+        }
+      }
+    });
+    
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

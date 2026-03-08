@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings | Bridd Jump</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#00ffff" />
+  <meta name="description" content="Bridd Jump Game Settings" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Settings | Infinite Campus';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = 'infinite-campus.png';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'Settings | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #0ff;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(0,0,0,0.9);
+      border: 3px solid #0ff;
+      border-radius: 20px;
+      padding: 30px;
+      width: 640px;
+      max-width: 95%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-size: 12px;
+    }
+    select, input[type=range], input[type=checkbox] {
+      margin-bottom: 10px;
+      background: black;
+      color: #0ff;
+      border: 2px solid #0ff;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      padding: 5px;
+    }
+    select, input[type=range] {
+      width: 100%;
+    }
+    .range-value {
+      font-size: 10px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    button {
+      margin: 15px;
+      padding: 12px 30px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #0ff;
+      background: black;
+      border: 3px solid #0ff;
+      border-radius: 10px;
+      font-family: 'Press Start 2P', cursive;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0ff;
+      color: black;
+    }
+    #advancedSettings {
+      display: none;
+      margin-top: 10px;
+      border-top: 1px solid #0ff;
+      padding-top: 10px;
+    }
+    #toggleAdvanced {
+      font-size: 12px;
+      background: transparent;
+      border: 2px solid #0ff;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    #toggleAdvanced:hover {
+      background: #0ff;
+      color: black;
+    }
+  
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { padding: 10px; }
+    .container { width: 92vw; max-width: none; padding: 20px; max-height: 92vh; }
+    h1 { font-size: 18px; }
+    label { font-size: 9px; }
+    select, input[type=range], button { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>SETTINGS</h1>
+
+    <label for="fps">Max FPS:</label>
+    <select id="fps">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+      <option value="30">30</option>
+      <option value="35">35</option>
+      <option value="40">40</option>
+      <option value="45">45</option>
+      <option value="50">50</option>
+      <option value="60">60</option>
+      <option value="70">70</option>
+      <option value="80">80</option>
+      <option value="90">90</option>
+      <option value="100">100</option>
+      <option value="110">110</option>
+      <option value="120">120</option>
+      <option value="130">130</option>
+      <option value="140">140</option>
+      <option value="150">150</option>
+      <option value="160">160</option>
+      <option value="180">180</option>
+      <option value="200">200</option>
+      <option value="250">250</option>
+      <option value="300">300</option>
+      <option value="unlimited">Unlimited</option>
+    </select>
+
+    <label for="quality">Quality:</label>
+    <select id="quality">
+      <option>Potato</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Medium+</option>
+      <option>High</option>
+      <option>High+</option>
+      <option>Extreme</option>
+      <option selected>Extreme+</option>
+      <option>Ultra</option>
+      <option>Ultra+</option>
+      <option>Highest</option>
+    </select>
+
+    <button id="toggleAdvanced">Advanced Settings ▼</button>
+
+    <div id="advancedSettings">
+      <label>Jump Effects</label>
+      <input type="range" id="jump" min="0" max="200" value="100">
+      <div class="range-value" id="jumpVal">100%</div>
+
+      <label>Walk Effects</label>
+      <input type="range" id="walk" min="0" max="200" value="100">
+      <div class="range-value" id="walkVal">100%</div>
+
+      <label>Die Effects</label>
+      <input type="range" id="die" min="0" max="200" value="100">
+      <div class="range-value" id="dieVal">100%</div>
+
+      <label>Horizontal Line Effects</label>
+      <input type="range" id="lines" min="0" max="200" value="100">
+      <div class="range-value" id="linesVal">100%</div>
+
+      <label>Gem Effects</label>
+      <input type="range" id="gem" min="0" max="200" value="100">
+      <div class="range-value" id="gemVal">100%</div>
+
+      <label>Trail Effects</label>
+      <input type="range" id="trail" min="0" max="200" value="100">
+      <div class="range-value" id="trailVal">100%</div>
+
+      <label>Glow Intensity</label>
+      <input type="range" id="glow" min="0" max="200" value="100">
+      <div class="range-value" id="glowVal">100%</div>
+
+      <label>
+        <input type="checkbox" id="block"> Use Block Texture
+      </label>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button id="cancelBtn">CANCEL</button>
+      <button id="saveBtn">SAVE</button>
+    </div>
+  </div>
+
+  <script>
+    // Mapping table for presets
+    const presets = {
+      "Potato":    {jump:0, walk:0, die:0, lines:0, gem:0, trail:0, glow:0,   block:false},
+      "Low":       {jump:5, walk:0, die:0, lines:0, gem:0, trail:0, glow:0,   block:false},
+      "Medium":    {jump:10, walk:0, die:10, lines:0, gem:0, trail:0, glow:0, block:true},
+      "Medium+":   {jump:15, walk:15, die:15, lines:0, gem:0, trail:0, glow:0, block:true},
+      "High":      {jump:15, walk:15, die:15, lines:15, gem:0, trail:0, glow:0, block:true},
+      "High+":     {jump:33, walk:33, die:33, lines:33, gem:0, trail:0, glow:0, block:true},
+      "Extreme":   {jump:60, walk:60, die:60, lines:60, gem:0, trail:0, glow:0, block:true},
+      "Extreme+":  {jump:64, walk:64, die:64, lines:64, gem:0, trail:0, glow:100, block:true},
+      "Ultra":     {jump:100, walk:100, die:100, lines:100, gem:100, trail:0, glow:100, block:true},
+      "Ultra+":    {jump:120, walk:120, die:120, lines:120, gem:120, trail:120, glow:120, block:true},
+      "Highest":   {jump:200, walk:200, die:200, lines:200, gem:200, trail:200, glow:150, block:true}
+    };
+
+    function bindRange(id){
+      const r = document.getElementById(id);
+      const v = document.getElementById(id+"Val");
+      r.oninput = ()=> v.textContent = r.value + "%";
+    }
+    ["jump","walk","die","lines","gem","trail","glow"].forEach(bindRange);
+
+    const toggle = document.getElementById("toggleAdvanced");
+    const adv = document.getElementById("advancedSettings");
+    toggle.onclick = ()=> {
+      if(adv.style.display === "none"){ 
+        adv.style.display = "block"; 
+        toggle.textContent = "Advanced Settings ▲";
+      } else { 
+        adv.style.display = "none"; 
+        toggle.textContent = "Advanced Settings ▼";
+      }
+    };
+
+    // Load saved settings
+    function loadSettings(){
+      const fps = localStorage.getItem("fps") || "60";
+      document.getElementById("fps").value = fps;
+
+      const quality = localStorage.getItem("quality") || "Extreme+";
+      document.getElementById("quality").value = quality;
+
+      const advSettings = presets[quality] || {};
+      for(const key in advSettings){
+        const elem = document.getElementById(key);
+        if(elem){
+          if(elem.type === "checkbox") elem.checked = advSettings[key];
+          else elem.value = advSettings[key];
+          const valElem = document.getElementById(key+"Val");
+          if(valElem) valElem.textContent = advSettings[key] + "%";
+        }
+      }
+    }
+
+    loadSettings();
+
+    // Update advanced sliders when quality changes
+    document.getElementById("quality").onchange = (e)=>{
+      const q = e.target.value;
+      const s = presets[q];
+      if(!s) return;
+      for(const key in s){
+        const elem = document.getElementById(key);
+        if(elem){
+          if(elem.type === "checkbox") elem.checked = s[key];
+          else elem.value = s[key];
+          const valElem = document.getElementById(key+"Val");
+          if(valElem) valElem.textContent = s[key]+"%";
+        }
+      }
+    };
+
+    // Save settings
+    document.getElementById("saveBtn").onclick = ()=>{
+      localStorage.setItem("fps", document.getElementById("fps").value);
+      localStorage.setItem("quality", document.getElementById("quality").value);
+      ["jump","walk","die","lines","gem","trail","glow","block"].forEach(k=>{
+        const elem = document.getElementById(k);
+        if(elem.type==="checkbox") localStorage.setItem(k, elem.checked);
+        else localStorage.setItem(k, elem.value);
+      });
+      window.close();
+    };
+
+    // Cancel button
+    document.getElementById("cancelBtn").onclick = ()=> window.close();
+  </script>
+  
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>Schedule | Infinite Campus</title>
+<link rel="icon" href="infinite-campus.png">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#00ffff" />
+<meta name="description" content="Jump from platform to platform and travel as far as possible!" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="../manifest.json" />
+<script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Schedule | Infinite Campus';
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.href = 'infinite-campus.png';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'V1.1.1 | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+
+<!-- Pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #000;
+    --accent: #0ff;
+    --panel: rgba(0,0,0,0.9);
+    --muted: #88f7ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { height:100%; margin:0; background:var(--bg); color:#fff; font-family: "Press Start 2P", monospace; -webkit-font-smoothing: none; -moz-osx-font-smoothing: grayscale; }
+  canvas { display:block; position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; background: #000; }
+  /* Menu overlay (restored UI) */
+  #menu {
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: 94vw;
+    padding: 28px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    border-radius: 12px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 1200;
+    pointer-events: all;
+  }
+  #menu h1 { margin:0; font-size: 28px; color: var(--accent); text-shadow: 0 0 12px var(--accent); }
+  #bestScore { font-size: 12px; color: var(--muted); margin-top: 6px;}
+  .btn {
+    appearance:none; border:3px solid var(--accent); background:transparent; color:var(--accent);
+    padding:12px 18px; border-radius:10px; cursor:pointer; font-size:12px; width:300px; text-align:center;
+  }
+  .btn:hover { background:var(--accent); color:#000; }
+  #scoreHUD { position: fixed; left: 12px; top: 12px; z-index: 1100; font-size:12px; color:var(--accent); text-shadow:0 0 6px rgba(0,255,255,0.2); pointer-events:none; font-family:"Press Start 2P",monospace; }
+  #fpsLabel { position: fixed; left: 12px; top: 44px; z-index: 1100; font-size:11px; color:var(--accent); pointer-events:none; }
+  #debugToast { position: fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:1300; background:rgba(0,0,0,0.6); border:2px solid var(--accent); color:var(--accent); padding:8px 12px; border-radius:8px; display:none; font-size:11px; pointer-events:none; }
+  @media (max-width:560px){
+    #menu { width: 92vw; padding: 18px; }
+    .btn { width: 100%; font-size:11px; padding:10px; }
+    #menu h1 { font-size:20px; }
+  }
+
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { overflow-y: auto; }
+    #menu { width: 92vw; max-width: none; padding: 20px 16px; }
+    .btn, select { width: 100%; max-width: none; font-size: 10px; padding: 12px 16px; }
+    #menu h1 { font-size: 20px; }
+    #menu h3 { font-size: 11px; }
+    #bestScore { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="menu" role="dialog" aria-label="start menu">
+    <h1>BRIDD JUMP</h1>
+    <div id="bestScore">Best Score: 0</div>
+    <button id="startBtn" class="btn">START</button>
+    <button id="settingsBtn" class="btn">SETTINGS (DOESN'T WORK YET)</button>
+    <button onclick="window.location.href='/bridd-jump/'" class="btn">HOME</button>
+  </div>
+
+  <div id="scoreHUD">Score: 0</div>
+  <div id="fpsLabel">FPS: -- / --</div>
+  <div id="debugToast"></div>
+
+<script>
+/* ===========================
+   FULL, STANDALONE index.html
+   - Keeps UI exactly as overlay above
+   - Fixes 'black after start' bug
+   - Integrates settings via localStorage key 'briddSettings'
+   - Alerts if settings.html missing when trying to open it
+   =========================== */
+
+/* ---------- Utilities ---------- */
+function showToast(msg, ms=1200){
+  const d = document.getElementById('debugToast');
+  d.innerText = msg;
+  d.style.display = 'block';
+  clearTimeout(d._timer);
+  d._timer = setTimeout(()=> d.style.display = 'none', ms);
+}
+
+/* ---------- Canvas & resizing ---------- */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ---------- Constants & state ---------- */
+const BLOCK_SIZE = 50;
+const JUMP_SPEED = -15;
+const GRAVITY = 0.7;
+
+/* Player object blueprint */
+let player = {
+  x: 100, y: 0, width: 50, height: 50, vy: 0, speed: 11,
+  color: "#0ff", hitboxScale: 0.6, jumpsLeft: 2, onGround:false, visible:true,
+  horizMultiplier:1, vertMultiplier:1, accountEmail: "player@example.com"
+};
+
+/* world arrays */
+let platforms = [], spikes = [], gems = [], particles = [], crashPieces = [], trail = [], lines = [];
+
+/* gameplay */
+let keys = {}, score = 0, bestScore = localStorage.getItem("bestScore") ? parseInt(localStorage.getItem("bestScore")) : 0;
+let gameRunning = false;
+let lastTime = performance.now();
+let cameraX = 0, cameraY = 0;
+
+/* color cycling */
+let baseColors = [
+  {r:255,g:0,b:0},{r:255,g:153,b:0},{r:255,g:255,b:0},
+  {r:0,g:255,b:0},{r:0,g:255,b:255},{r:0,g:0,b:255},{r:153,g:0,b:255}
+];
+let colorIndex = 0, nextColor = baseColors[1], platformColor = {...baseColors[0]}, colorLerp = 0, globalTime = 0;
+
+/* misc */
+let testMode = false, gemEveryBlock = false, account = "player", oldAccount = null;
+let cheats = { float:false, invincible:false, infiniteJump:false };
+
+/* ---------- Settings loading from localStorage ---------- */
+const LS_KEY = "briddSettings";
+
+const defaultSettings = {
+  maxFPS: 0, // 0 => unlimited
+  qualityPreset: "Extreme+",
+  quality: {
+    jumpEffect: 64,
+    walkEffect: 64,
+    dieEffect: 64,
+    horizontalLines: 64,
+    trail: 64,
+    blockTexture: 100,
+    glow: 100
+  }
+};
+
+const qualityPresets = {
+  "Potato":      { blockTexture:0, jumpEffect:0, walkEffect:0, dieEffect:0, horizontalLines:0, trail:0, glow:0, lines:false },
+  "Low":         { blockTexture:0, jumpEffect:5, walkEffect:0, dieEffect:0, horizontalLines:0, trail:0, glow:0, lines:false },
+  "Medium":      { blockTexture:1, jumpEffect:10, walkEffect:0, dieEffect:10, horizontalLines:0, trail:0, glow:0, lines:false },
+  "Medium+":     { blockTexture:1, jumpEffect:15, walkEffect:15, dieEffect:15, horizontalLines:0, trail:0, glow:0, lines:false },
+  "High":        { blockTexture:1, jumpEffect:15, walkEffect:15, dieEffect:15, horizontalLines:15, trail:0, glow:0, lines:true },
+  "High+":       { blockTexture:1, jumpEffect:33, walkEffect:33, dieEffect:33, horizontalLines:33, trail:0, glow:0, lines:true },
+  "Extreme":     { blockTexture:1, jumpEffect:60, walkEffect:60, dieEffect:60, horizontalLines:60, trail:0, glow:0, lines:true },
+  "Extreme+":    { blockTexture:1, jumpEffect:64, walkEffect:64, dieEffect:64, horizontalLines:64, trail:1, glow:1, lines:true },
+  "Ultra":       { blockTexture:1, jumpEffect:100, walkEffect:100, dieEffect:100, horizontalLines:100, trail:0, glow:1, lines:true },
+  "Ultra+":      { blockTexture:1, jumpEffect:120, walkEffect:120, dieEffect:120, horizontalLines:120, trail:1, glow:1, lines:true },
+  "Glow Highest":{ blockTexture:1, jumpEffect:200, walkEffect:200, dieEffect:200, horizontalLines:200, trail:1, glow:1.5, lines:true }
+};
+
+function readSettings(){
+  try {
+    let raw = localStorage.getItem(LS_KEY);
+    if(!raw) return JSON.parse(JSON.stringify(defaultSettings));
+    const parsed = JSON.parse(raw);
+    const merged = JSON.parse(JSON.stringify(defaultSettings));
+    if(parsed.maxFPS !== undefined) merged.maxFPS = parsed.maxFPS;
+    if(parsed.qualityPreset) merged.qualityPreset = parsed.qualityPreset;
+    if(parsed.quality) merged.quality = {...merged.quality, ...parsed.quality};
+    return merged;
+  } catch(e) {
+    console.warn("Failed to read settings:", e);
+    return JSON.parse(JSON.stringify(defaultSettings));
+  }
+}
+function writeSettings(s){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch(e){ console.warn("Failed to write settings:", e); }
+}
+
+/* runtime settings object derived from storage */
+let settings = readSettings();
+
+let runtime = {
+  minFrameTime: 0,
+  effects: {
+    jumpEffectMul: 1,
+    walkEffectMul: 1,
+    dieEffectMul: 1,
+    horizontalLinesMul: 1,
+    trailMul: 1,
+    blockTextureMul: 1
+  },
+  glowEnabled: true,
+  linesEnabled: true,
+  trailEnabled: true
+};
+
+function applySettings(s){
+  settings = s || settings;
+  // FPS
+  if(!settings.maxFPS || settings.maxFPS === 0 || settings.maxFPS === "Unlimited"){
+    runtime.minFrameTime = 0;
+    settings.maxFPS = 0;
+  } else {
+    runtime.minFrameTime = 1000 / Number(settings.maxFPS);
+  }
+
+  const preset = qualityPresets[settings.qualityPreset] || {};
+  const pct = (v) => (Number(v) || 0) / 100;
+
+  runtime.effects.blockTextureMul = pct(settings.quality.blockTexture) || (preset.blockTexture ? 1 : 0);
+  runtime.effects.jumpEffectMul = pct(settings.quality.jumpEffect) || (preset.jumpEffect ? preset.jumpEffect/100 : 0);
+  runtime.effects.walkEffectMul = pct(settings.quality.walkEffect) || (preset.walkEffect ? preset.walkEffect/100 : 0);
+  runtime.effects.dieEffectMul = pct(settings.quality.dieEffect) || (preset.dieEffect ? preset.dieEffect/100 : 0);
+  runtime.effects.horizontalLinesMul = pct(settings.quality.horizontalLines) || (preset.horizontalLines ? preset.horizontalLines/100 : 0);
+  runtime.effects.trailMul = pct(settings.quality.trail) || (preset.trail ? preset.trail/100 : 0);
+
+  runtime.glowEnabled = (settings.quality && settings.quality.glow !== undefined) ? (settings.quality.glow > 0) : (preset.glow !== undefined ? !!preset.glow : true);
+  runtime.linesEnabled = preset.lines !== undefined ? preset.lines : true;
+  runtime.trailEnabled = (settings.quality && settings.quality.trail !== undefined) ? settings.quality.trail > 0 : !!preset.trail;
+
+  // save canonical
+  writeSettings(settings);
+
+  // update HUD label
+  const fpsLabel = document.getElementById('fpsLabel');
+  fpsLabel.innerText = settings.maxFPS === 0 ? `FPS: Unlimited — Quality: ${settings.qualityPreset}` : `FPS: ${settings.maxFPS} — Quality: ${settings.qualityPreset}`;
+}
+
+/* initial apply */
+applySettings(settings);
+
+/* ---------- Utility drawing helpers ---------- */
+function lerpColor(c1,c2,t){ return { r: c1.r + (c2.r - c1.r)*t, g: c1.g + (c2.g - c1.g)*t, b: c1.b + (c2.b - c1.b)*t }; }
+
+/* ---------- World initialization & reset (fix black-screen issue) ---------- */
+let lastPlatformX = 0, lastPlatformY = 0;
+
+function resetWorld(){
+  // clear arrays
+  platforms = [];
+  spikes = [];
+  gems = [];
+  particles = [];
+  crashPieces = [];
+  trail = [];
+  lines = [];
+
+  // reset player
+  player.x = 100;
+  player.y = canvas.height/2 - player.height;
+  player.vy = 0;
+  player.speed = 11;
+  player.jumpsLeft = 2;
+  player.onGround = false;
+  player.visible = true;
+  player.horizMultiplier = 1; player.vertMultiplier = 1;
+
+  // reset score and color cycling
+  score = 0; colorLerp = 0; globalTime = 0;
+  colorIndex = 0; platformColor = {...baseColors[0]}; nextColor = baseColors[1];
+
+  // Create a guaranteed ground platform inside viewport so you do NOT get a black void
+  const groundHeight = BLOCK_SIZE;
+  platforms.push({
+    x: 0,
+    y: Math.max(100, canvas.height - groundHeight * 2),  // visible on screen
+    width: Math.max(canvas.width, BLOCK_SIZE*10),
+    height: groundHeight,
+    color: {...platformColor},
+    passed: false
+  });
+
+  lastPlatformX = platforms[platforms.length-1].x + platforms[platforms.length-1].width;
+  lastPlatformY = platforms[platforms.length-1].y;
+}
+
+/* ---------- Platform generator (blocks) ---------- */
+function generateBlockPlatform(lastX, lastY){
+  let blockCount = Math.floor(Math.random()*8)+1;
+  if(Math.random()<0.7) blockCount = Math.min(blockCount,Math.floor(Math.random()*3+1));
+  let gap = Math.floor(Math.random()*5+3) * BLOCK_SIZE;
+  let x = lastX + gap;
+  let y = lastY + (Math.floor(Math.random()*3)-1) * BLOCK_SIZE;
+  y = Math.max(BLOCK_SIZE, Math.min(canvas.height - 3*BLOCK_SIZE, y));
+
+  for(let i=0;i<blockCount;i++){
+    platforms.push({ x: x + i*BLOCK_SIZE, y, width: BLOCK_SIZE, height: BLOCK_SIZE, color: {...platformColor}, passed:false });
+    if(Math.random() < 0.2){
+      spikes.push({ x: x + i*BLOCK_SIZE + BLOCK_SIZE*0.2, y: y - BLOCK_SIZE + BLOCK_SIZE*0.2, width: BLOCK_SIZE*0.6, height: BLOCK_SIZE*0.6, baseY: y - BLOCK_SIZE + BLOCK_SIZE*0.2, hit:true, passed:false });
+    }
+  }
+
+  // gems
+  for(let i=0;i<blockCount;i++){
+    if(Math.random() < 0.1 || gemEveryBlock){
+      let gemX = x + i*BLOCK_SIZE + BLOCK_SIZE/4;
+      let gemY = y - BLOCK_SIZE*1.5;
+      let safe = true;
+      for(let s of spikes){ if(Math.abs(gemX - s.x) < BLOCK_SIZE*2) safe=false; }
+      if(safe) gems.push({ x: gemX, y: gemY, size: 20, collected:false, floatOffset: Math.random()*Math.PI*2 });
+    }
+  }
+
+  return { x: x + blockCount*BLOCK_SIZE, y };
+}
+
+/* ---------- Collision helpers ---------- */
+function checkSpikeCollision(spike){
+  if(!spike.hit) return false;
+  const hbW = player.width * player.hitboxScale;
+  const hbH = player.height * player.hitboxScale;
+  const hbX = player.x + (player.width - hbW)/2;
+  const hbY = player.y + (player.height - hbH)/2;
+  return hbX + hbW > spike.x && hbX < spike.x + spike.width && hbY + hbH > spike.y && hbY < spike.y + spike.height;
+}
+
+/* ---------- Particles / crash pieces ---------- */
+class Particle {
+  constructor(x,y,vx,vy,life,color){
+    this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.life = life; this.color = color;
+  }
+  update(){ this.x += this.vx; this.y += this.vy; this.vy += 0.1; this.life -= 1; }
+  draw(){ if(this.life>0){ ctx.fillStyle = this.color; ctx.fillRect(this.x - cameraX, this.y - cameraY, 4,4); } }
+}
+
+function spawnParticles(cx,cy,type,amountMul=1){
+  const base = type === "double" ? 20 : (type === "land" ? 10 : 15);
+  const count = Math.max(0, Math.floor(base * (amountMul || runtime.effects.jumpEffectMul || 1)));
+  const color = type === "double" ? "#ff0" : (type === "jump" ? "#0ff" : "#fff");
+  for(let i=0;i<count;i++){
+    const vx = (Math.random()-0.5)*6;
+    const vy = (Math.random()-1.5)*6;
+    particles.push(new Particle(cx + (Math.random()-0.5)*6, cy + (Math.random()-0.5)*6, vx, vy, Math.floor(Math.random()*40+20), color));
+  }
+}
+
+function createCrash(){
+  const pieces = Math.max(6, Math.floor(20 * (runtime.effects.dieEffectMul || 1)));
+  for(let i=0;i<pieces;i++){
+    crashPieces.push({
+      x: player.x + Math.random()*player.width,
+      y: player.y + Math.random()*player.height,
+      vx: (Math.random()-0.5)*12,
+      vy: (Math.random()-1)*12,
+      size: Math.random()*player.width/4+4,
+      color: player.color,
+      life: 80 + Math.random()*60
+    });
+  }
+}
+
+/* ---------- Lines background ---------- */
+function addLine(){
+  if(!runtime.linesEnabled) return;
+  const chance = Math.min(1, 0.15 * (runtime.effects.horizontalLinesMul || 0));
+  if(Math.random() > chance) return;
+  lines.push({ x: canvas.width + Math.random()*200, y: Math.random()*canvas.height, width: Math.random()*50+20, passed:false });
+}
+
+/* ---------- Input handling ---------- */
+window.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if(["KeyW","ArrowUp","Space"].includes(e.code)) jump();
+});
+window.addEventListener('keyup', e => { keys[e.code] = false; });
+window.addEventListener('mousedown', () => jump());
+window.addEventListener('touchstart', () => jump());
+
+function jump(){
+  if(!player.visible) return;
+  if(cheats.infiniteJump || player.jumpsLeft > 0){
+    player.vy = JUMP_SPEED;
+    spawnParticles(player.x + player.width/2, player.y + player.height, player.jumpsLeft === 2 ? "jump" : "double", runtime.effects.jumpEffectMul);
+    if(!cheats.infiniteJump) player.jumpsLeft--;
+  }
+}
+
+/* ---------- Game step (physics/collisions) ---------- */
+function worldStep(deltaSec){
+  if(!gameRunning) return;
+  // accelerate slowly
+  player.speed += 0.002;
+
+  // color cycling
+  colorLerp += deltaSec/25;
+  if(colorLerp >= 1){
+    colorIndex = (colorIndex + 1) % baseColors.length;
+    nextColor = baseColors[(colorIndex+1) % baseColors.length];
+    colorLerp = 0;
+  }
+  platformColor = lerpColor(baseColors[colorIndex], nextColor, colorLerp);
+
+  // physics
+  player.y += player.vy * player.vertMultiplier;
+  if(cheats.float && player.vy > 0) player.vy *= 0.5;
+  player.vy += GRAVITY * player.vertMultiplier;
+  player.x += player.speed * player.horizMultiplier;
+
+  // platform collision
+  player.onGround = false;
+  for(let plat of platforms){
+    if(player.x + player.width > plat.x && player.x < plat.x + plat.width &&
+       player.y + player.height > plat.y && player.y + player.height < plat.y + plat.height + player.vy + 1){
+      if(player.vy >= 0){
+        player.y = plat.y - player.height;
+        player.vy = 0;
+        player.onGround = true;
+        player.jumpsLeft = 2;
+        spawnParticles(player.x + player.width/2, player.y + player.height, "land", runtime.effects.walkEffectMul);
+        plat.y += 2; // subtle sink
+      }
+    }
+    if(!plat.passed && player.x > plat.x + plat.width){
+      score += 1;
+      plat.passed = true;
+    }
+  }
+
+  if(player.y > canvas.height + 300){
+    player.jumpsLeft = 1;
+    tryDie();
+  }
+
+  // spikes
+  for(let s of spikes){
+    if(checkSpikeCollision(s)) tryDie(s);
+    if(!s.passed && player.x > s.x + s.width){
+      score += 1; s.passed = true;
+    }
+  }
+
+  // gems
+  for(let g of gems){
+    if(!g.collected && player.x + player.width > g.x && player.x < g.x + g.size && player.y + player.height > g.y && player.y < g.y + g.size){
+      score += 50; g.collected = true;
+      spawnParticles(g.x + g.size/2, g.y + g.size/2, "double", runtime.effects.jumpEffectMul);
+    }
+  }
+
+  // generation
+  const lastPlatform = platforms[platforms.length - 1];
+  if(lastPlatform && lastPlatform.x < player.x + canvas.width){
+    const out = generateBlockPlatform(lastPlatform.x, lastPlatform.y);
+    lastPlatformX = out.x; lastPlatformY = out.y;
+  }
+
+  addLine();
+
+  // update crash pieces
+  for(let i=crashPieces.length-1;i>=0;i--){
+    const p = crashPieces[i];
+    p.vy += GRAVITY;
+    p.x += p.vx; p.y += p.vy; p.life--;
+    if(p.life <= 0) crashPieces.splice(i,1);
+  }
+
+  // update particles
+  for(let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.update();
+    if(p.life <= 0) particles.splice(i,1);
+  }
+
+  // update lines array movement
+  for(let i=lines.length-1;i>=0;i--){
+    const l = lines[i];
+    l.x -= player.speed * 0.5 * player.horizMultiplier;
+    if(l.x + 50 < 0) lines.splice(i,1);
+  }
+}
+
+/* ---------- Death / tryDie ---------- */
+function tryDie(spike){
+  if(!player.visible) return;
+  if(cheats.invincible) return;
+  if(player.onGround || player.vy > 0){
+    player.visible = false;
+    if(spike) spike.hit = false;
+    createCrash();
+    gameRunning = false;
+    if(score > bestScore){
+      bestScore = Math.floor(score);
+      localStorage.setItem('bestScore', bestScore);
+    }
+    setTimeout(()=> {
+      // show menu again
+      document.getElementById('menu').style.display = 'flex';
+      document.getElementById('bestScore').innerText = 'Best Score: ' + bestScore;
+    }, 900);
+  }
+}
+
+/* ---------- Command handling (Ctrl+Shift+A) ---------- */
+window.addEventListener('keydown', function(e){
+  // Ctrl + Shift + A opens prompt
+  if(e.ctrlKey && e.shiftKey && e.code === 'KeyA'){
+    const input = prompt("Enter command:");
+    if(!input) return;
+    const args = input.trim().split(/\s+/);
+    const command = args[0];
+    const root1 = args[1];
+    const root2 = args[2];
+    const root3 = args[3];
+
+    if(command === '/die'){
+      if(player.visible){
+        player.visible = false;
+        createCrash();
+        gameRunning = false;
+        if(score>bestScore){ bestScore = Math.floor(score); localStorage.setItem('bestScore', bestScore); }
+        setTimeout(()=> { document.getElementById('menu').style.display = 'flex'; }, 500);
+      }
+      return;
+    }
+
+    if(command === '/score'){
+      if(root1 === 'set' && root2 !== undefined){
+        const v = Number(root2);
+        if(!isNaN(v)) score = v; else alert('Invalid value');
+      } else if(root1 === 'add' && root2 !== undefined){
+        const v = Number(root2);
+        if(!isNaN(v)) score += v; else alert('Invalid value');
+      } else alert('Usage: /score set <value>  OR  /score add <value>');
+      return;
+    }
+
+    if(command === '/clear' && root1 === 'bestScore'){
+      bestScore = 0;
+      localStorage.setItem('bestScore', 0);
+      document.getElementById('bestScore').innerText = 'Best Score: ' + bestScore;
+      alert('Best score cleared.');
+      return;
+    }
+
+    if(command === '/gamerule'){
+      switch(root1){
+        case 'infiniteJump': cheats.infiniteJump = (root2 === 'true'); break;
+        case 'death': cheats.invincible = (root2 === 'false'); break;
+        case 'speed':
+          if(!player.speedMultiplier) player.speedMultiplier = 1;
+          if(root2 === 'reset') player.speedMultiplier = 1;
+          if(root2 === 'add' && !isNaN(parseFloat(root3))) player.speedMultiplier += parseFloat(root3);
+          if(root2 === 'set' && !isNaN(parseFloat(root3))) player.speedMultiplier = parseFloat(root3);
+          break;
+        default: alert('Unknown gamerule');
+      }
+      return;
+    }
+
+    if(command === '/variable'){
+      if(!root1){
+        let accountLocal = localStorage.getItem('account') || 'player';
+        let isCreator = ['bw55133@pausd.us','ikunbeautiful@gmail.com','benranwu@gmail.com'].includes(accountLocal);
+        alert('test mode: '+testMode+'\n'+'infinite jump: '+cheats.infiniteJump+'\n'+'float: '+cheats.float+'\n'+'death: '+(!cheats.invincible)+'\n'+'score: '+score+'\n'+'best score: '+bestScore+'\n'+'account: '+(isCreator?'creator':'player')+'\n'+'player speed: '+player.speed+'\n'+'jump height: '+(-JUMP_SPEED));
+      }
+      return;
+    }
+
+    if(command === '/code'){
+      if(root1 === '770709'){ testMode = !testMode; alert(testMode ? 'TEST MODE ON' : 'TEST MODE OFF'); }
+      else if(root1 === 'lanseyaoji'){ if(player.speed < 5) player.speed = 5; else player.speed *= 1.5; alert('Player speed: '+player.speed); }
+      else if(root1 === 'jinyumantang'){ gemEveryBlock = !gemEveryBlock; alert('Gem generation: '+gemEveryBlock); }
+      else if(root1 === 'JiMmYiStHeCoOlEsTgUy|2025.letmecheat|L^UP++0U+L0UD'){
+        if(account !== '𐀒𐀒𐀒'){ oldAccount = account; account = '𐀒𐀒𐀒'; } else account = oldAccount || 'player';
+        alert('Account toggled: '+account);
+      }
+      return;
+    }
+
+    alert('Unknown command');
+  }
+});
+
+/* ---------- Rendering ---------- */
+let lastRenderTime = performance.now();
+let fps = 0;
+function draw(){
+  // clear
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // background (plain)
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // horizontal lines background
+  if(runtime.linesEnabled){
+    for(let l of lines){
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(l.x - cameraX, l.y - cameraY);
+      ctx.lineTo(l.x + l.width - cameraX, l.y - cameraY);
+      ctx.stroke();
+    }
+  }
+
+  // platforms
+  for(let plat of platforms){
+    const useTexture = runtime.effects.blockTextureMul > 0.5;
+    if(useTexture){
+      for(let y = plat.y; y < canvas.height; y += BLOCK_SIZE){
+        let dark = (y === plat.y) ? 1 : 0.3;
+        const grd = ctx.createLinearGradient(plat.x - cameraX, y - cameraY, plat.x + plat.width - cameraX, y + BLOCK_SIZE - cameraY);
+        grd.addColorStop(0, `rgba(${Math.floor(plat.color.r*dark)},${Math.floor(plat.color.g*dark)},${Math.floor(plat.color.b*dark)},1)`);
+        grd.addColorStop(1, "rgba(0,0,0,1)");
+        ctx.fillStyle = grd;
+        if(runtime.glowEnabled){ ctx.shadowColor = `rgba(${plat.color.r},${plat.color.g},${plat.color.b},0.9)`; ctx.shadowBlur = plat === platforms[0] ? 12 : 0; }
+        ctx.fillRect(plat.x - cameraX, y - cameraY, plat.width, BLOCK_SIZE);
+        ctx.shadowBlur = 0;
+      }
+    } else {
+      ctx.fillStyle = `rgb(${plat.color.r},${plat.color.g},${plat.color.b})`;
+      ctx.fillRect(plat.x - cameraX, plat.y - cameraY, plat.width, plat.height);
+    }
+  }
+
+  // spikes
+  for(let s of spikes){
+    let pulse = Math.sin(globalTime*5 + s.x) * 5;
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(s.x - cameraX, s.baseY + s.height - cameraY + pulse);
+    ctx.lineTo(s.x - cameraX + s.width/2, s.baseY - cameraY + pulse);
+    ctx.lineTo(s.x - cameraX + s.width, s.baseY + s.height - cameraY + pulse);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // gems
+  for(let g of gems){
+    if(g.collected) continue;
+    g.floatOffset = g.floatOffset || Math.random()*Math.PI*2;
+    let floatY = Math.sin(globalTime*3 + g.floatOffset) * 5;
+    ctx.save();
+    ctx.translate(g.x + g.size/2 - cameraX, g.y + g.size/2 - cameraY + floatY);
+    ctx.rotate(Math.PI/4);
+    ctx.fillStyle = "white";
+    if(runtime.glowEnabled){ ctx.shadowColor = "white"; ctx.shadowBlur = 20 + 10 * Math.sin(globalTime*5); }
+    ctx.fillRect(-g.size/2, -g.size/2, g.size, g.size);
+    ctx.restore();
+    ctx.shadowBlur = 0;
+  }
+
+  // trail clones
+  if(player.visible && runtime.trailEnabled){
+    if(trail.length === 0 || Math.hypot(player.x - trail[trail.length-1].x, player.y - trail[trail.length-1].y) > 15){
+      trail.push({ x: player.x, y: player.y, width: player.width, height: player.height, color: player.color });
+    }
+    const maxTrailLen = Math.max(10, Math.floor(50 * (runtime.effects.trailMul || 1)));
+    if(trail.length > maxTrailLen) trail.shift();
+    for(let i=0;i<trail.length;i++){
+      const t = trail[i];
+      ctx.save();
+      let alpha = (i+1)/trail.length;
+      ctx.globalAlpha = alpha * 0.6;
+      if(runtime.glowEnabled){ ctx.shadowColor = t.color; ctx.shadowBlur = 15 * alpha; }
+      ctx.fillStyle = t.color;
+      ctx.fillRect(t.x - cameraX, t.y - cameraY, t.width, t.height);
+      ctx.strokeStyle = t.color; ctx.lineWidth = 4; ctx.strokeRect(t.x - cameraX, t.y - cameraY, t.width, t.height);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  } else {
+    trail = [];
+  }
+
+  // crash pieces
+  for(let p of crashPieces){
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x - cameraX, p.y - cameraY, p.size, p.size);
+  }
+
+  // particles
+  for(let p of particles){
+    if(p.life > 0){
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x - cameraX, p.y - cameraY, 4, 4);
+    }
+  }
+
+  // player
+  if(player.visible){
+    if(runtime.glowEnabled){ ctx.shadowColor = "#0ff"; ctx.shadowBlur = 20; }
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x - cameraX, player.y - cameraY, player.width, player.height);
+    if(runtime.glowEnabled) ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#0ff"; ctx.lineWidth = 6; ctx.strokeRect(player.x - cameraX, player.y - cameraY, player.width, player.height);
+  }
+
+  // HUD
+  const hudScore = document.getElementById('scoreHUD');
+  hudScore.innerText = 'Score: ' + Math.floor(score);
+  document.getElementById('bestScore').innerText = 'Best Score: ' + bestScore;
+
+  // fps label already updated in loop
+}
+
+/* ---------- Main loop with FPS limiting ---------- */
+let lastLoopTime = performance.now();
+let accumulated = 0;
+function mainLoop(now){
+  requestAnimationFrame(mainLoop);
+  if(!now) now = performance.now();
+  const deltaMs = now - lastLoopTime;
+  lastLoopTime = now;
+  const deltaSec = deltaMs / 1000;
+  globalTime += deltaSec;
+
+  // FPS limiting
+  if(runtime.minFrameTime > 0){
+    accumulated += deltaMs;
+    if(accumulated < runtime.minFrameTime) return;
+    accumulated = 0;
+  }
+
+  // world step & draw
+  if(gameRunning && player.visible){
+    worldStep(deltaSec);
+  }
+  // camera smoothing: center camera on player (offset)
+  const targetCamX = player.x - 150;
+  const targetCamY = player.y - canvas.height/2 + player.height*1.5;
+  cameraX = cameraX * 0.9 + targetCamX * 0.1;
+  cameraY = cameraY * 0.9 + targetCamY * 0.1;
+
+  // draw
+  draw();
+
+  // update crash/particles movement done in worldStep; here we update FPS display
+  fps = 1000 / Math.max(1, deltaMs);
+  // update fps label top-left (as "FPS: current / max")
+  const fpsLabel = document.getElementById('fpsLabel');
+  const maxFPSText = settings.maxFPS === 0 ? 'Unlimited' : settings.maxFPS;
+  fpsLabel.innerText = `FPS: ${Math.round(fps)} / ${maxFPSText} — Quality: ${settings.qualityPreset}`;
+}
+
+/* ---------- Start / Reset Game ---------- */
+function startGame(){
+  document.getElementById('menu').style.display = 'none';
+  resetWorld();
+  gameRunning = true;
+  player.visible = true;
+}
+document.getElementById('startBtn').addEventListener('click', startGame);
+
+/* ---------- Settings button (open settings.html if present) ---------- */
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  // Try to fetch settings.html HEAD to decide
+  fetch('settings.html', { method: 'HEAD' }).then(resp => {
+    if(resp.ok) {
+      window.location.href = 'settings.html';
+    } else {
+      alert('cannot open settings, settings.html required');
+    }
+  }).catch(()=> {
+    alert('cannot open settings, settings.html required');
+  });
+});
+
+/* ---------- Game initialization ---------- */
+// make sure we have at least a default settings object saved if none exists
+if(!localStorage.getItem(LS_KEY)){
+  writeSettings(defaultSettings);
+  settings = readSettings();
+  applySettings(settings);
+} else {
+  settings = readSettings();
+  applySettings(settings);
+}
+
+// init ground/platforms and show menu
+resetWorld();
+document.getElementById('bestScore').innerText = 'Best Score: ' + bestScore;
+document.getElementById('menu').style.display = 'flex';
+
+// start the RAF loop
+requestAnimationFrame(mainLoop);
+
+/* ---------- Expose some functions for settings window if opened in same origin ---------- */
+window.getCurrentSettings = () => settings;
+window.applySettings = (s) => { applySettings(s); settings = s; };
+window.setQualityPreset = (name) => {
+  settings.qualityPreset = name;
+  const p = qualityPresets[name];
+  if(p){
+    settings.quality.jumpEffect = p.jumpEffect || 0;
+    settings.quality.walkEffect = p.walkEffect || 0;
+    settings.quality.dieEffect = p.dieEffect || 0;
+    settings.quality.horizontalLines = p.horizontalLines || 0;
+    settings.quality.trail = p.trail ? 100 : 0;
+    settings.quality.blockTexture = p.blockTexture ? 100 : 0;
+  }
+  applySettings(settings);
+};
+
+console.log('Index.html loaded (complete).');
+
+</script>
+  
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+</script>
+</body>
+</html>

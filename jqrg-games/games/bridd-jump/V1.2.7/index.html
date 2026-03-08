@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>Schedule | Infinite Campus</title>
+<link rel="icon" href="infinite-campus.ico">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#00ffff" />
+<meta name="description" content="Jump from platform to platform and travel as far as possible!" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="../manifest.json" />
+<script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Schedule | Infinite Campus';
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.href = 'infinite-campus.ico';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'V1.2.7 | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+
+<!-- Pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<!-- Google Sans Code font -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #000;
+    --accent: #0ff;
+    --accent-glow: rgba(0, 255, 255, 0.8);
+    --panel: rgba(0, 0, 0, 0.95);
+    --muted: #88f7ff;
+    --text: #fff;
+  }
+  
+  * { 
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body { 
+    height: 100%; 
+    margin: 0; 
+    background: var(--bg);
+    color: var(--text); 
+    font-family: "Press Start 2P", monospace;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
+  
+  canvas { 
+    display: block; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 1; 
+    background: #000; 
+  }
+  
+  /* Menu overlay - Retro pixel style */
+  #menu {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: 94vw;
+    padding: 32px 28px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    border-radius: 0;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    z-index: 1200;
+    pointer-events: all;
+    animation: menuFadeIn 0.4s ease-out;
+  }
+  
+  @keyframes menuFadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  #menu h1 { 
+    margin: 0; 
+    font-size: 28px; 
+    color: var(--accent);
+    text-align: center;
+    line-height: 1.4;
+    letter-spacing: 2px;
+  }
+  
+  #bestScore { 
+    font-size: 11px; 
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  
+  .btn {
+    appearance: none;
+    border: 3px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    padding: 14px 24px;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: "Press Start 2P", monospace;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+  
+  .btn:hover {
+    color: #000;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+  
+  .btn:hover::before {
+    width: 100%;
+  }
+  
+  .btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 5px var(--accent-glow);
+  }
+  
+  #hpDisplay {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    z-index: 1100;
+    display: flex;
+    gap: 4px;
+    pointer-events: none;
+  }
+  
+  .hpSquare {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  
+  .hpSquare.full {
+    background-color: var(--accent);
+  }
+  
+  .hpSquare.empty {
+    background-color: #000;
+  }
+  
+  #fpsLabel { 
+    position: fixed; 
+    right: 16px; 
+    top: 16px; 
+    z-index: 1100; 
+    font-size: 14px; 
+    color: var(--muted);
+    pointer-events: none;
+    font-family: "Press Start 2P", monospace;
+    padding: 12px 18px;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  #scoreDisplay {
+    margin-top: 32px;
+    position: fixed;
+    left: 50%;
+    top: 16px;
+    transform: translateX(-50%);
+    z-index: 1100;
+    font-size: 48px;
+    color: var(--accent);
+    pointer-events: none;
+    font-family: "Press Start 2P", monospace;
+  }
+  
+  #pauseTimer {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1200;
+    font-size: 72px;
+    color: var(--accent);
+    font-family: "Press Start 2P", monospace;
+    display: none;
+    pointer-events: none;
+  }
+  
+  #debugToast { 
+    position: fixed; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    bottom: 24px; 
+    z-index: 1300; 
+    background: var(--panel);
+    border: 3px solid var(--accent);
+    color: var(--accent);
+    padding: 15px 24px;
+    border-radius: 0;
+    display: none;
+    font-size: 14px;
+    font-family: "Press Start 2P", monospace;
+    pointer-events: none;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 15px rgba(0, 255, 255, 0.1);
+    animation: toastSlideUp 0.3s ease-out;
+    text-transform: uppercase;
+  }
+  
+  @keyframes toastSlideUp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+  
+  /* Mobile command button - invisible but clickable */
+  #mobileCommandBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 56px;
+    height: 56px;
+    background: transparent;
+    border: none;
+    z-index: 1000;
+    cursor: pointer;
+    opacity: 0;
+  }
+  
+  /* Keyboard visualization blocks */
+  #keyboardVisualization {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+  
+  .keyboardKey {
+    width: 48px;
+    height: 48px;
+    background: #000;
+    border: 2px solid #fff;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.1s ease;
+  }
+  
+  .keyboardKey.active {
+    opacity: 1;
+  }
+  
+  .keyboardKey svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+  }
+  
+  /* How to Play Modal */
+  #howToPlayModal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90vw;
+    max-height: 80vh;
+    padding: 32px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    border-radius: 0;
+    box-shadow: 
+      0 0 30px var(--accent-glow),
+      inset 0 0 30px rgba(0, 255, 255, 0.1);
+    z-index: 1400;
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    animation: menuFadeIn 0.4s ease-out;
+  }
+  
+  #howToPlayModal.show {
+    display: flex;
+  }
+  
+  #howToPlayModal h2 {
+    font-size: 18px;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  #howToPlayModal .section {
+    margin-bottom: 16px;
+  }
+  
+  #howToPlayModal .section-title {
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    text-decoration: underline;
+  }
+  
+  #howToPlayModal .section-content {
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-left: 8px;
+  }
+  
+  #howToPlayModal .section-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 4px 0;
+  }
+  
+  #howToPlayModal .section-content li {
+    margin: 4px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  
+  #howToPlayModal .section-content li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  
+  #howToPlayModal .closeBtn {
+    margin-top: 8px;
+    align-self: center;
+  }
+  
+  #howToPlayModal::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  #howToPlayModal::-webkit-scrollbar-track {
+    background: rgba(0, 255, 255, 0.1);
+  }
+  
+  #howToPlayModal::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border: 2px solid #000;
+  }
+  
+  /* Code Editor Modal */
+  /* #codeEditorModal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1500;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  #codeEditorContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+  
+  #codeEditorHeader {
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  #codeEditorHeader h2 {
+    font-size: 14px;
+    color: var(--accent);
+    margin: 0;
+  }
+  
+  #codeEditorHeader .header-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  #codeEditorHeader .header-buttons .btn {
+    max-width: 120px;
+    font-size: 9px;
+    padding: 8px 16px;
+  }
+  
+  #codeEditorWrapper {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #findReplacePanel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.95);
+    border-left: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px;
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: -5px 5px 15px rgba(0, 255, 255, 0.3);
+  }
+  
+  #findReplacePanel h3 {
+    font-size: 11px;
+    color: var(--accent);
+    margin: 0 0 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #closeFindReplace {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+  }
+  
+  #closeFindReplace:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  
+  #findReplacePanel input[type="text"] {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--accent);
+    color: var(--text);
+    padding: 8px;
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  #findReplacePanel input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  
+  #findReplacePanel .find-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  #findReplacePanel .find-count {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: "Press Start 2P", monospace;
+  }
+  
+  #findReplacePanel .replace-controls {
+    display: flex;
+    gap: 8px;
+  }
+  
+  #findReplacePanel .replace-controls .btn {
+    flex: 1;
+    max-width: none;
+    font-size: 8px;
+    padding: 6px 12px;
+  }
+  
+  #findReplacePanel .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  #findReplacePanel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  
+  #findReplacePanel label {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: "Press Start 2P", monospace;
+    cursor: pointer;
+  }
+  
+  #codeEditor {
+    flex: 1;
+    width: 100%;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border: none;
+    padding: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    overflow-y: auto;
+    tab-size: 2;
+    white-space: pre;
+    word-wrap: normal;
+  }
+  
+  #codeEditor::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  #codeEditor::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  #codeEditor::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border: 2px solid #000;
+  }
+  
+  #codeEditor::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  } */
+  
+  /* Pause Screen */
+  #pauseScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  #pauseScreen.show {
+    display: flex;
+  }
+
+  .pauseBtn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: "Press Start 2P", monospace;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 20px 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.2s ease;
+  }
+
+  .pauseBtn:hover {
+    color: var(--muted);
+    transform: scale(1.1);
+  }
+
+  .pauseBtn:active {
+    transform: scale(0.95);
+  }
+
+  /* Best Score Modal */
+  #bestScoreModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #bestScoreModal.show {
+    display: flex;
+  }
+
+  .bestScoreModalContent {
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    padding: 40px;
+    text-align: center;
+    box-shadow: 
+      0 0 30px var(--accent-glow),
+      inset 0 0 30px rgba(0, 255, 255, 0.1);
+    max-width: 500px;
+    width: 90%;
+  }
+
+  .bestScoreTitle {
+    font-family: "Press Start 2P", monospace;
+    font-size: 24px;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .bestScoreValue {
+    font-family: "Press Start 2P", monospace;
+    font-size: 48px;
+    color: var(--accent);
+    margin-bottom: 30px;
+  }
+
+  .bestScoreQuestion {
+    font-family: "Press Start 2P", monospace;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .bestScoreButtons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .bestScoreBtn {
+    background: none;
+    border: 3px solid var(--accent);
+    color: var(--accent);
+    font-family: "Press Start 2P", monospace;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 16px 32px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.2s ease;
+    min-width: 150px;
+  }
+
+  .bestScoreBtn:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 
+      0 0 20px var(--accent-glow),
+      inset 0 0 20px rgba(0, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  .bestScoreBtn:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 560px) {
+    #menu { 
+      width: 92vw; 
+      padding: 24px 20px; 
+    }
+    .btn { 
+      width: 100%; 
+      font-size: 10px; 
+      padding: 12px 20px;
+      max-width: none;
+    }
+    #menu h1 { 
+      font-size: 22px; 
+    }
+    #hpDisplay {
+      left: 12px;
+      top: 12px;
+    }
+    .hpSquare {
+      width: 24px;
+      height: 24px;
+    }
+    #scoreDisplay {
+      font-size: 24px;
+    }
+    #fpsLabel {
+      right: 12px;
+      top: 12px;
+      font-size: 12px;
+      padding: 10px 14px;
+    }
+    #pauseTimer {
+      font-size: 54px;
+    }
+    .pauseBtn {
+      font-size: 16px;
+      padding: 16px 32px;
+    }
+    #codeEditorModal {
+      padding: 10px;
+    }
+    #findReplacePanel {
+      width: 100%;
+      position: relative;
+      border-left: none;
+      border-bottom: 2px solid var(--accent);
+    }
+    .pauseBtn {
+      font-size: 12px;
+      padding: 12px 24px;
+    }
+  }
+
+  /* Code Viewer */
+  #codeViewerModal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1500;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #codeViewerContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+  #codeViewerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 3px solid var(--accent);
+  }
+  #codeViewerHeader h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+  #codeViewer {
+    flex: 1;
+    width: 100%;
+    background: #000;
+    color: var(--accent);
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 12px;
+    font-family: "Press Start 2P", monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow: auto;
+  }
+
+
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { overflow-y: auto; }
+    #menu { width: 92vw; max-width: none; padding: 20px 16px; }
+    .btn, select { width: 100%; max-width: none; font-size: 10px; padding: 12px 16px; }
+    #menu h1 { font-size: 20px; }
+    #menu h3 { font-size: 11px; }
+    #bestScore { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="menu" role="dialog" aria-label="start menu">
+    <h1>BRIDD JUMP</h1>
+    <div id="bestScore">Best Score: 0</div>
+    <button id="startBtn" class="btn">START</button>
+    <button id="settingsBtn" class="btn">SETTINGS</button>
+    <button id="fullscreenBtn" class="btn">FULLSCREEN</button>
+    <button id="howToPlayBtn" class="btn">HOW TO PLAY</button>
+        <button onclick="if(typeof playSound === 'function') playSound('menuClick'); openCodeViewer();" class="btn">CODE</button>
+    <button onclick="if(typeof playSound === 'function') playSound('menuClick'); window.location.href='../';" class="btn">HOME</button>
+  </div>
+
+  <!-- How to Play Modal -->
+  <div id="howToPlayModal">
+    <h2>HOW TO PLAY</h2>
+    
+    <div class="section">
+      <div class="section-title">OBJECTIVE</div>
+      <div class="section-content">
+        Jump from platform to platform and travel as far as possible! Collect gems to increase your score. Avoid spikes and falling into the void.
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">CONTROLS</div>
+      <div class="section-content">
+        <ul>
+          <li><strong>Jump:</strong> Press W, Arrow Up, Space, or click/tap anywhere</li>
+          <li><strong>Double Jump:</strong> Jump again while in the air (2 jumps total)</li>
+          <li><strong>Drop:</strong> Press S or Arrow Down to drop quickly through platforms</li>
+          <li><strong>Mobile Drop:</strong> Tap and drag down to drop</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">GAME MECHANICS</div>
+      <div class="section-content">
+        <ul>
+          <li>You start with 2 jumps - use them wisely!</li>
+          <li>Landing on a platform restores your jumps</li>
+          <li>The game speeds up as you climb higher</li>
+          <li>Platforms become more spaced out at furthur distance</li>
+          <li>Gems give you points - collect as many as you can!</li>
+        </ul>
+      </div>
+    </div>
+    
+    <button class="btn closeBtn" onclick="if(typeof playSound === 'function') playSound('menuClick'); document.getElementById('howToPlayModal').classList.remove('show')">CLOSE</button>
+  </div>
+
+  <!-- Code Editor Modal -->
+  <!-- <div id="codeEditorModal">
+    <div id="codeEditorContainer">
+      <div id="codeEditorHeader">
+        <h2>CODE EDITOR</h2>
+        <div class="header-buttons">
+          <button id="applyCodeBtn" class="btn">APPLY</button>
+          <button id="closeCodeEditor" class="btn">CLOSE</button>
+        </div>
+      </div>
+      <div id="codeEditorWrapper">
+        <div id="findReplacePanel">
+          <h3>FIND & REPLACE<button id="closeFindReplace" title="Close">×</button></h3>
+          <input type="text" id="findInput" placeholder="Find...">
+          <div class="find-controls">
+            <span id="findCountLabel" class="find-count">0/0</span>
+          </div>
+          <input type="text" id="replaceInput" placeholder="Replace...">
+          <div class="replace-controls">
+            <button id="replaceBtn" class="btn">REPLACE</button>
+            <button id="replaceAllBtn" class="btn">REPLACE ALL</button>
+          </div>
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="matchCaseCheckbox">
+            <label for="matchCaseCheckbox">MATCH LETTERS</label>
+          </div>
+        </div>
+        <textarea id="codeEditor" spellcheck="false"></textarea>
+      </div>
+    </div>
+  </div> -->
+
+  <div id="hpDisplay"></div>
+  <div id="scoreDisplay">0</div>
+  <div id="fpsLabel">FPS: -- / --</div>
+  <div id="pauseTimer">3</div>
+  <div id="debugToast"></div>
+  <div id="mobileCommandBtn" title="Open Command (Ctrl+Shift+A)"></div>
+  
+  <!-- Pause Screen -->
+  <div id="pauseScreen">
+    <button id="continueBtn" class="pauseBtn">CONTINUE</button>
+    <button id="mainMenuBtn" class="pauseBtn">MAIN MENU</button>
+  </div>
+  
+  <!-- Best Score Choice Modal -->
+  <div id="bestScoreModal">
+    <div class="bestScoreModalContent">
+      <div class="bestScoreTitle">New High Score!</div>
+      <div class="bestScoreValue" id="bestScoreValue">0</div>
+      <div class="bestScoreQuestion">Would you like to save this as your best score?</div>
+      <div class="bestScoreButtons">
+        <button id="keepBestScoreBtn" class="bestScoreBtn">KEEP</button>
+        <button id="dontKeepBestScoreBtn" class="bestScoreBtn">DON'T KEEP</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Keyboard Visualization -->
+  <div id="keyboardVisualization">
+    <div id="keyboardKeyUp" class="keyboardKey">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+      </svg>
+    </div>
+    <div id="keyboardKeyDown" class="keyboardKey">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- <script src="../editCode.js"></script> -->
+  
+  <div id="codeViewerModal">
+    <div id="codeViewerContainer">
+      <div id="codeViewerHeader">
+        <h2>CODE VIEWER</h2>
+        <button id="closeCodeViewer" class="btn">CLOSE</button>
+      </div>
+      <textarea id="codeViewer" spellcheck="false" readonly></textarea>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    function openCodeViewer(){
+      const modal = document.getElementById('codeViewerModal');
+      const viewer = document.getElementById('codeViewer');
+      if(!modal || !viewer) return;
+      modal.style.display = 'flex';
+      viewer.value = 'Loading...';
+      fetch('game.js').then(r => r.text()).then(t => {
+        viewer.value = t;
+        viewer.scrollTop = 0;
+      }).catch(() => {
+        viewer.value = 'Failed to load code.';
+      });
+    }
+    const closeBtn = document.getElementById('closeCodeViewer');
+    if(closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        document.getElementById('codeViewerModal').style.display = 'none';
+      });
+    }
+  </script>
+
+  
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

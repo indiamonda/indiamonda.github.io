@@ -1,30 +1,30 @@
 # Announcements
 
-**03/02/2026** Added Stickman Arena. Added Amenda the Adventurer. Updated Drift Boss. In total of 95 games.
+**03/05/2026** Fixed bugs.
 
-**02/27/2026** Added Stickman Arena. Added Amenda the Adventurer. Added Stickman Rebirth. Updated Drift Boss. In total of 95 games.
+**02/27/2026** Added Stickman Arena. Updated Drift Boss. In total 95 games.
 
-**02/25/2026** Added Amenda the Adventurer. Added Stickman Rebirth. Added Vex. Added Count Master. Added Iron Lung. Added Flappy Dunk. Added Crazy Cattle. In total of 95 games.
+**02/25/2026** Added Amenda the Adventurer. In total 95 games.
 
-**02/24/2026** Added Stickman Rebirth. Added Vex. Added Count Master. Added Iron Lung. Added Flappy Dunk. Added Crazy Cattle. In total of 95 games.
+**02/24/2026** Added Stickman Rebirth. In total 95 games.
 
-**02/20/2026** Added Vex. Added Count Master. Added Iron Lung. Added Flappy Dunk. Added Crazy Cattle. In total of 87 games.
+**02/20/2026** Added Vex, Count Master, Iron Lung, Flappy Dunk, Crazy Cattle. In total 87 games.
 
-**02/15/2026** Added game Tanuki Sunset. In total of 87 games.
+**02/15/2026** Added game Tanuki Sunset. In total 87 games.
 
-**01/19/2026** Added game Bottle Flip 3D. Added game Tunnel Rush. Added game Uno. Added game Dino. Removed game The Backrooms. Fixed game Zombie Derby Pixel Survival. Fixed game Candy Jump. Fixed game 3D Car Simulator. Updated game Bridd Jump. In total of 98 games.
+**01/19/2026** Added game Bottle Flip 3D, Tunnel Rush, Uno, Dino. Removed game The Backrooms. Fixed game Zombie Derby Pixel Survival, Candy Jump, 3D Car Simulator. Updated game Bridd Jump. In total 98 games.
 
 **01/04/2026** Website back to [jimmyqrg.github.io](https://jimmyqrg.github.io/)
 
 **01/01/2026** Happy New Year!!!!!!
 
-**12/28/2025** FHDlikestrains copied the website without permission, the real website is [student.jimmyqrg.com/?page=extend](https://student.jimmyqrg.com/?page=extend). Slightly improved UI. Added contacts. Added game Drive Mad. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Having a page for exporting and importing data. Fix Scratch geometry dash. In total of 70 games.
+**12/28/2025** FHDlikestrains copied the website without permission, the real website is [student.jimmyqrg.com/?page=extend](https://student.jimmyqrg.com/?page=extend). Slightly improved UI. Added contacts. Added game Drive Mad. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Having a page for exporting and importing data. Fix Scratch geometry dash. In total 70 games.
 
-**12/26/2025** Slightly improved UI. Added contacts. Added game Drive Mad. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total of 70 games.
+**12/26/2025** Slightly improved UI. Added contacts. Added game Drive Mad. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total 70 games.
 
-**12/25/2025** Added contacts. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total of 70 games.
+**12/25/2025** Added contacts. Added game Curveball 3D. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total 70 games.
 
-**12/24/2025** FHDlikestrains copied the website without permission, the real website is [https://student.jimmyqrg.com/?page=extend](https://student.jimmyqrg.com/?page=extend). Added contacts. Added game Deltarune. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total of 70 games.
+**12/24/2025** FHDlikestrains copied the website without permission, the real website is [https://student.jimmyqrg.com/?page=extend](https://student.jimmyqrg.com/?page=extend). Added contacts. Added game Deltarune. Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash. In total 70 games.
 
 **12/23/2025** Added open game type settings. Exporting data and Importing data is now on testing. Future: Having a page for exporting and importing data. Fix Scratch geometry dash.
 

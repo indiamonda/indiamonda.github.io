@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>Schedule | Infinite Campus</title>
+<link rel="icon" href="infinite-campus.png">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#00ffff" />
+<meta name="description" content="Jump from platform to platform and travel as far as possible!" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="../manifest.json" />
+<script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Schedule | Infinite Campus';
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.href = 'infinite-campus.png';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'V1.1.3 | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+
+<!-- Pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #000;
+    --accent: #0ff;
+    --panel: rgba(0,0,0,0.9);
+    --muted: #88f7ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { height:100%; margin:0; background:var(--bg); color:#fff; font-family: "Press Start 2P", monospace; -webkit-font-smoothing: none; -moz-osx-font-smoothing: grayscale; }
+  canvas { display:block; position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; background: #000; }
+  /* Menu overlay (restored UI) */
+  #menu {
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: 94vw;
+    padding: 28px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    border-radius: 12px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 1200;
+    pointer-events: all;
+  }
+  #menu h1 { margin:0; font-size: 28px; color: var(--accent); text-shadow: 0 0 12px var(--accent); }
+  #bestScore { font-size: 12px; color: var(--muted); margin-top: 6px;}
+  .btn {
+    appearance:none; border:3px solid var(--accent); background:transparent; color:var(--accent);
+    padding:12px 18px; border-radius:10px; cursor:pointer; font-size:12px; width:300px; text-align:center;
+  }
+  .btn:hover { background:var(--accent); color:#000; }
+  #scoreHUD { position: fixed; left: 12px; top: 12px; z-index: 1100; font-size:12px; color:var(--accent); text-shadow:0 0 6px rgba(0,255,255,0.2); pointer-events:none; font-family:"Press Start 2P",monospace; }
+  #fpsLabel { position: fixed; left: 12px; top: 44px; z-index: 1100; font-size:11px; color:var(--accent); pointer-events:none; }
+  #debugToast { position: fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:1300; background:rgba(0,0,0,0.6); border:2px solid var(--accent); color:var(--accent); padding:8px 12px; border-radius:8px; display:none; font-size:11px; pointer-events:none; }
+  /* Mobile command button */
+  #mobileCommandBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 50%;
+    z-index: 1000;
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.3s, background 0.3s;
+  }
+  #mobileCommandBtn:hover {
+    opacity: 0.6;
+    background: rgba(0, 255, 255, 0.2);
+  }
+  @media (max-width:560px){
+    #menu { width: 92vw; padding: 18px; }
+    .btn { width: 100%; font-size:11px; padding:10px; }
+    #menu h1 { font-size:20px; }
+  }
+
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { overflow-y: auto; }
+    #menu { width: 92vw; max-width: none; padding: 20px 16px; }
+    .btn, select { width: 100%; max-width: none; font-size: 10px; padding: 12px 16px; }
+    #menu h1 { font-size: 20px; }
+    #menu h3 { font-size: 11px; }
+    #bestScore { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="menu" role="dialog" aria-label="start menu">
+    <h1>BRIDD JUMP</h1>
+    <div id="bestScore">Best Score: 0</div>
+    <button id="startBtn" class="btn">START</button>
+    <button id="settingsBtn" class="btn">SETTINGS</button>
+    <button onclick="window.location.href='../'" class="btn">HOME</button>
+  </div>
+
+  <div id="scoreHUD">Score: 0</div>
+  <div id="fpsLabel">FPS: -- / --</div>
+  <div id="debugToast"></div>
+  <div id="mobileCommandBtn" title="Open Command (Ctrl+Shift+A)"></div>
+
+  <script src="game.js"></script>
+  
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

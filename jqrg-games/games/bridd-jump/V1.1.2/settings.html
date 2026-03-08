@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings | Infinite Campus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#00ffff" />
+  <meta name="description" content="Bridd Jump Game Settings" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Bridd Jump" />
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/game-images/games/bridd-jump.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/game-images/games/bridd-jump.png" />
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <script>
+(function() {
+  // Check hide variable (can be set via localStorage, URL param, or window variable)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hide = typeof window.hide !== 'undefined' ? window.hide : 
+               localStorage.getItem('hide') === 'true' ? true :
+               urlParams.get('hide') === 'true' ? true : false;
+  
+  if (hide === true) {
+    // Keep original title and favicon
+    document.title = 'Settings | Infinite Campus';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = 'infinite-campus.png';
+  } else {
+    // Set Bridd Jump branding
+    document.title = 'Settings | Bridd Jump';
+    let icon = document.querySelector('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = '/game-images/games/bridd-jump.png';
+  }
+})();
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #0ff;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(0,0,0,0.9);
+      border: 3px solid #0ff;
+      border-radius: 20px;
+      padding: 30px;
+      width: 640px;
+      max-width: 95%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-size: 12px;
+    }
+    select, input[type=range], input[type=checkbox] {
+      margin-bottom: 10px;
+      background: black;
+      color: #0ff;
+      border: 2px solid #0ff;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      padding: 5px;
+    }
+    select, input[type=range] {
+      width: 100%;
+    }
+    .range-value {
+      font-size: 10px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    button {
+      margin: 15px;
+      padding: 12px 30px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #0ff;
+      background: black;
+      border: 3px solid #0ff;
+      border-radius: 10px;
+      font-family: 'Press Start 2P', cursive;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0ff;
+      color: black;
+    }
+    #advancedSettings, #effectsSettings {
+      display: none;
+      margin-top: 10px;
+      border-top: 1px solid #0ff;
+      padding-top: 10px;
+    }
+    #toggleAdvanced, #toggleEffects {
+      font-size: 12px;
+      background: transparent;
+      border: 2px solid #0ff;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    #toggleAdvanced:hover, #toggleEffects:hover {
+      background: #0ff;
+      color: black;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .checkbox-container label {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 10px;
+    }
+    .checkbox-container input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      cursor: pointer;
+    }
+    .settings-section {
+      margin: 20px 0;
+      border: 1px dashed #0ff;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .section-title {
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #0ff;
+      text-decoration: underline;
+    }
+  
+  /* Mobile friendly */
+  @media (max-width: 560px) {
+    body { padding: 10px; }
+    .container { width: 92vw; max-width: none; padding: 20px; max-height: 92vh; }
+    h1 { font-size: 18px; }
+    label { font-size: 9px; }
+    select, input[type=range], button { font-size: 10px; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>SETTINGS</h1>
+
+    <label for="fps">Max FPS:</label>
+    <select id="fps">
+      <option value="0">Unlimited</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+      <option value="30">30</option>
+      <option value="35">35</option>
+      <option value="40">40</option>
+      <option value="45">45</option>
+      <option value="50">50</option>
+      <option value="60">60</option>
+      <option value="70">70</option>
+      <option value="80">80</option>
+      <option value="90">90</option>
+      <option value="100">100</option>
+      <option value="110">110</option>
+      <option value="120">120</option>
+      <option value="130">130</option>
+      <option value="140">140</option>
+      <option value="150">150</option>
+      <option value="160">160</option>
+      <option value="180">180</option>
+      <option value="200">200</option>
+      <option value="250">250</option>
+      <option value="300">300</option>
+    </select>
+
+    <label for="quality">Quality Preset:</label>
+    <select id="quality">
+      <option>Potato</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Medium+</option>
+      <option>High</option>
+      <option>High+</option>
+      <option>Extreme</option>
+      <option selected>Extreme+</option>
+      <option>Ultra</option>
+      <option>Ultra+</option>
+      <option>Ultra++</option>
+      <option>Highest</option>
+    </select>
+
+    <button id="toggleEffects">Visual Effects Settings ▼</button>
+    
+    <div id="effectsSettings">
+      <div class="settings-section">
+        <div class="section-title">Basic Effects</div>
+        
+        <div class="checkbox-container">
+          <label>
+            <input type="checkbox" id="blockTexture" checked>
+            Enable Block Texture
+          </label>
+        </div>
+
+        <label>Jump Effects</label>
+        <input type="range" id="jumpEffect" min="0" max="200" value="100">
+        <div class="range-value" id="jumpEffectVal">100%</div>
+
+        <label>Walk Effects</label>
+        <input type="range" id="walkEffect" min="0" max="200" value="100">
+        <div class="range-value" id="walkEffectVal">100%</div>
+
+        <label>Die Effects</label>
+        <input type="range" id="dieEffect" min="0" max="200" value="100">
+        <div class="range-value" id="dieEffectVal">100%</div>
+
+        <label>Horizontal Line Effects</label>
+        <input type="range" id="horizontalLines" min="0" max="200" value="100">
+        <div class="range-value" id="horizontalLinesVal">100%</div>
+
+        <label>Trail Effects</label>
+        <input type="range" id="trail" min="0" max="200" value="100">
+        <div class="range-value" id="trailVal">100%</div>
+
+        <label>Glow Intensity</label>
+        <input type="range" id="glow" min="0" max="200" value="100">
+        <div class="range-value" id="glowVal">100%</div>
+      </div>
+
+      <button id="toggleAdvanced">Advanced Effects Settings ▼</button>
+      
+      <div id="advancedSettings">
+        <div class="settings-section">
+          <div class="section-title">Advanced Effects (High Performance Impact)</div>
+          
+          <label>Shockwave Effects</label>
+          <input type="range" id="shockwaves" min="0" max="200" value="100">
+          <div class="range-value" id="shockwavesVal">100%</div>
+
+          <label>Screen Shake Intensity</label>
+          <input type="range" id="screenShake" min="0" max="200" value="100">
+          <div class="range-value" id="screenShakeVal">100%</div>
+
+          <label>Bloom Particles</label>
+          <input type="range" id="bloomParticles" min="0" max="200" value="100">
+          <div class="range-value" id="bloomParticlesVal">100%</div>
+
+          <label>Particle Trails</label>
+          <input type="range" id="particleTrails" min="0" max="200" value="100">
+          <div class="range-value" id="particleTrailsVal">100%</div>
+
+          <label>Screen Distortion</label>
+          <input type="range" id="screenDistortion" min="0" max="200" value="100">
+          <div class="range-value" id="screenDistortionVal">100%</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button id="cancelBtn">CANCEL</button>
+      <button id="saveBtn">SAVE</button>
+    </div>
+  </div>
+
+  <script>
+    // Load settings from localStorage with the correct key
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem("briddSettings");
+        if (!saved) return;
+        
+        const settings = JSON.parse(saved);
+        
+        // Set FPS
+        document.getElementById("fps").value = settings.maxFPS || 0;
+        
+        // Set quality preset
+        document.getElementById("quality").value = settings.qualityPreset || "Extreme+";
+        
+        // Set basic effects if they exist
+        if (settings.quality) {
+          // Block texture is now a checkbox - convert numeric to boolean
+          // In game.js: 0 = off, 1 or more = on
+          const blockTextureValue = settings.quality.blockTexture || 100;
+          document.getElementById("blockTexture").checked = blockTextureValue >= 1;
+          
+          document.getElementById("jumpEffect").value = settings.quality.jumpEffect || 100;
+          document.getElementById("walkEffect").value = settings.quality.walkEffect || 100;
+          document.getElementById("dieEffect").value = settings.quality.dieEffect || 100;
+          document.getElementById("horizontalLines").value = settings.quality.horizontalLines || 100;
+          document.getElementById("trail").value = settings.quality.trail || 100;
+          document.getElementById("glow").value = settings.quality.glow || 100;
+        }
+        
+        // Set advanced effects if they exist
+        if (settings.advanced) {
+          document.getElementById("shockwaves").value = settings.advanced.shockwaves || 100;
+          document.getElementById("screenShake").value = settings.advanced.screenShake || 100;
+          document.getElementById("bloomParticles").value = settings.advanced.bloomParticles || 100;
+          document.getElementById("particleTrails").value = settings.advanced.particleTrails || 100;
+          document.getElementById("screenDistortion").value = settings.advanced.screenDistortion || 100;
+        }
+        
+        // Update all range value displays
+        updateAllRangeValues();
+        
+      } catch (e) {
+        console.error("Failed to load settings:", e);
+      }
+    }
+
+    // Update all range value displays
+    function updateAllRangeValues() {
+      const rangeIds = [
+        "jumpEffect", "walkEffect", "dieEffect", "horizontalLines", 
+        "trail", "glow", "shockwaves", 
+        "screenShake", "bloomParticles", "particleTrails", "screenDistortion"
+      ];
+      
+      rangeIds.forEach(id => {
+        updateRangeValue(id);
+      });
+    }
+
+    // Update range value display
+    function updateRangeValue(id) {
+      const input = document.getElementById(id);
+      const display = document.getElementById(id + "Val");
+      if (input && display) {
+        display.textContent = input.value + "%";
+      }
+    }
+
+    // Quality presets mapping (matching game.js - with numeric blockTexture)
+    const qualityPresets = {
+      "Potato": {
+        quality: {
+          blockTexture: false, jumpEffect: 0, walkEffect: 0, dieEffect: 0, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0
+        }
+      },
+      "Low": {
+        quality: {
+          blockTexture: false, jumpEffect: 5, walkEffect: 0, dieEffect: 0, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0
+        }
+      },
+      "Medium": {
+        quality: {
+          blockTexture: true, jumpEffect: 10, walkEffect: 0, dieEffect: 10, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0
+        }
+      },
+      "Medium+": {
+        quality: {
+          blockTexture: true, jumpEffect: 15, walkEffect: 15, dieEffect: 15, 
+          horizontalLines: 0, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 0, screenShake: 0, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0
+        }
+      },
+      "High": {
+        quality: {
+          blockTexture: true, jumpEffect: 15, walkEffect: 15, dieEffect: 15, 
+          horizontalLines: 15, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 10, screenShake: 10, bloomParticles: 0, 
+          particleTrails: 0, screenDistortion: 0
+        }
+      },
+      "High+": {
+        quality: {
+          blockTexture: true, jumpEffect: 33, walkEffect: 33, dieEffect: 33, 
+          horizontalLines: 33, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 25, screenShake: 25, bloomParticles: 10, 
+          particleTrails: 10, screenDistortion: 0
+        }
+      },
+      "Extreme": {
+        quality: {
+          blockTexture: true, jumpEffect: 60, walkEffect: 60, dieEffect: 60, 
+          horizontalLines: 60, trail: 0, glow: 0
+        },
+        advanced: {
+          shockwaves: 50, screenShake: 50, bloomParticles: 25, 
+          particleTrails: 25, screenDistortion: 10
+        }
+      },
+      "Extreme+": {
+        quality: {
+          blockTexture: true, jumpEffect: 64, walkEffect: 64, dieEffect: 64, 
+          horizontalLines: 64, trail: 100, glow: 100
+        },
+        advanced: {
+          shockwaves: 75, screenShake: 75, bloomParticles: 50, 
+          particleTrails: 50, screenDistortion: 25
+        }
+      },
+      "Ultra": {
+        quality: {
+          blockTexture: true, jumpEffect: 100, walkEffect: 100, dieEffect: 100, 
+          horizontalLines: 100, trail: 0, glow: 100
+        },
+        advanced: {
+          shockwaves: 100, screenShake: 100, bloomParticles: 75, 
+          particleTrails: 75, screenDistortion: 50
+        }
+      },
+      "Ultra+": {
+        quality: {
+          blockTexture: true, jumpEffect: 120, walkEffect: 120, dieEffect: 120, 
+          horizontalLines: 120, trail: 100, glow: 100
+        },
+        advanced: {
+          shockwaves: 120, screenShake: 120, bloomParticles: 100, 
+          particleTrails: 100, screenDistortion: 75
+        }
+      },
+      "Ultra++": {
+        quality: {
+          blockTexture: true, jumpEffect: 200, walkEffect: 200, dieEffect: 200, 
+          horizontalLines: 200, trail: 100, glow: 150
+        },
+        advanced: {
+          shockwaves: 150, screenShake: 150, bloomParticles: 150, 
+          particleTrails: 150, screenDistortion: 100
+        }
+      },
+      "Highest": {
+        quality: {
+          blockTexture: true, jumpEffect: 200, walkEffect: 200, dieEffect: 200, 
+          horizontalLines: 200, trail: 100, glow: 200
+        },
+        advanced: {
+          shockwaves: 200, screenShake: 200, bloomParticles: 200, 
+          particleTrails: 200, screenDistortion: 200
+        }
+      }
+    };
+
+    // Setup event listeners for range inputs
+    const allRangeIds = [
+      "jumpEffect", "walkEffect", "dieEffect", "horizontalLines", 
+      "trail", "glow", "shockwaves", "screenShake", 
+      "bloomParticles", "particleTrails", "screenDistortion"
+    ];
+
+    allRangeIds.forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener("input", () => updateRangeValue(id));
+        // When manually adjusting sliders, switch to custom mode
+        input.addEventListener("change", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+        // Also switch to custom when user starts dragging (mousedown)
+        input.addEventListener("mousedown", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+        // For touch devices
+        input.addEventListener("touchstart", () => {
+          document.getElementById("quality").value = "Custom";
+        });
+      }
+    });
+
+    // When block texture checkbox changes, switch to custom mode
+    document.getElementById("blockTexture").addEventListener("change", () => {
+      document.getElementById("quality").value = "Custom";
+    });
+
+    // When FPS dropdown changes, switch to custom mode
+    document.getElementById("fps").addEventListener("change", () => {
+      document.getElementById("quality").value = "Custom";
+    });
+
+    // Toggle visual effects settings
+    document.getElementById("toggleEffects").addEventListener("click", function() {
+      const effects = document.getElementById("effectsSettings");
+      if (effects.style.display === "none" || effects.style.display === "") {
+        effects.style.display = "block";
+        this.textContent = "Visual Effects Settings ▲";
+      } else {
+        effects.style.display = "none";
+        this.textContent = "Visual Effects Settings ▼";
+      }
+    });
+
+    // Toggle advanced settings
+    document.getElementById("toggleAdvanced").addEventListener("click", function() {
+      const adv = document.getElementById("advancedSettings");
+      if (adv.style.display === "none" || adv.style.display === "") {
+        adv.style.display = "block";
+        this.textContent = "Advanced Effects Settings ▲";
+      } else {
+        adv.style.display = "none";
+        this.textContent = "Advanced Effects Settings ▼";
+      }
+    });
+
+    // When quality preset changes, update sliders
+    document.getElementById("quality").addEventListener("change", function() {
+      const preset = qualityPresets[this.value];
+      if (preset) {
+        // Update basic effects
+        if (preset.quality) {
+          for (const [key, value] of Object.entries(preset.quality)) {
+            const input = document.getElementById(key);
+            if (input) {
+              if (key === "blockTexture") {
+                // Special handling for checkbox
+                input.checked = Boolean(value);
+              } else {
+                input.value = value;
+                updateRangeValue(key);
+              }
+            }
+          }
+        }
+        
+        // Update advanced effects
+        if (preset.advanced) {
+          for (const [key, value] of Object.entries(preset.advanced)) {
+            const input = document.getElementById(key);
+            if (input) {
+              input.value = value;
+              updateRangeValue(key);
+            }
+          }
+        }
+      }
+    });
+
+    // Save settings and go back to game
+    document.getElementById("saveBtn").addEventListener("click", function() {
+      const settings = {
+        maxFPS: parseInt(document.getElementById("fps").value) || 0,
+        qualityPreset: document.getElementById("quality").value === "Custom" ? "Extreme+" : document.getElementById("quality").value,
+        quality: {
+          blockTexture: document.getElementById("blockTexture").checked ? 100 : 0,
+          jumpEffect: parseInt(document.getElementById("jumpEffect").value) || 0,
+          walkEffect: parseInt(document.getElementById("walkEffect").value) || 0,
+          dieEffect: parseInt(document.getElementById("dieEffect").value) || 0,
+          horizontalLines: parseInt(document.getElementById("horizontalLines").value) || 0,
+          trail: parseInt(document.getElementById("trail").value) || 0,
+          glow: parseInt(document.getElementById("glow").value) || 0
+        },
+        advanced: {
+          shockwaves: parseInt(document.getElementById("shockwaves").value) || 0,
+          screenShake: parseInt(document.getElementById("screenShake").value) || 0,
+          bloomParticles: parseInt(document.getElementById("bloomParticles").value) || 0,
+          particleTrails: parseInt(document.getElementById("particleTrails").value) || 0,
+          screenDistortion: parseInt(document.getElementById("screenDistortion").value) || 0
+        }
+      };
+      
+      try {
+        localStorage.setItem("briddSettings", JSON.stringify(settings));
+        // Go back to the game
+        window.location.href = "index.html";
+      } catch (e) {
+        console.error("Failed to save settings:", e);
+        alert("Failed to save settings!");
+      }
+    });
+
+    // Cancel button - just go back without saving
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+      window.location.href = "index.html";
+    });
+
+    // Load settings on page load
+    window.addEventListener("load", function() {
+      loadSettings();
+      
+      // Show visual effects settings by default if any advanced setting is > 0
+      const saved = localStorage.getItem("briddSettings");
+      if (saved) {
+        try {
+          const settings = JSON.parse(saved);
+          if (settings.advanced) {
+            const hasAdvancedEffects = Object.values(settings.advanced).some(val => val > 0);
+            if (hasAdvancedEffects) {
+              const toggle = document.getElementById("toggleEffects");
+              const effects = document.getElementById("effectsSettings");
+              effects.style.display = "block";
+              toggle.textContent = "Visual Effects Settings ▲";
+            }
+          }
+        } catch (e) {
+          console.error("Error checking advanced settings:", e);
+        }
+      }
+    });
+    
+  </script>
+  
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
