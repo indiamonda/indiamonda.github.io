@@ -1,10 +1,17 @@
 /**
  * Backrooms custom menu & tutorial music
- * Keys: 1=menu, 2=tutorial, 3=tutorial ended (main menu again), 4=in game, 5=back to main menu from game.
- * On each key press we log a snapshot for debugging (to look for state we could detect automatically later).
+ * Auto-detects screen from Unity "Loaded Objects" logs: 2674=tutorial, 2677=in game, 3224/3495=menu.
+ * Keys 1-5 still work as manual overrides.
  */
 (function () {
   'use strict';
+
+  var LOADED_OBJECTS_MENU = [3224, 3495];
+  var LOADED_OBJECTS_TUTORIAL = 2674;
+  var LOADED_OBJECTS_GAME = 2677;
+  var lastDetectedState = null;
+  var lastLoadedObjects = 0;
+  var autoSwitchDebounce = 0;
 
   var RealAC = window.AudioContext || window.webkitAudioContext;
   if (!RealAC) return;
@@ -75,49 +82,12 @@
     unmuteGame();
   }
 
-  /** Snapshot state when you press 1–5 so we can look for detectable patterns. */
-  function logSnapshot(label) {
-    var t = performance.now();
-    var out = {
-      label: label,
-      time: Math.round(t),
-      gameGainNodesCount: gameGainNodes.length
-    };
-    try {
-      if (window.gameInstance) {
-        out.gameInstanceKeys = Object.keys(window.gameInstance);
-        if (typeof window.gameInstance.SendMessage === 'function') {
-          out.hasSendMessage = true;
-        }
-      }
-    } catch (err) {
-      out.gameInstanceError = String(err.message);
-    }
-    try {
-      var names = [];
-      for (var k in window) {
-        if (/unity|Unity|Module|gameInstance/i.test(k)) names.push(k);
-      }
-      if (names.length) out.unityLikeGlobals = names;
-    } catch (err) {}
-    try {
-      var canvas = document.querySelector('canvas');
-      if (canvas) {
-        out.canvasWidth = canvas.width;
-        out.canvasHeight = canvas.height;
-        out.canvasClientRect = canvas.getBoundingClientRect ? canvas.getBoundingClientRect().width + 'x' + canvas.getBoundingClientRect().height : 'n/a';
-      }
-    } catch (err) {}
-    console.log('[Backrooms state]', JSON.stringify(out, null, 2));
-  }
-
   window.__BackroomsCustomMusic = {
     playMenu: playMenu,
     playTutorial: playTutorial,
     useGameMusic: useGameMusic,
     unmuteGame: unmuteGame,
-    muteGame: muteGame,
-    logSnapshot: logSnapshot
+    muteGame: muteGame
   };
 
   function onFirstUserGesture() {
@@ -127,27 +97,27 @@
   document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.code === 'Digit1') {
-      logSnapshot('1=menu');
+      lastDetectedState = 'menu';
       playMenu();
       e.preventDefault();
     }
     if (e.code === 'Digit2') {
-      logSnapshot('2=tutorial');
+      lastDetectedState = 'tutorial';
       playTutorial();
       e.preventDefault();
     }
     if (e.code === 'Digit3') {
-      logSnapshot('3=tutorial_ended_main_menu');
+      lastDetectedState = 'menu';
       playMenu();
       e.preventDefault();
     }
     if (e.code === 'Digit4') {
-      logSnapshot('4=in_game');
+      lastDetectedState = 'game';
       useGameMusic();
       e.preventDefault();
     }
     if (e.code === 'Digit5') {
-      logSnapshot('5=back_to_main_menu_from_game');
+      lastDetectedState = 'menu';
       playMenu();
       e.preventDefault();
     }
