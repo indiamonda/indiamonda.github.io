@@ -1,0 +1,15 @@
+{
+  "name": "dunk-it-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Chaur Wu <wu.chaur@gmail.com> (http://www.essentier.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "ws": "^6.2.0"
+  }
+}

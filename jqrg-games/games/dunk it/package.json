@@ -1,0 +1,16 @@
+{
+  "name": "dunk-it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "cd server && nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  },
+  "author": "Chaur Wu <wu.chaur@gmail.com> (http://www.essentier.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
