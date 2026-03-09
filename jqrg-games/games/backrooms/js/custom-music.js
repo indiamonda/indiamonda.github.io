@@ -120,6 +120,10 @@
     logSnapshot: logSnapshot
   };
 
+  function onFirstUserGesture() {
+    playMenu();
+  }
+
   document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.code === 'Digit1') {
@@ -149,7 +153,10 @@
     }
   });
 
-  window.addEventListener('load', function () {
-    playMenu();
-  });
+  document.addEventListener('click', function () {
+    onFirstUserGesture();
+  }, { once: true });
+  document.addEventListener('keydown', function () {
+    onFirstUserGesture();
+  }, { once: true });
 })();
