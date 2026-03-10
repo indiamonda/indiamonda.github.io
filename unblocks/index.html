@@ -27,14 +27,19 @@
       background: url("c6e66984-1a96-4753-b83d-e7824f7c7c2a.png") no-repeat center center fixed;
       background-size: cover;
       }
+    .block-icon-dino {
+      overflow: visible;
+    }
     .block-icon-dino img {
       width: 48px;
       height: 48px;
       object-fit: contain;
+      object-position: center;
       display: block;
+      flex-shrink: 0;
     }
     .block:hover .block-icon-dino img {
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
     }
 </style>
 </head>
@@ -46,7 +51,7 @@
   <h1 class="page-title">OTHER UNBLOCKS</h1>
 
   <div class="blocks-container">
-    <a href="#" onclick="openGame('https://jimmyqrg.github.io/unblocks/dino/'); return false;" class="block-link">
+    <a href="#" onclick="openGame('https://jimmyqrg.github.io/dino/'); return false;" class="block-link">
       <div class="block">
         <div class="block-icon block-icon-dino">
           <img src="dino.svg" alt="" width="48" height="48">
