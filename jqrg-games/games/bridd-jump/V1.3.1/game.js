@@ -3194,6 +3194,21 @@ window.addEventListener('touchend', () => {
   stopDrop();
 });
 
+// Extra safety: ensure taps inside the canvas trigger jumps on mobile,
+// even when the game is running inside an iframe with scrollable parents.
+const __canvasForTouch = document.getElementById('gameCanvas');
+if (__canvasForTouch) {
+  __canvasForTouch.addEventListener('touchstart', function(e) {
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    if (!gameRunning || isPaused || voidDamagePause) return;
+    // Simple tap-to-jump; advanced swipe/drop logic is handled by the
+    // global touch listeners above.
+    jump();
+  }, { passive: false });
+}
+
 function jump(){
   if(!player.visible) return;
   if(!gameRunning || isPaused || voidDamagePause) return;

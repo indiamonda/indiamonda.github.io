@@ -77,6 +77,8 @@
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
+    /* Ensure touch events are captured by the game even when iframed */
+    touch-action: none;
   }
   
   canvas { 
@@ -88,6 +90,8 @@
     height: 100%; 
     z-index: 1; 
     background: #000; 
+    /* Prevent browser scrolling/zooming gestures over the game area */
+    touch-action: none;
   }
   
   /* Menu overlay - Retro pixel style */
