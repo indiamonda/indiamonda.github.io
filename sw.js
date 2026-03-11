@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jqrg-pwa-v7';
+const CACHE_NAME = 'jqrg-pwa-v8';
 
 // Complete list of all source files to pre-cache
 const urlsToCache = [
@@ -342,6 +342,9 @@ const urlsToCache = [
   '/unblocks/index.html',
   '/unblocks/infinite-campus.png',
   '/unblocks/c6e66984-1a96-4753-b83d-e7824f7c7c2a.png',
+  '/unblocks/dino/',
+  '/unblocks/dino/index.html',
+  '/unblocks/dino.svg',
   '/unblocks/i-ready-games/',
   '/unblocks/i-ready-games/index.html',
   '/unblocks/i-ready-games/images.png',
