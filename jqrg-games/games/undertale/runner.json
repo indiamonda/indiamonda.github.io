@@ -1,0 +1,9 @@
+{ "manifestFiles" : [ "runner.data",
+"runner.js",
+"runner.wasm",
+"audio-worklet.js",
+"game.unx" ], "manifestFilesMD5" : [ "f27d559c3b646eb1b6f3a14786946e2d",
+"db5d7a12d2cd866bf536f8ce8c8ffb94",
+"591f58ecebef9006336731fff76594fb",
+"e8f1e8db8cf996f8715a6f2164c2e44e",
+"b1e763db5c753fc5928976defdaccaae" ], "mainJS" : "runner.js", "unx": "game.unx", "index": "index.html", "runner": {"version": "2024.8.1.218", "yyc": false}}

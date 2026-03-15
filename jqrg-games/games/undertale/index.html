@@ -1,18 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-  <script src="/js/panicKey.js"></script>
-  <script src="/js/openGame.js"></script>
-
-    <base href="https://cdn.jsdelivr.net/gh/genizy/web-port@1102f068fff0083d2a5ed979ebac6425540d78a5/undertale/" />
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta
-      name="viewport"
-      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"
-    />
-    <link rel="icon" type="x-icon" href="https://1000logos.net/wp-content/uploads/2022/09/Undertale-Symbol.png"/>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+	<!-- For Favicons -->
+    <link rel="icon" type="x-icon" href="favicon.png">
+	<!-- For Page Title -->
     <title>UNDERTALE</title>
     <style>
       @-webkit-keyframes rotation {
@@ -56,7 +50,7 @@
       }
 
       html {
-        background: #ffffff;
+        background: #FFFFFF;
       }
 
       body {
@@ -68,12 +62,16 @@
         min-height: fill-available;
         min-height: 100vh; /* Otherwise contents can be covered by an address bar in Safari on iOS 15 */
         min-width: 100vw;
-        background: radial-gradient(56.63% 56.63% at 50% 43.37%, transparent 0%, transparent 100%);
-        background-color: black;
+        background: radial-gradient(
+          56.63% 56.63% at 50% 43.37%,
+          transparent 0%,
+          transparent 100%
+        );
+		background-color: black;
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
-        place-items: center;
+		place-items: center;
       }
 
       body.scrollingDisabled {
@@ -87,7 +85,7 @@
 
       div.emscripten {
         text-align: center;
-        font-family: 'Lucida Console', Monaco, monospace;
+		font-family: "Lucida Console", Monaco, monospace;
       }
 
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
@@ -99,12 +97,12 @@
         -webkit-transition: opacity 5s ease-in;
         opacity: 0;
         filter: blur(0) grayscale(0);
-        image-rendering: optimizeSpeed; /* Older versions of FF          */
-        image-rendering: -moz-crisp-edges; /* FF 6.0+                       */
+        image-rendering: optimizeSpeed;             /* Older versions of FF          */
+        image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
         image-rendering: -webkit-optimize-contrast; /* Safari                        */
-        image-rendering: -o-crisp-edges; /* OS X & Windows Opera (12.02+) */
-        image-rendering: pixelated; /* Awesome future-browsers       */
-        -ms-interpolation-mode: nearest-neighbor; /* IE                            */
+        image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+        image-rendering: pixelated;                 /* Awesome future-browsers       */
+        -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
       }
 
       canvas.active {
@@ -219,9 +217,9 @@
         cursor: pointer;
         background-color: black;
         color: white;
-        outline-color: #20c20e;
-        outline-style: dashed;
-        font-family: 'Lucida Console', Monaco, monospace;
+		outline-color: #20c20e;
+		outline-style: dashed;
+        font-family: "Lucida Console", Monaco, monospace;
       }
 
       #output {
@@ -229,7 +227,7 @@
         height: 200px;
         background-color: black;
         color: white;
-        font-family: 'Lucida Console', Monaco, monospace;
+        font-family: "Lucida Console", Monaco, monospace;
         outline: none;
         border: none;
         padding: 0;
@@ -251,16 +249,16 @@
       #messages {
         margin-left: 50px;
         color: white;
-        font-family: 'Lucida Console', Monaco, monospace;
+        font-family: "Lucida Console", Monaco, monospace;
         outline: none;
         border: none;
         padding: 0;
       }
 
       img.qrCode {
-        opacity: 1;
-        width: 50%;
-        height: 50%;
+         opacity: 1.0;
+         width: 50%;
+         height: 50%;
       }
 
       #pauseMenuContainer {
@@ -280,7 +278,7 @@
       }
 
       #pauseMenuBorder {
-        background: linear-gradient(135deg, #fa1e4e, transparent 40%);
+        background: linear-gradient(135deg, #FA1E4E, transparent 40%);
         padding: 1px;
         border-radius: 4px;
         clip-path: polygon(10.5px 0, 100% 0, 100% 100%, 0 100%, 0 10.5px);
@@ -292,7 +290,7 @@
         display: flex;
         flex-direction: column;
         padding: 60px 30px 60px 30px;
-        background: linear-gradient(180deg, #2e273f 16.15%, rgba(46, 39, 63, 0.79) 56.25%, #2e273f 91.15%);
+        background: linear-gradient(180deg, #2E273F 16.15%, rgba(46, 39, 63, 0.79) 56.25%, #2E273F 91.15%);
         border-radius: 4px;
         clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
         animation-name: fadeIn;
@@ -304,8 +302,8 @@
         font-weight: 500;
         font-size: 17px;
         color: white;
-        background: #fa1e4e;
-        border: 1px solid #fa1e4e;
+        background: #FA1E4E;
+        border: 1px solid #FA1E4E;
         border-radius: 6px;
         padding: 12px 24px;
         margin: 5px 0;
@@ -314,7 +312,7 @@
       }
 
       #pauseMenu button#quitButton {
-        background: #fa1e4e40;
+        background: #FA1E4E40;
       }
 
       #pauseMenu button:hover {
@@ -328,109 +326,554 @@
       #pauseMenu button[hidden] {
         display: none;
       }
-        /* Custom Cursor */
-      * {
-        cursor: url('/cursor/cursor.png') 24 24, auto !important;
-      }
-</style>
+    </style>
   </head>
   <body>
-    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"> </canvas>
+    <canvas
+      class="emscripten"
+      id="canvas"
+      oncontextmenu="event.preventDefault()"
+      tabindex="-1"
+    >
+    </canvas>
     <div id="pauseMenuContainer" hidden>
       <div id="pauseMenuBorder">
         <div id="pauseMenu">
-          <button id="resumeButton" onclick="resume()">Resume</button>
-          <button id="quitButton" onclick="quitIfSupported()">Quit</button>
+          <button id="resumeButton" onclick="resume()">
+            Resume
+          </button>
+          <button id="quitButton" onclick="quitIfSupported()">
+            Quit
+          </button>
         </div>
-      </div>
+        </div>
     </div>
     <div class="loading">
       <div class="spinner" id="spinner"></div>
       <div class="emscripten" id="status">Downloading...</div>
 
-      <progress value="0" max="100" id="progress"></progress>
+      <progress value="0" max="100" id="progress" hidden="1"></progress>
+    </div>
+    <div class="output-container" id="output-container">
+	  <!-- Stock Toggle Console Button -->
+      <button class="output-button" onclick="toggleConsole()" title="Lists Console Output and Loading Progress"+>
+        Toggle Console
+      </button>
+	  <!-- Go to Github Repo Button -->
+      <button id="QRButton" class="output-button" onclick="togglegithub()" title="Sends you to My Github Repository of this Project"+>
+        Visit Github Repo
+      </button>
+	  <!-- CLear Site Cache Button -->
+      <button id="QR2Button" class="output-button" onclick="toggleclear_site_cache()" title="Fixes Crashes due to the Website being Updated, but also Deletes ALL Saves, so Continue with Caution"+>
+        Clear Site Cache
+      </button>
+		<!-- Enable FPS Counter Bookmarklet Button -->
+      <button class="output-button" id="stats-button" onclick="toggleFPS()" title="Enables External FPS Counter"+>
+        Enable FPS Counter
+      </button>
+	    <!-- Go to Web Port Website Button -->
+      <button class="output-button" id="share-button" onclick="togglewebports()" title="Sends you to My Personal Website with a List of All My Web Ports"+>
+        View All Web Ports
+      </button>
+	    <!-- Join Discord Server Button -->
+	  <button class="output-button" onclick="togglejoin_discord()" title="Press to Join My Discord Server for Info and Updates"+>
+        Join Discord Server
+      </button>
+	    <!-- Background Color Changer Button -->
+      <input id="colorpicker" type="color" onchange="changecolor(this)" title="Changes Color of the Website's Background"+>
+      <textarea id="output" rows="8"></textarea>
     </div>
 
     <div id="message-container">
-      <div id="messages"></div>
+      <div id="messages">
+      </div>
     </div>
-    <script>
-      function mergeFiles(fileParts) {
-        return new Promise((resolve, reject) => {
-          let buffers = []
+	<!-- Ads Stuff for games that need it -->
+   <script async
+     data-ad-client="ca-pub-123"
+     data-ad-frequency-hint="30s"
+     data-adbreak-test="on"
+     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
 
-          function fetchPart(index) {
-            if (index >= fileParts.length) {
-              let mergedBlob = new Blob(buffers)
-              let mergedFileUrl = URL.createObjectURL(mergedBlob)
-              resolve(mergedFileUrl)
-              return
-            }
-            fetch(fileParts[index])
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error('Failed to load part ' + (index + 1) + ': HTTP ' + response.status)
-                }
-                return response.arrayBuffer()
-              })
-              .then((data) => {
-                console.log('Loaded part', index + 1, 'size:', data.byteLength)
-                buffers.push(data)
-                document.getElementById('progress').value = ((index + 1) / fileParts.length) * 100
-                document.getElementById('status').innerText =
-                  'Downloading... ' + Math.round(((index + 1) / fileParts.length) * 100) + '%'
-                fetchPart(index + 1)
-              })
-              .catch(reject)
-          }
-          fetchPart(0)
-        })
-      }
+   <script>
+     window.adsbygoogle = window.adsbygoogle || [];
+     const adBreak =  adConfig = function(o) {adsbygoogle.push(o);}
+   </script>
 
-      function getParts(file, start, end) {
-        let parts = []
-        for (let i = start; i <= end; i++) {
-          parts.push(file + '.part' + i)
+    <script type="text/javascript">
+	// Background Color Changer Function
+	function changecolor(el) {
+		document.body.style.backgroundColor = el.value;
+	}
+	
+      const CHANGE_ASPECT_RATIO = true;
+		// Main Page Elements
+      var bodyElement = document.getElementsByTagName("body")[0];
+      var statusElement = document.getElementById("status");
+      var progressElement = document.getElementById("progress");
+      var spinnerElement = document.getElementById("spinner");
+      var canvasElement = document.getElementById("canvas");
+      var outputElement = document.getElementById("output");
+      var outputContainerElement = document.getElementById("output-container");
+      var qrElement = document.getElementById("QRCode");
+      var qr2Element = document.getElementById("QR2Code");
+      var qrButton = document.getElementById("QRButton");
+      var qr2Button = document.getElementById("QR2Button");
+      var pauseMenu = document.getElementById("pauseMenuContainer");
+      var resumeButton = document.getElementById("resumeButton");
+      var quitButton = document.getElementById("quitButton");
+
+      const messageContainerElement = document.getElementById("message-container");
+      const messagesElement = document.getElementById("messages");
+      let rollbackMessages = [];
+
+      let clearRollbackMessagesTimeoutId = -1;
+      const showRollbackMessage = function (message) {
+        let messages = "";
+        rollbackMessages.push(message);
+        rollbackMessages.forEach(m => messages += "<p>" + m + "</p>");
+
+        messagesElement.innerHTML = messages;
+        messageContainerElement.style.display = 'block';
+
+        if (clearRollbackMessagesTimeoutId === -1) {
+          clearTimeout(clearRollbackMessagesTimeoutId);
         }
-        return parts
+        clearRollbackMessagesTimeoutId = setTimeout(clearRollbackMessages, 5000);
+      };
+
+      const clearRollbackMessages = function () {
+        clearRollbackMessagesTimeoutId = -1;
+        rollbackMessages = [];
+        messageContainerElement.style.display = 'none';
+      };
+		
+	  // for displaying contents of console to display as a single line of text
+	  // stopload is set to 0, as to initialize it
+	  var loadprogress = 0;
+		
+      var startingHeight, startingWidth;
+      var startingAspect;
+      var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function () {
+          var element = document.getElementById("output");
+          if (element) element.value = ""; // clear browser cache
+          return function (text) {
+		  
+		  // for displaying contents of console to display as a single line of text
+		  // if loading has started
+			if (text === "Starting WAD") {
+			// tells if statement below to display ALL loading strings
+				loadprogress += 1;
+			}
+	  
+			// if loading has started
+			if (loadprogress === 1) {
+			// allow console to be displayed as text on-screen
+				Module.setStatus(text);
+			}
+			// if game has started
+			// greater than or equal to just in case
+			else if (loadprogress >= 2) {
+			// then set load text to nothing
+				Module.setStatus("");
+			}
+		    // back to normal shit
+			
+            if (arguments.length > 1)
+              text = Array.prototype.slice.call(arguments).join(" ");
+			// for normal console
+            console.log(text);
+            if (text === "Entering main loop.") {
+              // It seems that this text ensures game is loaded.
+              ensureAspectRatio();
+			  // below are custom
+			  // stops loading text on game run
+			  loadprogress += 1;
+
+			  // TRUE END of custom shit
+            }
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        printErr: function (text) {
+          if (arguments.length > 1)
+            text = Array.prototype.slice.call(arguments).join(" ");
+          console.error(text);
+        },
+        canvas: (function () {
+          var canvas = document.getElementById("canvas");
+
+          return canvas;
+        })(),
+        setStatus: function (text) {
+          if (!Module.setStatus.last)
+            Module.setStatus.last = { time: Date.now(), text: "" };
+          if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2]) * 100;
+            progressElement.max = parseInt(m[4]) * 100;
+            progressElement.hidden = false;
+            spinnerElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+
+            // If there are no status text, we are finished and can display
+            // the canvas and hide the spinner
+            if (!text) {
+              spinnerElement.style.display = "none";
+              canvasElement.style.display = "block";
+            }
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function (left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(
+            left
+              ? "Preparing... (" +
+                  (this.totalDependencies - left) +
+                  "/" +
+                  this.totalDependencies +
+                  ")"
+              : "All downloads complete."
+          );
+        },
+      };
+      Module.setStatus("Downloading...");
+      window.onerror = function (event) {
+        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+        Module.setStatus("Exception thrown, see JavaScript console");
+        spinnerElement.style.display = "none";
+        Module.setStatus = function (text) {
+          if (text) Module.printErr("[post-exception status] " + text);
+        };
+      };
+
+      // Route URL GET parameters to argc+argv
+      if (typeof window === "object") {
+        Module['arguments'] = window.location.search.substr(1).trim().split('&');
+        // If no args were passed arguments = [''], in which case kill the single empty string.
+        if (!Module['arguments'][0]) {
+          Module['arguments'] = [];
+        }
+      }
+	  
+	  // All Button Functions
+	  
+		// Stock Toggle Console Function
+      function toggleConsole() {
+        var isShown = outputElement.style.display === "flex";
+        if (isShown) {
+          outputElement.style.display = "none";
+          outputElement.scrollIntoView(false);
+        } else {
+          outputElement.style.display = "flex";
+          outputElement.scrollIntoView(true);
+        }
+      }
+		// Go To Github Function
+      function togglegithub() {
+	    window.open("https://github.com/burnedpopcorn/Pizza-Tower-1.1.0-Web-Port", '_blank').focus();
+      }
+		// Clear Site Cache Function
+      function toggleclear_site_cache() {
+	  // Trigger Choice Popup
+		if (confirm("This Will Clear Site Cache\nThis will ALSO Clear ALL SAVES\nONLY do this if the Site has recently been Updated\nand if you are experiencing crashes relating to texture loading\nContinue?")) {
+		// User clicked OK
+		
+		// Clear All IndexedDB Databases
+		(async () => {
+			const dbs = await window.indexedDB.databases();
+			dbs.forEach(db => { window.indexedDB.deleteDatabase(db.name) });
+			})();
+			
+		// 
+		alert("All Site Cache Has been Cleared!\nPlease reload the Page");
+		} else {
+		// User clicked Cancel
+		// Do nothing
+		}
+	  }
+
+		// Enable FPS Counter Button
+	  var stopfps = 0;
+      function toggleFPS() {
+	  // to stop it from making multiple instances after 1 has already been made
+	  stopfps += 1
+	  // if pressed ONLY once
+	  if (stopfps === 1) {
+	    window.location.href = "javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()"
+        }
+		// so it can't go crazy high, but can't be activated again
+		if (stopfps >= 5) {
+		stopfps = 2;
+		}
+	  }
+	    // Go To Website of Web Ports Function
+	  function togglewebports() {
+		window.open("https://burnedwebsite.vercel.app/projects/", '_blank').focus();
+	  }
+	    // Join Discord Function
+	  function togglejoin_discord() {
+	    window.open("https://discord.gg/3dPTpruHhc", '_blank').focus();
+	  }
+		// End of Button Functions
+
+      var g_pWadLoadCallback = undefined;
+      function setWadLoadCallback( _wadLoadCallback ) 
+      {
+        g_pWadLoadCallback = _wadLoadCallback;
       }
 
-      mergeFiles(getParts('game.unx', 1, 5))
-        .then(async (url) => {
-          window.gameUnxUrl = url
+      var g_pAddAsyncMethod = -1;
 
-          const originalFetch = window.fetch
-          window.fetch = async function (...args) {
-            let [url, options] = args
-            if (typeof url === 'string' && url.includes('game.unx')) {
-              console.log('fetch:', url)
-              url = window.gameUnxUrl
-            } else if (url instanceof Request && url.url.includes('game.unx')) {
-              console.log('fetch request:', url.url)
-              url = new Request(window.gameUnxUrl, url)
-            }
-            return originalFetch.call(this, url, options)
+      function setAddAsyncMethod( asyncMethod )
+      {
+        g_pAddAsyncMethod = asyncMethod;
+      }
+
+      var g_pJSExceptionHandler = undefined;
+
+      function setJSExceptionHandler( exceptionHandler )
+      {
+        if (typeof exceptionHandler == "function") {
+            g_pJSExceptionHandler = exceptionHandler;
+        } // end if
+      } // end setJSExceptionHandler
+
+      function hasJSExceptionHandler()
+      {
+        return (g_pJSExceptionHandler != undefined) && (typeof g_pJSExceptionHandler == "function");
+      } // end hasJSExceptionHandler
+
+      function doJSExceptionHandler( exceptionJSON )
+      {
+        if (typeof g_pJSExceptionHandler == "function") {
+          var exception = JSON.parse( exceptionJSON );
+          g_pJSExceptionHandler( exception );
+        } // end if
+      } // end doJSExceptionHandler
+
+		// Get Files
+      function manifestFiles()
+      {
+        return [ "runner.data",
+"runner.js",
+"runner.wasm",
+"audio-worklet.js",
+"game.unx" ].join( ";");
+      }
+
+		// Verify Files
+      function manifestFilesMD5()
+      {
+        return [ "f27d559c3b646eb1b6f3a14786946e2d",
+"db5d7a12d2cd866bf536f8ce8c8ffb94",
+"591f58ecebef9006336731fff76594fb",
+"e8f1e8db8cf996f8715a6f2164c2e44e",
+"b1e763db5c753fc5928976defdaccaae" ];
+      }
+
+      function onFirstFrameRendered()
+      {
+          //console.log("First frame rendered!");
+      }
+
+      function onGameSetWindowSize(width,height)
+      {
+          if (startingHeight === undefined && startingWidth === undefined) {
+              console.log("Initial window size set to width: " + width + ", height: " + height);
+
+              startingHeight = height;
+              startingWidth = width;
+              startingAspect = startingWidth / startingHeight;
           }
+      }
 
-          const originalOpen = XMLHttpRequest.prototype.open
-          XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-            if (url.includes('game.unx')) {
-              console.log('XHR:', url)
-              url = window.gameUnxUrl
-            }
-            return originalOpen.call(this, method, url, ...rest)
-          }
-          let index = document.createElement('script')
-          index.src = 'index.js'
-          document.body.appendChild(index)
+	// Trigger Ads
+    function triggerAd(adId, _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone) {
+       // need to take a copy of the RValues represented
+       var pRValueCopy = triggerAdPrefix( _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone );
+       var pCallbackBeforeAd = pRValueCopy + (0*16);
+       var pCallbackAfterAd = pRValueCopy + (1*16);
+       var pCallbackAdDismissed = pRValueCopy + (2*16);
+       var pCallbackAdViewed = pRValueCopy + (3*16);
+       var pCallbackAdBreakDone = pRValueCopy + (4*16);
 
-          let runner = document.createElement('script')
-          runner.src = 'runner.js'
-          document.body.appendChild(runner)
-        })
-        .catch((error) => {
-          console.error('Failed to merge files:', error)
-        })
+       adBreak({
+         "type": "reward",                    // The type of this placement
+         "name": adId,                        // A descriptive name for this placement
+
+         "beforeAd": () => {                  // Prepare for the ad. Mute and pause the game flow
+           console.log("beforeAd");
+           // trigger _callback_beforeAd to game
+           doGMLCallback( pCallbackBeforeAd, { id:adId } );
+         },
+         "afterAd" : () => {                   // Resume the game and re-enable sound
+           console.log("afterAd");
+           // trigger _callback_afterAd to game
+           doGMLCallback( pCallbackAfterAd, { id:adId } );
+         },
+         "beforeReward": (showAdFn) => {      // Show reward prompt (call showAdFn() if clicked)
+           console.log("beforeReward");
+           showAdFn();
+           // Setup native prompt to indicate ad will load
+           // Will not be setup by dev so this UX controlled by GXC
+         },
+         "adDismissed": () => {               // Player dismissed the ad before it finished
+           console.log("adDismissed");
+           // trigger _callback_adDismissed to game
+           doGMLCallback( pCallbackAdDismissed, { id:adId } );
+         },
+         "adViewed": () => {                  // Player watched the ad–give them the reward.
+           console.log("adViewed");
+           // trigger _callback_adViewed to game
+           doGMLCallback( pCallbackAdViewed, { id:adId } );
+         },
+         "adBreakDone": (placementInfo) => {  // Always called (if provided) even if an ad didn't show
+           console.log("adBreakDone");
+           // trigger _callback_adBreakDone to game
+           doGMLCallback( pCallbackAdBreakDone, { id:adId } );
+           triggerAdPostfix( pRValueCopy );
+         }, 
+       });
+      }
+
+      function ensureAspectRatio() {
+        if (canvasElement === undefined) {
+          return;
+        }
+
+        if (!CHANGE_ASPECT_RATIO) {
+          return;
+        }
+        
+        if (startingHeight === undefined && startingWidth === undefined) {
+          return;
+        }
+
+        canvasElement.classList.add("active");
+
+        const maxWidth = window.innerWidth;
+        const maxHeight = window.innerHeight;
+        var newHeight, newWidth;
+
+        // Find the limiting dimension.
+        var heightQuotient = startingHeight / maxHeight;
+        var widthQuotient = startingWidth / maxWidth;
+
+        if (heightQuotient > widthQuotient) {
+          // Max out on height.
+          newHeight = maxHeight;
+          newWidth = newHeight * startingAspect;
+        } else {
+          // Max out on width.
+          newWidth = maxWidth;
+          newHeight = newWidth / startingAspect;
+        }
+
+        canvasElement.style.height = newHeight + "px";
+        canvasElement.style.width = newWidth + "px";
+      }
+		// To Pause when it detects the Tab is inactive
+      function pause() { // Don't change the name - GX Mobile calls it when the app becomes inactive.
+        if (!canvasElement.classList.contains("active")) { // Wait for the canvas to load.
+          return
+        }
+        
+        GM_pause();
+        pauseMenu.hidden = false;
+        canvasElement.classList.add("paused");
+      }
+		// To Resume when it detects the Tab is Active
+      function resume() {
+        GM_unpause();
+        pauseMenu.hidden = true;
+        canvasElement.classList.remove("paused");
+        canvasElement.classList.add("unpaused");
+        enterFullscreenIfSupported();
+        lockOrientationIfSupported();
+      }
+
+      function quitIfSupported() {
+        if (window.oprt && window.oprt.closeTab) { /* GX Mobile API */
+          window.oprt.closeTab();
+        } else if (window.chrome && window.chrome.runtime && window.chrome.runtime.sendMessage) {
+          window.chrome.runtime.sendMessage('mpojjmidmnpcpopbebmecmjdkdbgdeke', { command: 'closeTab' })
+        }
+      }
+
+      function enterFullscreenIfSupported() {
+        if (!window.oprt || !window.oprt.enterFullscreen) { /* GX Mobile API */
+          return;
+        }
+
+        window.oprt.enterFullscreen();
+        let viewStatus = GM_get_view_status();
+        viewStatus.fullscreen = true;
+        GM_set_view_status(viewStatus);
+      }
+
+      function lockOrientationIfSupported() {
+        if (!window.oprt || !window.oprt.lockPortraitOrientation || !window.oprt.lockLandscapeOrientation) { /* GX Mobile API */
+          return;
+        }
+
+        let viewStatus = GM_get_view_status();
+        if (viewStatus.landscape === true && viewStatus.portrait === false) {
+          window.oprt.lockPortraitOrientation();
+        } else if (viewStatus.landscape === false && viewStatus.portrait === true) {
+          window.oprt.lockPortraitOrientation();
+        }
+      }
+		// uh, shit that no one cares about
+      const resizeObserver = new ResizeObserver(() => {
+        window.requestAnimationFrame(ensureAspectRatio);
+        setTimeout(() => window.requestAnimationFrame(ensureAspectRatio), 100);
+      });
+      resizeObserver.observe(document.body);
+		
+		// Disable Scrolling on Mobile
+      if (/Android|iPhone|iPod/i.test(navigator.userAgent)) {
+        bodyElement.className = "scrollingDisabled";
+        canvasElement.classList.add("animatedSizeTransitions");
+        outputContainerElement.hidden = true;
+      }
+
+      document.addEventListener("visibilitychange", (event) => {
+        if (document.visibilityState != "visible") {
+          pause();
+        }
+      });
+
+      window.addEventListener("load", (event) => {
+        if ((!window.oprt || !window.oprt.enterFullscreen) && (!window.chrome || !window.chrome.runtime || !window.chrome.runtime.sendMessage)) {
+          quitButton.hidden = true;
+        }
+      });
+
+      setWadLoadCallback(() => {
+        enterFullscreenIfSupported();
+        lockOrientationIfSupported();
+      });
     </script>
+	<!-- Load Main Game Runner JS File -->
+    <script async type="text/javascript" src="runner.js"></script>
   </body>
 </html>
