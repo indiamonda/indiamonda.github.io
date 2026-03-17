@@ -10,3 +10,5 @@ The `LISENCE` clearly indecates that this repo is not allowing any copy or forki
 ### If you are a new joined developer
 
 See [DEVELOPERS.md](https://github.com/jimmyqrg/jimmyqrg.github.io/blob/main/DEVELOPERS.md)
+
+Developer: JimmyQrg
