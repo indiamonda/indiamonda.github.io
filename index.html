@@ -9,20 +9,33 @@
     </script>
 
     <script>
-        // Redirect to /page/ if not ?page=extend, ?directly=1, or iframed
-        (function () {
-          const urlParams = new URLSearchParams(window.location.search);
-          const pageParam = urlParams.get('page');
-          const directlyParam = urlParams.get('directly');
-          const isIframed = window.self !== window.top;
-          if (
-            pageParam !== 'extend' &&
-            directlyParam !== '1' &&
-            !isIframed
-          ) {
-            window.location.href = 'page/';
-          }
-        })();
+      (function () {
+        const currentUrl = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = urlParams.get('page');
+
+        // Skip all redirects if any URL parameter value is "1"
+        const hasDirectAccess = Array.from(urlParams.values()).includes("1");
+        if (hasDirectAccess) return;
+
+        // Check if URL does not include "page"
+        if (!currentUrl.includes("page")) {
+          window.location.href = "page/";
+          return;
+        }
+
+        // Check if current page is not iframed in
+        if (window.self === window.top) {
+          window.location.href = "page/";
+          return;
+        }
+
+        // Check if ?page=extend is not present
+        if (!pageParam || pageParam !== "extend") {
+          window.location.href = "?page=extend";
+          return;
+        }
+      })();
     </script>
     <script src="/js/openGame.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
@@ -50,7 +63,140 @@
     <script src="js/cursor.js"></script>
   </head>
   <body>
-      <!-- SPA content will be injected here -->
+    <div class="bg-effects"></div>
+    <span id="settingsBtn">⚙️</span>
+
+    <h1 id="domainTitle" class="page-title">JIMMYQRG</h1>
+
+    <h2 class="page-title">MAIN PORTAL</h2>
+
+    <div class="blocks-container">
+      <a href="jqrg-games/" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-gamepad"></i>
+          </div>
+          <div class="block-text">JQRG UNBLOCKED GAMES</div>
+        </div>
+      </a>
+      <a href="https://jimmyqrg.github.io/info" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-circle-info"></i>
+          </div>
+          <div class="block-text">INTERESTING INFOS</div>
+        </div>
+      </a>
+      <a href="https://jimmyqrg.github.io/tools/" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <div class="block-text">TOOLS</div>
+        </div>
+      </a>
+      <a href="unblocks/" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-unlock"></i>
+          </div>
+          <div class="block-text">OTHER UNBLOCKS</div>
+        </div>
+      </a>
+      <a href="lx/" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="block-text">CONTACTS</div>
+        </div>
+      </a>
+      <a href="test/jqrgd.html" class="block-link">
+        <div class="block">
+          <div class="block-icon">
+            <i class="fas fa-flask"></i>
+          </div>
+          <div class="block-text">JQRGD TEST</div>
+        </div>
+      </a>
+    </div>
+
+    <p>
+      <span class="announcement-link">Announcements (Click to reopen)</span
+      ><br /><br />If you want to join me and make the website together, click
+      <a
+        href="#"
+        data-path="/join/"
+        target="_blank"
+        style="color: #4d8cff; text-decoration: underline"
+        >here</a
+      >!
+    </p>
+
+    <!-- === Footer === -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p class="footer-copyright">© Copyright JimmyQrg 2026</p>
+        <a href="https://www.github.com/jimmyqrg/" target="_blank" rel="noopener noreferrer" class="footer-github-link">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </footer>
+
+    <!-- === Announcement Modal === -->
+    <div class="modal-overlay" id="announcementModal">
+      <div class="modal-content" id="announcementContent">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h2 style="text-align:center;">📢 Announcements</h2>
+      <p>Welcome to <strong>JimmyQrg</strong>! Check here for updates, new game releases, and important information.</p>
+      <p>More informations and updates can be found 
+        <a href="https://docs.google.com/document/d/1Xv3x76SwL2CkZPIJq0uMNBt_YQNRfWrR5H5mXILuxfw/edit?tab=t.w5htvyo8czbl" target="_blank" style="color:#4d8cff; text-decoration:underline;">here</a>.</p>
+      <hr style="border: 1px solid rgba(255,255,255,0.3);">
+      <p>✨ Latest updates:</p>
+        <ul>
+          <li>Added Bomb Pass</li>
+          <li>Added Boom Slingers</li>
+          <li>Added Escape Road</li>
+        </ul>
+        <!-- <p>🚀Future Update</p>
+        <ul>
+          <li></li>
+        </ul> -->
+      <p>⏱️History</p>
+        <ul>
+          <!-- <li>Fixed in total <b>1165</b> bugs</li> -->
+          <li>Added in total <b>103</b> games</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- === SETTINGS MODAL === -->
+    <div class="modal-overlay" id="settingsModal">
+      <div class="modal-content" id="settingsContent">
+        <span class="close-btn" id="closeSettings">&times;</span>
+
+        <h2 style="text-align: center">⚙️ Settings</h2>
+
+        <!-- ========== APPEARANCE ========== -->
+        <h3>🎨 Appearance</h3>
+
+        <!-- Enable Cursor -->
+        <label><b>Cursor</b></label><br />
+        <p style="margin-top: 10px; opacity: 0.8">
+          Show the custom cursor on all pages. (except in games)
+        </p>
+        <input
+          type="checkbox"
+          id="enableCursor"
+          style="margin-top: 10px"
+        />
+        <label for="enableCursor" style="margin-left: 8px; cursor: pointer;">
+          Enable cursor
+        </label>
+
+        <br /><br /><br />
+
+        <!-- Disabled Cloak Settings -->
         
         <!-- Main Page Cloak
         <label><b>Use cloak for main page</b></label><br />
