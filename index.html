@@ -19,22 +19,22 @@
         if (hasDirectAccess) return;
 
         // Check if URL does not include "page"
-        if (!currentUrl.includes("page")) {
-          window.location.href = "page/";
-          return;
-        }
+        // if (!currentUrl.includes("page")) {
+        //   window.location.href = "page/";
+        //   return;
+        // }
 
         // Check if current page is not iframed in
-        if (window.self === window.top) {
-          window.location.href = "page/";
-          return;
-        }
+        // if (window.self === window.top) {
+        //   window.location.href = "page/";
+        //   return;
+        // }
 
         // Check if ?page=extend is not present
-        if (!pageParam || pageParam !== "extend") {
-          window.location.href = "?page=extend";
-          return;
-        }
+        // if (!pageParam || pageParam !== "extend") {
+        //   window.location.href = "?page=extend";
+        //   return;
+        // }
       })();
     </script>
     <script src="/js/openGame.js"></script>
