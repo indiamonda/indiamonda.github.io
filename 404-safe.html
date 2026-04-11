@@ -1,97 +1,161 @@
 <!DOCTYPE html>
-<html lang="en"> 
-  <head>
-    
-    <script src="/js/mainPageCloak.js"></script>
-    <script src="/js/openGame.js"></script>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Site not found · GitHub Pages</title>
-    <script src="/js/panicKey.js"></script>
-    <script src="/js/style.js"></script>
-    <script src="/js/cursor.js"></script>
-    <style>
-      body.error-page main {
-        width: 100%;
-        max-width: 760px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        z-index: 1;
-      }
-      .code404 {
-        font-size: 4rem;
-        color: white;
-        font-weight: normal;
-        margin: 0 0 10px 0;
-        text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-      }
-      .headline {
-        font-size: 1rem;
-        font-weight: 600;
-        margin: 0 0 8px 0;
-        color: white;
-      }
-      .explain {
-        font-size: 0.85rem;
-        margin: 0 0 8px 0;
-        line-height: 1.4;
-        text-align: center;
-        color: white;
-      }
-      .note {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.7);
-        margin-top: 8px;
-        text-align: center;
-      }
-      .cat {
-        width: 32px;
-        height: auto;
-        display: block;
-        margin-top: 12px;
-      }
-      @media (max-width: 480px) {
-        .code404 {
-          font-size: 3rem;
-        }
-        .headline {
-          font-size: 0.9rem;
-        }
-        .explain {
-          font-size: 0.8rem;
-        }
-        .note {
-          font-size: 0.7rem;
-        }
-        .cat {
-          width: 24px;
-          margin-top: 8px;
-        }
-      }
-</style>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site not found · GitHub Pages</title>
+
+  <!-- Scripts -->
+  <script src="/js/mainPageCloak.js"></script>
+  <script src="/js/openGame.js"></script>
+  <script src="/js/panicKey.js"></script>
+  <script src="/js/style.js"></script>
+  <script src="/js/cursor.js"></script>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/css/main.css" />
+
+  <style>
+    body.error-page {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .bg-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03), transparent 40%);
+      z-index: 0;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 40px;
+      background: rgba(13, 17, 23, 0.85);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 1;
+      backdrop-filter: blur(6px);
+    }
+
+    .code404 {
+      font-size: 72px;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+      color: #f0f6fc;
+      letter-spacing: -2px;
+    }
+
+    .headline {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #c9d1d9;
+    }
+
+    .explain {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #8b949e;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #6e7681;
+      border-top: 1px solid #30363d;
+      padding-top: 12px;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .cat {
+      width: 36px;
+      margin-top: 20px;
+      opacity: 0.85;
+      transition: transform 0.3s ease;
+    }
+
+    .cat:hover {
+      transform: scale(1.15) rotate(5deg);
+    }
+
+    /* subtle fade-in */
+    main {
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 500px) {
+      main {
+        padding: 25px;
+      }
+
+      .code404 {
+        font-size: 52px;
+      }
+
+      .headline {
+        font-size: 16px;
+      }
+
+      .explain {
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
-  <body class="error-page">
-    <div class="bg-effects"></div>
-    <main>
-      <div class="code404">404</div>
-      <div class="headline">This site has been removed from GitHub Pages</div>
-      <p class="explain">
-        This website has been removed from the service and is temporarily
-        inaccessible due to serious violations of our Terms of Use and multiple
-        illegal content. If you have any questions, please report them to us.
-      </p>
-      <div class="note">
-        GitHub Status — @githubstatus<br />This site has been disabled by GitHub
-        and will no longer be public
-      </div>
-      <img
-        src="https://jimmyqrg.github.io/github.png"
-        alt="gray cat icon"
-        class="cat"
-      />
-    </main>
-  </body>
+
+<body class="error-page">
+  <div class="bg-effects"></div>
+
+  <main>
+    <div class="code404">404</div>
+
+    <div class="headline">
+      This site has been removed from GitHub Pages
+    </div>
+
+    <p class="explain">
+      This repository has been disabled and is no longer accessible due to a violation of GitHub’s Terms of Service or applicable policies.
+      If you believe this is a mistake, please contact support.
+    </p>
+
+    <div class="note">
+      GitHub Status — @githubstatus<br>
+      This site has been disabled and is no longer publicly available.
+    </div>
+
+    <img
+      src="https://jimmyqrg.github.io/github.png"
+      alt="GitHub mascot"
+      class="cat"
+    />
+  </main>
+</body>
 </html>
