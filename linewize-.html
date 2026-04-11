@@ -1,1 +1,72 @@
-<p>failed</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Failed</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d1117;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .error-box {
+    padding: 20px 30px;
+    background: rgba(255, 0, 0, 0.06);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 12px;
+    color: #ff6b6b;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(6px);
+
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeSlide 0.6s ease forwards;
+  }
+
+  .error-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
+    pointer-events: none;
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 rgba(255, 0, 0, 0); }
+    50%  { box-shadow: 0 0 20px rgba(255, 0, 0, 0.25); }
+    100% { box-shadow: 0 0 0 rgba(255, 0, 0, 0); }
+  }
+
+  .error-box {
+    animation:
+      fadeSlide 0.6s ease forwards,
+      pulse 2s ease-in-out infinite;
+  }
+</style>
+</head>
+
+<body>
+  <div class="error-box">
+    Request failed. Please try again.
+  </div>
+</body>
+</html>
