@@ -1,36 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-  <script src="/js/mainPageCloak.js"></script>
-  <script src="/js/openGame.js"></script>
-  <script src="/js/panicKey.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 | Page Not Found</title>
-  <link rel="stylesheet" href="/css/main.css" />
-    <link rel="icon" type="image/ico" href="https://jimmyqrg.github.io/info.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="/js/mainPageCloak.js"></script>
+  <script src="/js/openGame.js"></script>
+  <script src="/js/panicKey.js"></script>
   <script src="/js/style.js"></script>
-    <script src="/js/cursor.js"></script>
+  <script src="/js/cursor.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="icon" type="image/ico" href="https://jimmyqrg.github.io/info.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body.error-page {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Josefin Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    .bg-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03), transparent 40%);
+      z-index: 0;
+    }
+
+    .container {
+      text-align: center;
+      padding: 50px 40px;
+      background: rgba(13, 17, 23, 0.85);
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1;
+      animation: fadeIn 0.6s ease;
+    }
+
+    h1 {
+      font-size: 90px;
+      margin: 0;
+      letter-spacing: -3px;
+      background: linear-gradient(90deg, #58a6ff, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      margin: 10px 0 25px;
+      font-weight: 400;
+      color: #8b949e;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 26px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #238636;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2ea043;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(46,160,67,0.5);
+    }
+
+    .btn-secondary {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+    }
+
+    .btn-secondary:hover {
+      background: #30363d;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 60px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
+
 <body class="error-page">
   <div class="bg-effects"></div>
 
-  <h1>404</h1>
-  <h2>Page Not Found</h2>
+  <div class="container">
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
 
-  <button class="btn" id="backHomeBtn">
-    ⬅ Back to Home
-  </button>
+    <div class="buttons">
+      <button class="btn btn-primary" id="backHomeBtn">
+        ⬅ Back to Home
+      </button>
+
+      <button class="btn btn-secondary" onclick="location.href='https://jimmyqrg.github.io/suggest-games/'">
+        Suggest a Game
+      </button>
+    </div>
+  </div>
+
   <script>
     document.getElementById('backHomeBtn').onclick = () => {
       window.location.href = 'https://jimmyqrg.github.io/?page=extend';
     };
   </script>
-  
-  <button class="btn" onclick="location.href='https://jimmyqrg.github.io/suggest-games/'">
-    Suggest a Game
-  </button>
 </body>
 </html>
