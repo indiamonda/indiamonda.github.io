@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Random String Generator | JimmyQrg Tools</title>
+
+<!-- Wide Unicode coverage, proportional fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family:
+        "Noto Sans Symbols 2",
+        "Noto Sans",
+        "Segoe UI Symbol",
+        "Arial Unicode MS",
+        system-ui,
+        sans-serif;
+    background: #111;
+    color: #eee;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+input, select, textarea, button {
+    background: #1b1b1b;
+    color: #eee;
+    border: 1px solid #444;
+    padding: 8px;
+    font-family: inherit; /* ensures non-monospace */
+}
+
+textarea {
+    width: 100%;
+    height: 220px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+button {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+.output {
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Random String Generator</h1>
+
+<div class="controls">
+    <label>
+        Length
+        <input type="number" id="length" value="16" min="1">
+    </label>
+
+    <label>
+        Amount
+        <input type="number" id="amount" value="1" min="1">
+    </label>
+
+    <label>
+        Mode
+        <select id="mode">
+            <option value="alnum">Letters & Numbers</option>
+            <option value="unicode">Completely Random (Unicode)</option>
+            <option value="numbers">Numbers Only</option>
+            <option value="wingdings">Wingdings</option>
+            <option value="custom">Custom</option>
+        </select>
+    </label>
+
+    <label id="customBox" class="hidden">
+        Custom Characters
+        <input type="text" id="customChars" placeholder="Enter allowed characters">
+    </label>
+</div>
+
+<button onclick="generate()">Generate</button>
+
+<div class="output">
+    <textarea id="output" readonly></textarea>
+</div>
+
+<script>
+const ALNUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const NUMBERS = "0123456789";
+
+// Wingdings-ish block (font dependent)
+const WINGDINGS_START = 0x2700;
+const WINGDINGS_END   = 0x27BF;
+
+document.getElementById("mode").addEventListener("change", () => {
+    document.getElementById("customBox").classList.toggle(
+        "hidden",
+        document.getElementById("mode").value !== "custom"
+    );
+});
+
+function randomFromString(chars) {
+    return chars[Math.floor(Math.random() * chars.length)];
+}
+
+function randomUnicodeChar() {
+    while (true) {
+        const cp = Math.floor(Math.random() * 0x110000);
+        if (cp >= 0xD800 && cp <= 0xDFFF) continue; // skip surrogate range
+        return String.fromCodePoint(cp);
+    }
+}
+
+function generate() {
+    const length = +document.getElementById("length").value;
+    const amount = +document.getElementById("amount").value;
+    const mode = document.getElementById("mode").value;
+    const customChars = document.getElementById("customChars").value;
+
+    let output = [];
+
+    for (let i = 0; i < amount; i++) {
+        let str = "";
+        for (let j = 0; j < length; j++) {
+            switch (mode) {
+                case "alnum":
+                    str += randomFromString(ALNUM);
+                    break;
+                case "numbers":
+                    str += randomFromString(NUMBERS);
+                    break;
+                case "unicode":
+                    str += randomUnicodeChar();
+                    break;
+                case "wingdings":
+                    str += String.fromCodePoint(
+                        WINGDINGS_START +
+                        Math.floor(Math.random() * (WINGDINGS_END - WINGDINGS_START))
+                    );
+                    break;
+                case "custom":
+                    if (!customChars.length) {
+                        alert("Custom character set is empty.");
+                        return;
+                    }
+                    str += randomFromString(customChars);
+                    break;
+            }
+        }
+        output.push(str);
+    }
+
+    document.getElementById("output").value = output.join("\n");
+}
+</script>
+
+</body>
+</html>

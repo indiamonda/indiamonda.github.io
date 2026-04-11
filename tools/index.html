@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+<head>
+  <script src="https://jimmyqrg.github.io/js/panicKey.js"></script>
+  <script src="https://jimmyqrg.github.io/js/window.open.js"></script>
+  <script src="https://jimmyqrg.github.io/js/panicKey.js"></script>
+  <script src="https://jimmyqrg.github.io/js/openGame.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Tools - JQRG</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+  
+    body {
+      margin: 0;
+      font-family: "Josefin Sans", sans-serif;
+      background: radial-gradient(1200px 600px at top, #24004d, #050014 60%, #000010);
+      color: #f2e9ff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding-top: 70px;
+    }
+  
+    .container {
+      width: 92%;
+      max-width: 780px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow:
+        0 0 25px rgba(170, 0, 255, 0.25),
+        inset 0 0 30px rgba(255, 255, 255, 0.03);
+      animation: containerEnter 1.4s cubic-bezier(.2,.8,.2,1);
+    }
+  
+    @keyframes containerEnter {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  
+    h1 {
+      margin: 0 0 28px;
+      text-align: center;
+      font-size: 42px;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(180, 0, 255, 0.6);
+      position: relative;
+      padding-bottom: 14px;
+    }
+  
+    h1::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.5),
+        transparent
+      );
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    .item {
+      padding: 18px 20px;
+      margin-bottom: 22px;
+      border-radius: 12px;
+      background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.02)
+      );
+      border-left: 5px solid #b84dff;
+      cursor: pointer;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+      opacity: 0;
+      animation: itemSlide 0.9s ease forwards;
+    }
+  
+    .item:nth-child(1) { animation-delay: 0.1s; }
+    .item:nth-child(2) { animation-delay: 0.2s; }
+    .item:nth-child(3) { animation-delay: 0.3s; }
+  
+    @keyframes itemSlide {
+      from {
+        opacity: 0;
+        transform: translateX(-18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  
+    .item:hover {
+      transform: translateY(-3px) scale(1.025);
+      background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0.12),
+        rgba(255,255,255,0.05)
+      );
+      box-shadow:
+        0 0 18px rgba(190, 0, 255, 0.45),
+        0 0 40px rgba(120, 0, 200, 0.25);
+    }
+  
+    .item-title {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+  
+    .item-desc {
+      margin-top: 6px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.78);
+    }
+  
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tools</h1>
+    <h2>JimmyQrg</h2>
+    <ul>
+
+      <li class="item" onclick="window.open('lagger/')">
+        <a>
+          <span class="item-title">Lagger</span><br>
+          <span class="item-desc">This will make your chromebook laggier and laggier, stop by closing the tab, be careful when using it.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('html-opener/')">
+        <a>
+          <span class="item-title">HTML Unblocker</span><br>
+          <span class="item-desc">This opens your HTML file as about:blank.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('https://jimmyqrg.github.io/proxy/')">
+        <a>
+          <span class="item-title">Hackwize</span><br>
+          <span class="item-desc">This is slightly weaker than JimmyQrg home page, but this is a secondary proxy.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('html-tester/')">
+        <a>
+          <span class="item-title">HTML Tester</span><br>
+          <span class="item-desc">This allows you to enter HTML code and runs it, it also allows you to download the file.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('IndexedDB-reader/')">
+        <a>
+          <span class="item-title">IndexedDB Reader</span><br>
+          <span class="item-desc">This allows you to read IndexedDB on your chromebook on this site, for developers.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('random-string/')">
+        <a>
+          <span class="item-title">Random String Generator</span><br>
+          <span class="item-desc">A simple tool that generates random strings.</span>
+        </a>
+      </li>
+
+      <li class="item" onclick="window.open('files/')">
+        <a>
+          <span class="item-title">Source Viewer</span><br>
+          <span class="item-desc">Lets you view the code of a website and copy the code easily.</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+</body>
+</html>
