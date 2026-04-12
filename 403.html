@@ -2,105 +2,182 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>403 - Access Denied</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>403 | Access Denied</title>
 
-  <!-- Scripts -->
   <script src="/js/mainPageCloak.js"></script>
   <script src="/js/openGame.js"></script>
   <script src="/js/panicKey.js"></script>
-  <script src="/js/style.js"></script>
   <script src="/js/cursor.js"></script>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/css/main.css" />
+  <link rel="icon" type="image/ico" href="https://jimmyqrg.github.io/info.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    body {
+    body.error-page {
       margin: 0;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at center, #111, #000);
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Josefin Sans', sans-serif;
       overflow: hidden;
     }
 
-    .container {
-      text-align: center;
-      z-index: 2;
-    }
-
-    h1 {
-      font-size: 120px;
-      margin: 0;
-      color: #ff3c3c;
-      text-shadow: 0 0 20px rgba(255, 60, 60, 0.6);
-    }
-
-    h2 {
-      margin-top: -10px;
-      font-weight: 400;
-      color: #ccc;
-    }
-
-    .btn {
-      margin-top: 30px;
-      padding: 12px 30px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #ff3c3c;
-      color: #fff;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .btn:hover {
-      background: #ff1f1f;
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(255, 60, 60, 0.5);
-    }
-
-    /* Background effect */
     .bg-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,60,60,0.06), transparent 40%),
+        radial-gradient(circle at 70% 75%, rgba(255,60,60,0.04), transparent 40%);
+      z-index: 0;
+    }
+
+    .bg-stripe {
       position: absolute;
       width: 100%;
       height: 100%;
       background: repeating-linear-gradient(
         45deg,
-        rgba(255, 0, 0, 0.05),
-        rgba(255, 0, 0, 0.05) 10px,
+        rgba(255,60,60,0.03),
+        rgba(255,60,60,0.03) 10px,
         transparent 10px,
         transparent 20px
       );
-      animation: moveBg 5s linear infinite;
-      z-index: 1;
+      animation: moveBg 8s linear infinite;
+      z-index: 0;
     }
 
     @keyframes moveBg {
       from { background-position: 0 0; }
-      to { background-position: 200px 200px; }
+      to { background-position: 283px 283px; }
+    }
+
+    .container {
+      text-align: center;
+      padding: 50px 40px;
+      background: rgba(13, 17, 23, 0.85);
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.7), 0 0 80px rgba(255,60,60,0.05);
+      backdrop-filter: blur(8px);
+      z-index: 1;
+      animation: fadeIn 0.6s ease;
+    }
+
+    h1 {
+      font-size: 90px;
+      margin: 0;
+      letter-spacing: -3px;
+      background: linear-gradient(90deg, #ff6b6b, #d63384);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      margin: 10px 0 8px;
+      font-weight: 400;
+      color: #8b949e;
+    }
+
+    p.subtext {
+      margin: 0 0 25px;
+      font-size: 14px;
+      color: #6e7681;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 26px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #d63384;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #e0408f;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(214,51,132,0.5);
+    }
+
+    .btn-secondary {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+    }
+
+    .btn-secondary:hover {
+      background: #30363d;
+      transform: scale(1.05);
+    }
+
+    .lock-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      opacity: 0.3;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.5; }
+    }
+
+    @media (max-width: 500px) {
+      .container { padding: 30px 20px; }
+      h1 { font-size: 60px; }
+      h2 { font-size: 16px; }
     }
   </style>
 </head>
 
-<body class="strategies-page">
+<body class="error-page">
   <div class="bg-effects"></div>
+  <div class="bg-stripe"></div>
 
   <div class="container">
+    <div class="lock-icon">🔒</div>
     <h1>403</h1>
     <h2>Access Denied</h2>
-    <button id="backBtn" class="btn">Go Back</button>
+    <p class="subtext">You don't have permission to view this page.</p>
+
+    <div class="buttons">
+      <button class="btn btn-primary" id="backHomeBtn">
+        ⬅ Back to Home
+      </button>
+
+      <button class="btn btn-secondary" onclick="history.back()">
+        Go Back
+      </button>
+    </div>
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const backLink = params.get("back") || "https://jimmyqrg.github.io/?page=extend";
-
-    document.getElementById("backBtn").onclick = () => {
-      window.location.href = backLink;
+    document.getElementById('backHomeBtn').onclick = function() {
+      window.location.href = 'https://jimmyqrg.github.io/';
     };
   </script>
 </body>
