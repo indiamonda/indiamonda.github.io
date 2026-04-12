@@ -154,7 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const OPEN_GAME_TYPE_KEY = "openGameType";
     const openType = forceType || localStorage.getItem(OPEN_GAME_TYPE_KEY) || "popup";
-    const target = "/loader/?content=" + encodeURIComponent(url);
+    var absoluteUrl = url;
+    try { absoluteUrl = new URL(url, window.location.origin).href; } catch(e) {}
+    const target = "/loader/?content=" + encodeURIComponent(absoluteUrl);
 
     let win = null;
 
