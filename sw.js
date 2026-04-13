@@ -5,7 +5,6 @@ const urlsToCache = [
   // ============ ROOT FILES ============
   '/',
   '/index.html',
-  '/403.html',
   '/404.html',
   '/404-building.html',
   '/404-safe.html',

@@ -125,7 +125,7 @@
           <div class="block-text">CONTACTS</div>
         </div>
       </a>
-      <a href="#" class="block-link" onclick="event.preventDefault();if(localStorage.getItem('user')==='authorized'){window.location.href='https://jimmyqrg.vercel.app'}else{window.location.href='/403'}">
+      <a href="#" class="block-link" onclick="event.preventDefault();if(confirm('This content is experimental and may contain bugs or unfinished features. Do you want to continue?')){window.location.href='https://jimmyqrg.vercel.app'}">
         <div class="block">
           <div class="block-icon">
             <i class="fas fa-flask"></i>
@@ -392,27 +392,6 @@
           placeholder="https://example.com"
         />
         <br /><br /><br />
-
-        <!-- Access code -->
-        <label><b>Access code:</b></label>
-        <p style="margin-top: 10px; opacity: 0.8">
-          For interaction in construction zone
-        </p>
-        <input
-          id="accessCode"
-          type="password"
-          class="styled-input"
-          placeholder="Enter code"
-          style="margin-top: 5px"
-        />
-        <button id="authorizeBtn" class="btn" style="margin-top: 15px">
-          AUTHORIZE
-        </button>
-        <button id="unauthorizeBtn" class="btn" style="margin-top: 10px">
-          UNAUTHORIZE
-        </button>
-
-        <hr style="border: 1px solid rgba(255,255,255,0.2); margin: 30px 0;">
 
         <!-- ========== INSTALL APP ========== -->
         <h3>📲 Install App</h3>
@@ -693,25 +672,6 @@
             window.location.reload();
           });
         }
-
-        /* --- Access Code System --- */
-        const authorizeBtn = document.getElementById("authorizeBtn");
-        const unauthorizeBtn = document.getElementById("unauthorizeBtn");
-
-        authorizeBtn.addEventListener("click", () => {
-          const code = document.getElementById("accessCode").value;
-          if (code === "asdfghjkl;'") {
-            localStorage.setItem("user", "authorized");
-            alert("Access granted.");
-          } else {
-            alert("Incorrect code.");
-          }
-        });
-
-        unauthorizeBtn.addEventListener("click", () => {
-          localStorage.setItem("user", "normal");
-          alert("User unauthorized.");
-        });
 
         // ---------- Persistent Panic Key Logic ----------
         const PANIC_KEY_STORAGE = "panicKey";
