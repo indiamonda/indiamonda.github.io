@@ -1,0 +1,86 @@
+[
+  {
+    "frameId": "frame_1",
+    "url": "game-resources/frames/frame_1.png",
+    "levelUnlock": 5,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_2",
+    "url": "game-resources/frames/frame_2.png",
+    "levelUnlock": 10,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_3",
+    "url": "game-resources/frames/frame_3.png",
+    "levelUnlock": 20,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_4",
+    "url": "game-resources/frames/frame_4.png",
+    "levelUnlock": 30,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_5",
+    "url": "game-resources/frames/frame_5.png",
+    "levelUnlock": 40,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_6",
+    "url": "game-resources/frames/frame_6.png",
+    "levelUnlock": 50,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_7",
+    "url": "game-resources/frames/frame_7.png",
+    "levelUnlock": 60,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_8",
+    "url": "game-resources/frames/frame_8.png",
+    "levelUnlock": 70,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_9",
+    "url": "game-resources/frames/frame_9.png",
+    "levelUnlock": 80,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_10",
+    "url": "game-resources/frames/frame_10.png",
+    "levelUnlock": 90,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_11",
+    "url": "game-resources/frames/frame_11.png",
+    "levelUnlock": 95,
+    "songChallengUnlock": -1
+  },
+  {
+    "frameId": "frame_song_1",
+    "url": "game-resources/frames/frame_song_1.png",
+    "levelUnlock": 999999,
+    "songChallengUnlock": 0
+  },
+  {
+    "frameId": "frame_song_2",
+    "url": "game-resources/frames/frame_song_2.png",
+    "levelUnlock": 999999,
+    "songChallengUnlock": 1
+  },
+  {
+    "frameId": "frame_song_3",
+    "url": "game-resources/frames/frame_song_3.png",
+    "levelUnlock": 999999,
+    "songChallengUnlock": 2
+  }
+]
