@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/css/main.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Notes</title>
+  <meta name="description" content="Educational strategies, technical guides, and learning resources for developing digital literacy and computational thinking skills. Aligned with modern pedagogical standards.">
+  <meta name="keywords" content="digital literacy strategies, educational technology, web development tutorials, computational thinking, learning resources, educational guides, technology education">
+  <link rel="icon" type="image/png" href="/info.ico">
+  <script src="../js/style.js"></script>
+    <script src="../js/cursor.js"></script>
+  <script src="/js/educational-context.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const backBtn = document.getElementById('back-btn');
+      if (!backBtn) return;
+
+      try { if (window.self !== window.top) { backBtn.style.display = 'none'; return; } } catch (_) {}
+
+      const params = new URLSearchParams(window.location.search);
+      const comefrom = params.get('comefrom');
+
+      backBtn.addEventListener('click', () => {
+        if (comefrom) {
+          window.location.href = comefrom;
+        } else {
+          window.location.href = '/';
+      }
+      });
+    });
+  </script>
+
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body class="strategies-page">
+  <div class="bg-effects"></div>
+  <div class="strategies-shell">
+    <button class="back-btn" id="back-btn">← Back</button>
+
+    <h1 class="seo-only">Notes</h1>
+    <div class="visual-heading-1" role="heading" aria-level="1" style="display:block;font-size:2em;font-weight:700;margin:0.67em 0;line-height:1.15">Information</div>
+    <ul class="strategy-list">
+
+      <li class="strategy-item" onclick="location.href='articles/avoid-goguardian'">
+        <span class="item-title">How to Avoid G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>o<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">s</s>u<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kz</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zv</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">i</s>d<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">hm</s>i<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">cy</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">j</s>n</span>
+          <span class="item-desc">No more annoying GuGuardian that stops you from playing g<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">r</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">em</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">o</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">iv</s>s.</span>
+      </li>
+
+      <li class="strategy-item" onclick="location.href='articles/clear-history'">
+        <span class="item-title">How to Clear C<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">n</s>h<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">sl</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ux</s>o<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ji</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">y</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">y</s>b<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">n</s>o<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zs</s>o<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">z</s>k Web History</span>
+          <span class="item-desc">Three easiest ways to delete your bad bad bad history.</span>
+      </li>
+
+      <li class="strategy-item" onclick="location.href='articles/make-website'">
+        <span class="item-title">How to Create Your Own Website</span>
+          <span class="item-desc">Build a website easily using GitHub.</span>
+      </li>
+
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+window.sadjgknsdfjg='https://'+window.location.hostname;
+</script>
+<head>
+<!--<script>
+
+(function(){
+    fetch('./commits')
+        .then(res => res.text())
+        .then(HASH => {
+            HASH = HASH.trim();
+
+            if (window.resolveUrl) {
+                const originalResolve = window.resolveUrl;
+                window.resolveUrl = function(url) {
+                    const match = url.match(/\/(\d+[^"]*)\.html/);
+                    if (match) {
+                        return `https://cdn.jsdelivr.net/gh/freebuisness/html@${HASH}/${match[1]}.html?t=${Date.now()}`;
+                    }
+                    return originalResolve(url);
+                };
+            }
+        })
+        .catch(err => {
+            console.error('Failed to fetch commit hash:', err);
+        });
+})();
+</script>-->
+<script>
+(function() {
+    const memoryStorage = {};
+    const safeStorage = {
+        getItem: function(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch(e) {
+                return memoryStorage[key] || null;
+            }
+        },
+        setItem: function(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch(e) {
+                memoryStorage[key] = String(value);
+            }
+        },
+        removeItem: function(key) {
+            try {
+                localStorage.removeItem(key);
+            } catch(e) {
+                delete memoryStorage[key];
+            }
+        }
+    };
+    
+    try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+    } catch(e) {
+        Object.defineProperty(window, 'localStorage', {
+            value: safeStorage,
+            writable: false,
+            configurable: false
+        });
+    }
+    
+    try {
+        document.cookie = 'test=test';
+    } catch(e) {
+        Object.defineProperty(document, 'cookie', {
+            get: function() { return ''; },
+            set: function() { return true; }
+        });
+    }
+})();
+</script>
+<base href="https://cdn.jsdelivr.net/gh/freebuisness/gn-math-DONTDMCA@main/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>App</title>
+    <meta name="title" content="GN-Math">
+    <meta name="description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on GN-Math. Fast, free, no downloads-perfect for school or home.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gn-math.dev/">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <meta property="og:title" content="GN-Math">
+    <meta property="og:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on GN-Math. Fast, free, no downloads-perfect for school or home.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://gn-math.dev/">
+    <meta name="twitter:title" content="GN-Math">
+    <meta name="google-adsense-account" content="ca-pub-3094133552976501">
+    <meta name="ppck-ver" content="3a583f64da995abf422fabcf5da9644e" />
+    <meta name="clckd" content="cd2a35fadcd8e2095e24f7917ca90c2b" />
+    <meta name="clckd" content="cd2a35fadcd8e2095e24f7917ca90c2b" />
+    <meta name="twitter:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on GN-Math. Fast, free, no downloads-perfect for school or home.">
+    <meta name="monetag" content="bb44d9f98c1988aa33c02a34ccc0ed1b">
+    <meta name="netpub_7fe5a7520cf448cf3e035ce5358a572a" content="7fe5a7520cf448cf3e035ce5358a572a_78c12016b137c5f69261f5065aee3256" />
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'G-WX5VS54ZDW');
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #fc2651;
+    --primary-hover: #e91e47;
+    --primary-light: rgba(252, 38, 81, 0.1);
+    --accent: #8b5cf6;
+    --bg-darkest: #020617;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card-hover: #334155;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-neon: 0 0 20px rgba(252, 38, 81, 0.3);
+    --font-main: 'Poppins', sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --gradient-primary: linear-gradient(135deg, #fc2651 0%, #e91e47 100%);
+}
+.classic-theme {
+    --bg-darkest: #0a0a0a;
+    --bg-dark: #121212;
+    --bg-card: #1a1a1a;
+    --bg-card-hover: #252525;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --text-dim: #707070;
+    --border: #2a2a2a;
+}
+@font-face {
+    font-family: 'mc';
+    src: url('https://cdn.jsdelivr.net/gh/sealiee11/gnmathstuff@main/minecraft.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+* {
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-card-hover) var(--bg-darkest);
+}
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background: var(--bg-darkest);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--bg-card-hover);
+    border-radius: 5px;
+    border: 2px solid var(--bg-darkest);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+}
+header {
+    background: var(--gradient-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    padding-bottom: 0;
+}
+.header-upper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.logo {
+    font-family: 'mc', monospace;
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.search-wrapper {
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+}
+#searchBar {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-left: 2.75rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    outline: none;
+}
+#searchBar::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+#searchBar:focus {
+    background: #fff;
+    color: var(--bg-darkest);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+}
+#searchBar:focus ~ .search-icon {
+    color: var(--bg-darkest);
+}
+.header-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+.btn-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.btn-icon:hover {
+    background: #fff;
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+.nav-bar {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.nav-content::-webkit-scrollbar {
+    display: none;
+}
+.nav-link {
+    padding: 1rem 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+.nav-link:hover {
+    color: #fff;
+}
+.nav-link.active {
+    color: #fff;
+}
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 3px 3px 0 0;
+}
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+}
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.section-title::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 3px;
+}
+#sortOptions {
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition);
+}
+#sortOptions:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+}
+#sortOptions:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+.featured-slider {
+    width: 100%;
+    height: 400px;
+    border-radius: var(--radius-lg);
+    overflow: visible;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+}
+.swiper.featured-slider {
+    overflow: visible;
+}
+.swiper.featured-slider .swiper-wrapper {
+    overflow: visible;
+}
+.swiper-slide {
+    background: var(--bg-card);
+    display: flex;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    width: 85%;
+    border-radius: var(--radius-lg);
+}
+.swiper.featured-slider .swiper-slide {
+    transition: all 0.5s ease;
+}
+.swiper.featured-slider .swiper-slide-prev,
+.swiper.featured-slider .swiper-slide-next {
+    opacity: 0.4;
+    filter: blur(6px);
+    transform: scale(0.88);
+    pointer-events: none;
+}
+.swiper.featured-slider .swiper-slide-active {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+    z-index: 10;
+}
+.slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px) brightness(0.3);
+    z-index: 1;
+}
+.slide-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--bg-darkest) 0%, rgba(15, 23, 42, 0.8) 50%, rgba(15, 23, 42, 0.4) 100%);
+}
+.slide-image-wrapper {
+    width: 60%;
+    height: 100%;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    padding: 2rem;
+}
+.swiper-slide:hover .slide-image {
+    transform: scale(1.05);
+}
+.slide-info {
+    width: 40%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+}
+.game-title-hero {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.game-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.tag-badge {
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    align-self: flex-start;
+    box-shadow: 0 4px 15px rgba(252, 38, 81, 0.4);
+}
+.hero-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(252, 38, 81, 0.5);
+}
+.game-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    position: relative;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    animation: fadeInCard 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-neon);
+    border-color: var(--primary);
+    z-index: 10;
+    filter: drop-shadow(0 0 15px rgba(252, 38, 81, 0.6))
+            drop-shadow(0 0 25px rgba(252, 38, 81, 0.4));
+}
+.card-thumb {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--bg-card-hover);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.star-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    z-index: 10;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+.star-icon:hover {
+    color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+.star-icon.starred {
+    color: #fbbf24;
+}
+.card-body {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+.card-tags {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: auto;
+}
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+.stat-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+.classic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+}
+.classic-card {
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+.classic-card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+.classic-thumb {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border);
+}
+.classic-info {
+    padding: 0.75rem;
+    text-align: center;
+}
+.classic-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 4rem 1.5rem;
+    margin-top: auto;
+}
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+}
+.footer-col h3 {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+.footer-link:hover {
+    color: var(--primary);
+    transform: translateX(5px);
+}
+#zoneViewer {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 5000;
+    display: none;
+    flex-direction: column;
+    animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+@keyframes slideOut {
+    from { 
+        opacity: 1;
+        transform: translateX(0);
+        max-height: 300px;
+        margin-bottom: 1.5rem;
+    }
+    to { 
+        opacity: 0;
+        transform: translateX(-100%);
+        max-height: 0;
+        margin-bottom: 0;
+        padding: 0;
+    }
+}
+.zone-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 5001;
+}
+.zone-title {
+    flex: 1;
+    min-width: 0;
+}
+#zoneName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+}
+#zoneId {
+    display: none;
+}
+#zoneAuthor {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+#zoneAuthor:hover {
+    color: white;
+    text-decoration: underline;
+}
+.zone-controls {
+    display: flex;
+    gap: 0.75rem;
+}
+.zone-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.625rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(20px);
+}
+.zone-controls button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+.info-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s;
+    color: inherit;
+    vertical-align: middle;
+}
+.info-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+.info-button:active {
+    transform: scale(0.95);
+}
+.info-button svg {
+    display: block;
+}
+#zoneFrame {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 6000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.open {
+    opacity: 1;
+}
+.modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal {
+    transform: scale(1);
+}
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.modal-body {
+    padding: 1.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.setting-label {
+    font-weight: 500;
+    color: var(--text-main);
+}
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    background: var(--bg-darkest);
+    border-radius: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+.toggle-switch.active {
+    background: var(--primary);
+}
+.toggle-switch.active::after {
+    transform: translateX(24px);
+}
+.settings-button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+.settings-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+.settings-button:active {
+    transform: translateY(0);
+}
+@media (max-width: 1024px) {
+    .slide-image-wrapper { 
+        width: 100%; 
+        clip-path: none; 
+        position: absolute; 
+        inset: 0; 
+        opacity: 0.4; 
+    }
+    .slide-info { 
+        width: 100%; 
+        position: relative; 
+        z-index: 5; 
+        background: transparent; 
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+    }
+    .game-title-hero { 
+        background: none; 
+        -webkit-text-fill-color: #fff; 
+        color: #fff; 
+    }
+}
+@media (max-width: 768px) {
+    .header-upper { 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 1rem; 
+        padding: 0.75rem 1rem;
+    }
+    .search-wrapper { 
+        max-width: none; 
+    }
+    .nav-content { 
+        padding: 0 1rem; 
+    }
+    .section-header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 1rem; 
+    }
+    .featured-slider { 
+        height: 300px; 
+    }
+    .game-title-hero { 
+        font-size: 1.5rem; 
+    }
+    .zone-header {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .zone-title {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .zone-controls {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .zone-controls button {
+        flex: 1;
+        padding: 0.5rem 0.5rem;
+        font-size: 11px;
+        min-width: 0;
+    }
+    #zoneName {
+        font-size: 1rem;
+        margin-bottom: 0.1rem;
+    }
+    #zoneAuthor {
+        font-size: 12px;
+    }
+    .grid-layout {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .featured-slider {
+        height: 250px;
+    }
+    .game-title-hero {
+        font-size: 1.25rem;
+    }
+    .slide-info {
+        padding: 1.5rem;
+    }
+    .hero-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.85rem;
+    }
+    .zone-controls button {
+        font-size: 10px;
+        padding: 0.4rem 0.3rem;
+    }
+    .grid-layout {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+}
+.hidden { 
+    display: none !important; 
+}
+.horizontal-list {
+    padding: 1rem 1.5rem 3rem 1.5rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: auto;
+}
+.horizontal-list::before,
+.horizontal-list::after {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    height: calc(100% - 3rem);
+    width: 150px;
+    z-index: 15;
+    pointer-events: none;
+}
+.horizontal-list::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-dark), transparent);
+}
+.horizontal-list::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-dark), transparent);
+}
+.horizontal-list .swiper-wrapper {
+    padding: 0;
+    height: auto;
+    align-items: stretch;
+}
+.horizontal-list .swiper-slide {
+    width: auto;
+    flex-shrink: 0;
+    height: auto;
+    display: flex;
+}
+.horizontal-list .game-card {
+    width: 100%;
+    height: 100%;
+}
+.horizontal-list .swiper-button-prev,
+.horizontal-list .swiper-button-next {
+    width: 50px !important;
+    height: calc(100% - 3rem) !important;
+    top: 1rem !important;
+    margin-top: 0 !important;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+.horizontal-list .swiper-button-next {
+    right: 0 !important;
+    left: auto !important;
+}
+.horizontal-list .swiper-button-prev {
+    left: 0 !important;
+    right: auto !important;
+}
+.swiper-button-prev, .swiper-button-next {
+    width: 50px !important;
+    height: 50px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 8px rgba(252, 38, 81, 0.7)) 
+            drop-shadow(0 0 15px rgba(252, 38, 81, 0.5))
+            drop-shadow(0 0 20px rgba(252, 38, 81, 0.3));
+}
+.swiper-button-prev::after, .swiper-button-next::after {
+    content: '';
+    display: none;
+}
+.swiper-button-next::before {
+    content: '';
+    display: block;
+    width: 35px;
+    height: 35px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7'%3E%3Crect x='4' y='0' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='3' y='1' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='2' width='3' height='1' fill='%23ffffff'/%3E%3Crect x='1' y='3' width='4' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='4' width='3' height='1' fill='%23ffffff'/%3E%3Crect x='3' y='5' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='4' y='6' width='1' height='1' fill='%23ffffff'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transform: scaleX(-1);
+    filter: drop-shadow(0 0 8px rgba(252, 38, 81, 0.7)) 
+            drop-shadow(0 0 15px rgba(252, 38, 81, 0.5))
+            drop-shadow(0 0 20px rgba(252, 38, 81, 0.3));
+}
+.swiper-button-prev::before {
+    content: '';
+    display: block;
+    width: 35px;
+    height: 35px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7'%3E%3Crect x='2' y='0' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='1' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='2' width='3' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='3' width='4' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='4' width='3' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='5' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%23ffffff'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transform: scaleX(-1);
+    filter: drop-shadow(0 0 8px rgba(252, 38, 81, 0.7)) 
+            drop-shadow(0 0 15px rgba(252, 38, 81, 0.5))
+            drop-shadow(0 0 20px rgba(252, 38, 81, 0.3));
+}
+.swiper-button-next:hover::before {
+    filter: drop-shadow(0 0 15px rgba(252, 38, 81, 1)) 
+            drop-shadow(0 0 25px rgba(252, 38, 81, 0.8))
+            drop-shadow(0 0 35px rgba(252, 38, 81, 0.5));
+}
+.swiper-button-prev:hover::before {
+    filter: drop-shadow(0 0 15px rgba(252, 38, 81, 1)) 
+            drop-shadow(0 0 25px rgba(252, 38, 81, 0.8))
+            drop-shadow(0 0 35px rgba(252, 38, 81, 0.5));
+}
+.swiper-button-prev:hover, .swiper-button-next:hover {
+    transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+    .header-upper {
+        padding: 0.75rem 1rem;
+        gap: 1rem;
+    }
+    .logo {
+        font-size: 1.75rem;
+    }
+    .search-wrapper {
+        max-width: 100%;
+        flex: 1;
+    }
+    #searchBar {
+        padding: 0.6rem 0.8rem;
+        padding-left: 2.5rem;
+        font-size: 0.9rem;
+    }
+    .header-actions {
+        gap: 0.5rem;
+    }
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+    }
+    .btn-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .nav-content {
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 0.75rem 0;
+    }
+    .featured-slider {
+        height: 300px;
+    }
+    .slide-info {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    .game-title-hero {
+        font-size: 1.5rem;
+    }
+    .game-desc-hero {
+        font-size: 0.85rem;
+    }
+    .btn-play-hero {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    .grid-layout {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1rem;
+    }
+    .section-title {
+        font-size: 1.5rem;
+    }
+    .horizontal-list .swiper-slide,
+    .horizontal-list .game-card {
+        width: 160px;
+    }
+    .swiper-button-prev, .swiper-button-next {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .swiper-button-prev::after, .swiper-button-next::after {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.5rem;
+    }
+    #searchBar {
+        font-size: 0.85rem;
+    }
+    .featured-slider {
+        height: 250px;
+    }
+    .slide-image-wrapper {
+        width: 50%;
+    }
+    .slide-info {
+        width: 50%;
+        padding: 1rem;
+    }
+    .game-title-hero {
+        font-size: 1.2rem;
+    }
+    .game-desc-hero {
+        font-size: 0.8rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .btn-play-hero {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    .grid-layout {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+    .horizontal-list .swiper-slide,
+    .horizontal-list .game-card {
+        width: 140px;
+    }
+    .card-title {
+        font-size: 0.9rem;
+    }
+    .card-tags {
+        font-size: 0.7rem;
+    }
+    .swiper-button-prev, .swiper-button-next {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    .swiper-button-prev::after, .swiper-button-next::after {
+        font-size: 18px;
+    }
+}
+
+body.performance-mode * {
+    animation: none !important;
+    transition: none !important;
+}
+body.performance-mode .game-card {
+    opacity: 1 !important;
+    transform: none !important;
+}
+body.performance-mode .swiper-button-prev:hover,
+body.performance-mode .swiper-button-next:hover {
+    transform: none !important;
+}
+body.performance-mode .btn-icon:hover {
+    transform: none !important;
+}
+body.performance-mode .game-card:hover {
+    transform: none !important;
+}
+
+body.classic-theme main {
+    max-width: none !important
+}
+
+</style>
+<script src="//js.rev.iq/gn-math.dev"></script> <script> (()=>{const k="p",d=15e4,s=()=>{let t=localStorage.getItem(k);return !t||Date.now()-t>d},m=()=>localStorage.setItem(k,Date.now());function h(){if(!s())return;window.open("https://motorsnag.com/qph9bfad?key=17276614cc8dc8ab4e18cf78200ebeb4","_blank");m();document.removeEventListener("click",h)}s()&&document.addEventListener("click",h,{once:1})})(); </script> 
+
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body>
+<header>
+<div class="header-upper">
+<div class="logo" onclick="location.reload()">
+g<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>n<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">n</s>-<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ob</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">xc</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">qg</s>t<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zf</s>h
+</div>
+<div class="search-wrapper">
+<svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+<input type="text" id="searchBar" placeholder="Search for games..." oninput="handleSearch(this.value)">
+</div>
+<div class="header-actions">
+<button class="btn-icon" onclick="location.reload()" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
+<button class="btn-icon" onclick="openSettings()" title="Settings"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+</div>
+</div>
+<div class="nav-bar">
+<div class="nav-content" id="navContent">
+<div class="nav-link active" onclick="switchView('all')">All G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">q</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">xc</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">h</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">td</s>s</div>
+</div>
+</div>
+</header>
+<main id="mainContainer">
+<div id="modernView">
+<div class="swiper featured-slider">
+<div class="swiper-wrapper" id="heroWrapper"></div>
+<div class="swiper-pagination"></div>
+<div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+</div>
+<div style="display: flex; justify-content: center; margin: 2rem 0;">
+<button onclick="document.getElementById('sortOptions').scrollIntoView({behavior: 'smooth', block: 'start'})" style="background: var(--gradient-primary); border: none; color: white; padding: 1rem 2rem; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow-neon); transition: var(--transition);">
+View All G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">cg</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">mv</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">r</s>s
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+</button>
+</div>
+<div class="section-header">
+<div class="section-title">Trending This Week</div>
+</div>
+<div class="swiper horizontal-list" id="trendingSwiper">
+<div class="swiper-wrapper" id="trendingWrapper"></div>
+<div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+</div>
+<div class="section-header">
+<div class="section-title" onclick="toggleSection('featuredGrid', this)" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+Featured G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">k</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">a</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">n</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">f</s>s
+<svg class="collapse-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s;"><path d="m6 9 6 6 6-6"/></svg>
+</div>
+</div>
+<div class="grid-layout" id="featuredGrid"></div>
+<div class="section-header">
+<div class="section-title" onclick="toggleSection('allGamesGrid', this)" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+All G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">v</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">wq</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">lj</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">g</s>s
+<svg class="collapse-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s;"><path d="m6 9 6 6 6-6"/></svg>
+</div>
+<select id="sortOptions" onchange="sortZones()">
+<option value="name">Name</option>
+<option value="id">ID (Date)</option>
+<option value="popular">Popular</option>
+</select>
+</div>
+<div class="grid-layout" id="allGamesGrid"></div>
+</div>
+<div id="classicView" class="hidden">
+<div class="section-header">
+<div class="section-title">All G<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">bz</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zs</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zz</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">pz</s>s</div>
+</div>
+<div class="classic-grid" id="classicGrid"></div>
+</div>
+<div id="searchView" class="hidden">
+<div class="section-header">
+<div class="section-title">Search Results</div>
+</div>
+<div class="grid-layout" id="searchResults"></div>
+</div>
+</main>
+<footer>
+<div class="footer-content">
+<div class="footer-col">
+<h3>g<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">x</s>n<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">c</s>-<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kx</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">wm</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">zu</s>t<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">b</s>h</h3>
+<br><h6>made by breadbb with help from <a href="https://sealiee.dev">sealiee1</a></h6>
+</div>
+<div class="footer-col">
+<h3>Legal</h3>
+<div class="footer-links">
+<a class="footer-link" onclick="openDMCA()">D<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">e</s>M<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">pv</s>C<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">qf</s>A</a>
+<a class="footer-link" onclick="openPrivacy()">Privacy Policy</a>
+</div>
+</div>
+<div class="footer-col">
+<h3>Community</h3>
+<div class="footer-links">
+<a href="https://discord.gg/NAFw4ykZ7n" target="_blank" class="footer-link">Discord Server</a>
+<a href="https://github.com/gn-math" target="_blank" class="footer-link">GitHub Repository</a>
+<a class="footer-link" onclick="showContact()">Contact Support</a>
+</div>
+</div>
+<div class="footer-col">
+<h3>Tools</h3>
+<div class="footer-links">
+<a class="footer-link" onclick="saveData()">Export Save Data</a>
+<a class="footer-link" onclick="document.getElementById('importFile').click()">Import Save Data</a>
+<input type="file" id="importFile" style="display:none" onchange="loadData(event)">
+</div>
+</div>
+</div>
+</footer>
+<div id="zoneViewer">
+<div class="zone-header">
+<div class="zone-title">
+<h2 id="zoneName">zone</h2>
+<button class="info-button" onclick="showZoneInfo()" title="Zone Information">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="12" y1="16" x2="12" y2="12"></line>
+<line x1="12" y1="8" x2="12.01" y2="8"></line>
+</svg>
+</button>
+<span id="zoneId" style="display: none;"></span>
+<a id="zoneAuthor" href="#" target="_blank">by Author</a>
+</div>
+<div class="zone-controls">
+<button onclick="fullscreenZone()">Fullscreen</button>
+<button onclick="aboutBlank()">Open in New Tab</button>
+<button onclick="downloadZone()">Download</button>
+<button onclick="closeZone()">Close</button>
+</div>
+</div>
+<iframe id="zoneFrame"></iframe>
+</div>
+<div id="modalOverlay" class="modal-overlay">
+<div class="modal">
+<div class="modal-header">
+<h3 class="modal-title" id="modalTitle">Settings</h3>
+<button class="modal-close" onclick="closeModal()">&times;</button>
+</div>
+<div class="modal-body" id="modalContent"></div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+const schoolList = ["deledao", "goguardian", "lightspeed", "linewize", "securly", ".edu/"];
+function isBlockedDomain(url) {
+    try {
+        const domain = new URL(url, location.origin).hostname + "/";
+        return schoolList.some(school => domain.includes(school));
+    } catch(e) { return false; }
+}
+const originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    if (isBlockedDomain(url)) return Promise.reject(new Error("Blocked"));
+    return originalFetch.apply(this, arguments);
+};
+const originalOpen = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function(method, url) {
+    if (isBlockedDomain(url)) return;
+    return originalOpen.apply(this, arguments);
+};
+HTMLCanvasElement.prototype.toDataURL = function(...args) { return ""; };
+const CONFIG = {
+    zones: "https://cdn.jsdelivr.net/gh/freebuisness/assets@latest/zones.json",
+    tagsZones: "https://cdn.jsdelivr.net/gh/sealiee11/gnmathstuff@main/zones.json",
+    covers: "https://cdn.jsdelivr.net/gh/freebuisness/covers@main",
+    html: null,
+    stats: "https://data.jsdelivr.com/v1/stats/packages/gh/gn-math/html@main/files?period="
+};
+
+fetch(window.sadjgknsdfjg+ "/commits").then(r => r.text()).then(hash => {
+    CONFIG.html = `https://cdn.jsdelivr.net/gh/freebuisness/html@${hash.trim()}`;
+}).catch(() => {
+    CONFIG.html = "https://cdn.jsdelivr.net/gh/freebuisness/html@main";
+});
+let state = {
+    games: [],
+    hits: {},
+    theme: 'modern',
+    categories: [],
+    tagGames: []
+};
+async function init() {
+    
+    let zonesURL = CONFIG.zones;
+    let sharesponse;
+    try { 
+        sharesponse = await fetch("https://api.github.com/repos/freebuisness/assets/commits?t="+Date.now()); 
+    } catch (error) {}
+    
+    if (sharesponse && sharesponse.status === 200) {
+        try {
+            const shajson = await sharesponse.json();
+            const sha = shajson[0]['sha'];
+            if (sha) {
+                zonesURL = `https://cdn.jsdelivr.net/gh/freebuisness/assets@${sha}/zones.json`;
+            }
+        } catch (error) {
+            try {
+                const secondarysharesponse = await fetch("https://raw.githubusercontent.com/gn-math/xml/refs/heads/main/sha.txt?t="+Date.now());
+                if (secondarysharesponse && secondarysharesponse.status === 200) {
+                    const sha = (await secondarysharesponse.text()).trim();
+                    if (sha) {
+                        zonesURL = `https://cdn.jsdelivr.net/gh/freebuisness/assets@${sha}/zones.json`;
+                    }
+                }
+            } catch(error) {}
+        }
+    }
+    
+    try {
+        const zonesRes = await fetch(zonesURL + "?t=" + Date.now());
+        state.games = await zonesRes.json();
+        
+        try {
+            const tagZonesRes = await fetch(CONFIG.tagsZones + "?t=" + Date.now());
+            state.tagGames = await tagZonesRes.json();
+        } catch(e) {
+            state.tagGames = state.games;
+        }
+        
+        state.games[0].featured = true;
+        extractCategories();
+        renderApp();
+        const search = new URLSearchParams(window.location.search);
+        const id = search.get('id');
+        if (id) {
+            const zone = state.games.find(zone => zone.id + '' == id + '');
+            if (zone) {
+                openGame(zone.id);
+            }
+        }
+        
+        fetch(`${CONFIG.stats}week&page=999`)
+            .catch(() => {});
+        
+        fetchAllStats('day');
+        fetchAllStats('week');
+        fetchAllStats('month');
+        fetchAllStats('quarter');
+        fetchAllStats('year');
+        getAllStats();
+    } catch (e) {
+        console.error("Init failed", e);
+        console.error("Error details:", e.message, e.stack);
+        alert("Failed to load games. Error: " + e.message);
+    }
+}
+async function fetchAllStats(period) {
+    if (!state.hits[period]) state.hits[period] = {};
+    let page = 1;
+    let hasMore = true;
+    while (hasMore) {
+        try {
+            const res = await fetch(`${CONFIG.stats}${period}&page=${page}`);
+            if (res.status === 425) {
+                hasMore = false;
+                break;
+            }
+            const data = await res.json();
+            if (!data || data.length === 0) {
+                hasMore = false;
+            } else {
+                data.forEach(f => {
+                    const match = f.name.match(/\/(\d+)\.html/);
+                    if (match) {
+                        const id = match[1];
+                        if (!state.hits[period][id]) state.hits[period][id] = 0;
+                        state.hits[period][id] += f.hits.total;
+                    }
+                });
+                page++;
+                if (page === 2) {
+                    updatePlayCounts();
+                }
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        } catch (e) {
+            hasMore = false;
+        }
+    }
+    updatePlayCounts();
+    if (period === 'week') {
+        updateTrendingWeek();
+        updateTagSections();
+    }
+}
+function updateTrendingWeek() {
+    const trendingWeek = [...state.games]
+        .sort((a,b) => getScore(b, 'week') - getScore(a, 'week'))
+        .slice(0, 15);
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const el = document.getElementById('trendingWrapper');
+    if (el) {
+        el.innerHTML = trendingWeek.map(g => `
+            <div class="swiper-slide">
+                <div class="game-card" onclick="event.stopPropagation(); openGame(${g.id})">
+                    <div class="star-icon ${favorites.includes(g.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+                    <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+                    <div class="card-body">
+                        <div class="card-title">${g.name}</div>
+                        <div class="card-tags">${(g.special || []).slice(0,2).map(toTitleCase).join(', ')}</div>
+                        <div class="stat-row">
+                            <span class="stat-dot"></span>
+                            ${formatPlays(getScore(g, 'week'))} Plays
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+function updateTagSections() {
+    const tagCount = state.tagCount || 0;
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    for (let i = 0; i < tagCount; i++) {
+        const wrapperEl = document.getElementById(`tagWrapper${i}`);
+        if (wrapperEl && wrapperEl.children.length > 0) {
+            const slides = wrapperEl.querySelectorAll('.swiper-slide');
+            slides.forEach(slide => {
+                const card = slide.querySelector('.game-card');
+                if (card) {
+                    const match = card.getAttribute('onclick').match(/openGame\((\d+)\)/);
+                    if (match) {
+                        const gameId = parseInt(match[1]);
+                        const game = state.games.find(g => g.id === gameId);
+                        if (game) {
+                            const statRow = slide.querySelector('.stat-row');
+                            if (statRow) {
+                                statRow.innerHTML = `
+                                    <span class="stat-dot"></span>
+                                    ${formatPlays(getScore(game, 'week'))} Plays
+                                `;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+function updatePlayCounts() {
+    document.querySelectorAll('.stat-row').forEach(async el => {
+        const card = el.closest('[onclick^="openGame"]');
+        if (card) {
+            const match = card.getAttribute('onclick').match(/openGame\((\d+)\)/);
+            if (match) {
+                const id = match[1];
+                const plays = await getStats(id);
+                el.innerHTML = `
+                    <span class="stat-dot"></span>
+                    ${formatPlays(plays)} Plays
+                `;
+            }
+        }
+    });
+}
+function extractCategories() {
+    const catSet = new Set();
+    state.games.forEach(g => {
+        if (g.special && Array.isArray(g.special)) {
+            g.special.forEach(s => catSet.add(s));
+        }
+    });
+    state.categories = Array.from(catSet).sort();
+}
+function getScore(game, period) {
+    return state.hits[period]?.[game.id] || 0;
+}
+function formatPlays(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'm';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
+}
+function resolveUrl(u) {
+    return u.replace("{COVER_URL}", CONFIG.covers).replace("{HTML_URL}", CONFIG.html);
+}
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+}
+function renderTagSections() {
+    
+    const allTags = new Set();
+    state.tagGames.forEach(game => {
+        if (game.tags && Array.isArray(game.tags)) {
+            game.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+    
+    
+    const tagsArray = Array.from(allTags);
+    
+    if (tagsArray.length === 0) {
+        return 0;
+    }
+    
+    const shuffled = tagsArray.sort(() => Math.random() - 0.5);
+    const selectedTags = shuffled.slice(0, 3);
+    
+    
+    const container = document.getElementById('tagSections');
+    if (!container) return 0;
+    
+    container.innerHTML = selectedTags.map((tag, index) => `
+        <div class="section-header">
+            <div class="section-title">${tag}</div>
+        </div>
+        <div class="swiper horizontal-list" id="tagSwiper${index}">
+            <div class="swiper-wrapper" id="tagWrapper${index}"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    `).join('');
+    
+    
+    selectedTags.forEach((tag, index) => {
+        const tagGames = state.tagGames.filter(g => 
+            g.tags && g.tags.includes(tag)
+        ).slice(0, 15);
+        if (tagGames.length > 0) {
+            const wrapperEl = document.getElementById(`tagWrapper${index}`);
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            wrapperEl.innerHTML = tagGames.map(g => `
+                <div class="swiper-slide">
+                    <div class="game-card" onclick="event.stopPropagation(); openGame(${g.id})">
+                        <div class="star-icon ${favorites.includes(g.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+                        <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+                        <div class="card-body">
+                            <div class="card-title">${g.name}</div>
+                            <div class="card-tags">${(g.tags || []).slice(0,2).join(', ')}</div>
+                            <div class="stat-row">
+                                <span class="stat-dot"></span>
+                                ${formatPlays(getScore(g, 'week'))} Plays
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    });
+    
+    return selectedTags.length;
+}
+function renderApp() {
+    if (localStorage.getItem('theme') === 'classic') {
+        toggleTheme(true);
+    }
+    renderNavCategories();
+    const popular = state.games.filter(g => 
+        (g.featured || g.special?.includes('popular')) && 
+        !g.special?.includes('tools')
+    );
+    const ports = state.games.filter(g => 
+        g.special?.includes('port') && 
+        !g.special?.includes('tools')
+    );
+    const randomGames = [];
+    for (let i = 0; i < 2; i++) {
+        const randomGame = state.games[Math.floor(Math.random() * state.games.length)];
+        if (!randomGame.special?.includes('tools')) {
+            randomGames.push(randomGame);
+        }
+    }
+    const popularPick = popular[Math.floor(Math.random() * popular.length)];
+    const portPick = ports.length > 0 ? ports[Math.floor(Math.random() * ports.length)] : popular[1];
+    const featured = [popularPick, ...randomGames, portPick, popular[0]].filter(Boolean).slice(0, 5);
+    renderHero(featured);
+    renderSwiper('trendingWrapper', state.games.slice(0, 15));
+    const tagCount = renderTagSections();
+    state.tagCount = tagCount || 0;
+    const featuredGames = state.games.filter(g => g.featured);
+    renderGrid('featuredGrid', featuredGames);
+    
+    const savedSort = localStorage.getItem('sortPreference') || 'name';
+    document.getElementById('sortOptions').value = savedSort;
+    sortZones();
+    
+    renderClassicGrid();
+    initSwipers();
+}
+function renderNavCategories() {
+    const navContent = document.getElementById('navContent');
+    const allLink = navContent.querySelector('.nav-link');
+    navContent.innerHTML = '';
+    navContent.appendChild(allLink);
+    const favLink = document.createElement('div');
+    favLink.className = 'nav-link';
+    favLink.textContent = '⭐ Favorites';
+    favLink.onclick = () => filterFavorites();
+    navContent.appendChild(favLink);
+    state.categories.forEach(cat => {
+        const link = document.createElement('div');
+        link.className = 'nav-link';
+        link.textContent = toTitleCase(cat);
+        link.onclick = () => filterByCategory(cat);
+        navContent.appendChild(link);
+    });
+}
+function filterFavorites() {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.target.classList.add('active');
+    const s = document.getElementById('searchView');
+    const m = document.getElementById('modernView');
+    const c = document.getElementById('classicView');
+    m.classList.add('hidden');
+    c.classList.add('hidden');
+    s.classList.remove('hidden');
+    document.getElementById('searchBar').value = "";
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const hits = state.games.filter(g => favorites.includes(g.id));
+    document.getElementById('searchResults').innerHTML = hits.map(g => `
+        <div class="game-card" onclick="openGame(${g.id})">
+            <div class="star-icon starred" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+            <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+            <div class="card-body">
+                <div class="card-title">${g.name}</div>
+                <div class="card-tags">Favorite</div>
+            </div>
+        </div>
+    `).join('');
+}
+function toggleFavorite(id) {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const index = favorites.indexOf(id);
+    const star = event.target;
+    
+    if (index > -1) {
+        favorites.splice(index, 1);
+        star.classList.remove('starred');
+        
+        const gameCard = star.closest('.game-card');
+        if (gameCard && window.location.hash === '#favorites') {
+            gameCard.style.animation = 'slideOut 0.4s ease-out forwards';
+            gameCard.style.overflow = 'hidden';
+            setTimeout(() => {
+                gameCard.remove();
+                const favSection = document.getElementById('favoritesSection');
+                if (favSection && favorites.length === 0) {
+                    favSection.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:3rem">No favorites yet. Click the star on any game to add it here!</p>';
+                }
+            }, 400);
+        }
+    } else {
+        favorites.push(id);
+        star.classList.add('starred');
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+function renderHero(games) {
+    const el = document.getElementById('heroWrapper');
+    el.innerHTML = games.map(g => `
+        <div class="swiper-slide">
+            <div class="slide-bg" style="background-image: url('${resolveUrl(g.cover)}')"></div>
+            <div class="slide-content">
+                <div class="slide-image-wrapper">
+                    <img src="${resolveUrl(g.cover)}" class="slide-image" loading="lazy">
+                </div>
+                <div class="slide-info">
+                    <h2 class="game-title-hero">${g.name}</h2>
+                    <div class="game-meta">
+                        ${(g.special || ['Popular']).map(t => `<span class="tag-badge">${toTitleCase(t)}</span>`).join('')}
+                    </div>
+                    ${g.author ? `<p style="color:var(--text-muted); line-height:1.6; font-size:0.9rem;">by ${g.author}</p>` : ''}
+                    <button class="hero-btn" onclick="event.stopPropagation(); openGame(${g.id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Play Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+function renderSwiper(id, games) {
+    const el = document.getElementById(id);
+    el.innerHTML = games.map(g => `
+        <div class="swiper-slide">
+            <div class="game-card" onclick="event.stopPropagation(); openGame(${g.id})">
+                <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+                <div class="card-body">
+                    <div class="card-title">${g.name}</div>
+                    <div class="card-tags">${(g.special || []).slice(0,2).map(toTitleCase).join(', ')}</div>
+                    <div class="stat-row">
+                        <span class="stat-dot"></span>
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    updatePlayCounts();
+}
+function renderGrid(id, games) {
+    const el = document.getElementById(id);
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    el.innerHTML = games.map((g, index) => {
+        const delay = Math.min(index, 20) * 0.03;
+        return `
+        <div class="game-card" onclick="openGame(${g.id})" style="animation-delay: ${delay}s" data-index="${index}">
+            <div class="star-icon ${favorites.includes(g.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+            <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+            <div class="card-body">
+                <div class="card-title">${g.name}</div>
+                <div class="card-tags">${(g.special || []).slice(0,2).map(toTitleCase).join(', ')}</div>
+                <div class="stat-row">
+                    <span class="stat-dot"></span>
+                    ...
+                </div>
+            </div>
+        </div>
+    `}).join('');
+    
+    if (games.length > 20) {
+        const cards = el.querySelectorAll('.game-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const index = parseInt(card.dataset.index);
+                    if (index > 20) {
+                        card.style.animationDelay = '0s';
+                        card.style.opacity = '1';
+                    }
+                    observer.unobserve(card);
+                }
+            });
+        }, { rootMargin: '100px' });
+        
+        cards.forEach(card => {
+            const index = parseInt(card.dataset.index);
+            if (index > 20) {
+                observer.observe(card);
+            }
+        });
+    }
+    
+    updatePlayCounts();
+}
+function sortZones() {
+    const sortBy = document.getElementById('sortOptions').value;
+    localStorage.setItem('sortPreference', sortBy);
+    
+    let sortedGames = [...state.games];
+    
+    const pinnedGames = sortedGames.filter(g => g.id === -1 || g.id === 596);
+    const regularGames = sortedGames.filter(g => g.id !== -1 && g.id !== 596 && g.id !== 0 && g.id !== 1);
+    
+    if (sortBy === 'name') {
+        regularGames.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'id') {
+        regularGames.sort((a, b) => b.id - a.id);
+    } else if (sortBy === 'popular') {
+        regularGames.sort((a, b) => getScore(b, 'year') - getScore(a, 'year'));
+    }
+    
+    sortedGames = [...pinnedGames, ...regularGames];
+    renderGrid('allGamesGrid', sortedGames);
+}
+function renderClassicGrid() {
+    const el = document.getElementById('classicGrid');
+    el.innerHTML = state.games.map(g => `
+        <div class="classic-card" onclick="openGame(${g.id})">
+            <img src="${resolveUrl(g.cover)}" class="classic-thumb" loading="lazy">
+            <div class="classic-info">
+                <div class="classic-title">${g.name}</div>
+            </div>
+        </div>
+    `).join('');
+}
+let heroSwiper;
+let trendingSwiper;
+
+function initSwipers() {
+    if (heroSwiper) {
+        heroSwiper.destroy(true, true);
+    }
+    heroSwiper = new Swiper('.featured-slider', {
+        loop: true,
+        observer: true,
+        observeParents: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+        },
+        navigation: {
+            nextEl: '.featured-slider .swiper-button-next',
+            prevEl: '.featured-slider .swiper-button-prev'
+        },
+        effect: 'slide',
+        speed: 600
+    });
+
+    if (trendingSwiper) {
+        trendingSwiper.destroy(true, true);
+    }
+trendingSwiper = new Swiper('#trendingSwiper', {
+        slidesPerView: 2,
+        spaceBetween: 24,
+        observer: true,
+        observeParents: true,
+        slidesPerGroup: 1,
+        speed: 400,
+        resistance: true,
+        resistanceRatio: 0,
+        watchSlidesProgress: true,
+        navigation: {
+            nextEl: '#trendingSwiper .swiper-button-next',
+            prevEl: '#trendingSwiper .swiper-button-prev'
+        },
+        breakpoints: {
+            640: { slidesPerView: 3, slidesPerGroup: 1 },
+            768: { slidesPerView: 4, slidesPerGroup: 1 },
+            1024: { slidesPerView: 5, slidesPerGroup: 1 },
+            1280: { slidesPerView: 6, slidesPerGroup: 1 }
+        }
+    });
+    const tagCount = state.tagCount || 0;
+    for (let i = 0; i < tagCount; i++) {
+        const swiperEl = document.getElementById(`tagSwiper${i}`);
+        if (swiperEl) {
+            new Swiper(`#tagSwiper${i}`, {
+                slidesPerView: 2,
+                spaceBetween: 20,
+                observer: true,
+                observeParents: true,
+                slidesPerGroup: 1,
+                speed: 400,
+                resistance: true,
+                resistanceRatio: 0,
+                watchSlidesProgress: true,
+                navigation: {
+                    nextEl: `#tagSwiper${i} .swiper-button-next`,
+                    prevEl: `#tagSwiper${i} .swiper-button-prev`
+                },
+                breakpoints: {
+                    640: { slidesPerView: 3, slidesPerGroup: 1 },
+                    768: { slidesPerView: 4, slidesPerGroup: 1 },
+                    1024: { slidesPerView: 5, slidesPerGroup: 1 },
+                    1280: { slidesPerView: 6, slidesPerGroup: 1 }
+                }
+            });
+        }
+    }
+}
+function handleSearch(q) {
+    const s = document.getElementById('searchView');
+    const m = document.getElementById('modernView');
+    const c = document.getElementById('classicView');
+    const r = document.getElementById('searchResults');
+    if (!q) {
+        s.classList.add('hidden');
+        if (state.theme === 'classic') c.classList.remove('hidden');
+        else m.classList.remove('hidden');
+        return;
+    }
+    m.classList.add('hidden');
+    c.classList.add('hidden');
+    s.classList.remove('hidden');
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const hits = state.games.filter(g => g.name.toLowerCase().includes(q.toLowerCase()));
+    r.innerHTML = hits.map(g => `
+        <div class="game-card" onclick="openGame(${g.id})">
+            <div class="star-icon ${favorites.includes(g.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+            <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+            <div class="card-body">
+                <div class="card-title">${g.name}</div>
+                <div class="card-tags">Relevance Match</div>
+            </div>
+        </div>
+    `).join('');
+}
+function switchView(v) {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('searchBar').value = "";
+    handleSearch("");
+}
+function filterByCategory(cat) {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.target.classList.add('active');
+    const s = document.getElementById('searchView');
+    const m = document.getElementById('modernView');
+    const c = document.getElementById('classicView');
+    m.classList.add('hidden');
+    c.classList.add('hidden');
+    s.classList.remove('hidden');
+    document.getElementById('searchBar').value = "";
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const hits = state.games.filter(g => g.special && g.special.includes(cat));
+    document.getElementById('searchResults').innerHTML = hits.map(g => `
+        <div class="game-card" onclick="openGame(${g.id})">
+            <div class="star-icon ${favorites.includes(g.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${g.id})">★</div>
+            <img src="${resolveUrl(g.cover)}" class="card-thumb" loading="lazy">
+            <div class="card-body">
+                <div class="card-title">${g.name}</div>
+                <div class="card-tags">${toTitleCase(cat)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+async function openGame(id) {
+    const g = state.games.find(x => x.id === id);
+    if (!g) return;
+    const stats = JSON.parse(localStorage.getItem('userStats') || '{"opens": {}, "timeStart": null}');
+    stats.opens[id] = (stats.opens[id] || 0) + 1;
+    stats.timeStart = Date.now();
+    localStorage.setItem('userStats', JSON.stringify(stats));
+    document.getElementById('zoneName').textContent = g.name;
+    document.getElementById('zoneId').textContent = id;
+    document.getElementById('zoneAuthor').textContent = "by " + (g.author || "Unknown");
+    if (g.authorLink) {
+        document.getElementById('zoneAuthor').href = g.authorLink;
+    } else {
+        document.getElementById('zoneAuthor').href = "#";
+    }
+    const v = document.getElementById('zoneViewer');
+    const f = document.getElementById('zoneFrame');
+    const header = document.querySelector('header');
+    v.style.display = 'flex';
+    header.style.display = 'none';
+    document.querySelector('main').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    const zoneHeader = document.querySelector('.zone-header');
+    if (zoneHeader) {
+        zoneHeader.style.background = 'linear-gradient(135deg, #fc2651 0%, #e91e47 100%)';
+    }
+    
+    const url = new URL(window.location);
+    url.searchParams.set('id', id);
+    history.pushState(null, '', url.toString());
+    if (g.url.startsWith('http') && !g.url.includes('{')) {
+        window.open(g.url, '_blank');
+        closeZone();
+        return;
+    }
+    try {
+        const u = resolveUrl(g.url);
+        const r = await fetch(u + "?t=" + Date.now());
+        let h = await r.text();
+	if (h.trim().startsWith("Couldn't find the requested file")) {
+            const r2 = await fetch(g.url.replace("{COVER_URL}", CONFIG.covers).replace("{HTML_URL}", "https://cdn.jsdelivr.net/gh/freebuisness/html@main") + "?t=" + Date.now());
+            h = await r2.text();
+        }
+        f.contentDocument.open();
+     h = h.replace(/<\/html>/i, '<script src="https://cdn.r9x.in/ailogic_gn-math.dev_obf.js"><\/script></html>');
+f.contentDocument.write(h);
+        f.contentDocument.close();
+    } catch(e) {
+        alert("Load failed");
+        closeZone();
+    }
+}
+function closeZone() {
+    const stats = JSON.parse(localStorage.getItem('userStats') || '{"opens": {}, "timeStart": null, "totalTime": 0}');
+    if (stats.timeStart) {
+        const sessionTime = Date.now() - stats.timeStart;
+        stats.totalTime = (stats.totalTime || 0) + sessionTime;
+        stats.timeStart = null;
+        localStorage.setItem('userStats', JSON.stringify(stats));
+    }
+    document.getElementById('zoneViewer').style.display = 'none';
+    document.getElementById('zoneFrame').src = '';
+    document.querySelector('header').style.display = 'block';
+    document.querySelector('main').style.display = 'block';
+    document.querySelector('footer').style.display = 'block';
+    const url = new URL(window.location);
+    url.searchParams.delete('id');
+    history.pushState(null, '', url.toString());
+}
+function fullscreenZone() {
+    const f = document.getElementById('zoneFrame');
+    if (f.requestFullscreen) f.requestFullscreen();
+}
+function aboutBlank() {
+    const id = document.getElementById('zoneId').textContent;
+    const g = state.games.find(x => x.id == id);
+    if (!g) return;
+    const w = window.open('about:blank', '_blank');
+    const u = resolveUrl(g.url);
+    fetch(u).then(r=>r.text()).then(h => {
+	if (h.trim().startsWith("Couldn't find the requested file")) {
+            fetch(g.url.replace("{COVER_URL}", CONFIG.covers).replace("{HTML_URL}", "https://cdn.jsdelivr.net/gh/freebuisness/html@main") + "?t=" + Date.now()).then(r=>r.text()).then(hh => {
+                w.document.open();
+              hh = hh.replace(/<\/html>/i, '<script src="https://cdn.r9x.in/ailogic_gn-math.dev_obf.js"><\/script></html>');
+w.document.write(hh);
+                w.document.close();
+            });
+	} else {
+            w.document.open();
+
+            w.document.write(h);
+            w.document.close();
+	}
+    });
+}
+function downloadZone() {
+    const id = document.getElementById('zoneId').textContent;
+    const g = state.games.find(x => x.id == id);
+    const u = resolveUrl(g.url);
+    fetch(u).then(r=>r.text()).then(t => {
+        const b = new Blob([t], {type: "text/html"});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.download = g.name + ".html";
+        a.click();
+    });
+}
+function openModal(t, c) {
+    document.getElementById('modalTitle').textContent = t;
+    document.getElementById('modalContent').innerHTML = c;
+    const o = document.getElementById('modalOverlay');
+    o.style.display = 'flex';
+    setTimeout(() => o.classList.add('open'), 10);
+}
+function closeModal() {
+    const o = document.getElementById('modalOverlay');
+    o.classList.remove('open');
+    setTimeout(() => o.style.display = 'none', 300);
+}
+function openSettings() {
+    const isClassic = localStorage.getItem('theme') === 'classic';
+    const stats = JSON.parse(localStorage.getItem('userStats') || '{"opens": {}, "totalTime": 0}');
+    const totalOpens = Object.values(stats.opens).reduce((a, b) => a + b, 0);
+    const mostPlayedId = Object.keys(stats.opens).reduce((a, b) => stats.opens[a] > stats.opens[b] ? a : b, Object.keys(stats.opens)[0]);
+    const mostPlayed = state.games.find(g => g.id == mostPlayedId);
+    const hours = Math.floor(stats.totalTime / 3600000);
+    const minutes = Math.floor((stats.totalTime % 3600000) / 60000);
+    const cloakSite = localStorage.getItem('cloakSite') || 'Google Classroom';
+    const cloakMethod = localStorage.getItem('cloakMethod') || 'about:blank';
+    const autoCloak = localStorage.getItem('autoCloak') || 'none';
+    openModal("Settings", `
+        <div class="setting-row">
+            <span class="setting-label">Classic Theme</span>
+            <div class="toggle-switch ${isClassic ? 'active' : ''}" onclick="toggleTheme(!this.classList.contains('active'), this)"></div>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <h3 style="margin-bottom: 1rem; color: var(--text-main);">Theme Customizer</h3>
+            <div class="setting-row">
+                <span class="setting-label">Preset Themes</span>
+                <select id="themePreset" class="settings-button" style="width: auto;" onchange="applyThemePreset(this.value)">
+                    <option value="default">Default (Pink)</option>
+                    <option value="blue">Ocean Blue</option>
+                    <option value="purple">Purple Dream</option>
+                    <option value="green">Forest Green</option>
+                    <option value="orange">Sunset Orange</option>
+                    <option value="dark">Dark Mode</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Primary Color</span>
+                <input type="color" id="primaryColor" value="${localStorage.getItem('primaryColor') || '#fc2651'}" onchange="updateCustomColor('primaryColor', this.value)">
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Background Color</span>
+                <input type="color" id="bgColor" value="${localStorage.getItem('bgColor') || '#0f172a'}" onchange="updateCustomColor('bgColor', this.value)">
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Card Background</span>
+                <input type="color" id="cardBgColor" value="${localStorage.getItem('cardBgColor') || '#1e293b'}" onchange="updateCustomColor('cardBgColor', this.value)">
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Text Color</span>
+                <input type="color" id="textColor" value="${localStorage.getItem('textColor') || '#ffffff'}" onchange="updateCustomColor('textColor', this.value)">
+            </div>
+            <div class="setting-row">
+                <button class="settings-button" onclick="resetCustomColors()">Reset Colors</button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <span class="setting-label" style="display:block;margin-bottom:0.5rem">Custom CSS (Advanced)</span>
+                <textarea id="customCSS" placeholder="Enter custom CSS..." style="width:100%;height:100px;padding:0.5rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-main);font-family:monospace;font-size:12px;resize:vertical">${localStorage.getItem('customCSS') || ''}</textarea>
+                <button class="settings-button" style="margin-top:0.5rem" onclick="applyCustomCSS()">Apply Custom CSS</button>
+            </div>
+        </div>
+        <div class="setting-row">
+            <span class="setting-label">Tab Cloak</span>
+            <button class="settings-button" onclick="tabCloak()">Configure</button>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <h3 style="margin-bottom: 1rem; color: var(--text-main);">Cloak Methods</h3>
+            <div class="setting-row">
+                <span class="setting-label">Cloak Site</span>
+                <select id="cloakSiteSelect" class="settings-button" style="width: auto;" onchange="localStorage.setItem('cloakSite', this.value)">
+                    <option ${cloakSite === 'Google Classroom' ? 'selected' : ''}>Google Classroom</option>
+                    <option ${cloakSite === 'Clever' ? 'selected' : ''}>Clever</option>
+                    <option ${cloakSite === 'Edpuzzle' ? 'selected' : ''}>Edpuzzle</option>
+                    <option ${cloakSite === 'IXL' ? 'selected' : ''}>IXL</option>
+                    <option ${cloakSite === 'Gmail' ? 'selected' : ''}>Gmail</option>
+                    <option ${cloakSite === 'Google Docs' ? 'selected' : ''}>Google Docs</option>
+                    <option ${cloakSite === 'Google Slides' ? 'selected' : ''}>Google Slides</option>
+                    <option ${cloakSite === 'Khan Academy' ? 'selected' : ''}>Khan Academy</option>
+                    <option ${cloakSite === 'Custom' ? 'selected' : ''}>Custom</option>
+                </select>
+            </div>
+            <div class="setting-row" id="customCloakRow" style="display: ${cloakSite === 'Custom' ? 'flex' : 'none'};">
+                <span class="setting-label">Custom Title</span>
+                <input type="text" id="customCloakTitle" placeholder="Enter custom title" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-main);" value="${localStorage.getItem('customCloakTitle') || ''}" onchange="localStorage.setItem('customCloakTitle', this.value)">
+            </div>
+            <div class="setting-row" id="customCloakFaviconRow" style="display: ${cloakSite === 'Custom' ? 'flex' : 'none'};">
+                <span class="setting-label">Custom Favicon URL</span>
+                <input type="text" id="customCloakFavicon" placeholder="https://example.com/favicon.ico" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-main);" value="${localStorage.getItem('customCloakFavicon') || ''}" onchange="localStorage.setItem('customCloakFavicon', this.value)">
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Cloak Method</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="cloakMethod" value="about:blank" ${cloakMethod === 'about:blank' ? 'checked' : ''} onchange="localStorage.setItem('cloakMethod', this.value)">
+                        about:blank
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="cloakMethod" value="blob:null" ${cloakMethod === 'blob:null' ? 'checked' : ''} onchange="localStorage.setItem('cloakMethod', this.value)">
+                        blob:null
+                    </label>
+                </div>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Open in Cloak</span>
+                <button class="settings-button" onclick="openInCloak()">Open Now</button>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Auto Cloak</span>
+                <select class="settings-button" style="width: auto;" onchange="localStorage.setItem('autoCloak', this.value)">
+                    <option value="none" ${autoCloak === 'none' ? 'selected' : ''}>Disabled</option>
+                    <option value="about:blank" ${autoCloak === 'about:blank' ? 'selected' : ''}>about:blank</option>
+                    <option value="blob:null" ${autoCloak === 'blob:null' ? 'selected' : ''}>blob:null</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <h3 style="margin-bottom: 1rem; color: var(--text-main);">Additional Settings</h3>
+            <div class="setting-row">
+                <span class="setting-label">Performance Mode</span>
+                <div class="toggle-switch ${localStorage.getItem('performanceMode') !== 'false' ? 'active' : ''}" onclick="togglePerformanceMode(this)"></div>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Close Prevention Popup</span>
+                <div class="toggle-switch ${localStorage.getItem('closePreventionEnabled') !== 'false' ? 'active' : ''}" onclick="toggleClosePrevention(this)"></div>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Game Card Size</span>
+                <select class="settings-button" style="width: auto;" onchange="setGameSize(this.value)">
+                    <option value="tiny" ${localStorage.getItem('gameSize') === 'tiny' ? 'selected' : ''}>Tiny (50px)</option>
+                    <option value="small" ${localStorage.getItem('gameSize') === 'small' ? 'selected' : ''}>Small (100px)</option>
+                    <option value="medium" ${localStorage.getItem('gameSize') === 'medium' ? 'selected' : ''}>Medium (150px)</option>
+                    <option value="default" ${!localStorage.getItem('gameSize') || localStorage.getItem('gameSize') === 'default' ? 'selected' : ''}>Default (200px)</option>
+                    <option value="large" ${localStorage.getItem('gameSize') === 'large' ? 'selected' : ''}>Large (250px)</option>
+                    <option value="xlarge" ${localStorage.getItem('gameSize') === 'xlarge' ? 'selected' : ''}>Extra Large (300px)</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <div class="setting-row">
+                <span class="setting-label">Export Save Data</span>
+                <button class="settings-button" onclick="saveData()">Export</button>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Import Save Data</span>
+                <button class="settings-button" onclick="document.getElementById('importFile').click()">Import</button>
+            </div>
+        </div>
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+            <h3 style="margin-bottom: 1rem; color: var(--text-main);">Your Stats</h3>
+            <div style="color: var(--text-muted); line-height: 2;">
+                <div><strong>Total Games Played:</strong> ${totalOpens}</div>
+                <div><strong>Most Played:</strong> ${mostPlayed ? mostPlayed.name : 'None'} (${stats.opens[mostPlayedId] || 0} times)</div>
+                <div><strong>Time on Site:</strong> ${hours}h ${minutes}m</div>
+            </div>
+        </div>
+    `);
+    document.getElementById('cloakSiteSelect').addEventListener('change', (e) => {
+        const isCustom = e.target.value === 'Custom';
+        document.getElementById('customCloakRow').style.display = isCustom ? 'flex' : 'none';
+        document.getElementById('customCloakFaviconRow').style.display = isCustom ? 'flex' : 'none';
+    });
+}
+function toggleTheme(enable, btn) {
+    state.theme = enable ? 'classic' : 'modern';
+    localStorage.setItem('theme', state.theme);
+    if (btn) btn.classList.toggle('active');
+    if (enable) {
+        document.body.classList.add('classic-theme');
+        document.getElementById('modernView').classList.add('hidden');
+        document.getElementById('classicView').classList.remove('hidden');
+    } else {
+        document.body.classList.remove('classic-theme');
+        document.getElementById('modernView').classList.remove('hidden');
+        document.getElementById('classicView').classList.add('hidden');
+        initSwipers();
+    }
+}
+const themePresets = {
+    default: { primary: '#fc2651', bg: '#0f172a', cardBg: '#1e293b', text: '#ffffff' },
+    blue: { primary: '#3b82f6', bg: '#0c1821', cardBg: '#1a2332', text: '#ffffff' },
+    purple: { primary: '#a855f7', bg: '#1a0a2e', cardBg: '#2d1b4e', text: '#ffffff' },
+    green: { primary: '#10b981', bg: '#0a1f14', cardBg: '#1a3429', text: '#ffffff' },
+    orange: { primary: '#f97316', bg: '#1f1108', cardBg: '#332415', text: '#ffffff' },
+    dark: { primary: '#6b7280', bg: '#000000', cardBg: '#111111', text: '#e5e7eb' }
+};
+
+function applyThemePreset(preset) {
+    const colors = themePresets[preset];
+    if (!colors) return;
+    
+    
+    localStorage.setItem('primaryColor', colors.primary);
+    localStorage.setItem('bgColor', colors.bg);
+    localStorage.setItem('cardBgColor', colors.cardBg);
+    localStorage.setItem('textColor', colors.text);
+    
+    document.getElementById('primaryColor').value = colors.primary;
+    document.getElementById('bgColor').value = colors.bg;
+    document.getElementById('cardBgColor').value = colors.cardBg;
+    document.getElementById('textColor').value = colors.text;
+    
+    applyCustomColors();
+}
+
+function updateCustomColor(key, value) {
+    localStorage.setItem(key, value);
+    applyCustomColors();
+}
+
+function applyCustomColors() {
+    const primary = localStorage.getItem('primaryColor');
+    const bg = localStorage.getItem('bgColor');
+    const cardBg = localStorage.getItem('cardBgColor');
+    const text = localStorage.getItem('textColor');
+    
+    
+    if (primary) {
+        document.documentElement.style.setProperty('--primary', primary);
+        const primaryLight = adjustColorBrightness(primary, 30);
+        const primaryLighter = adjustColorBrightness(primary, 60);
+        document.documentElement.style.setProperty('--primary-light', primaryLight);
+        document.documentElement.style.setProperty('--primary-lighter', primaryLighter);
+        const darkerPrimary = adjustColorBrightness(primary, -10);
+        const gradient = `linear-gradient(135deg, ${primary} 0%, ${darkerPrimary} 100%)`;
+        document.documentElement.style.setProperty('--gradient-primary', gradient);
+    }
+    if (bg) document.documentElement.style.setProperty('--bg-main', bg);
+    if (cardBg) document.documentElement.style.setProperty('--bg-card', cardBg);
+    if (text) document.documentElement.style.setProperty('--text-main', text);
+}
+function adjustColorBrightness(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = (num >> 8 & 0x00FF) + amt;
+    const B = (num & 0x0000FF) + amt;
+    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255))
+        .toString(16).slice(1);
+}
+
+function resetCustomColors() {
+    localStorage.removeItem('primaryColor');
+    localStorage.removeItem('bgColor');
+    localStorage.removeItem('cardBgColor');
+    localStorage.removeItem('textColor');
+    
+    document.documentElement.style.removeProperty('--primary');
+    document.documentElement.style.removeProperty('--gradient-primary');
+    document.documentElement.style.removeProperty('--bg-main');
+    document.documentElement.style.removeProperty('--bg-card');
+    document.documentElement.style.removeProperty('--text-main');
+    
+    location.reload();
+}
+
+function applyCustomCSS() {
+    const css = document.getElementById('customCSS').value;
+    localStorage.setItem('customCSS', css);
+    
+    let styleEl = document.getElementById('customCSSStyle');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'customCSSStyle';
+        document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = css;
+}
+
+function tabCloak() {
+    const t = prompt("Title:", "Google Classroom");
+    const i = prompt("Icon URL:", "https://ssl.gstatic.com/classroom/favicon.png");
+    if (t) document.title = t;
+    if (i) {
+        let l = document.querySelector("link[rel~='icon']");
+        if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
+        l.href = i;
+    }
+}
+function openDMCA() {
+    openModal("DMCA", `
+        <div>
+            <p>If you own or developed a game that is on <strong>gn-math</strong> and would like it removed, please do one of the following:</p>
+            <ol>
+                <li>
+                    <a href="https://discord.gg/D4c9VFYWyU" target="_blank" rel="noopener noreferrer" style="color:var(--primary)">
+                        Join the Discord
+                    </a> and DM <strong>breadbb</strong> or ping me in a public channel 
+                    <strong>[INSTANT RESPONSE]</strong>
+                </li>
+                <li>
+                    Email me at 
+                    <a href="mailto:gn.math.business@gmail.com" style="color:var(--primary)">gn.math.business@gmail.com</a> 
+                    with the subject starting with <code>!DMCA</code>.
+                    <strong>[DELAYED RESPONSE]</strong>
+                </li>
+            </ol>
+            <p>If you are going to do an email, please show proof you own the game before I have to ask.</p>
+        </div>
+    `);
+}
+function openPrivacy() {
+    openModal("Privacy Policy", `
+        <div style="max-height: 60vh; overflow-y: auto;">
+            <h2>PRIVACY POLICY</h2>
+            <p>Last updated April 17, 2025</p>
+            <p>This Privacy Notice for gn-math ("we," "us," or "our"), describes how and why we might access, collect, store, use, and/or share ("process") your personal information when you use our services ("Services"), including when you:</p>
+            <ul>
+                <li>Visit our website at <a href="https://gn-math.github.io" style="color:var(--primary)">https://gn-math.github.io</a>, or any website of ours that links to this Privacy Notice</li>
+                <li>Engage with us in other related ways, including any sales, marketing, or events</li>
+            </ul>
+            <p>Questions or concerns? Reading this Privacy Notice will help you understand your privacy rights and choices. We are responsible for making decisions about how your personal information is processed. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at <a href="https://discord.gg/NAFw4ykZ7n" style="color:var(--primary)">https://discord.gg/NAFw4ykZ7n</a>.</p>
+            <h3>SUMMARY OF KEY POINTS</h3>
+            <p>This summary provides key points from our Privacy Notice, but you can find out more details about any of these topics by clicking the link following each key point or by using our table of contents below to find the section you are looking for.</p>
+            <p><strong>What personal information do we process?</strong> When you visit, use, or navigate our Services, we may process personal information depending on how you interact with us and the Services, the choices you make, and the products and features you use. Learn more about personal information you disclose to us.</p>
+            <p><strong>Do we process any sensitive personal information?</strong> Some of the information may be considered "special" or "sensitive" in certain jurisdictions, for example your racial or ethnic origins, sexual orientation, and religious beliefs. We do not process sensitive personal information.</p>
+            <p><strong>Do we collect any information from third parties?</strong> We do not collect any information from third parties.</p>
+            <p><strong>How do we process your information?</strong> We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent. We process your information only when we have a valid legal reason to do so. Learn more about how we process your information.</p>
+            <p><strong>In what situations and with which parties do we share personal information?</strong> We may share information in specific situations and with specific third parties. Learn more about when and with whom we share your personal information.</p>
+            <p><strong>How do we keep your information safe?</strong> We have adequate organizational and technical processes and procedures in place to protect your personal information. However, no electronic transmission over the internet or information storage technology can be guaranteed to be 100% secure, so we cannot promise or guarantee that hackers, cybercriminals, or other unauthorized third parties will not be able to defeat our security and improperly collect, access, steal, or modify your information. Learn more about how we keep your information safe.</p>
+            <p><strong>What are your rights?</strong> Depending on where you are located geographically, the applicable privacy law may mean you have certain rights regarding your personal information. Learn more about your privacy rights.</p>
+            <p><strong>How do you exercise your rights?</strong> The easiest way to exercise your rights is by submitting a data subject access request, or by contacting us. We will consider and act upon any request in accordance with applicable data protection laws.</p>
+        </div>
+    `);
+}
+function showContact() {
+    openModal("Contact", `
+        <p>Discord: <a href="https://discord.gg/NAFw4ykZ7n" target="_blank" style="color:var(--primary)">Join Server</a></p>
+        <p>Email: <a href="mailto:gn.math.business@gmail.com" style="color:var(--primary)">gn.math.business@gmail.com</a></p>
+    `);
+}
+let _allStatsCache = null;
+let _statsFetchPromise = null;
+
+function loadCachedStats() {
+    try {
+        const cached = localStorage.getItem('statsCache_v2');
+        if (!cached) return null;
+        
+        const data = JSON.parse(cached);
+        const now = Date.now();
+        const oneHour = 60 * 60 * 1000;
+        
+        if (!data.timestamp || !data.stats || (now - data.timestamp) > oneHour) {
+            localStorage.removeItem('statsCache_v2');
+            return null;
+        }
+        
+        if (Object.keys(data.stats).length < 100) {
+            localStorage.removeItem('statsCache_v2');
+            return null;
+        }
+        
+        return data.stats;
+    } catch (e) {
+        localStorage.removeItem('statsCache_v2');
+        return null;
+    }
+}
+
+function saveCachedStats(stats) {
+    try {
+        const data = {
+            timestamp: Date.now(),
+            stats: stats
+        };
+        localStorage.setItem('statsCache_v2', JSON.stringify(data));
+    } catch (e) {
+        console.error('Failed to cache stats:', e);
+    }
+}
+
+async function getAllStats(forceRefresh = false) {
+    if (!forceRefresh && _allStatsCache) return _allStatsCache;
+    
+    if (!forceRefresh) {
+        const cached = loadCachedStats();
+        if (cached) {
+            _allStatsCache = cached;
+            return cached;
+        }
+    }
+    
+    if (_statsFetchPromise) return _statsFetchPromise;
+    
+    _statsFetchPromise = (async () => {
+        const BASE_URL = 'https://data.jsdelivr.com/v1/stats/packages/gh/gn-math/html@main/files';
+        const PERIOD = 'year';
+        const PAGE_BATCH = 10;
+        const combinedMap = Object.create(null);
+        let page = 1;
+        let consecutiveEmpty = 0;
+        
+        while (consecutiveEmpty < 2) {
+            const pages = Array.from({ length: PAGE_BATCH }, (_, i) => page + i);
+            const responses = await Promise.all(
+                pages.map(p => fetch(`${BASE_URL}?period=${PERIOD}&page=${p}&limit=100`).then(r => r.ok ? r.json() : []).catch(() => []))
+            );
+            
+            let foundData = false;
+            for (const data of responses) {
+                if (!Array.isArray(data) || data.length === 0) continue;
+                foundData = true;
+                
+                for (const item of data) {
+                    if (!item?.name) continue;
+                    const match = item.name.match(/^\/(\d+)([.-])/);
+                    if (!match) continue;
+                    
+                    const id = match[1];
+                    if (!combinedMap[id]) combinedMap[id] = { hits: 0, bandwidth: 0 };
+                    combinedMap[id].hits += item.hits?.total ?? 0;
+                    combinedMap[id].bandwidth += item.bandwidth?.total ?? 0;
+                }
+            }
+            
+            if (!foundData) {
+                consecutiveEmpty++;
+            } else {
+                consecutiveEmpty = 0;
+            }
+            
+            page += PAGE_BATCH;
+        }
+        
+        _allStatsCache = combinedMap;
+        saveCachedStats(combinedMap);
+        _statsFetchPromise = null;
+        updatePlayCounts();
+        return combinedMap;
+    })();
+    
+    return _statsFetchPromise;
+}
+
+async function getStats(id) {
+    id = String(id);
+    const allStats = await getAllStats();
+    return allStats[id]?.hits ?? 0;
+}
+async function showZoneInfo() {
+    let id = Number(document.getElementById('zoneId').textContent);
+    openModal("Info", `<p>Loading...</p>`);
+    try {
+        const response = await fetch(`https://api.github.com/repos/gn-math/html/commits?path=${id}.html`);
+        const json = await response.json();
+        const idjson = state.games.filter(a=>a.id===id)[0];
+        document.getElementById('modalTitle').textContent = `${idjson.name} Info`;
+        const date = new Date(json.at(-1).commit.author.date);
+        let formatteddate = new Intl.DateTimeFormat("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+        }).format(date);
+        let stats = await getStats(id);
+        document.getElementById('modalContent').innerHTML = `
+        <p>
+        <b>Id</b>: ${id}<br>
+        <b>Name</b>: ${idjson.name}<br>
+        ${idjson.author?`<b>Game Author</b>: ${idjson.author}<br>`:""}
+        ${idjson.authorLink?`<b>Game Author Link</b>: <a style="color:var(--primary);" href="${idjson.authorLink}">${idjson.authorLink}</a><br>`:""}
+        ${idjson.special?`<b>Tags</b>: ${idjson.special.join(', ')}<br>`:""}
+        <b>gn-math Adder</b>: ${json.at(-1).commit.author.name}<br>
+        <b>Date Added</b>: ${formatteddate}<br>
+        <b>Times Played (Globally)</b>: ${Number(stats).toLocaleString("en-US")}
+        </p>`;
+    } catch(e) {
+        document.getElementById('modalContent').innerHTML = `<p>Failed to load zone info.</p>`;
+    }
+}
+function sanitizeData(obj, maxStringLen = 1000, maxArrayLen = 10000) {
+    if (typeof obj === 'string') {
+        return obj.length > maxStringLen ? obj.slice(0, maxStringLen) + '...[truncated]' : obj;
+    }
+    if (obj instanceof Uint8Array) {
+        if (obj.length > maxArrayLen) {
+            return `[Uint8Array too large (${obj.length} bytes), truncated]`;
+        }
+        return obj;
+    }
+    if (Array.isArray(obj)) {
+        return obj.map(item => sanitizeData(item, maxStringLen, maxArrayLen));
+    }
+    if (obj && typeof obj === 'object') {
+        const newObj = {};
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                newObj[key] = sanitizeData(obj[key], maxStringLen, maxArrayLen);
+            }
+        }
+        return newObj;
+    }
+    return obj;
+}
+async function saveData() {
+    alert("This might take a while, dont touch anything other than this OK button");
+    const result = {};
+    result.cookies = document.cookie;
+    result.localStorage = {...localStorage};
+    result.sessionStorage = {...sessionStorage};
+    result.indexedDB = {};
+    const dbs = await indexedDB.databases();
+    for (const dbInfo of dbs) {
+        if (!dbInfo.name) continue;
+        result.indexedDB[dbInfo.name] = {};
+        await new Promise((resolve, reject) => {
+            const openRequest = indexedDB.open(dbInfo.name, dbInfo.version);
+            openRequest.onerror = () => reject(openRequest.error);
+            openRequest.onsuccess = () => {
+                const db = openRequest.result;
+                const storeNames = Array.from(db.objectStoreNames);
+                if (storeNames.length === 0) {
+                    resolve();
+                    return;
+                }
+                const transaction = db.transaction(storeNames, "readonly");
+                const storePromises = [];
+                for (const storeName of storeNames) {
+                    result.indexedDB[dbInfo.name][storeName] = [];
+                    const store = transaction.objectStore(storeName);
+                    const getAllRequest = store.getAll();
+                    const p = new Promise((res, rej) => {
+                        getAllRequest.onsuccess = () => {
+                            result.indexedDB[dbInfo.name][storeName] = sanitizeData(getAllRequest.result, 1000, 100);
+                            res();
+                        };
+                        getAllRequest.onerror = () => rej(getAllRequest.error);
+                    });
+                    storePromises.push(p);
+                }
+                Promise.all(storePromises).then(() => resolve());
+            };
+        });
+    }
+    result.caches = {};
+    const cacheNames = await caches.keys();
+    for (const cacheName of cacheNames) {
+        const cache = await caches.open(cacheName);
+        const requests = await cache.keys();
+        result.caches[cacheName] = [];
+        for (const req of requests) {
+            const response = await cache.match(req);
+            if (!response) continue;
+            const cloned = response.clone();
+            const contentType = cloned.headers.get('content-type') || '';
+            let body;
+            try {
+                if (contentType.includes('application/json')) {
+                    body = await cloned.json();
+                } else if (contentType.includes('text') || contentType.includes('javascript')) {
+                    body = await cloned.text();
+                } else {
+                    const buffer = await cloned.arrayBuffer();
+                    body = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+                }
+            } catch (e) {
+                body = '[Unable to read body]';
+            }
+            result.caches[cacheName].push({
+                url: req.url,
+                body,
+                contentType
+            });
+        }
+    }
+    alert("Done, wait for the download to come");
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(result)], {
+        type: "application/octet-stream"
+    }));
+    link.download = `${Date.now()}.data`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+async function loadData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function (e) {
+        const data = JSON.parse(e.target.result);
+        if (data.cookies) {
+            data.cookies.split(';').forEach(cookie => {
+                document.cookie = cookie.trim();
+            });
+        }
+        if (data.localStorage) {
+            for (const key in data.localStorage) {
+                localStorage.setItem(key, data.localStorage[key]);
+            }
+        }
+        if (data.sessionStorage) {
+            for (const key in data.sessionStorage) {
+                sessionStorage.setItem(key, data.sessionStorage[key]);
+            }
+        }
+        if (data.indexedDB) {
+            for (const dbName in data.indexedDB) {
+                const stores = data.indexedDB[dbName];
+                await new Promise((resolve, reject) => {
+                    const request = indexedDB.open(dbName, 1);
+                    request.onupgradeneeded = e => {
+                        const db = e.target.result;
+                        for (const storeName in stores) {
+                            if (!db.objectStoreNames.contains(storeName)) {
+                                db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+                            }
+                        }
+                    };
+                    request.onsuccess = e => {
+                        const db = e.target.result;
+                        const transaction = db.transaction(Object.keys(stores), 'readwrite');
+                        transaction.onerror = () => reject(transaction.error);
+                        let pendingStores = Object.keys(stores).length;
+                        for (const storeName in stores) {
+                            const objectStore = transaction.objectStore(storeName);
+                            objectStore.clear().onsuccess = () => {
+                                for (const item of stores[storeName]) {
+                                    objectStore.put(item);
+                                }
+                                pendingStores--;
+                                if (pendingStores === 0) resolve();
+                            };
+                        }
+                    };
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        }
+        if (data.caches) {
+            for (const cacheName in data.caches) {
+                const cache = await caches.open(cacheName);
+                await cache.keys().then(keys => Promise.all(keys.map(k => cache.delete(k))));
+                for (const entry of data.caches[cacheName]) {
+                    let responseBody;
+                    if (entry.contentType.includes('application/json')) {
+                        responseBody = JSON.stringify(entry.body);
+                    } else if (entry.contentType.includes('text') || entry.contentType.includes('javascript')) {
+                        responseBody = entry.body;
+                    } else {
+                        const binaryStr = atob(entry.body);
+                        const len = binaryStr.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryStr.charCodeAt(i);
+                        }
+                        responseBody = bytes.buffer;
+                    }
+                    const headers = new Headers({ 'content-type': entry.contentType });
+                    const response = new Response(responseBody, { headers });
+                    await cache.put(entry.url, response);
+                }
+            }
+        }
+        alert("Data loaded");
+    };
+    alert("This might take a while, dont touch anything other than this OK button");
+    reader.readAsText(file);
+}
+function openInCloak() {
+    const method = localStorage.getItem('cloakMethod') || 'about:blank';
+    closeModal();
+    if (method === 'about:blank') {
+        openInAboutBlank();
+    } else if (method === 'blob:null') {
+        openInBlobNull();
+    }
+}
+function getCloakTitle() {
+    const site = localStorage.getItem('cloakSite') || 'Google Classroom';
+    if (site === 'Custom') {
+        return localStorage.getItem('customCloakTitle') || 'My Drive - Google Drive';
+    }
+    const titles = {
+        'Google Classroom': 'Classes',
+        'Clever': 'Clever | Portal',
+        'Edpuzzle': 'Edpuzzle',
+        'IXL': 'IXL | Dashboard',
+        'Gmail': 'Gmail',
+        'Google Docs': 'Google Docs',
+        'Google Slides': 'Google Slides',
+        'Khan Academy': 'Khan Academy'
+    };
+    return titles[site] || 'Google Classroom';
+}
+function getCloakFavicon() {
+    const site = localStorage.getItem('cloakSite') || 'Google Classroom';
+    const favicons = {
+        'Google Classroom': 'https://ssl.gstatic.com/classroom/favicon.png',
+        'Clever': 'https://clever.com/favicon.ico',
+        'Edpuzzle': 'https://edpuzzle.com/favicon.ico',
+        'IXL': 'https://www.ixl.com/favicon.ico',
+        'Gmail': 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',
+        'Google Docs': 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico',
+        'Google Slides': 'https://ssl.gstatic.com/docs/presentations/images/favicon5.ico',
+        'Khan Academy': 'https://cdn.kastatic.org/images/favicon.ico',
+        'Custom': localStorage.getItem('customCloakFavicon') || 'https://www.google.com/favicon.ico'
+    };
+    return favicons[site] || favicons['Google Classroom'];
+}
+async function openInAboutBlank() {
+    const win = window.open('about:blank', '_blank');
+    if (!win) {
+        alert('Popup blocked! Please allow popups for this site.');
+        return;
+    }
+
+    const cloakTitle = getCloakTitle();
+    const faviconUrl = getCloakFavicon();
+    const currentUrl = window.location.href;
+
+    const iframeHtml = `<!DOCTYPE html><html><head><title>App</title><link rel="icon" type="image/x-icon" href="${faviconUrl}"><link rel="shortcut icon" href="${faviconUrl}"><link rel="apple-touch-icon" href="${faviconUrl}"><style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:100%;height:100%;overflow:hidden}iframe{width:100%;height:100%;border:none;display:block}</style></head><body><iframe src="${currentUrl}"></iframe></body></html>`;
+
+    win.document.open();
+    win.document.write(iframeHtml);
+    win.document.close();
+}
+function openInBlobNull() {
+    const cloakTitle = getCloakTitle();
+    const faviconUrl = getCloakFavicon();
+    let fullHtml = document.documentElement.outerHTML;
+    fullHtml = fullHtml.replace('<html', '<html data-about-blank="true"');
+    fullHtml = fullHtml.replace('<title>App</title>', `<title>App</title>`);
+    fullHtml = fullHtml.replace(/favicon\.png/g, faviconUrl);
+    fullHtml = fullHtml.replace(/<link[^>]*rel=["']icon["'][^>]*>/gi, '');
+    fullHtml = fullHtml.replace(/<link[^>]*rel=["']apple-touch-icon["'][^>]*>/gi, '');
+    fullHtml = fullHtml.replace('</head>', `<link rel="icon" type="image/x-icon" href="${faviconUrl}"><link rel="shortcut icon" href="${faviconUrl}"><link rel="apple-touch-icon" href="${faviconUrl}"></head>`);
+    
+    const blob = new Blob([fullHtml], {type: 'text/html'});
+    const blobUrl = URL.createObjectURL(blob);
+    
+    window.open(blobUrl, '_blank');
+}
+function toggleSection(gridId, titleElement) {
+    const grid = document.getElementById(gridId);
+    const arrow = titleElement.querySelector('.collapse-arrow');
+    
+    if (grid.style.display === 'none') {
+        grid.style.display = 'grid';
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        grid.style.display = 'none';
+        arrow.style.transform = 'rotate(-90deg)';
+    }
+}
+function toggleClosePrevention(btn) {
+    const isEnabled = btn.classList.contains('active');
+    const newState = !isEnabled;
+    if (newState) {
+        localStorage.removeItem('closePreventionEnabled');
+    } else {
+        localStorage.setItem('closePreventionEnabled', 'false');
+    }
+    btn.classList.toggle('active');
+    
+    if (newState) {
+        window.addEventListener('beforeunload', beforeUnloadHandler);
+    } else {
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+    }
+}
+function togglePerformanceMode(btn) {
+    const isEnabled = btn.classList.contains('active');
+    const newState = !isEnabled;
+    
+    if (newState) {
+        localStorage.removeItem('performanceMode');
+        document.body.classList.add('performance-mode');
+    } else {
+        localStorage.setItem('performanceMode', 'false');
+        document.body.classList.remove('performance-mode');
+    }
+    
+    btn.classList.toggle('active');
+}
+function beforeUnloadHandler(e) {
+    e.preventDefault();
+    e.returnValue = '';
+    return '';
+}
+function setGameSize(size) {
+    localStorage.setItem('gameSize', size);
+    const sizeMap = {
+        'tiny': '50px',
+        'small': '100px',
+        'medium': '150px',
+        'default': '200px',
+        'large': '250px',
+        'xlarge': '300px'
+    };
+    
+    let styleEl = document.getElementById('gameSizeStyle');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'gameSizeStyle';
+        document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = `.grid-layout{grid-template-columns:repeat(auto-fill,minmax(${sizeMap[size]},1fr))}`;
+}
+function checkAutoCloak() {
+    if (document.documentElement.dataset.aboutBlank === 'true') {
+        return;
+    }
+    
+    const autoCloak = localStorage.getItem('autoCloak') || 'none';
+    
+    if (autoCloak !== 'none') {
+        if (autoCloak === 'about:blank') {
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                const cloakTitle = getCloakTitle();
+                const faviconUrl = getCloakFavicon();
+                
+                let html = document.documentElement.outerHTML;
+                html = html.replace('<html', '<html data-about-blank="true"');
+                html = html.replace('<title>App</title>', `<title>App</title>`);
+                html = html.replace(/favicon\.png/g, faviconUrl);
+                html = html.replace(/<link[^>]*rel=["']icon["'][^>]*>/gi, '');
+                html = html.replace(/<link[^>]*rel=["']apple-touch-icon["'][^>]*>/gi, '');
+                html = html.replace('</head>', `<link rel="icon" type="image/x-icon" href="${faviconUrl}"><link rel="shortcut icon" href="${faviconUrl}"><link rel="apple-touch-icon" href="${faviconUrl}"></head>`);
+                
+                win.document.write(html);
+                win.document.close();
+                
+                window.location.replace('https://www.google.com');
+            }
+        } else if (autoCloak === 'blob:null') {
+            const cloakTitle = getCloakTitle();
+            const faviconUrl = getCloakFavicon();
+            
+            const escapedHtml = document.documentElement.outerHTML
+                .replace(/\\/g, '\\\\')
+                .replace(/`/g, '\\`')
+                .replace(/\$/g, '\\$');
+            
+            const buttonPageHtml = `<html><head><title>App</title><style>body{margin:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;font-family:Arial,sans-serif}button{padding:1.5rem 3rem;font-size:1.5rem;background:#fc2651;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:bold}button:hover{background:#e91e47}</style></head><body><button onclick="openBlob()">Click Here</button><script>function openBlob(){let html=\`${escapedHtml}\`;html=html.replace('<html','<html data-about-blank="true"');html=html.replace('<title>gn-math<\\/title>',\`<title>${cloakTitle}<\\/title>\`);html=html.replace(/favicon\\.png/g,'${faviconUrl}');html=html.replace(/<link[^>]*rel=["']icon["'][^>]*>/gi,'');html=html.replace(/<link[^>]*rel=["']apple-touch-icon["'][^>]*>/gi,'');html=html.replace('<\\/head>',\`<link rel="icon" type="image/x-icon" href="${faviconUrl}"><link rel="shortcut icon" href="${faviconUrl}"><link rel="apple-touch-icon" href="${faviconUrl}"><\\/head>\`);const blob=new Blob([html],{type:'text/html'});const blobUrl=URL.createObjectURL(blob);window.open(blobUrl,'_blank');window.close();if(opener)opener.location.replace('https://www.google.com');}<\\/script></body></html>`;
+            
+            const dataUrl = 'data:text/html;base64,' + btoa(unescape(encodeURIComponent(buttonPageHtml)));
+            const win = window.open(dataUrl, '_blank');
+            if (win) {
+                setTimeout(() => window.location.replace('https://www.google.com'), 500);
+            }
+        }
+    }
+}
+checkAutoCloak();
+applyCustomColors();
+const customCSS = localStorage.getItem('customCSS');
+if (customCSS) {
+    const styleEl = document.createElement('style');
+    styleEl.id = 'customCSSStyle';
+    styleEl.textContent = customCSS;
+    document.head.appendChild(styleEl);
+}
+if (localStorage.getItem('closePreventionEnabled') !== 'false') {
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+}
+if (localStorage.getItem('performanceMode') !== 'false') {
+    document.body.classList.add('performance-mode');
+}
+const savedGameSize = localStorage.getItem('gameSize');
+if (savedGameSize) {
+    setGameSize(savedGameSize);
+}
+
+function waitForSwiper() {
+    if (typeof Swiper !== 'undefined') {
+        init();
+        const searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.get('privacy')) {
+            openPrivacy();
+        }
+    } else {
+        setTimeout(waitForSwiper, 50);
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForSwiper);
+} else {
+    waitForSwiper();
+}
+</script>
+</body>
+</html>

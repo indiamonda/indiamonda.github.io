@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:"Josefin Sans",sans-serif;color:#f2e9ff;overflow:hidden}
+body{background:#0a0014 url("background.png") center/cover no-repeat fixed}
+.wrap{display:flex;flex-direction:column;height:100%;padding:12px;gap:10px;background:rgba(10,0,20,.55)}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(20,10,35,.75);border:1px solid rgba(184,77,255,.2);border-radius:6px;flex-wrap:wrap}
+.toolbar h1{font-size:16px;font-weight:600;letter-spacing:1px;margin-right:auto;color:#fff}
+.toolbar button,.toolbar label.btn{padding:6px 14px;border:1px solid rgba(184,77,255,.3);border-radius:5px;background:rgba(184,77,255,.1);color:#f2e9ff;cursor:pointer;font-size:13px;font-family:inherit;transition:background .15s}
+.toolbar button:hover,.toolbar label.btn:hover{background:rgba(184,77,255,.25)}
+.toolbar input[type="text"]{padding:6px 9px;border:1px solid rgba(184,77,255,.25);border-radius:5px;background:rgba(10,0,25,.6);color:#f2e9ff;font-family:inherit;font-size:13px;width:140px;outline:none}
+.toolbar input[type="text"]:focus{border-color:#b84dff}
+.toolbar input[type="file"]{display:none}
+.main{display:flex;flex:1;min-height:0;gap:10px}
+.editor-pane,.preview-pane{flex:1;display:flex;flex-direction:column;min-width:0;background:rgba(20,10,35,.75);border:1px solid rgba(184,77,255,.2);border-radius:6px;overflow:hidden}
+.pane-label{padding:6px 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(184,77,255,.08);border-bottom:1px solid rgba(184,77,255,.2);color:#c8a8ff}
+.editor-pane textarea{flex:1;resize:none;border:none;outline:none;padding:12px;font-family:"Consolas","Monaco","Courier New",monospace;font-size:14px;line-height:1.5;background:transparent;color:#e7d9ff;tab-size:2;caret-color:#b84dff}
+.editor-pane textarea::selection{background:rgba(184,77,255,.3)}
+.preview-pane iframe{flex:1;border:none;background:#fff}
+@media(max-width:780px){.main{flex-direction:column}}
+</style>
+
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <h1>HTML Tester</h1>
+    <input type="text" id="filename" value="page.html" placeholder="filename">
+    <button id="runBtn">&#9654; Run</button>
+    <label class="btn" for="importFile">Import</label>
+    <input type="file" id="importFile" accept=".html,.htm,.txt,text/html">
+    <button id="dlBtn">Download</button>
+    <button id="clearBtn">Clear</button>
+    <button id="newTabBtn">Open in Tab</button>
+  </div>
+  <div class="main">
+    <div class="editor-pane">
+      <div class="pane-label">Editor</div>
+      <textarea id="code" spellcheck="false">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello world&lt;/h1&gt;
+  &lt;p&gt;Edit this and click Run.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+    </div>
+    <div class="preview-pane">
+      <div class="pane-label">Preview</div>
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+</div>
+<script>
+var code=document.getElementById('code');
+var preview=document.getElementById('preview');
+var filenameEl=document.getElementById('filename');
+var importFile=document.getElementById('importFile');
+
+function run(){
+  var doc=preview.contentDocument||preview.contentWindow.document;
+  doc.open();doc.write(code.value);doc.close();
+}
+
+document.getElementById('runBtn').addEventListener('click',run);
+
+document.getElementById('dlBtn').addEventListener('click',function(){
+  var fn=(filenameEl.value||'page.html').trim()||'page.html';
+  var blob=new Blob([code.value],{type:'text/html;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(url)},5000);
+});
+
+document.getElementById('clearBtn').addEventListener('click',function(){
+  if(confirm('Clear the editor?'))code.value='';
+});
+
+document.getElementById('newTabBtn').addEventListener('click',function(){
+  var w=window.open('','_blank');
+  w.document.open();w.document.write(code.value);w.document.close();
+});
+
+importFile.addEventListener('change',function(){
+  var f=importFile.files&&importFile.files[0];
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    code.value=r.result;
+    filenameEl.value=f.name;
+    run();
+  };
+  r.onerror=function(){alert('Failed to read file.')};
+  r.readAsText(f);
+  importFile.value='';
+});
+
+code.addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var start=code.selectionStart,end=code.selectionEnd;
+    var val=code.value;
+    if(e.shiftKey){
+      var lineStart=val.lastIndexOf('\n',start-1)+1;
+      var before=val.slice(0,lineStart);
+      var region=val.slice(lineStart,end);
+      var removed=0,firstRemoved=0;
+      var newRegion=region.replace(/^ {1,2}/gm,function(m,off){
+        if(off===0)firstRemoved=m.length;
+        removed+=m.length;
+        return '';
+      });
+      code.value=before+newRegion+val.slice(end);
+      code.selectionStart=Math.max(lineStart,start-firstRemoved);
+      code.selectionEnd=end-removed;
+    }else if(start!==end){
+      var ls=val.lastIndexOf('\n',start-1)+1;
+      var b=val.slice(0,ls);
+      var r=val.slice(ls,end);
+      var added=0,firstAdded=2;
+      var nr=r.replace(/^/gm,function(){added+=2;return '  '});
+      code.value=b+nr+val.slice(end);
+      code.selectionStart=start+firstAdded;
+      code.selectionEnd=end+added;
+    }else{
+      code.value=val.slice(0,start)+'  '+val.slice(end);
+      code.selectionStart=code.selectionEnd=start+2;
+    }
+  }
+});
+
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();run();}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='enter'){e.preventDefault();run();}
+});
+
+run();
+</script>
+</body>
+</html>

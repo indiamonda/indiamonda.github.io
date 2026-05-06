@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    <link rel="stylesheet" href="/css/info.css" />
+    <link rel="icon" href="https://jimmyqrg.github.io/info.ico">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body class="info-page">
+    <div class="bg-effects"></div>
+    <div class="main-container">
+        <header>
+            <div class="diamond-icon"></div>
+            <h1 class="seo-only">List</h1>
+            <div class="header-title" data-text="SERVER LIST" role="heading" aria-level="1">SERVER LIST</div>
+            <p class="header-subtitle">J<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ml</s>i<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kt</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ew</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">u</s>y<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">b</s>Q<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">h</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">md</s>g Info</p>
+            <p style="color: rgba(255, 255, 255, 0.7); max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+                Free server list that are enterable in e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ha</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">tl</s>g<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">u</s>l<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">e</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">d</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>c<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">dc</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">qa</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kp</s>f<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">o</s>t
+            </p>
+        </header>
+        
+        <div class="blocks-container" id="server-list">
+            <!-- Server blocks will be dynamically inserted here -->
+        </div>
+        
+        <div class="footer">
+            <p>© Copyright J<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">el</s>i<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">m</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">jd</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">td</s>y<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">d</s>Q<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">s</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ud</s>g 2026</p>
+        </div>
+    </div>
+
+    <script>
+        // Server data from your list (excluding vote counts)
+        const servers = [
+            { name: "AdderaIMC", ip: "wss://adderall.ir" },
+            { name: "Voidsent MC", ip: "wss://mc.voidsent.net" },
+            { name: "Lamp Network", ip: "wss://mc.lamplifesteol.xyz" },
+            { name: "VanillaMC", ip: "wss://vanillamc.org" },
+            { name: "TuffNET", ip: "wss://tuff.ws" },
+            { name: "Dumbshit Survival X", ip: "wss://mc.dssx.uk" },
+            { name: "Communist MC", ip: "wss://cmc.tf" },
+            { name: "GG SMP", ip: "wss://ggsmp.net" },
+            { name: "Lifested", ip: "wss://play.heartamp.net" },
+            { name: "Radiant Network", ip: "wss://eagler.radianinet.club" },
+            { name: "Thanatos-Network", ip: "wss://web.thanatos-network.xyz" },
+            { name: "Jonarchy", ip: "wss://8b4t.org" },
+            { name: "Fyre Network", ip: "wss://fyrecraft.imcalledfyre.com/eagler" },
+            { name: "AkaziMC", ip: "wss://akazimc.eagler.host" },
+            { name: "Zpanesite", ip: "wss://eagler.2plt.com" },
+            { name: "CrackedPvP", ip: "wss://play.crackedpvp.club" },
+            { name: "DuckyMC", ip: "wss://eagler.duckymc.xyz" },
+            { name: "Velkor Network", ip: "wss://velkor.club" },
+            { name: "SealCraft + NootServer", ip: "wss://mc.sealcentral.co" },
+            { name: "KerCraft", ip: "wss://eagler.kercraft.workers.dev/" },
+            { name: "Hyrise Network", ip: "wss://hyrise.fun" },
+            { name: "PulseStrip", ip: "wss://pulsingsmp.xyz" },
+            { name: "SweftMC", ip: "wss://study-tools.sweft.org" },
+            { name: "EB Bridging", ip: "wss://ec.eb-bridging.pro" },
+            { name: "Hyper NW", ip: "wss://egg.hyper-network.xyz" },
+            { name: "Bus SMP", ip: "wss://bus-smp.eagler.host" },
+            { name: "Vortexium Network", ip: "wss://30086.ddmod.es" },
+            { name: "PrysmMC", ip: "wss://prysm.lol" },
+            { name: "GODS NATION", ip: "wss://gods.modernnations.xyz" },
+            { name: "Zentic Network", ip: "wss://zentic.cc" },
+            { name: "Contract bell", ip: "wss://contractbell.bytommy.uk" },
+            { name: "NullCraft FACTIONS", ip: "wss://eag.xapktech.xyz/" },
+            { name: "DylanMC Lifested S1", ip: "wss://play.monacoeducation.info" },
+            { name: "JasonSMP", ip: "wss://jasonsmp.eagler.host" },
+            { name: "Spadalia HCSMP", ip: "wss://spadalia-hcsmp.eagler.host" },
+            { name: "SME MC (1.8)", ip: "wss://sme-mc.us/e" },
+            { name: "LightSMP", ip: "wss://lightsmp.eagler.host" },
+            { name: "The EagMP", ip: "wss://mc.theludos.com/" },
+            { name: "BlockByBlox", ip: "wss://blockbyblox.eagler.host" },
+            { name: "GALA SERVER", ip: "wss://gala.eagler.host" },
+            { name: "TS_Gamer Craft", ip: "wss://tsgamercraft.eagler.host" },
+            { name: "creayun CLASSIC", ip: "wss://play.shinnowisnotthetime" },
+            { name: "SHADOW NETWORK 2", ip: "wss://play.shadownetwork.shop" },
+            { name: "toxide", ip: "wss://toxide.eagler.host" },
+            { name: "Thunder Network", ip: "wss://play.thundernetwork.store/" },
+            { name: "AsianF4rmer", ip: "wss://asianfarmer.lol" },
+            { name: "Spaddila HCSMP", ip: "wss://spaddila-hcsmp.eagler.host" },
+            { name: "SkiNet", ip: "wss://mc.skiinet.ru" },
+            { name: "TeamHolyTOP", ip: "wss://eagler.teamholy.top" },
+            { name: "AnarchMC", ip: "wss://web.aesthetiful.com" },
+            { name: "Adventure Islands", ip: "wss://adventureislands.eu:25567/" },
+            { name: "Kuklinc Server", ip: "wss://gannet-literate-ape.ngrok-free.app" },
+            { name: "WegCraft", ip: "wss://craft.slaysisters.website" },
+            { name: "MLMC Season 2", ip: "wss://31095.ddmod.es" },
+            { name: "SuckMyCraft", ip: "wss://eagler.suckmycraft.online/" },
+            { name: "DazedSMP", ip: "wss://dazed.galacticnet.cfd" },
+            { name: "GalaxyMC Server", ip: "wss://galaxymc.eagler.host" },
+            { name: "RitalinMC", ip: "wss://eagler.ritalinmc.club" },
+            { name: "Alphrix Network", ip: "wss://mc.alphrixnetwork.site" },
+            { name: "Huntsols", ip: "wss://craft.huntsols-bot.xyz" },
+            { name: "HighSides SMP", ip: "wss://highsides.theludos.com/" },
+            { name: "VelocityCraft", ip: "wss://velocity.pixinetworks.eu" },
+            { name: "IMC.RE", ip: "wss://ws.imc.re/server" },
+            { name: "AvernusMC", ip: "wss://play.avernusmc.net" },
+            { name: "PixelVerseMC", ip: "wss://thijmens.nl:4444" },
+            { name: "VelcroftSMP", ip: "wss://mc.velcroftnetwork.xyz" },
+            { name: "Lune Network", ip: "wss://lunenet.galacticnet.cfd" },
+            { name: "DragonFireMC", ip: "wss://eagler.dragonfire.world" },
+            { name: "CastersMC", ip: "wss://mc.castersmc.org" }
+        ];
+
+        // Generate server blocks
+        const serverListContainer = document.getElementById('server-list');
+        
+        servers.forEach(server => {
+            const block = document.createElement('div');
+            block.className = 'block';
+            
+            // Get a random icon for each server
+            const icons = ['fas fa-server', 'fas fa-gamepad', 'fas fa-dice-d20', 'fas fa-cube', 'fas fa-gem', 'fas fa-crown'];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            
+            block.innerHTML = `
+                <div class="block-icon">
+                    <i class="${randomIcon}"></i>
+                </div>
+                <div class="block-text">${server.name}</div>
+                <div style="margin-top: 10px; font-size: 0.85rem; opacity: 0.8; word-break: break-all;">${server.ip}</div>
+                <button class="copy-btn" data-ip="${server.ip}" style="margin-top: 12px; padding: 8px 16px; font-size: 0.9rem;">
+                    <i class="fas fa-copy"></i> Copy IP Address
+                </button>
+            `;
+            
+            serverListContainer.appendChild(block);
+        });
+
+        // Copy IP functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('copy-btn') || e.target.parentElement.classList.contains('copy-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const button = e.target.classList.contains('copy-btn') ? e.target : e.target.parentElement;
+                const ip = button.getAttribute('data-ip');
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(ip).then(() => {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> IP Copied!';
+                    button.style.background = 'linear-gradient(90deg, #00c853, #29ff6a)';
+                    button.style.borderColor = 'transparent';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = 'rgba(0, 0, 0, 0.6)';
+                        button.style.borderColor = 'white';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy IP: ', err);
+                    button.innerHTML = '<i class="fas fa-times"></i> Failed to Copy';
+                    button.style.background = 'linear-gradient(90deg, #ff3b3b, #ff6b2d)';
+                    button.style.borderColor = 'transparent';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-copy"></i> Copy IP Address';
+                        button.style.background = 'rgba(0, 0, 0, 0.6)';
+                        button.style.borderColor = 'white';
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0c0614;color:#e0e0e8}
+.wrap{display:flex;flex-direction:column;height:100%;padding:20px;gap:14px;max-width:1200px;margin:0 auto;width:100%}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toolbar h1{font-size:17px;font-weight:700;letter-spacing:.3px;background:linear-gradient(135deg,#b07aff,#e94560);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-right:10px;white-space:nowrap}
+.toolbar input[type="text"]{flex:1;min-width:200px;padding:10px 14px;border:1px solid rgba(176,122,255,.25);border-radius:10px;background:rgba(255,255,255,.04);color:#e0e0e8;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+.toolbar input[type="text"]:focus{border-color:rgba(176,122,255,.55);box-shadow:0 0 0 3px rgba(176,122,255,.12)}
+.toolbar input[type="text"]::placeholder{color:rgba(255,255,255,.3)}
+.toolbar button,.copy-bar button{padding:9px 20px;border:1px solid rgba(176,122,255,.3);border-radius:10px;background:linear-gradient(135deg,rgba(136,65,214,.25),rgba(176,122,255,.12));color:rgba(255,255,255,.88);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s;white-space:nowrap;backdrop-filter:blur(4px)}
+.toolbar button:hover,.copy-bar button:hover{background:linear-gradient(135deg,rgba(136,65,214,.45),rgba(176,122,255,.25));border-color:rgba(176,122,255,.55);color:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(136,65,214,.2)}
+.toolbar button:active,.copy-bar button:active{transform:scale(.97)}
+.toolbar button:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.status{font-size:13px;color:rgba(255,255,255,.45);min-height:18px;padding-left:2px}
+.output{flex:1;min-height:0;display:flex;flex-direction:column}
+.output pre{flex:1;overflow:auto;padding:16px;font-family:'Cascadia Code','Fira Code','Consolas','Monaco',monospace;font-size:13px;line-height:1.6;background:rgba(255,255,255,.02);border:1px solid rgba(176,122,255,.15);border-radius:12px;white-space:pre-wrap;word-break:break-all;color:#c4c8d8;scrollbar-width:thin;scrollbar-color:rgba(176,122,255,.25) transparent}
+.output pre::-webkit-scrollbar{width:6px;height:6px}
+.output pre::-webkit-scrollbar-thumb{background:rgba(176,122,255,.25);border-radius:3px}
+.copy-bar{display:flex;justify-content:flex-end;padding-top:10px;gap:8px}
+.copy-bar button{padding:7px 16px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <h1>Source Viewer</h1>
+    <input type="text" id="url" placeholder="Enter URL (e.g. https://example.com)" value="">
+    <button id="fetchBtn">Fetch Source</button>
+  </div>
+  <div class="status" id="status"></div>
+  <div class="output">
+    <pre id="result">Enter a URL above and click Fetch Source to view its HTML.</pre>
+    <div class="copy-bar">
+      <button id="copyBtn">Copy to Clipboard</button>
+      <button id="dlBtn">Download as HTML</button>
+    </div>
+  </div>
+</div>
+<script>
+var urlEl=document.getElementById('url');
+var resultEl=document.getElementById('result');
+var statusEl=document.getElementById('status');
+var fetchBtn=document.getElementById('fetchBtn');
+
+function doFetch(){
+  var raw=urlEl.value.trim();
+  if(!raw){statusEl.textContent='Please enter a URL.';return;}
+  if(!/^https?:\/\//i.test(raw))raw='https://'+raw;
+  statusEl.textContent='Fetching…';
+  resultEl.textContent='';
+  fetchBtn.disabled=true;
+
+  var proxies=[
+    'https://api.allorigins.win/raw?url='+encodeURIComponent(raw),
+    'https://corsproxy.io/?'+encodeURIComponent(raw),
+    'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(raw)
+  ];
+
+  tryNext(proxies,0,raw);
+}
+
+function tryNext(proxies,i,original){
+  if(i>=proxies.length){
+    statusEl.textContent='All proxies failed. The site may block external requests.';
+    resultEl.textContent='Could not fetch the source for: '+original;
+    fetchBtn.disabled=false;
+    return;
+  }
+  fetch(proxies[i]).then(function(r){
+    if(!r.ok)throw new Error(r.status);
+    return r.text();
+  }).then(function(text){
+    resultEl.textContent=text;
+    statusEl.textContent='Fetched '+text.length.toLocaleString()+' characters from '+original;
+    fetchBtn.disabled=false;
+  }).catch(function(){
+    tryNext(proxies,i+1,original);
+  });
+}
+
+fetchBtn.addEventListener('click',doFetch);
+urlEl.addEventListener('keydown',function(e){if(e.key==='Enter')doFetch();});
+
+document.getElementById('copyBtn').addEventListener('click',function(){
+  navigator.clipboard.writeText(resultEl.textContent).then(function(){
+    statusEl.textContent='Copied to clipboard!';
+  });
+});
+
+document.getElementById('dlBtn').addEventListener('click',function(){
+  var blob=new Blob([resultEl.textContent],{type:'text/html;charset=utf-8'});
+  var u=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=u;a.download='source.html';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(u)},5000);
+});
+</script>
+</body>
+</html>

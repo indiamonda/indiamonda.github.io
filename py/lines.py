@@ -1,0 +1,160 @@
+"""Source of truth for the cycling tip lines that flow along the bottom of
+the universal jqrg-loader splash. Edit `loadingWaitLines` here, then run
+
+    python3 py/lines.py
+
+to regenerate `js/jqrg-loader-lines.js`. After regenerating, run
+
+    node js/migrate-loader-tip-lines-inline.mjs
+
+so every game page gets the new lines inlined directly into its <head>.
+Inlining is what guarantees the lines appear even on tiny / fast-loading
+games where the universal loader would otherwise complete before an
+async fetch of `/js/jqrg-loader-lines.js` had a chance to finish.
+
+Keep each line short (≤ ~80 chars) so it sits on one line on phones, and
+keep the tone friendly — these are the first words a player sees when
+they're staring at a loading bar."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+loadingWaitLines: list[str] = [
+    # --- Computing & gaming trivia ---
+    "Cool fact: Tetris was invented in 1984 by Alexey Pajitnov.",
+    "Cool fact: The first computer mouse was carved out of a block of wood.",
+    "Cool fact: Mario was originally named Jumpman.",
+    "Cool fact: A real moth caused the first computer 'bug' back in 1947.",
+    "Cool fact: A Game Boy once survived a bombing and still booted up.",
+    "Cool fact: The very first website (info.cern.ch) is still online today.",
+    "Cool fact: Pac-Man's design was inspired by a pizza missing one slice.",
+    "Cool fact: The Konami Code is up, up, down, down, left, right, left, right, B, A.",
+    "Cool fact: A 'nibble' is half a byte. Yes, really.",
+    "Cool fact: 1024 bytes is technically a kibibyte.",
+    "Cool fact: HTTP 418 means 'I'm a teapot.' It's in the spec.",
+    "Cool fact: A jiffy is a real unit of time, about 1/100 of a second.",
+    "Cool fact: There's no place like 127.0.0.1.",
+    "Cool fact: The first Pong was a training exercise for an Atari new hire.",
+    "Cool fact: There are 10 kinds of people: those who read binary and those who don't.",
+    "Cool fact: Doom has been ported to a pregnancy test.",
+    "Cool fact: Minecraft's first version was hacked together in just six days.",
+    "Cool fact: The Sims series has sold over 200 million copies.",
+    "Cool fact: Wii Sports was once the best-selling video game on Earth.",
+    "Cool fact: PlayStation was almost just a Nintendo accessory.",
+    "Cool fact: A floppy disk holds about 1.4MB. A phone photo today is bigger.",
+    "Cool fact: ENIAC, an early computer, weighed about 27 tons.",
+    "Cool fact: Linux quietly runs most of the world's web servers.",
+    "Cool fact: The @ symbol predates email by hundreds of years.",
+    "Cool fact: The first emoji set was designed in Japan in 1999.",
+    "Cool fact: Hyperlinks were proposed all the way back in 1965.",
+    "Cool fact: Pixar started life as a hardware company.",
+    "Cool fact: The first banner ad ran in 1994 with a 44% click-through rate.",
+    "Cool fact: Wikipedia has more than 60 million articles across all languages.",
+    "Cool fact: The cursor blink rate is measured in 'Hz of patience.'",
+
+    # --- Programmer humor ---
+    "To understand recursion, you must first understand recursion.",
+    "There are two hard problems in CS: cache invalidation, naming, and off-by-one errors.",
+    "Have you tried turning it off and on again?",
+    "It works on my machine.",
+    "Coffee.exe has stopped working.",
+    "Real programmers count from 0.",
+    "Why do programmers prefer dark mode? Light attracts bugs.",
+    "!false — it's funny because it's true.",
+    "CSS: where !important is rarely important.",
+    "Tabs vs spaces: the eternal flame war.",
+    "There are 10 types of bugs: the ones you find and the ones you don't.",
+    "Programmers don't sleep, they recharge their RAM.",
+    "The best error message is the one that never shows up.",
+    "Reading other people's code is harder than writing your own.",
+    "The cloud is just someone else's computer.",
+    "60% of the game files were added using a chromebook.",
+
+    # --- Encouraging & playful ---
+    "Hang tight. The bytes are on their way.",
+    "Pixels are warming up.",
+    "Almost there. Almost.",
+    "Big adventures start with small loading bars.",
+    "The fun is just around the corner.",
+    "Buckle up. Here we go.",
+    "Bits are flying as fast as they can.",
+    "Caffeinating the servers.",
+    "Convincing the bytes to cooperate.",
+    "Dusting off the high score table.",
+    "Reticulating splines.",
+    "Polishing pixels.",
+    "Untangling cables.",
+    "Asking the cat to please move off the keyboard.",
+    "Negotiating with electrons.",
+    "Spinning up the fun-o-meter.",
+    "Convincing the loading bar to load faster.",
+    "Reminding the GPU it's loved.",
+    "Buffering... now with extra buffering.",
+    "The internet hamsters are stretching their legs.",
+    "Dispatching the loading goblins.",
+    "Baking fresh cookies.",
+    "Folding origami progress bars.",
+    "Asking the bytes to please hurry up.",
+    "Knitting a tiny sweater for the CPU.",
+    "Watering the server room plants.",
+    "Stretching the loading bar a little longer.",
+    "Playing rock paper scissors with the network.",
+    "Bribing the loading bar with snacks.",
+    "Sweet-talking the database.",
+    "Telling the modem some encouraging words.",
+    "The game is loading, but the fun has already started.",
+    "Don't blink. Or do — it's fine.",
+    "Welcome aboard. Snacks are at the back.",
+]
+
+if len(loadingWaitLines) < 20:
+    raise AssertionError(
+        f"Need at least 20 lines so the rotation feels varied; got "
+        f"{len(loadingWaitLines)}. Pad the list before regenerating."
+    )
+
+if len(set(loadingWaitLines)) != len(loadingWaitLines):
+    seen: set[str] = set()
+    dupes: list[str] = []
+    for line in loadingWaitLines:
+        if line in seen and line not in dupes:
+            dupes.append(line)
+        seen.add(line)
+    raise AssertionError(
+        "loadingWaitLines contains duplicate entries: "
+        + ", ".join(repr(d) for d in dupes)
+    )
+
+
+HEADER = (
+    "// AUTO-GENERATED by py/lines.py — do not edit by hand.\n"
+    "// Source: py/lines.py :: loadingWaitLines\n"
+    "// Run `python3 py/lines.py` to regenerate.\n"
+    "//\n"
+    "// Two consumers:\n"
+    "//   1. Every game page inlines the same payload right before the\n"
+    "//      universal jqrg-loader IIFE so the lines are available the\n"
+    "//      moment the loader paints. Keeps fast games from finishing\n"
+    "//      before any line shows up. Run\n"
+    "//        node js/migrate-loader-tip-lines-inline.mjs\n"
+    "//      after regenerating this file to push the new payload.\n"
+    "//   2. This file itself stays in /js/ as a defensive fallback for\n"
+    "//      any future page that ships the loader without the inline\n"
+    "//      payload. The loader fetches it lazily in that case.\n"
+)
+
+
+def main() -> None:
+    out = Path(__file__).resolve().parent.parent / "js" / "jqrg-loader-lines.js"
+    payload = json.dumps(loadingWaitLines, ensure_ascii=False, indent=2)
+    out.write_text(
+        f"{HEADER}window.__JqrgLoaderLines = {payload};\n",
+        encoding="utf-8",
+    )
+    print(f"wrote {out.relative_to(out.parent.parent)} ({len(loadingWaitLines)} lines)")
+
+
+if __name__ == "__main__":
+    main()

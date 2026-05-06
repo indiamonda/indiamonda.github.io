@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIF Workshop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0c0614;color:#e0e0e8}
+.app{display:flex;flex-direction:column;height:100%;padding:20px;gap:16px;max-width:1100px;margin:0 auto;width:100%}
+h1{font-size:20px;font-weight:700;letter-spacing:.3px;background:linear-gradient(135deg,#b07aff,#e94560);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center}
+.tabs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.tab{padding:8px 18px;border:1px solid rgba(176,122,255,.25);border-radius:10px;background:rgba(255,255,255,.03);color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.tab:hover{background:rgba(176,122,255,.12);color:#fff}
+.tab.active{background:linear-gradient(135deg,rgba(136,65,214,.35),rgba(176,122,255,.18));border-color:rgba(176,122,255,.5);color:#fff}
+.panel{display:none;flex:1;min-height:0;flex-direction:column;gap:14px}
+.panel.active{display:flex}
+
+/* shared controls */
+.drop-zone{border:2px dashed rgba(176,122,255,.3);border-radius:14px;padding:40px 20px;text-align:center;color:rgba(255,255,255,.4);font-size:14px;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.drop-zone:hover,.drop-zone.drag-over{border-color:rgba(176,122,255,.6);background:rgba(176,122,255,.06)}
+.drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.preview-area{flex:1;min-height:200px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.02);border:1px solid rgba(176,122,255,.12);border-radius:12px;overflow:hidden;position:relative}
+.preview-area img,.preview-area video,.preview-area canvas{max-width:100%;max-height:100%;object-fit:contain}
+.preview-placeholder{color:rgba(255,255,255,.25);font-size:14px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.controls label{font-size:13px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px}
+.controls input[type="number"],.controls input[type="text"],.controls select{padding:7px 10px;border:1px solid rgba(176,122,255,.25);border-radius:8px;background:rgba(255,255,255,.04);color:#e0e0e8;font-size:13px;outline:none;width:80px;transition:border-color .2s}
+.controls input:focus,.controls select:focus{border-color:rgba(176,122,255,.55)}
+.controls select{width:auto;cursor:pointer}
+.controls input[type="range"]{accent-color:#b07aff;width:120px}
+.controls input[type="color"]{width:32px;height:28px;border:1px solid rgba(176,122,255,.25);border-radius:6px;background:transparent;cursor:pointer;padding:0}
+.btn{padding:8px 20px;border:1px solid rgba(176,122,255,.3);border-radius:10px;background:linear-gradient(135deg,rgba(136,65,214,.25),rgba(176,122,255,.12));color:rgba(255,255,255,.88);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s;white-space:nowrap}
+.btn:hover{background:linear-gradient(135deg,rgba(136,65,214,.45),rgba(176,122,255,.25));border-color:rgba(176,122,255,.55);color:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(136,65,214,.2)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.btn-primary{background:linear-gradient(135deg,rgba(136,65,214,.5),rgba(176,122,255,.3));border-color:rgba(176,122,255,.5)}
+.status-bar{font-size:13px;color:rgba(255,255,255,.45);min-height:18px;text-align:center}
+.progress-wrap{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;display:none}
+.progress-wrap.show{display:block}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#b07aff,#e94560);border-radius:3px;transition:width .15s}
+
+/* frames strip */
+.frames-strip{display:flex;gap:6px;padding:8px 0;overflow-x:auto;scrollbar-width:thin;scrollbar-color:rgba(176,122,255,.2) transparent;min-height:70px;align-items:center}
+.frames-strip::-webkit-scrollbar{height:5px}
+.frames-strip::-webkit-scrollbar-thumb{background:rgba(176,122,255,.2);border-radius:3px}
+.frame-thumb{width:60px;height:60px;border:2px solid rgba(176,122,255,.2);border-radius:8px;object-fit:cover;cursor:pointer;transition:border-color .15s,transform .15s;flex-shrink:0}
+.frame-thumb:hover{border-color:rgba(176,122,255,.5);transform:scale(1.05)}
+.frame-thumb.selected{border-color:#b07aff;box-shadow:0 0 8px rgba(176,122,255,.3)}
+.frame-thumb-wrap{position:relative;flex-shrink:0}
+.frame-remove{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#e94560;border:none;color:#fff;font-size:11px;line-height:18px;text-align:center;cursor:pointer;display:none;padding:0}
+.frame-thumb-wrap:hover .frame-remove{display:block}
+
+/* edit canvas overlay controls */
+.edit-overlay{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
+
+/* result section */
+.result-section{display:flex;flex-direction:column;align-items:center;gap:10px}
+.result-section img{max-width:100%;max-height:300px;border-radius:10px;border:1px solid rgba(176,122,255,.15)}
+
+@media(max-width:600px){
+  .app{padding:12px;gap:10px}
+  h1{font-size:17px}
+  .controls{gap:6px}
+  .drop-zone{padding:24px 12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>GIF Workshop</h1>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="create">Create GIF</button>
+    <button class="tab" data-tab="edit">Edit GIF</button>
+    <button class="tab" data-tab="video">Video to GIF</button>
+  </div>
+
+  <!-- ═══════════ CREATE GIF FROM IMAGES ═══════════ -->
+  <div class="panel active" id="panel-create">
+    <div class="drop-zone" id="create-drop">
+      Drop images here or click to browse
+      <input type="file" id="create-files" multiple accept="image/*">
+    </div>
+    <div class="frames-strip" id="create-strip"></div>
+    <div class="controls">
+      <label>Delay (ms) <input type="number" id="create-delay" value="100" min="20" max="5000" step="10"></label>
+      <label>Width <input type="number" id="create-w" value="480" min="1" max="4000"></label>
+      <label>Height <input type="number" id="create-h" value="480" min="1" max="4000"></label>
+      <label>Quality <input type="range" id="create-q" min="1" max="20" value="10"> <span id="create-q-val">10</span></label>
+      <label><input type="checkbox" id="create-loop" checked> Loop</label>
+      <button class="btn btn-primary" id="create-btn" disabled>Create GIF</button>
+    </div>
+    <div class="progress-wrap" id="create-progress"><div class="progress-fill" id="create-progress-fill"></div></div>
+    <div class="status-bar" id="create-status"></div>
+    <div class="result-section" id="create-result"></div>
+  </div>
+
+  <!-- ═══════════ EDIT EXISTING GIF ═══════════ -->
+  <div class="panel" id="panel-edit">
+    <div class="drop-zone" id="edit-drop">
+      Drop a GIF here or click to browse
+      <input type="file" id="edit-file" accept="image/gif">
+    </div>
+    <div class="preview-area" id="edit-preview"><span class="preview-placeholder">No GIF loaded</span></div>
+    <div class="frames-strip" id="edit-strip"></div>
+    <div class="controls">
+      <label>Speed <input type="range" id="edit-speed" min="0.25" max="4" step="0.25" value="1"> <span id="edit-speed-val">1×</span></label>
+      <label>Resize W <input type="number" id="edit-rw" value="0" min="0" max="4000"></label>
+      <label>Resize H <input type="number" id="edit-rh" value="0" min="0" max="4000"></label>
+      <label><input type="checkbox" id="edit-reverse"> Reverse</label>
+      <label><input type="checkbox" id="edit-boomerang"> Boomerang</label>
+      <label>Text <input type="text" id="edit-text" placeholder="overlay text" style="width:120px"></label>
+      <label>Color <input type="color" id="edit-text-color" value="#ffffff"></label>
+      <label>Size <input type="number" id="edit-text-size" value="24" min="8" max="200" style="width:56px"></label>
+      <label>Position
+        <select id="edit-text-pos">
+          <option value="top">Top</option>
+          <option value="center">Center</option>
+          <option value="bottom" selected>Bottom</option>
+        </select>
+      </label>
+      <button class="btn" id="edit-trim-btn" disabled>Trim Selected</button>
+      <button class="btn btn-primary" id="edit-btn" disabled>Export GIF</button>
+    </div>
+    <div class="progress-wrap" id="edit-progress"><div class="progress-fill" id="edit-progress-fill"></div></div>
+    <div class="status-bar" id="edit-status"></div>
+    <div class="result-section" id="edit-result"></div>
+  </div>
+
+  <!-- ═══════════ VIDEO TO GIF ═══════════ -->
+  <div class="panel" id="panel-video">
+    <div class="drop-zone" id="video-drop">
+      Drop a video here or click to browse
+      <input type="file" id="video-file" accept="video/*">
+    </div>
+    <div class="preview-area" id="video-preview"><span class="preview-placeholder">No video loaded</span></div>
+    <div class="controls">
+      <label>Start (s) <input type="number" id="vid-start" value="0" min="0" step="0.1"></label>
+      <label>Duration (s) <input type="number" id="vid-dur" value="5" min="0.1" max="60" step="0.1"></label>
+      <label>FPS <input type="number" id="vid-fps" value="10" min="1" max="30"></label>
+      <label>Width <input type="number" id="vid-w" value="480" min="1" max="4000"></label>
+      <label>Quality <input type="range" id="vid-q" min="1" max="20" value="10"> <span id="vid-q-val">10</span></label>
+      <button class="btn btn-primary" id="vid-btn" disabled>Convert to GIF</button>
+    </div>
+    <div class="progress-wrap" id="vid-progress"><div class="progress-fill" id="vid-progress-fill"></div></div>
+    <div class="status-bar" id="vid-status"></div>
+    <div class="result-section" id="vid-result"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+<script>
+(function () {
+  /* ── helpers ── */
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return document.querySelectorAll(s); };
+
+  function setStatus(id, msg) { $('#' + id).textContent = msg; }
+  function setProgress(id, pct) {
+    var w = $('#' + id);
+    w.classList.toggle('show', pct >= 0);
+    w.firstElementChild.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  }
+
+  function downloadBlob(blob, name) {
+    var u = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = u; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 5000);
+  }
+
+  function showResult(containerId, blob) {
+    var c = $('#' + containerId);
+    c.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = URL.createObjectURL(blob);
+    c.appendChild(img);
+
+    var info = document.createElement('div');
+    info.className = 'status-bar';
+    info.textContent = (blob.size / 1024).toFixed(1) + ' KB';
+    c.appendChild(info);
+
+    var bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;gap:8px;justify-content:center';
+    var dlBtn = document.createElement('button');
+    dlBtn.className = 'btn';
+    dlBtn.textContent = 'Download GIF';
+    dlBtn.onclick = function () { downloadBlob(blob, 'workshop.gif'); };
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'btn';
+    copyBtn.textContent = 'Copy to Clipboard';
+    copyBtn.onclick = function () {
+      navigator.clipboard.write([new ClipboardItem({ 'image/gif': blob })]).then(function () {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function () { copyBtn.textContent = 'Copy to Clipboard'; }, 1500);
+      }).catch(function () { copyBtn.textContent = 'Not supported'; });
+    };
+    bar.appendChild(dlBtn);
+    bar.appendChild(copyBtn);
+    c.appendChild(bar);
+  }
+
+  function loadImage(src) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  function readFileAsDataURL(file) {
+    return new Promise(function (resolve) {
+      var r = new FileReader();
+      r.onload = function () { resolve(r.result); };
+      r.readAsDataURL(file);
+    });
+  }
+
+  function readFileAsArrayBuffer(file) {
+    return new Promise(function (resolve) {
+      var r = new FileReader();
+      r.onload = function () { resolve(r.result); };
+      r.readAsArrayBuffer(file);
+    });
+  }
+
+  function makeGif(frames, opts) {
+    return new Promise(function (resolve, reject) {
+      var gif = new GIF({
+        workers: 2,
+        quality: opts.quality || 10,
+        width: opts.width,
+        height: opts.height,
+        workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+        repeat: opts.loop === false ? -1 : 0
+      });
+      frames.forEach(function (f) {
+        gif.addFrame(f.canvas || f.img, { delay: f.delay || 100, copy: true });
+      });
+      gif.on('progress', function (p) { if (opts.onProgress) opts.onProgress(p); });
+      gif.on('finished', function (blob) { resolve(blob); });
+      gif.on('error', function (e) { reject(e); });
+      gif.render();
+    });
+  }
+
+  /* ── tabs ── */
+  $$('.tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      $$('.tab').forEach(function (x) { x.classList.remove('active'); });
+      $$('.panel').forEach(function (x) { x.classList.remove('active'); });
+      t.classList.add('active');
+      $('#panel-' + t.dataset.tab).classList.add('active');
+    });
+  });
+
+  /* ── drag-over styling ── */
+  $$('.drop-zone').forEach(function (dz) {
+    dz.addEventListener('dragover', function (e) { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', function () { dz.classList.remove('drag-over'); });
+    dz.addEventListener('drop', function () { dz.classList.remove('drag-over'); });
+  });
+
+  /* ═══════════════════════════════════════════════
+   *  CREATE GIF FROM IMAGES
+   * ═══════════════════════════════════════════════ */
+  var createFrames = [];
+  var createSelIdx = -1;
+
+  function renderCreateStrip() {
+    var strip = $('#create-strip');
+    strip.innerHTML = '';
+    createFrames.forEach(function (f, i) {
+      var wrap = document.createElement('div');
+      wrap.className = 'frame-thumb-wrap';
+      var thumb = document.createElement('img');
+      thumb.className = 'frame-thumb' + (i === createSelIdx ? ' selected' : '');
+      thumb.src = f.src;
+      thumb.onclick = function () { createSelIdx = i; renderCreateStrip(); };
+      var rm = document.createElement('button');
+      rm.className = 'frame-remove';
+      rm.textContent = '×';
+      rm.onclick = function (e) {
+        e.stopPropagation();
+        createFrames.splice(i, 1);
+        if (createSelIdx >= createFrames.length) createSelIdx = createFrames.length - 1;
+        renderCreateStrip();
+      };
+      wrap.appendChild(thumb);
+      wrap.appendChild(rm);
+      strip.appendChild(wrap);
+    });
+    $('#create-btn').disabled = createFrames.length < 2;
+  }
+
+  function addCreateFiles(files) {
+    var promises = [];
+    for (var i = 0; i < files.length; i++) {
+      if (!files[i].type.startsWith('image/')) continue;
+      promises.push(readFileAsDataURL(files[i]));
+    }
+    Promise.all(promises).then(function (urls) {
+      urls.forEach(function (u) { createFrames.push({ src: u }); });
+      renderCreateStrip();
+      setStatus('create-status', createFrames.length + ' frames loaded');
+    });
+  }
+
+  $('#create-files').addEventListener('change', function (e) { addCreateFiles(e.target.files); e.target.value = ''; });
+  $('#create-drop').addEventListener('drop', function (e) { e.preventDefault(); addCreateFiles(e.dataTransfer.files); });
+  $('#create-q').addEventListener('input', function () { $('#create-q-val').textContent = this.value; });
+
+  $('#create-btn').addEventListener('click', function () {
+    if (createFrames.length < 2) return;
+    var w = +$('#create-w').value || 480;
+    var h = +$('#create-h').value || 480;
+    var delay = +$('#create-delay').value || 100;
+    var quality = +$('#create-q').value || 10;
+    var loop = $('#create-loop').checked;
+    setStatus('create-status', 'Loading images…');
+    setProgress('create-progress', 0);
+    $('#create-btn').disabled = true;
+
+    var imgPromises = createFrames.map(function (f) { return loadImage(f.src); });
+    Promise.all(imgPromises).then(function (images) {
+      var frames = images.map(function (img) {
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        var ctx = c.getContext('2d');
+        var scale = Math.min(w / img.naturalWidth, h / img.naturalHeight);
+        var dw = img.naturalWidth * scale;
+        var dh = img.naturalHeight * scale;
+        ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+        return { canvas: c, delay: delay };
+      });
+      setStatus('create-status', 'Encoding GIF…');
+      return makeGif(frames, {
+        width: w, height: h, quality: quality, loop: loop,
+        onProgress: function (p) { setProgress('create-progress', p * 100); }
+      });
+    }).then(function (blob) {
+      setProgress('create-progress', 100);
+      setStatus('create-status', 'Done!');
+      showResult('create-result', blob);
+      $('#create-btn').disabled = false;
+    }).catch(function (err) {
+      setStatus('create-status', 'Error: ' + err.message);
+      setProgress('create-progress', -1);
+      $('#create-btn').disabled = false;
+    });
+  });
+
+  /* ═══════════════════════════════════════════════
+   *  EDIT EXISTING GIF
+   * ═══════════════════════════════════════════════ */
+  var editFrames = [];
+  var editSelected = new Set();
+  var editOrigW = 0, editOrigH = 0;
+
+  function parseGifFrames(buffer) {
+    return new Promise(function (resolve, reject) {
+      var bytes = new Uint8Array(buffer);
+      if (String.fromCharCode(bytes[0], bytes[1], bytes[2]) !== 'GIF') {
+        reject(new Error('Not a valid GIF'));
+        return;
+      }
+
+      var width = bytes[6] | (bytes[7] << 8);
+      var height = bytes[8] | (bytes[9] << 8);
+      editOrigW = width;
+      editOrigH = height;
+      $('#edit-rw').value = width;
+      $('#edit-rh').value = height;
+
+      var blob = new Blob([buffer], { type: 'image/gif' });
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function () {
+        var tempCanvas = document.createElement('canvas');
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        var tempCtx = tempCanvas.getContext('2d');
+
+        /* Use ImageDecoder if available for proper frame extraction */
+        if (typeof ImageDecoder !== 'undefined') {
+          var decoder = new ImageDecoder({ data: blob.stream(), type: 'image/gif' });
+          decoder.tracks.ready.then(function () {
+            var count = decoder.tracks.selectedTrack.frameCount;
+            var frames = [];
+            var decoded = 0;
+            for (var i = 0; i < count; i++) {
+              (function (idx) {
+                decoder.decode({ frameIndex: idx }).then(function (result) {
+                  var fc = document.createElement('canvas');
+                  fc.width = width; fc.height = height;
+                  var fctx = fc.getContext('2d');
+                  fctx.drawImage(result.image, 0, 0);
+                  result.image.close();
+                  var delay = 100;
+                  try { delay = result.image && result.image.duration ? result.image.duration / 1000 : 100; } catch (_) {}
+                  frames[idx] = { canvas: fc, delay: delay, src: fc.toDataURL() };
+                  decoded++;
+                  if (decoded === count) resolve(frames);
+                }).catch(function () {
+                  var fc = document.createElement('canvas');
+                  fc.width = width; fc.height = height;
+                  frames[idx] = { canvas: fc, delay: 100, src: fc.toDataURL() };
+                  decoded++;
+                  if (decoded === count) resolve(frames);
+                });
+              })(i);
+            }
+          }).catch(function () { fallbackSingleFrame(); });
+        } else {
+          fallbackSingleFrame();
+        }
+
+        function fallbackSingleFrame() {
+          tempCtx.drawImage(img, 0, 0);
+          var frames = [{ canvas: tempCanvas, delay: 100, src: tempCanvas.toDataURL() }];
+          resolve(frames);
+        }
+      };
+      img.onerror = function () { reject(new Error('Failed to load GIF')); };
+      img.src = url;
+    });
+  }
+
+  function renderEditStrip() {
+    var strip = $('#edit-strip');
+    strip.innerHTML = '';
+    editFrames.forEach(function (f, i) {
+      var wrap = document.createElement('div');
+      wrap.className = 'frame-thumb-wrap';
+      var thumb = document.createElement('img');
+      thumb.className = 'frame-thumb' + (editSelected.has(i) ? ' selected' : '');
+      thumb.src = f.src;
+      thumb.onclick = function () {
+        if (editSelected.has(i)) editSelected.delete(i);
+        else editSelected.add(i);
+        renderEditStrip();
+      };
+      wrap.appendChild(thumb);
+      strip.appendChild(wrap);
+    });
+    $('#edit-trim-btn').disabled = editSelected.size === 0 || editSelected.size >= editFrames.length;
+    previewEditGif();
+  }
+
+  var editPreviewTimer = null;
+  var editPreviewIdx = 0;
+
+  function previewEditGif() {
+    if (editPreviewTimer) { clearInterval(editPreviewTimer); editPreviewTimer = null; }
+    if (!editFrames.length) return;
+    var area = $('#edit-preview');
+    area.innerHTML = '';
+    var c = document.createElement('canvas');
+    var speed = +$('#edit-speed').value || 1;
+    var f0 = editFrames[0];
+    c.width = f0.canvas.width;
+    c.height = f0.canvas.height;
+    area.appendChild(c);
+    var ctx = c.getContext('2d');
+    editPreviewIdx = 0;
+    function drawFrame() {
+      if (!editFrames.length) return;
+      var f = editFrames[editPreviewIdx % editFrames.length];
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.drawImage(f.canvas, 0, 0);
+      editPreviewIdx++;
+    }
+    drawFrame();
+    var baseDelay = editFrames[0].delay || 100;
+    editPreviewTimer = setInterval(drawFrame, Math.max(20, baseDelay / speed));
+  }
+
+  function loadEditGif(file) {
+    setStatus('edit-status', 'Parsing GIF…');
+    editFrames = [];
+    editSelected.clear();
+    readFileAsArrayBuffer(file).then(parseGifFrames).then(function (frames) {
+      editFrames = frames;
+      setStatus('edit-status', frames.length + ' frame' + (frames.length > 1 ? 's' : '') + ' extracted (' + editOrigW + '×' + editOrigH + ')');
+      renderEditStrip();
+      $('#edit-btn').disabled = false;
+    }).catch(function (err) {
+      setStatus('edit-status', 'Error: ' + err.message);
+    });
+  }
+
+  $('#edit-file').addEventListener('change', function (e) { if (e.target.files[0]) loadEditGif(e.target.files[0]); e.target.value = ''; });
+  $('#edit-drop').addEventListener('drop', function (e) { e.preventDefault(); if (e.dataTransfer.files[0]) loadEditGif(e.dataTransfer.files[0]); });
+  $('#edit-speed').addEventListener('input', function () {
+    $('#edit-speed-val').textContent = this.value + '×';
+    previewEditGif();
+  });
+
+  $('#edit-trim-btn').addEventListener('click', function () {
+    if (editSelected.size === 0 || editSelected.size >= editFrames.length) return;
+    editFrames = editFrames.filter(function (_, i) { return !editSelected.has(i); });
+    editSelected.clear();
+    renderEditStrip();
+    setStatus('edit-status', editFrames.length + ' frames remaining');
+  });
+
+  $('#edit-btn').addEventListener('click', function () {
+    if (!editFrames.length) return;
+    var speed = +$('#edit-speed').value || 1;
+    var rw = +$('#edit-rw').value || editOrigW;
+    var rh = +$('#edit-rh').value || editOrigH;
+    var reverse = $('#edit-reverse').checked;
+    var boomerang = $('#edit-boomerang').checked;
+    var text = $('#edit-text').value.trim();
+    var textColor = $('#edit-text-color').value;
+    var textSize = +$('#edit-text-size').value || 24;
+    var textPos = $('#edit-text-pos').value;
+    var quality = 10;
+
+    var ordered = editFrames.slice();
+    if (reverse) ordered.reverse();
+    if (boomerang) {
+      var rev = ordered.slice(1, -1).reverse();
+      ordered = ordered.concat(rev);
+    }
+
+    setStatus('edit-status', 'Building frames…');
+    setProgress('edit-progress', 0);
+    $('#edit-btn').disabled = true;
+
+    var processed = ordered.map(function (f) {
+      var c = document.createElement('canvas');
+      c.width = rw; c.height = rh;
+      var ctx = c.getContext('2d');
+      ctx.drawImage(f.canvas, 0, 0, f.canvas.width, f.canvas.height, 0, 0, rw, rh);
+      if (text) {
+        ctx.font = 'bold ' + textSize + 'px sans-serif';
+        ctx.fillStyle = textColor;
+        ctx.textAlign = 'center';
+        ctx.strokeStyle = 'rgba(0,0,0,.6)';
+        ctx.lineWidth = Math.max(2, textSize / 8);
+        var y = textPos === 'top' ? textSize + 8 : textPos === 'center' ? rh / 2 + textSize / 3 : rh - 10;
+        ctx.strokeText(text, rw / 2, y);
+        ctx.fillText(text, rw / 2, y);
+      }
+      return { canvas: c, delay: Math.max(20, (f.delay || 100) / speed) };
+    });
+
+    setStatus('edit-status', 'Encoding GIF…');
+    makeGif(processed, {
+      width: rw, height: rh, quality: quality, loop: true,
+      onProgress: function (p) { setProgress('edit-progress', p * 100); }
+    }).then(function (blob) {
+      setProgress('edit-progress', 100);
+      setStatus('edit-status', 'Done!');
+      showResult('edit-result', blob);
+      $('#edit-btn').disabled = false;
+    }).catch(function (err) {
+      setStatus('edit-status', 'Error: ' + err.message);
+      setProgress('edit-progress', -1);
+      $('#edit-btn').disabled = false;
+    });
+  });
+
+  /* ═══════════════════════════════════════════════
+   *  VIDEO TO GIF
+   * ═══════════════════════════════════════════════ */
+  var videoEl = null;
+
+  function loadVideo(file) {
+    var area = $('#video-preview');
+    area.innerHTML = '';
+    videoEl = document.createElement('video');
+    videoEl.controls = true;
+    videoEl.muted = true;
+    videoEl.playsInline = true;
+    videoEl.style.maxWidth = '100%';
+    videoEl.style.maxHeight = '100%';
+    var url = URL.createObjectURL(file);
+    videoEl.src = url;
+    videoEl.addEventListener('loadedmetadata', function () {
+      setStatus('vid-status', 'Video loaded: ' + Math.round(videoEl.duration * 10) / 10 + 's, ' + videoEl.videoWidth + '×' + videoEl.videoHeight);
+      $('#vid-w').value = Math.min(480, videoEl.videoWidth);
+      $('#vid-btn').disabled = false;
+    });
+    area.appendChild(videoEl);
+  }
+
+  $('#video-file').addEventListener('change', function (e) { if (e.target.files[0]) loadVideo(e.target.files[0]); e.target.value = ''; });
+  $('#video-drop').addEventListener('drop', function (e) { e.preventDefault(); if (e.dataTransfer.files[0]) loadVideo(e.dataTransfer.files[0]); });
+  $('#vid-q').addEventListener('input', function () { $('#vid-q-val').textContent = this.value; });
+
+  $('#vid-btn').addEventListener('click', function () {
+    if (!videoEl || !videoEl.duration) return;
+    var startT = +$('#vid-start').value || 0;
+    var dur = +$('#vid-dur').value || 5;
+    var fps = +$('#vid-fps').value || 10;
+    var outW = +$('#vid-w').value || 480;
+    var quality = +$('#vid-q').value || 10;
+    var scale = outW / videoEl.videoWidth;
+    var outH = Math.round(videoEl.videoHeight * scale);
+    var interval = 1 / fps;
+    var totalFrames = Math.ceil(dur * fps);
+    var endT = Math.min(startT + dur, videoEl.duration);
+
+    setStatus('vid-status', 'Capturing ' + totalFrames + ' frames…');
+    setProgress('vid-progress', 0);
+    $('#vid-btn').disabled = true;
+
+    var c = document.createElement('canvas');
+    c.width = outW; c.height = outH;
+    var ctx = c.getContext('2d');
+    var frames = [];
+    var frameIdx = 0;
+
+    videoEl.pause();
+    videoEl.currentTime = startT;
+
+    function captureFrame() {
+      if (frameIdx >= totalFrames || videoEl.currentTime >= endT) {
+        encodeFrames();
+        return;
+      }
+      ctx.drawImage(videoEl, 0, 0, outW, outH);
+      var fc = document.createElement('canvas');
+      fc.width = outW; fc.height = outH;
+      fc.getContext('2d').drawImage(c, 0, 0);
+      frames.push({ canvas: fc, delay: Math.round(interval * 1000) });
+      frameIdx++;
+      setProgress('vid-progress', (frameIdx / totalFrames) * 50);
+      setStatus('vid-status', 'Capturing frame ' + frameIdx + '/' + totalFrames);
+      videoEl.currentTime = Math.min(startT + frameIdx * interval, endT);
+    }
+
+    videoEl.addEventListener('seeked', function onSeeked() {
+      if (frameIdx >= totalFrames || videoEl.currentTime >= endT) {
+        videoEl.removeEventListener('seeked', onSeeked);
+        encodeFrames();
+        return;
+      }
+      ctx.drawImage(videoEl, 0, 0, outW, outH);
+      var fc = document.createElement('canvas');
+      fc.width = outW; fc.height = outH;
+      fc.getContext('2d').drawImage(c, 0, 0);
+      frames.push({ canvas: fc, delay: Math.round(interval * 1000) });
+      frameIdx++;
+      setProgress('vid-progress', (frameIdx / totalFrames) * 50);
+      setStatus('vid-status', 'Capturing frame ' + frameIdx + '/' + totalFrames);
+      if (frameIdx < totalFrames) {
+        videoEl.currentTime = Math.min(startT + frameIdx * interval, endT);
+      } else {
+        videoEl.removeEventListener('seeked', onSeeked);
+        encodeFrames();
+      }
+    });
+
+    function encodeFrames() {
+      if (!frames.length) {
+        setStatus('vid-status', 'No frames captured');
+        setProgress('vid-progress', -1);
+        $('#vid-btn').disabled = false;
+        return;
+      }
+      setStatus('vid-status', 'Encoding GIF (' + frames.length + ' frames)…');
+      makeGif(frames, {
+        width: outW, height: outH, quality: quality, loop: true,
+        onProgress: function (p) { setProgress('vid-progress', 50 + p * 50); }
+      }).then(function (blob) {
+        setProgress('vid-progress', 100);
+        setStatus('vid-status', 'Done!');
+        showResult('vid-result', blob);
+        $('#vid-btn').disabled = false;
+      }).catch(function (err) {
+        setStatus('vid-status', 'Error: ' + err.message);
+        setProgress('vid-progress', -1);
+        $('#vid-btn').disabled = false;
+      });
+    }
+  });
+})();
+</script>
+</body>
+</html>

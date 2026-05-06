@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;background:#1a1a2e;color:#e0e0e0}
+.wrap{display:flex;flex-direction:column;height:100%;padding:16px;gap:12px;overflow:auto}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar h1{font-size:16px;font-weight:600;color:#e94560;margin-right:8px}
+.toolbar button{padding:8px 18px;border:1px solid #0f3460;border-radius:4px;background:#0f3460;color:#e0e0e0;cursor:pointer;font-size:13px;transition:background .15s}
+.toolbar button:hover{background:#e94560;border-color:#e94560;color:#fff}
+.status{font-size:13px;color:#888;min-height:18px}
+.db-list{display:flex;flex-wrap:wrap;gap:8px}
+.db-btn{padding:6px 14px;border:1px solid #0f3460;border-radius:4px;background:#0a0a1a;color:#e0e0e0;cursor:pointer;font-size:13px;transition:background .15s}
+.db-btn:hover,.db-btn.active{background:#e94560;border-color:#e94560;color:#fff}
+.stores{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.store-btn{padding:4px 12px;border:1px solid #0f3460;border-radius:3px;background:#16213e;color:#e0e0e0;cursor:pointer;font-size:12px;transition:background .15s}
+.store-btn:hover,.store-btn.active{background:#533483;border-color:#533483}
+.results{flex:1;min-height:200px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 10px;border:1px solid #0f3460;max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+th{background:#16213e;position:sticky;top:0;z-index:1}
+td{background:#0a0a1a}
+tr:hover td{background:#16213e}
+td.expandable{cursor:pointer}
+td.expandable:hover{white-space:normal;word-break:break-all}
+.empty{padding:20px;text-align:center;color:#666}
+</style>
+
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <h1>IndexedDB Reader</h1>
+    <button id="scanBtn">Scan Databases</button>
+  </div>
+  <div class="status" id="status">Click Scan to discover IndexedDB databases on this origin.</div>
+  <div class="db-list" id="dbList"></div>
+  <div class="stores" id="storeList"></div>
+  <div class="results" id="results"></div>
+</div>
+<script>
+var statusEl=document.getElementById('status');
+var dbListEl=document.getElementById('dbList');
+var storeListEl=document.getElementById('storeList');
+var resultsEl=document.getElementById('results');
+var currentDb=null;
+
+document.getElementById('scanBtn').addEventListener('click',scan);
+
+function scan(){
+  dbListEl.innerHTML='';
+  storeListEl.innerHTML='';
+  resultsEl.innerHTML='';
+  statusEl.textContent='Scanning…';
+
+  if(indexedDB.databases){
+    indexedDB.databases().then(function(dbs){
+      if(!dbs.length){statusEl.textContent='No IndexedDB databases found on this origin.';return;}
+      statusEl.textContent='Found '+dbs.length+' database(s).';
+      dbs.forEach(function(db){
+        var btn=document.createElement('button');
+        btn.className='db-btn';
+        btn.textContent=db.name+' (v'+db.version+')';
+        btn.addEventListener('click',function(){openDb(db.name,db.version,btn)});
+        dbListEl.appendChild(btn);
+      });
+    }).catch(function(e){
+      statusEl.textContent='Error scanning: '+e.message;
+    });
+  }else{
+    statusEl.textContent='indexedDB.databases() not supported. Enter a database name manually.';
+    var inp=document.createElement('input');
+    inp.type='text';inp.placeholder='Database name';
+    inp.style.cssText='padding:6px 10px;border:1px solid #0f3460;border-radius:4px;background:#0a0a1a;color:#e0e0e0;font-size:13px';
+    var go=document.createElement('button');
+    go.className='db-btn';go.textContent='Open';
+    go.addEventListener('click',function(){if(inp.value.trim())openDb(inp.value.trim(),undefined,go)});
+    dbListEl.appendChild(inp);
+    dbListEl.appendChild(go);
+  }
+}
+
+function openDb(name,version,btn){
+  document.querySelectorAll('.db-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  storeListEl.innerHTML='';
+  resultsEl.innerHTML='';
+
+  var req=version?indexedDB.open(name,version):indexedDB.open(name);
+  req.onerror=function(){statusEl.textContent='Error opening '+name+': '+req.error};
+  req.onsuccess=function(){
+    currentDb=req.result;
+    var stores=Array.from(currentDb.objectStoreNames);
+    if(!stores.length){statusEl.textContent='Database "'+name+'" has no object stores.';return;}
+    statusEl.textContent='Database "'+name+'" — '+stores.length+' store(s).';
+    stores.forEach(function(s){
+      var sb=document.createElement('button');
+      sb.className='store-btn';sb.textContent=s;
+      sb.addEventListener('click',function(){readStore(s,sb)});
+      storeListEl.appendChild(sb);
+    });
+  };
+  req.onupgradeneeded=function(){
+    req.transaction.abort();
+    statusEl.textContent='Database "'+name+'" needs upgrade; cannot read without modifying.';
+  };
+}
+
+function readStore(name,btn){
+  document.querySelectorAll('.store-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  resultsEl.innerHTML='';
+
+  var tx=currentDb.transaction(name,'readonly');
+  var store=tx.objectStore(name);
+  var items=[];
+  var cur=store.openCursor();
+  cur.onsuccess=function(){
+    var c=cur.result;
+    if(c){items.push({key:c.key,value:c.value});c.continue();}
+    else renderTable(items,name);
+  };
+  cur.onerror=function(){statusEl.textContent='Error reading store "'+name+'": '+cur.error};
+}
+
+function renderTable(items,storeName){
+  if(!items.length){
+    resultsEl.innerHTML='<div class="empty">Store "'+storeName+'" is empty.</div>';
+    statusEl.textContent='Store "'+storeName+'" — 0 records.';
+    return;
+  }
+  statusEl.textContent='Store "'+storeName+'" — '+items.length+' record(s).';
+
+  var cols=new Set(['key']);
+  items.forEach(function(item){
+    if(item.value&&typeof item.value==='object'&&!Array.isArray(item.value)){
+      Object.keys(item.value).forEach(function(k){cols.add(k)});
+    }else{
+      cols.add('value');
+    }
+  });
+  var colArr=Array.from(cols);
+
+  var html='<table><thead><tr>';
+  colArr.forEach(function(c){html+='<th>'+esc(c)+'</th>'});
+  html+='</tr></thead><tbody>';
+
+  items.forEach(function(item){
+    html+='<tr>';
+    colArr.forEach(function(c){
+      var val;
+      if(c==='key')val=item.key;
+      else if(item.value&&typeof item.value==='object'&&!Array.isArray(item.value))val=item.value[c];
+      else if(c==='value')val=item.value;
+      else val=undefined;
+      var s=stringify(val);
+      html+='<td class="expandable" title="'+esc(s)+'">'+esc(s)+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  resultsEl.innerHTML=html;
+}
+
+function stringify(v){
+  if(v===undefined)return '';
+  if(v===null)return 'null';
+  if(typeof v==='object'){try{return JSON.stringify(v)}catch(e){return String(v)}}
+  return String(v);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+scan();
+</script>
+</body>
+</html>

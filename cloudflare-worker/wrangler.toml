@@ -1,0 +1,34 @@
+name = "deepseek-proxy"
+main = "worker.js"
+compatibility_date = "2024-12-01"
+
+# Optional: bind a KV namespace for server-side rate limiting.
+# Run `wrangler kv namespace create RATE_KV` (Wrangler v4+)
+# or `wrangler kv:namespace create RATE_KV` (Wrangler v3) and paste the id below.
+# Comment out the entire [[kv_namespaces]] block to skip server-side limiting
+# (the client still enforces its own escalating ban).
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "d4dd2716b2d34d05ac5031d09cff34e7"
+
+# Subscription state (Stripe). Stores `sub:<user_id>` -> JSON record with
+# status / current_period_end / customer id. Run:
+#   wrangler kv namespace create SUB_KV
+# and paste the id below before the file-upload paywall will work.
+[[kv_namespaces]]
+binding = "SUB_KV"
+id = "7ce6f5551be941e29a21530463dddf33"
+
+# Required secrets (set via `wrangler secret put`, do NOT commit values):
+#   DEEPSEEK_KEY                 -> sk-... DeepSeek API key
+#   STRIPE_SECRET_KEY            -> sk_test_... or sk_live_... Stripe API key
+#   STRIPE_PUBLISHABLE_KEY       -> pk_test_... or pk_live_... Stripe publishable key
+#   STRIPE_PRICE_ID_MONTHLY      -> price_... Premium monthly ($5.99)
+#   STRIPE_PRICE_ID_YEARLY       -> price_... Premium yearly ($59.99)
+#   STRIPE_PRICE_ID_PLUS_MONTHLY -> price_... Premium Plus monthly ($10.99)
+#   STRIPE_PRICE_ID_PLUS_YEARLY  -> price_... Premium Plus yearly ($80.99)
+#   STRIPE_WEBHOOK_SECRET        -> whsec_... signing secret for /v1/stripe-webhook
+#   SUB_RETURN_URL               -> https://jimmyqrg.com/?upgraded=1 (where Stripe
+#                                   redirects after a successful checkout)
+#
+# See README.md for the full setup walkthrough.

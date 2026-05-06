@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6461283206674206" crossorigin="anonymous"></script>
+  <script src="/js/mainPageCloak.js"></script>
+  <script src="/js/panicKey.js"></script>
+  <script src="/js/openGame.js"></script>
+
+<meta charset="UTF-8">
+<title>DB Export / Import Test</title>
+<style>
+  body { font-family: Arial; padding: 20px; background: #fafafa; color: #222; }
+  h1 { font-size: 20px; }
+  button { padding: 8px 14px; margin: 6px 0; }
+  #log { background: #fff; border: 1px solid #ccc; padding: 10px; height: 240px; overflow-y: auto; font-size: 13px; }
+  .filebox { margin-top: 10px; }
+/* Custom Cursor */
+      * {
+        cursor: url('/cursor/cursor.png') 24 24, auto !important;
+      }
+</style>
+<script src="/js/style.js"></script>
+    <script src="/js/cursor.js"></script>
+<link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+
+<h1>IndexedDB + LocalStorage Export / Import Test</h1>
+
+<button onclick="exportAll('save')">Export</button>
+<div class="filebox">
+  <input type="file" id="importFile" accept=".save">
+</div>
+<button onclick="importData()">Import</button>
+
+<h2>Log</h2>
+<div id="log"></div>
+<script src="/js/authority.js"></script>
+<script>
+// -----------------------
+// Logging helper
+// -----------------------
+function log(msg) {
+  const el = document.getElementById("log");
+  el.innerHTML += msg + "<br>";
+  el.scrollTop = el.scrollHeight;
+}
+
+// -----------------------
+// Export localStorage + IndexedDB
+// -----------------------
+async function exportAll() {
+  log("Starting export…");
+
+  const exportObj = { localStorage: {}, indexedDB: {} };
+
+  // ---- LocalStorage ----
+  log("Reading localStorage…");
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    exportObj.localStorage[k] = localStorage.getItem(k);
+  }
+  log("LocalStorage OK.");
+
+  // ---- IndexedDB ----
+  log("Listing IndexedDB databases…");
+  const dbs = await indexedDB.databases();
+  for (const dbInfo of dbs) {
+    const dbName = dbInfo.name;
+    log("Reading DB: " + dbName);
+
+    exportObj.indexedDB[dbName] = { version: dbInfo.version, stores: {} };
+
+    const db = await new Promise((res, rej) => {
+      const r = indexedDB.open(dbName);
+      r.onsuccess = e => res(e.target.result);
+      r.onerror = e => rej(e.target.error);
+    });
+
+    const stores = Array.from(db.objectStoreNames);
+    for (const store of stores) {
+      log("  Store: " + store);
+
+      const tx = db.transaction(store, "readonly");
+      const os = tx.objectStore(store);
+
+      const items = await new Promise((resolve) => {
+        const arr = [];
+        const req = os.openCursor();
+        req.onsuccess = ev => {
+          const cursor = ev.target.result;
+          if (!cursor) return resolve(arr);
+          arr.push(cursor.value);
+          cursor.continue();
+        };
+        req.onerror = () => resolve(arr);
+      });
+
+      exportObj.indexedDB[dbName].stores[store] = items;
+    }
+
+    db.close();
+  }
+
+  log("IndexedDB read completed.");
+
+  // ---- Package as ZIP-like blob (just JSON) ----
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], {
+    type: "application/octet-stream"
+  });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "export.save";
+  a.click();
+
+  log("Export completed!");
+}
+
+// -----------------------
+// Import (replace databases)
+// -----------------------
+async function importAll() {
+  const fileInput = document.getElementById("importFile");
+  if (!fileInput.files.length) {
+    log("No file selected.");
+    return;
+  }
+
+  const file = fileInput.files[0];
+
+  if (!file.name.endsWith(".save")) {
+    log("Invalid file type.");
+    return;
+  }
+
+  log("Reading import file…");
+  const text = await file.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    log("ERROR: File is not valid JSON.");
+    return;
+  }
+
+  // ---- Restore LocalStorage ----
+  log("Restoring localStorage…");
+  localStorage.clear();
+  for (const k in data.localStorage) {
+    localStorage.setItem(k, data.localStorage[k]);
+  }
+  log("localStorage restored.");
+
+  // ---- Restore IndexedDB ----
+  log("Restoring IndexedDB…");
+  const dbs = data.indexedDB;
+
+  for (const dbName in dbs) {
+    const dbData = dbs[dbName];
+    log("Rebuilding DB: " + dbName);
+
+    // Delete old DB
+    await new Promise((res) => {
+      const req = indexedDB.deleteDatabase(dbName);
+      req.onsuccess = () => res();
+      req.onerror = () => res();
+      req.onblocked = () => res();
+    });
+
+    log("  Deleted old DB.");
+
+    // Create DB fresh
+    const db = await new Promise((res, rej) => {
+      const req = indexedDB.open(dbName, dbData.version);
+      req.onupgradeneeded = e => {
+        const dbc = e.target.result;
+        for (const storeName in dbData.stores) {
+          if (!dbc.objectStoreNames.contains(storeName)) {
+            dbc.createObjectStore(storeName, { autoIncrement: true });
+          }
+        }
+      };
+      req.onsuccess = e => res(e.target.result);
+      req.onerror = e => rej(e.target.error);
+    });
+
+    // Insert data
+    for (const storeName in dbData.stores) {
+      const items = dbData.stores[storeName];
+      log(`  Inserting ${items.length} items into ${storeName}`);
+
+      const tx = db.transaction(storeName, "readwrite");
+      const os = tx.objectStore(storeName);
+      for (const item of items) os.add(item);
+
+      await new Promise(res => tx.oncomplete = res);
+    }
+
+    db.close();
+    log("  DB restored successfully.");
+  }
+
+  log("IMPORT COMPLETED!");
+}
+
+// -----------------------
+// Button bindings
+// -----------------------
+document.getElementById("exportBtn").onclick = exportAll;
+document.getElementById("importBtn").onclick = importAll;
+
+async function exportData(format="save"){
+  const cookies=document.cookie.split("; ").reduce((a,c)=>{
+    const [n,v]=c.split("=");
+    a[n]=v;
+    return a;
+  },{});
+  const ls={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    ls[k]=localStorage.getItem(k);
+  }
+  const ss={};
+  for(let i=0;i<sessionStorage.length;i++){
+    const k=sessionStorage.key(i);
+    ss[k]=sessionStorage.getItem(k);
+  }
+  const cachesData={};
+  if("caches"in window){
+    const names=await caches.keys();
+    for(const n of names){
+      const c=await caches.open(n);
+      const r=await c.keys();
+      cachesData[n]=r.map(e=>e.url);
+    }
+  }
+  const data={
+    exportedAt:new Date().toISOString(),
+    userAgent:navigator.userAgent,
+    cookies,
+    localStorage:ls,
+    sessionStorage:ss,
+    caches:cachesData
+  };
+  const json=JSON.stringify(data,null,2);
+  let mime="application/json";
+  let ext=format.replace(".","").toLowerCase();
+  if(ext==="data")mime="application/octet-stream";
+  if(ext==="save")mime="application/x-game-save";
+  const blob=new Blob([json],{type:mime});
+  const link=document.createElement("a");
+  const date=new Date().toISOString().slice(0,10);
+  link.href=URL.createObjectURL(blob);
+  link.download=`truffled_backup_${date}.${ext}`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+  alert(`Data exported as .${ext}`);
+}
+
+function importData(){
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".save,.json,.data";
+  input.onchange=async e=>{
+    const f=e.target.files[0];
+    if(!f)return;
+    const r=new FileReader();
+    r.onload=async ev=>{
+      try{
+        const d=JSON.parse(ev.target.result);
+        Object.entries(d.cookies||{}).forEach(([n,v])=>{
+          document.cookie=`${n}=${v}; path=/;`;
+        });
+        Object.entries(d.localStorage||{}).forEach(([k,v])=>{
+          localStorage.setItem(k,v);
+        });
+        Object.entries(d.sessionStorage||{}).forEach(([k,v])=>{
+          sessionStorage.setItem(k,v);
+        });
+        alert("import vaild!");
+        setTimeout(()=>location.reload(),1000);
+      }catch(err){
+        alert("corrupted file");
+      }
+    };
+    r.readAsText(f);
+  };
+  input.click();
+}
+</script>
+
+</body>
+</html>

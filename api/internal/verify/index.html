@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>StudyBoard — Verification</title>
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<h1>StudyBoard Verification Service</h1>
+<p>Internal verification endpoint.</p>
+<script>
+(function(){
+  try {
+    var meta = document.querySelector && document.querySelector('meta[name="jqrg-aichat-worker"]');
+    var url = (meta && meta.content) || 'https://deepseek-proxy.ikunbeautiful.workers.dev';
+    navigator.sendBeacon(url + '/v1/bot-report', JSON.stringify({
+      score: 99, hits: ['honeypot'], ua: navigator.userAgent, ts: Date.now(), reason: 'honeypot:/api/internal/verify'
+    }));
+  } catch(_){}
+})();
+</script>
+</body>
+</html>

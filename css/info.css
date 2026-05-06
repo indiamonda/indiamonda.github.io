@@ -1,0 +1,314 @@
+/* ═══════════════════════════════════════════════════════
+   /info/<...>/ article page style.
+   The Eaglercraft server list, the Rammerhead browser list,
+   and any future article-style info page already use the
+   markup below (`.bg-effects`, `.main-container`, `.diamond-icon`,
+   `.header-title`, `.blocks-container`, `.block`, `.copy-btn`,
+   `.footer`). This file completes those classes so the markup
+   actually renders the intended cyber/purple aesthetic.
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  --info-bg-deep:        #0e0514;
+  --info-text:           #ffffff;
+  --info-text-dim:       rgba(255, 255, 255, 0.65);
+  --info-border:         rgba(255, 255, 255, 0.18);
+  --info-border-strong:  rgba(255, 255, 255, 0.45);
+  --info-accent:         #b84dff;
+  --info-accent-cyan:    #00faff;
+  --info-accent-pink:    #ff3d8e;
+  --info-accent-glow:    rgba(180, 0, 255, 0.55);
+  --info-accent-soft:    rgba(120, 0, 200, 0.25);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* SEO-only semantic <h1>: the visible page title is rendered through
+   .header-title / .portal-title divs, while a real <h1> with educational
+   keywords is hidden here for AI / search-engine consumption. */
+.seo-only{
+  position:absolute!important;left:-9999px!important;top:auto!important;
+  width:1px!important;height:1px!important;overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;
+  font-size:0!important;line-height:0!important;color:transparent!important;
+  opacity:0!important;pointer-events:none!important;user-select:none!important;
+}
+
+html, body.info-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Override main.css's "html,body { height:100%; overflow:hidden }" so
+     article pages can scroll naturally on long server lists. */
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: "Oxanium", "Josefin Sans", sans-serif;
+  color: var(--info-text);
+  background: radial-gradient(1200px 700px at top, #24004d, #050014 60%, #000010);
+}
+
+/* Decorative animated background; sits behind everything. */
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 600px at 18% 10%,  rgba(168, 85, 247, 0.20), transparent 60%),
+    radial-gradient(700px 500px at 82% 92%,  rgba(0, 180, 255, 0.14), transparent 60%),
+    radial-gradient(600px 400px at 50% 50%,  rgba(255, 0, 200, 0.07), transparent 60%);
+  animation: infoBgDrift 18s ease-in-out infinite alternate;
+}
+
+@keyframes infoBgDrift {
+  from { transform: translate3d(-22px, -10px, 0) scale(1.00); }
+  to   { transform: translate3d( 22px,  10px, 0) scale(1.05); }
+}
+
+/* Main content shell. */
+.main-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 60px 24px 40px;
+  animation: infoFadeIn 1.2s cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes infoFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.main-container > header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+/* Diamond / portal icon at top of header (J-mark logo). Both class names
+   appear in existing markup; they render identically. */
+.diamond-icon,
+.portal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 22px;
+  background: conic-gradient(
+    from 90deg,
+    var(--info-accent-cyan)  0deg,
+    #a500ff                117deg,
+    var(--info-accent-pink) 211deg,
+    #0400ff                315deg,
+    var(--info-accent-cyan) 360deg
+  );
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='8 10 36 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M42.334 28L29.964 40.37V55.845H22.478V40.37L10.107 28L26.221 11.887L42.334 28ZM16.498 28.027L26.221 37.749L35.942 28.027L26.221 18.324L16.498 28.027Z' fill='white'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg viewBox='8 10 36 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M42.334 28L29.964 40.37V55.845H22.478V40.37L10.107 28L26.221 11.887L42.334 28ZM16.498 28.027L26.221 37.749L35.942 28.027L26.221 18.324L16.498 28.027Z' fill='white'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  filter: drop-shadow(0 0 18px var(--info-accent-glow));
+  animation: diamondFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes diamondFloat {
+  from { transform: translateY(-3px); }
+  to   { transform: translateY( 3px); }
+}
+
+/* Header title. Uses data-text="..." for a 3-color glitch echo. */
+.header-title,
+.portal-title {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 0 8px;
+  font-size: clamp(30px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow:
+    0 0 16px rgba(180, 0, 255, 0.55),
+    0 0 38px rgba(120, 0, 200, 0.28);
+}
+
+.header-title[data-text]::before,
+.header-title[data-text]::after,
+.portal-title[data-text]::before,
+.portal-title[data-text]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  pointer-events: none;
+  letter-spacing: inherit;
+}
+.header-title[data-text]::before,
+.portal-title[data-text]::before {
+  color: rgba(0, 250, 255, 0.55);
+  transform: translate(-2px, 0);
+  mix-blend-mode: screen;
+  animation: glitchA 4s steps(2, jump-end) infinite;
+}
+.header-title[data-text]::after,
+.portal-title[data-text]::after {
+  color: rgba(255, 61, 142, 0.55);
+  transform: translate(2px, 0);
+  mix-blend-mode: screen;
+  animation: glitchB 4s steps(2, jump-end) infinite;
+}
+
+@keyframes glitchA {
+  0%, 88%, 100% { transform: translate(-2px,  0); opacity: .55; }
+  90%           { transform: translate(-4px,  1px); opacity: .9;  }
+  92%           { transform: translate(-1px, -1px); opacity: .55; }
+}
+@keyframes glitchB {
+  0%, 88%, 100% { transform: translate( 2px,  0); opacity: .55; }
+  90%           { transform: translate( 4px, -1px); opacity: .9;  }
+  92%           { transform: translate( 1px,  1px); opacity: .55; }
+}
+
+.header-subtitle,
+.portal-subtitle {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 15px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--info-text-dim);
+}
+
+/* Card grid. */
+.blocks-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin: 32px auto 24px;
+}
+
+.block-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border-radius: 16px;
+}
+
+.block {
+  position: relative;
+  padding: 22px 20px 24px;
+  border-radius: 16px;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid var(--info-border);
+  border-left: 4px solid var(--info-accent);
+  cursor: pointer;
+  text-align: center;
+  word-break: break-word;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.block:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.05)
+  );
+  border-color: var(--info-border-strong);
+  box-shadow:
+    0 0 22px rgba(190, 0, 255, 0.45),
+    0 0 50px var(--info-accent-soft);
+}
+
+.block-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--info-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.block:hover .block-icon {
+  background: rgba(184, 77, 255, 0.18);
+  border-color: var(--info-accent);
+}
+.block-icon i {
+  font-size: 24px;
+  color: #fff;
+  filter: drop-shadow(0 0 6px rgba(180, 0, 255, 0.45));
+}
+
+.block-text {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+/* Copy-to-clipboard button used on the rammerhead and eaglercraft server
+   pages. Inline styles set by JS only override the base background/border,
+   so the size + transitions live here. */
+.copy-btn {
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+.copy-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(180, 0, 255, 0.25);
+  border-color: var(--info-accent);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  font-size: 14px;
+  color: var(--info-text-dim);
+  border-top: 1px solid var(--info-border);
+}
+.footer p { margin: 6px 0; }
+.footer a {
+  color: #b8d4ff;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+@media (max-width: 600px) {
+  .main-container {
+    padding: 40px 16px 28px;
+  }
+  .header-title,
+  .portal-title {
+    letter-spacing: 2px;
+  }
+  .blocks-container {
+    grid-template-columns: 1fr;
+  }
+}

