@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    background-color: black;
+    height: 100%;
+  }
+  
+  .container {
+    width: 100vw;
+    height: 56.25vw; /* 100/56.25 = 1.778 */
+    background: black;
+    max-height: 100vh;
+    max-width: 177.78vh; /* 16/9 = 1.778 */
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+  }
+  .game {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /* Pin the Ruffle stage to its own GPU layer so the SWF is composited at
+       the monitor refresh rate instead of being repainted on every tick. */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout paint;
+  }
+  .game ruffle-player {
+    image-rendering: auto;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  .loading-anim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .gamepad {
+    position: absolute;
+    bottom: -20%;
+    left: 0;
+    z-index: 11;
+    transition: bottom 0.5s ease-in-out;
+    transition-delay: 0.5s;
+  }
+  
+  .rotate-screen {
+    position: absolute;
+    background: rgba(0, 0, 0, 1);
+    max-height: 100%;
+    width: 100%;
+    text-align: center;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+  }
+  

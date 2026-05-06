@@ -1,0 +1,11 @@
+0,CombatZoneResize,141,226,426,391,,,
+0,CombatZoneSpeed,480,,,,,,
+0,HeartTeleport,171,321,,,,,
+0,HeartMode,1,,,,,,
+0,BonevRepeat,336,226,35,1,100,24,70
+0,BonevRepeat,376,226,35,3,100,24,70
+0,BonevRepeat,201,226,35,1,100,24,70
+0,BonevRepeat,296,391,35,3,100,24,70
+0,BoneStab,1,30,0,999,,,
+0,Platform,161,331,35,0,70,1,
+15,EndAttack,,,,,,,

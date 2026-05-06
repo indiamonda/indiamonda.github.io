@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://127.0.0.1:8080/sources/editor.html -->
+<html lang="en"><script>(function main() {
+    // Create enabled event
+    function fireEnabledEvent() {
+        // If gli exists, then we are already present and shouldn't do anything
+        if (!window.gli) {
+            setTimeout(function () {
+                var enabledEvent = document.createEvent("Event");
+                enabledEvent.initEvent("WebGLEnabledEvent", true, true);
+                document.dispatchEvent(enabledEvent);
+            }, 0);
+        } else {
+            //console.log("WebGL Inspector already embedded on the page - disabling extension");
+        }
+    };
+
+    // Grab the path root from the extension
+    document.addEventListener("WebGLInspectorReadyEvent", function (e) {
+        var pathElement = document.getElementById("__webglpathroot");
+        if (window["gliloader"]) {
+            gliloader.pathRoot = pathElement.innerText;
+        } else {
+            // TODO: more?
+            window.gliCssUrl = pathElement.innerText + "gli.all.css";
+        }
+    }, false);
+
+    // Rewrite getContext to snoop for webgl
+    var originalGetContext = HTMLCanvasElement.prototype.getContext;
+    if (!HTMLCanvasElement.prototype.getContextRaw) {
+        HTMLCanvasElement.prototype.getContextRaw = originalGetContext;
+    }
+    HTMLCanvasElement.prototype.getContext = function () {
+        var ignoreCanvas = this.internalInspectorSurface;
+        if (ignoreCanvas) {
+            return originalGetContext.apply(this, arguments);
+        }
+
+        var result = originalGetContext.apply(this, arguments);
+        if (result == null) {
+            return null;
+        }
+
+        var contextNames = ["moz-webgl", "webkit-3d", "experimental-webgl", "webgl", "3d"];
+        var requestingWebGL = contextNames.indexOf(arguments[0]) != -1;
+        if (requestingWebGL) {
+            // Page is requesting a WebGL context!
+            fireEnabledEvent(this);
+
+            // If we are injected, inspect this context
+            if (window.gli) {
+                if (gli.host.inspectContext) {
+                    // TODO: pull options from extension
+                    result = gli.host.inspectContext(this, result);
+                    var hostUI = new gli.host.HostUI(result);
+                    result.hostUI = hostUI; // just so we can access it later for debugging
+                }
+            }
+        }
+
+        return result;
+    };
+})();</script><head>
+
+<!-- jqrg-tip-lines:inline -->
+<script>window.__JqrgLoaderLines=["Cool fact: Tetris was invented in 1984 by Alexey Pajitnov.","Cool fact: The first computer mouse was carved out of a block of wood.","Cool fact: Mario was originally named Jumpman.","Cool fact: A real moth caused the first computer 'bug' back in 1947.","Cool fact: A Game Boy once survived a bombing and still booted up.","Cool fact: The very first website (info.cern.ch) is still online today.","Cool fact: Pac-Man's design was inspired by a pizza missing one slice.","Cool fact: The Konami Code is up, up, down, down, left, right, left, right, B, A.","Cool fact: A 'nibble' is half a byte. Yes, really.","Cool fact: 1024 bytes is technically a kibibyte.","Cool fact: HTTP 418 means 'I'm a teapot.' It's in the spec.","Cool fact: A jiffy is a real unit of time, about 1/100 of a second.","Cool fact: There's no place like 127.0.0.1.","Cool fact: The first Pong was a training exercise for an Atari new hire.","Cool fact: There are 10 kinds of people: those who read binary and those who don't.","Cool fact: Doom has been ported to a pregnancy test.","Cool fact: Minecraft's first version was hacked together in just six days.","Cool fact: The Sims series has sold over 200 million copies.","Cool fact: Wii Sports was once the best-selling video game on Earth.","Cool fact: PlayStation was almost just a Nintendo accessory.","Cool fact: A floppy disk holds about 1.4MB. A phone photo today is bigger.","Cool fact: ENIAC, an early computer, weighed about 27 tons.","Cool fact: Linux quietly runs most of the world's web servers.","Cool fact: The @ symbol predates email by hundreds of years.","Cool fact: The first emoji set was designed in Japan in 1999.","Cool fact: Hyperlinks were proposed all the way back in 1965.","Cool fact: Pixar started life as a hardware company.","Cool fact: The first banner ad ran in 1994 with a 44% click-through rate.","Cool fact: Wikipedia has more than 60 million articles across all languages.","Cool fact: The cursor blink rate is measured in 'Hz of patience.'","To understand recursion, you must first understand recursion.","There are two hard problems in CS: cache invalidation, naming, and off-by-one errors.","Have you tried turning it off and on again?","It works on my machine.","Coffee.exe has stopped working.","Real programmers count from 0.","Why do programmers prefer dark mode? Light attracts bugs.","!false — it's funny because it's true.","CSS: where !important is rarely important.","Tabs vs spaces: the eternal flame war.","There are 10 types of bugs: the ones you find and the ones you don't.","Programmers don't sleep, they recharge their RAM.","The best error message is the one that never shows up.","Reading other people's code is harder than writing your own.","The cloud is just someone else's computer.","60% of the game files were added using a chromebook.","Hang tight. The bytes are on their way.","Pixels are warming up.","Almost there. Almost.","Big adventures start with small loading bars.","The fun is just around the corner.","Buckle up. Here we go.","Bits are flying as fast as they can.","Caffeinating the servers.","Convincing the bytes to cooperate.","Dusting off the high score table.","Reticulating splines.","Polishing pixels.","Untangling cables.","Asking the cat to please move off the keyboard.","Negotiating with electrons.","Spinning up the fun-o-meter.","Convincing the loading bar to load faster.","Reminding the GPU it's loved.","Buffering... now with extra buffering.","The internet hamsters are stretching their legs.","Dispatching the loading goblins.","Baking fresh cookies.","Folding origami progress bars.","Asking the bytes to please hurry up.","Knitting a tiny sweater for the CPU.","Watering the server room plants.","Stretching the loading bar a little longer.","Playing rock paper scissors with the network.","Bribing the loading bar with snacks.","Sweet-talking the database.","Telling the modem some encouraging words.","The game is loading, but the fun has already started.","Don't blink. Or do — it's fine.","Welcome aboard. Snacks are at the back."];</script>
+<!-- /jqrg-tip-lines:inline -->
+<script>
+/* jqrg-loader.js
+ * Universal game loading screen. Each game page includes this script
+ * (non-deferred) in <head> so it can intercept engine globals before they
+ * run. Games with custom download loops (Unity + zip, etc.) should call
+ * `window.JqrgLoader.setBytes(loaded, total)` so the size readout shows a
+ * real total instead of a placeholder.
+ *
+ *   1. Paints a black overlay with a progress bar and size counter.
+ *   2. Hooks every game engine we ship (Unity, Godot, Ruffle, EmulatorJS,
+ *      Construct, GameMaker, plain HTML/JS) so it can drive that progress
+ *      bar with real numbers when possible. PerformanceObserver is the
+ *      universal fallback - it tracks transferSize for every resource the
+ *      page downloads and gives us byte counts even when the engine refuses
+ *      to talk to us.
+ *   3. When the engine reports complete (or window.load fires), it plays
+ *      the branded splash: fade in /background.png, scale + fade in the
+ *      banner image (default /banner.png, or <meta name="jqrg-loader-banner-url"
+ *      content="..."> when set *before* this script), fade out, remove overlay.
+ *
+ * The script is idempotent - loading twice is a no-op - and it cleans up
+ * its listeners and DOM after the splash so it does not leak into games.
+ */
+(function () {
+  'use strict';
+  if (typeof window === 'undefined') return;
+  if (window.__JqrgLoaderLoaded) return;
+  window.__JqrgLoaderLoaded = true;
+
+  // ---------- Configuration --------------------------------------------------
+  var BG_URL = '/background.png';
+  var BANNER_URL = '/banner.png';
+  // Optional per-page splash + loading-phase brand image (copyright / branding).
+  // Place in <head> *before* this script: <meta name="jqrg-loader-banner-url" content="/path/logo.png">
+  // Absolute paths are recommended when the page uses <base href>.
+  function getBannerUrlOverride() {
+    try {
+      var m = document.querySelector('meta[name="jqrg-loader-banner-url"]');
+      if (!m || !m.content) return null;
+      var raw = String(m.content).trim();
+      if (!raw) return null;
+      if (/^https?:\/\//i.test(raw) || raw.charAt(0) === '/') return raw;
+      try {
+        return new URL(raw, document.baseURI || location.href).href;
+      } catch (_) {
+        return raw;
+      }
+    } catch (_) {}
+    return null;
+  }
+  function getEffectiveBannerUrl() {
+    var o = getBannerUrlOverride();
+    return o || BANNER_URL;
+  }
+  // Optional per-page splash background override.
+  // <meta name="jqrg-loader-black-bg" content="1"> keeps splash background black
+  // instead of fading in /background.png.
+  function useBlackSplashBackground() {
+    try {
+      var m = document.querySelector('meta[name="jqrg-loader-black-bg"]');
+      if (!m || !m.content) return false;
+      var v = String(m.content).toLowerCase();
+      return v === '1' || v === 'true' || v === 'yes' || v === 'on';
+    } catch (_) {}
+    return false;
+  }
+  // Splash timing. Banner scale is intentionally rate-matched across the two
+  // banner phases: fade-in grows by 0.20 over BANNER_ANIM_MS, fade-out grows
+  // by 0.10 over BANNER_FADE_OUT_MS, so 0.20 / 2500 ≈ 0.10 / 1250 (same px-per-
+  // ms expansion rate). That makes the "keep expanding while fading out" look
+  // visually continuous instead of a fresh scale bump kicking in mid-fade.
+  var BG_FADE_IN_MS = 1000;      // background fade from black to image
+  var BANNER_ANIM_MS = 2500;     // banner scale + fade in (linear)
+  var BANNER_FADE_OUT_MS = 1250; // banner fade out (banner keeps expanding)
+  var BG_FADE_OUT_MS = 1000;     // background fade back to black
+  // Keep banner growth continuous across fade-in and fade-out by using
+  // matching scale velocity in both phases.
+  var BANNER_MID_SCALE = 1.05;   // scale at end of fade-in
+  var BANNER_END_SCALE = 1.175;  // final scale at end of fade-out
+  var MIN_LOADING_MS = 600;      // never blink past instantly even on cache
+  var MAX_LOADING_MS = 90000;    // hard ceiling so we never strand the user
+  var POLL_INTERVAL_MS = 60;     // engine-global polling interval
+  // Deferred completion: when only PerformanceObserver is tracking (no engine
+  // hook caught), wait for resource activity to settle before completing.
+  // This handles pages that drive their own fetch loops after window.load
+  // (e.g. Hollow Knight downloads its .data/.wasm via fetch() in an IIFE,
+  // then dynamically loads the Unity loader script).
+  var QUIET_AFTER_RESOURCE_MS = 1500; // resource activity must be quiet this long
+  var QUIET_AFTER_LOAD_MS = 800;      // and at least this long since window.load
+  var ENGINE_WAIT_MS = 8000;          // grace window for an engine global that
+                                      // appeared but hasn't fired progress yet
+
+  // ---------- State ----------------------------------------------------------
+  var startTime = Date.now();
+  var loadedBytes = 0;
+  var totalBytes = 0;
+  // True only after we've received a real total from an engine (Godot,
+  // Construct, GameMaker, JqrgLoader.setBytes) or derived one from
+  // loaded/engineProgress. PerformanceObserver alone never sets this -
+  // the wire size of completed resources is not a meaningful "total" for
+  // the still-running page. While this is false the size readout shows
+  // "X / --.--MB" so the right side does not appear to track the left.
+  var totalBytesKnown = false;
+  var engineProgress = 0;
+  var hasEngineProgress = false;
+  var completed = false;
+  var splashStarted = false;
+  var disposed = false;
+
+  var overlay = null;
+  var barFillEl = null;
+  var sizeTextEl = null;
+  var pctTextEl = null;
+  var bgEl = null;
+  var bannerEl = null;
+  // Cycling tip footer state. tipEl holds the DOM node, tipTimer
+  // schedules the next rotation, tipTransitionTimer holds the fade-out
+  // -> swap-text -> fade-in handoff, tipLines is the shuffled copy of
+  // window.__JqrgLoaderLines once it loads, and tipIndex walks it.
+  var tipEl = null;
+  var tipTimer = null;
+  var tipTransitionTimer = null;
+  var tipLines = null;
+  var tipIndex = 0;
+
+  var seenResources = Object.create(null);
+  var resourceObserver = null;
+  var pollTimer = null;
+  var maxLoadingTimer = null;
+  var loadCompletionTimer = null;
+  var deferredCompleteTimer = null;
+  // Track activity timestamps so deferredCompleteCheck can decide whether the
+  // page is really done or just between fetches.
+  var lastResourceTime = 0;
+  var loadFiredTime = 0;
+  var firstEngineGlobalSeenTime = 0;
+  // True once we saw any new resource land *after* window.load. That is the
+  // signal a page is doing JS-driven loading (custom fetch loops, dynamic
+  // script injection, etc) and needs a longer quiet window before we declare
+  // it "done". Pages without post-load activity finish quickly.
+  var hadPostLoadResource = false;
+  // Pending in-flight requests (fetch() and XHR). PerformanceObserver only
+  // reports completed resources, so a single multi-MB fetch can keep us from
+  // seeing any new entries for many seconds. Tracking the in-flight count
+  // prevents deferredCompleteCheck from giving up while requests are still
+  // running.
+  var inflightRequests = 0;
+  // True after a page starts driving byte counts via JqrgLoader.setBytes().
+  // When enabled we stop adding PerformanceObserver bytes to avoid double-
+  // counting the same transfer (manual game fetch loops + observer entries).
+  var manualBytesMode = false;
+
+  // Splash images get fetched as soon as the loader runs so they sit in the
+  // browser cache (or memory) by the time the splash sequence kicks off. On
+  // heavy games the connection pool is saturated by engine assets, and a
+  // late-started preload can add seconds of dead-black time. Starting now,
+  // and remembering the Image objects, eliminates that gap.
+  var splashAssets = { bg: null, banner: null };
+  var splashAssetsReady = null;
+
+  // ---------- Unit formatting -----------------------------------------------
+  // The user spec scales all numbers by the *largest of loaded/total*, so the
+  // "/" line never mixes units. < 10 of a unit drops down to the next unit.
+  function formatPair(loaded, total) {
+    var ref = Math.max(loaded || 0, total || 0);
+    if (ref >= 10 * 1024 * 1024) {
+      return formatMB(loaded) + ' / ' + formatMB(total);
+    }
+    if (ref >= 10 * 1024) {
+      return formatKB(loaded) + ' / ' + formatKB(total);
+    }
+    if (ref >= 10) {
+      return formatB(loaded) + ' / ' + formatB(total);
+    }
+    return (loaded || 0) + ' / ' + (total || 0);
+  }
+  // Used when totalBytesKnown is false: scale by loaded alone and show
+  // the right-hand side as the same "--.--" placeholder used at boot.
+  // This prevents the right value from mirroring the left value (which
+  // is what made the readout look like "5MB / 5MB" updating in lockstep).
+  function formatPairUnknownTotal(loaded) {
+    if (loaded >= 10 * 1024 * 1024) return formatMB(loaded) + ' / --.--MB';
+    if (loaded >= 10 * 1024) return formatKB(loaded) + ' / --KB';
+    if (loaded >= 10) return formatB(loaded) + ' / --B';
+    return (loaded || 0) + ' / --';
+  }
+  function formatMB(b) {
+    if (!b || b < 0) return '--.--MB';
+    return (b / (1024 * 1024)).toFixed(2) + 'MB';
+  }
+  function formatKB(b) {
+    if (!b || b < 0) return '--KB';
+    return Math.round(b / 1024) + 'KB';
+  }
+  function formatB(b) {
+    if (!b || b < 0) return '--B';
+    return Math.round(b) + 'B';
+  }
+
+  // ---------- Overlay UI -----------------------------------------------------
+  function injectStyle() {
+    if (document.getElementById('jqrg-loader-style')) return;
+    var style = document.createElement('style');
+    style.id = 'jqrg-loader-style';
+    style.textContent = [
+      '#jqrg-loader{position:fixed;inset:0;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;z-index:2147483647;background:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#fff;pointer-events:all;-webkit-user-select:none;user-select:none;overflow:hidden}',
+      '#jqrg-loader-bg{position:absolute;inset:0;top:0;left:0;right:0;bottom:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transition:opacity ' + (BG_FADE_IN_MS / 1000) + 's linear;will-change:opacity;pointer-events:none}',
+      '#jqrg-loader-banner{position:absolute;top:50%;left:50%;width:68vw;max-width:700px;max-height:46vh;object-fit:contain;opacity:0;transform:translate(-50%,-50%) scale(.8);pointer-events:none;will-change:opacity,transform}',
+      '#jqrg-loader-banner.jqrg-banner-anim{animation:jqrg-banner-in ' + (BANNER_ANIM_MS / 1000) + 's linear forwards}',
+      '#jqrg-loader-banner.jqrg-banner-out{animation:jqrg-banner-out ' + (BANNER_FADE_OUT_MS / 1000) + 's linear forwards}',
+      '@keyframes jqrg-banner-in{from{opacity:0;transform:translate(-50%,-50%) scale(.8)}to{opacity:1;transform:translate(-50%,-50%) scale(' + BANNER_MID_SCALE + ')}}',
+      // Fade-out keeps the same per-ms scale rate as fade-in so the banner
+      // appears to keep expanding through the fade. End scale is configurable
+      // via BANNER_END_SCALE; opacity goes 1 → 0 in lock-step.
+      '@keyframes jqrg-banner-out{from{opacity:1;transform:translate(-50%,-50%) scale(' + BANNER_MID_SCALE + ')}to{opacity:0;transform:translate(-50%,-50%) scale(' + BANNER_END_SCALE + ')}}',
+      '#jqrg-loader-content{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:0 24px;z-index:2}',
+      '#jqrg-loader-pct{color:rgba(255,255,255,.92);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:.02em;text-shadow:0 0 10px rgba(0,0,0,.6);line-height:1}',
+      '#jqrg-loader-bar{width:320px;max-width:60vw;height:6px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden;position:relative}',
+      '#jqrg-loader-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#8841d6,#b07aff);border-radius:3px;transition:width .25s ease-out;box-shadow:0 0 12px rgba(176,122,255,.55)}',
+      '#jqrg-loader-text{color:rgba(255,255,255,.72);font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:.02em;text-shadow:0 0 8px rgba(0,0,0,.5)}',
+      '#jqrg-loader-brand{display:block;max-width:84vw;max-height:30vh;width:auto;height:auto;object-fit:contain;margin:0 0 6px;filter:drop-shadow(0 2px 14px rgba(0,0,0,.5))}',
+      '#jqrg-loader.jqrg-splash #jqrg-loader-content{opacity:0;transition:opacity .2s linear;pointer-events:none}',
+      '#jqrg-loader-sound-gate{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;appearance:none;-webkit-appearance:none;border:0;background:transparent;color:#fff;font:inherit;padding:0;cursor:pointer;outline:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;max-width:min(90vw,460px);text-align:left;isolation:isolate}',
+      '#jqrg-loader-sound-gate::before{content:"";position:absolute;inset:-34px -42px;border-radius:40px;background:radial-gradient(circle at 50% 50%,rgba(176,122,255,.34),rgba(73,200,255,.14) 36%,rgba(136,65,214,.08) 58%,rgba(0,0,0,0) 75%);filter:blur(13px);opacity:.9;z-index:-2;animation:jqrg-sound-aura 3.8s ease-in-out infinite}',
+      '#jqrg-loader-sound-gate::after{content:"";position:absolute;inset:-1px;border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.48),rgba(176,122,255,.2) 31%,rgba(73,200,255,.26) 64%,rgba(255,255,255,.36));opacity:.9;z-index:-1;transition:opacity .18s ease,filter .18s ease,transform .18s ease}',
+      '#jqrg-loader-sound-gate:hover{transform:translate(-50%,calc(-50% - 3px))}',
+      '#jqrg-loader-sound-gate:hover::before{opacity:1;filter:blur(15px)}',
+      '#jqrg-loader-sound-gate:hover::after{opacity:1;filter:brightness(1.12);transform:scale(1.01)}',
+      '#jqrg-loader-sound-gate:active{transform:translate(-50%,calc(-50% + 1px)) scale(.99)}',
+      '#jqrg-loader-sound-gate:focus-visible::after{box-shadow:0 0 0 3px rgba(255,255,255,.78),0 0 0 8px rgba(176,122,255,.34)}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-card{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;min-width:min(86vw,390px);padding:18px 20px;border-radius:29px;background:linear-gradient(180deg,rgba(18,15,34,.88),rgba(8,7,18,.92));box-shadow:0 30px 90px rgba(0,0,0,.62),0 16px 44px rgba(136,65,214,.24),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.08);overflow:hidden;backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-card::before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.12) 28%,transparent 47%);transform:translateX(-120%);animation:jqrg-sound-sheen 4.2s ease-in-out infinite;pointer-events:none}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-card::after{content:"";position:absolute;inset:1px;border-radius:28px;border:1px solid rgba(255,255,255,.09);pointer-events:none}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-icon{position:relative;display:grid;grid-template-columns:repeat(3,4px);align-items:center;justify-content:center;gap:4px;width:50px;height:50px;border-radius:18px;background:linear-gradient(135deg,#9b6cff,#49c8ff);box-shadow:0 12px 30px rgba(91,132,255,.38),inset 0 1px 0 rgba(255,255,255,.42)}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-icon span{display:block;width:4px;border-radius:99px;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.5);animation:jqrg-sound-bars 1.25s ease-in-out infinite}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-icon span:nth-child(1){height:15px;animation-delay:-.22s}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-icon span:nth-child(2){height:24px;animation-delay:-.08s}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-icon span:nth-child(3){height:18px;animation-delay:-.34s}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-copy{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-title{font-size:18px;font-weight:850;line-height:1.08;letter-spacing:.005em;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.45);white-space:nowrap}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-subtitle{font-size:12px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:rgba(226,221,255,.72);white-space:nowrap}',
+      '#jqrg-loader-sound-gate .jqrg-sound-gate-arrow{position:relative;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.82);font-size:18px;font-weight:800;line-height:1;transition:transform .18s ease,background .18s ease,color .18s ease}',
+      '#jqrg-loader-sound-gate:hover .jqrg-sound-gate-arrow{transform:translateX(2px);background:rgba(255,255,255,.15);color:#fff}',
+      '@keyframes jqrg-sound-aura{0%,100%{opacity:.64;transform:scale(.96)}50%{opacity:1;transform:scale(1.045)}}',
+      '@keyframes jqrg-sound-sheen{0%,55%{transform:translateX(-120%)}76%,100%{transform:translateX(120%)}}',
+      '@keyframes jqrg-sound-bars{0%,100%{transform:scaleY(.65);opacity:.72}50%{transform:scaleY(1.08);opacity:1}}',
+      '@media (prefers-reduced-motion:reduce){#jqrg-loader-sound-gate::before,#jqrg-loader-sound-gate .jqrg-sound-gate-card::before,#jqrg-loader-sound-gate .jqrg-sound-gate-icon span{animation:none}}',
+      '@media (max-width:480px){#jqrg-loader-sound-gate .jqrg-sound-gate-card{min-width:min(88vw,340px);grid-template-columns:auto 1fr;gap:12px;padding:15px 16px;border-radius:24px}#jqrg-loader-sound-gate::after{border-radius:25px}#jqrg-loader-sound-gate .jqrg-sound-gate-icon{width:44px;height:44px;border-radius:16px}#jqrg-loader-sound-gate .jqrg-sound-gate-title{font-size:16px;white-space:normal}#jqrg-loader-sound-gate .jqrg-sound-gate-subtitle{font-size:10px;letter-spacing:.085em;white-space:normal}#jqrg-loader-sound-gate .jqrg-sound-gate-arrow{display:none}}',
+      '#jqrg-loader-tip{position:absolute;left:0;right:0;bottom:24px;text-align:center;padding:0 24px;color:rgba(255,255,255,.78);font-size:14px;font-weight:400;line-height:1.35;letter-spacing:.01em;text-shadow:0 1px 6px rgba(0,0,0,.6);opacity:0;transition:opacity .35s ease;pointer-events:none;z-index:2;-webkit-font-smoothing:antialiased}',
+      '#jqrg-loader-tip.jqrg-tip-show{opacity:1}',
+      '@media (max-width:480px){#jqrg-loader-tip{font-size:12px;bottom:18px;padding:0 18px}}',
+      '#jqrg-loader.jqrg-splash #jqrg-loader-tip{opacity:0!important;transition:opacity .25s linear;pointer-events:none}',
+      'html.jqrg-loader-active body,html.jqrg-loader-active>body{visibility:visible}',
+    ].join('\n');
+    var head = document.head || document.documentElement;
+    head.appendChild(style);
+  }
+
+  function ensureOverlay() {
+    if (overlay || disposed) return;
+    injectStyle();
+
+    overlay = document.createElement('div');
+    overlay.id = 'jqrg-loader';
+    overlay.setAttribute('role', 'progressbar');
+    overlay.setAttribute('aria-label', 'Loading game');
+
+    bgEl = document.createElement('div');
+    bgEl.id = 'jqrg-loader-bg';
+    overlay.appendChild(bgEl);
+
+    var content = document.createElement('div');
+    content.id = 'jqrg-loader-content';
+
+    pctTextEl = document.createElement('div');
+    pctTextEl.id = 'jqrg-loader-pct';
+    pctTextEl.textContent = '0%';
+
+    var bar = document.createElement('div');
+    bar.id = 'jqrg-loader-bar';
+    barFillEl = document.createElement('div');
+    barFillEl.id = 'jqrg-loader-bar-fill';
+    bar.appendChild(barFillEl);
+
+    sizeTextEl = document.createElement('div');
+    sizeTextEl.id = 'jqrg-loader-text';
+    sizeTextEl.textContent = '--.--MB / --.--MB';
+
+    var brandSrc = getBannerUrlOverride();
+    if (brandSrc) {
+      var brandEl = document.createElement('img');
+      brandEl.id = 'jqrg-loader-brand';
+      brandEl.alt = '';
+      brandEl.decoding = 'async';
+      brandEl.src = brandSrc;
+      content.appendChild(brandEl);
+    }
+
+    content.appendChild(pctTextEl);
+    content.appendChild(bar);
+    content.appendChild(sizeTextEl);
+    overlay.appendChild(content);
+
+    bannerEl = document.createElement('img');
+    bannerEl.id = 'jqrg-loader-banner';
+    bannerEl.alt = '';
+    bannerEl.decoding = 'async';
+    overlay.appendChild(bannerEl);
+
+    tipEl = document.createElement('div');
+    tipEl.id = 'jqrg-loader-tip';
+    overlay.appendChild(tipEl);
+
+    var target = document.body || document.documentElement;
+    target.appendChild(overlay);
+    document.documentElement.classList.add('jqrg-loader-active');
+
+    refreshUI();
+    loadTipLines();
+  }
+
+  function refreshUI() {
+    if (!barFillEl || !sizeTextEl) return;
+    var enginePct = hasEngineProgress ? engineProgress * 100 : -1;
+    var resourcePct = totalBytes > 0
+      ? Math.min((loadedBytes / totalBytes) * 100, 95)
+      : (loadedBytes > 0
+        ? Math.min(85, 100 - 100 / (1 + (loadedBytes / (1024 * 1024)) / 4))
+        : 0);
+    // Pick the higher of the two so the bar never visually walks backwards
+    // when an engine starts reporting 0% over a 95% PerformanceObserver bar.
+    var pct = enginePct >= 0 ? Math.max(enginePct, resourcePct) : resourcePct;
+    if (pct < 0) pct = 0;
+    if (pct > 100) pct = 100;
+    barFillEl.style.width = pct.toFixed(2) + '%';
+
+    if (pctTextEl) {
+      // Floor instead of round so we never display "100%" until the loader
+      // has truly completed (which forces pct to exactly 100 in complete()).
+      var displayPct = pct >= 100 ? 100 : Math.floor(pct);
+      pctTextEl.textContent = displayPct + '%';
+    }
+
+    if (loadedBytes > 0 || totalBytesKnown) {
+      if (totalBytesKnown && totalBytes > 0) {
+        sizeTextEl.textContent = formatPair(loadedBytes, totalBytes);
+      } else {
+        sizeTextEl.textContent = formatPairUnknownTotal(loadedBytes);
+      }
+    }
+  }
+
+  // ---------- Progress reporting --------------------------------------------
+  function setEngineProgress(p) {
+    if (typeof p !== 'number' || isNaN(p) || !isFinite(p)) return;
+    if (p < 0) p = 0;
+    if (p > 1) p = 1;
+    hasEngineProgress = true;
+    if (p > engineProgress) engineProgress = p;
+
+    // Derive a synthetic total from our real loaded bytes when we can - this
+    // is the only way to display "X / Y" units while progress is fractional.
+    // Once we have a derived value we mark the total as "known" so the
+    // readout switches from "X / --.--MB" to "X / Y".
+    // Only synthesize a total while we truly have no reliable total. Once a
+    // game reports an explicit total (setBytes(..., total)), never override it.
+    if (!totalBytesKnown && loadedBytes > 0 && engineProgress > 0.02) {
+      var derived = Math.round(loadedBytes / engineProgress);
+      if (derived > totalBytes) totalBytes = derived;
+      if (totalBytes > 0) totalBytesKnown = true;
+    }
+    refreshUI();
+    if (engineProgress >= 0.999) scheduleComplete(150);
+  }
+
+  function setBytesLoaded(b) {
+    if (typeof b !== 'number' || isNaN(b) || b < 0) return;
+    if (b > loadedBytes) loadedBytes = b;
+    // Deliberately do NOT ratchet totalBytes upward here. Doing so made
+    // the right-hand readout mirror the left-hand readout whenever the
+    // engine had not given us a real total, producing "5MB / 5MB" that
+    // updated in lockstep on every PerformanceObserver tick.
+    refreshUI();
+  }
+  function setBytesTotal(b) {
+    if (typeof b !== 'number' || isNaN(b) || b < 0) return;
+    if (b > totalBytes) totalBytes = b;
+    if (b > 0) totalBytesKnown = true;
+    refreshUI();
+  }
+  function addBytesLoaded(delta) {
+    if (typeof delta !== 'number' || isNaN(delta) || delta <= 0) return;
+    setBytesLoaded(loadedBytes + delta);
+  }
+
+  // ---------- PerformanceObserver universal byte tracking --------------------
+  function consumeEntries(entries) {
+    if (!entries || !entries.length) return;
+    if (manualBytesMode) return;
+    var added = 0;
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      if (!e || !e.name) continue;
+      // Ignore our own scripts/images.
+      if (e.name.indexOf('/js/jqrg-loader.js') !== -1) continue;
+      if (e.name.indexOf('/js/jqrg-cloud.js') !== -1) continue;
+      if (e.name.indexOf('/js/jqrg-auth-ui.js') !== -1) continue;
+      // The cycling-tip data file is loader infrastructure, not game
+      // bytes — keep it out of the X / Y readout.
+      if (e.name.indexOf('/js/jqrg-loader-lines.js') !== -1) continue;
+      // Use the URL plus startTime as a key so the same URL fetched twice
+      // (rare but possible) is still counted once per request.
+      var key = e.name + '@' + (e.startTime || 0);
+      if (seenResources[key]) continue;
+      seenResources[key] = 1;
+      var bytes = e.transferSize || e.encodedBodySize || e.decodedBodySize || 0;
+      if (bytes > 0) added += bytes;
+    }
+    if (added > 0) {
+      addBytesLoaded(added);
+      var now = Date.now();
+      lastResourceTime = now;
+      if (loadFiredTime > 0 && now - loadFiredTime > 50) {
+        // 50ms slop avoids counting the tail of pre-load fetches that report
+        // their entries to the observer just after the load event fires.
+        hadPostLoadResource = true;
+      }
+    }
+  }
+
+  // ---------- Network in-flight tracking ------------------------------------
+  // Wraps window.fetch and XMLHttpRequest.prototype.send so we can see the
+  // count of in-flight requests at any moment. Browsers fire
+  // PerformanceObserver entries only when a resource completes, so a single
+  // multi-MB fetch could otherwise look like the page has gone quiet.
+  function bumpInflight(delta) {
+    inflightRequests += delta;
+    if (inflightRequests < 0) inflightRequests = 0;
+    if (delta > 0) {
+      // Treat starting a new request as activity so we don't false-complete.
+      var now = Date.now();
+      lastResourceTime = now;
+      if (loadFiredTime > 0 && now - loadFiredTime >= 0) {
+        hadPostLoadResource = true;
+      }
+    }
+  }
+
+  function hookNetwork() {
+    try {
+      if (typeof window.fetch === 'function' && !window.fetch.__jqrgWrapped) {
+        var origFetch = window.fetch;
+        var wrappedFetch = function () {
+          bumpInflight(1);
+          var p;
+          try { p = origFetch.apply(this, arguments); }
+          catch (e) { bumpInflight(-1); throw e; }
+          if (p && typeof p.then === 'function') {
+            p.then(function () { bumpInflight(-1); },
+                   function () { bumpInflight(-1); });
+          } else {
+            bumpInflight(-1);
+          }
+          return p;
+        };
+        wrappedFetch.__jqrgWrapped = true;
+        window.fetch = wrappedFetch;
+      }
+    } catch (_) {}
+    try {
+      var XHR = window.XMLHttpRequest;
+      if (XHR && XHR.prototype && !XHR.prototype.send.__jqrgWrapped) {
+        var origSend = XHR.prototype.send;
+        var wrappedSend = function () {
+          var self = this;
+          var settled = false;
+          function settle() {
+            if (settled) return;
+            settled = true;
+            bumpInflight(-1);
+          }
+          bumpInflight(1);
+          self.addEventListener('loadend', settle);
+          // loadend usually covers all paths, but belt-and-suspenders:
+          self.addEventListener('error', settle);
+          self.addEventListener('abort', settle);
+          self.addEventListener('timeout', settle);
+          try { return origSend.apply(this, arguments); }
+          catch (e) { settle(); throw e; }
+        };
+        wrappedSend.__jqrgWrapped = true;
+        XHR.prototype.send = wrappedSend;
+      }
+    } catch (_) {}
+  }
+
+  function startResourceObserver() {
+    if (typeof PerformanceObserver === 'undefined') return;
+    try {
+      // Replay anything already buffered by the browser before we hooked in.
+      if (typeof performance !== 'undefined' && performance.getEntriesByType) {
+        consumeEntries(performance.getEntriesByType('resource'));
+      }
+    } catch (_) {}
+    try {
+      resourceObserver = new PerformanceObserver(function (list) {
+        consumeEntries(list.getEntries());
+      });
+      resourceObserver.observe({ type: 'resource', buffered: true });
+    } catch (_) {
+      try {
+        resourceObserver = new PerformanceObserver(function (list) {
+          consumeEntries(list.getEntries());
+        });
+        resourceObserver.observe({ entryTypes: ['resource'] });
+      } catch (__) {}
+    }
+  }
+
+  // ---------- Engine hooks ---------------------------------------------------
+  // Each hook tries hard to wrap the engine global *before* the engine uses
+  // it. defineProperty traps catch top-level assignments; the polling loop
+  // catches anything that slipped through (e.g. defineProperty failed because
+  // the engine already pre-defined the property as non-configurable).
+
+  function defineTrap(name, onSet, prewrap) {
+    var current;
+    try {
+      var existing = window[name];
+      Object.defineProperty(window, name, {
+        configurable: true,
+        get: function () { return current; },
+        set: function (v) { current = onSet ? onSet(v) : v; },
+      });
+      if (typeof existing !== 'undefined') {
+        current = onSet ? onSet(existing) : existing;
+      }
+    } catch (_) {
+      // Property might be non-configurable from a previous define. Fall back
+      // to read+write on the original if a prewrap function is provided.
+      if (prewrap && typeof window[name] !== 'undefined') {
+        try { window[name] = prewrap(window[name]); } catch (__) {}
+      }
+    }
+  }
+
+  // 1. Unity (legacy UnityLoader.instantiate)
+  function wrapUnityLoader(loader) {
+    if (!loader || loader.__jqrgWrapped) return loader;
+    if (typeof loader.instantiate === 'function') {
+      var origInstantiate = loader.instantiate;
+      loader.instantiate = function (container, manifestUrl, options) {
+        options = options || {};
+        var origProgress = options.onProgress;
+        options.onProgress = function (gameInstance, progress) {
+          if (typeof progress === 'number') setEngineProgress(progress);
+          else if (progress === 'complete' || progress === 'success') setEngineProgress(1);
+          if (origProgress) try { return origProgress.apply(this, arguments); } catch (_) {}
+        };
+        var origCompat = options.compatibilityCheck;
+        if (typeof origCompat === 'function') {
+          options.compatibilityCheck = origCompat;
+        }
+        return origInstantiate.call(this, container, manifestUrl, options);
+      };
+    }
+    loader.__jqrgWrapped = true;
+    return loader;
+  }
+  function hookUnityLoader() {
+    defineTrap('UnityLoader', wrapUnityLoader, wrapUnityLoader);
+  }
+
+  // 2. Unity (modern createUnityInstance)
+  function wrapCreateUnityInstance(fn) {
+    if (typeof fn !== 'function') return fn;
+    if (fn.__jqrgWrapped) return fn;
+    var wrapped = function (canvasArg, configArg, progressCb) {
+      var hookProgress = function (p) {
+        if (typeof p === 'number') setEngineProgress(p);
+        if (typeof progressCb === 'function') {
+          try { return progressCb(p); } catch (_) {}
+        }
+      };
+      // Some games omit the progress callback; we still want to track.
+      return fn.call(this, canvasArg, configArg, hookProgress);
+    };
+    wrapped.__jqrgWrapped = true;
+    return wrapped;
+  }
+  function hookCreateUnityInstance() {
+    defineTrap('createUnityInstance', wrapCreateUnityInstance, wrapCreateUnityInstance);
+  }
+
+  // 3. Godot Engine - both modern (engine.startGame({onProgress})) and legacy
+  // (engine.setProgressFunc(fn)) APIs.
+  function wrapGodotEngine(EngineCls) {
+    if (!EngineCls || EngineCls.__jqrgWrapped) return EngineCls;
+    EngineCls.__jqrgWrapped = true;
+    if (EngineCls.prototype) {
+      var origStartGame = EngineCls.prototype.startGame;
+      if (typeof origStartGame === 'function') {
+        EngineCls.prototype.startGame = function (args) {
+          args = args || {};
+          var origProgress = args.onProgress;
+          args.onProgress = function (current, total) {
+            if (typeof current === 'number' && typeof total === 'number' && total > 0) {
+              setBytesLoaded(current);
+              setBytesTotal(total);
+              setEngineProgress(current / total);
+            }
+            if (typeof origProgress === 'function') {
+              try { return origProgress.apply(this, arguments); } catch (_) {}
+            }
+          };
+          var result;
+          try { result = origStartGame.call(this, args); }
+          catch (e) { throw e; }
+          if (result && typeof result.then === 'function') {
+            // Resolve drives setEngineProgress(1); reject also fires it so a
+            // failed Godot init never strands the loader.
+            result.then(
+              function () { setEngineProgress(1); },
+              function () { setEngineProgress(1); }
+            );
+          }
+          return result;
+        };
+      }
+      var origInit = EngineCls.prototype.init;
+      if (typeof origInit === 'function') {
+        EngineCls.prototype.init = function () {
+          var r = origInit.apply(this, arguments);
+          if (r && typeof r.then === 'function') {
+            r.then(function () { /* init done; startGame still ahead */ }, function () {});
+          }
+          return r;
+        };
+      }
+      var origSetProgressFunc = EngineCls.prototype.setProgressFunc;
+      if (typeof origSetProgressFunc === 'function') {
+        EngineCls.prototype.setProgressFunc = function (fn) {
+          var wrapped = function (current, total) {
+            if (typeof current === 'number' && typeof total === 'number' && total > 0) {
+              setBytesLoaded(current);
+              setBytesTotal(total);
+              setEngineProgress(current / total);
+            }
+            if (typeof fn === 'function') try { return fn.apply(this, arguments); } catch (_) {}
+          };
+          return origSetProgressFunc.call(this, wrapped);
+        };
+      }
+    }
+    return EngineCls;
+  }
+  function hookGodot() {
+    defineTrap('Engine', wrapGodotEngine, wrapGodotEngine);
+  }
+
+  // 4. Ruffle / Flash - Ruffle players emit a `loadeddata` (or `loadedmetadata`)
+  // event when the SWF is parsed and ready. Listening at the document level
+  // catches every player on the page.
+  function hookRuffle() {
+    var settled = false;
+    function markDone() {
+      if (settled) return;
+      settled = true;
+      setEngineProgress(1);
+    }
+    document.addEventListener('loadeddata', function (e) {
+      var t = e && e.target;
+      if (!t) return;
+      var tag = t.tagName || '';
+      if (tag === 'RUFFLE-PLAYER' || tag === 'RUFFLE-EMBED' || tag === 'RUFFLE-OBJECT') markDone();
+    }, true);
+    document.addEventListener('loadedmetadata', function (e) {
+      var t = e && e.target;
+      if (!t) return;
+      var tag = t.tagName || '';
+      if (tag === 'RUFFLE-PLAYER' || tag === 'RUFFLE-EMBED' || tag === 'RUFFLE-OBJECT') markDone();
+    }, true);
+  }
+
+  // 5. EmulatorJS - hook EJS_onGameStart so we know when the ROM finished
+  // loading. Some games leave the callback unset; we provide a default that
+  // simply forwards to whatever may have been assigned later.
+  function hookEmulatorJS() {
+    var stored;
+    function wrap(fn) {
+      if (typeof fn !== 'function') return fn;
+      if (fn.__jqrgWrapped) return fn;
+      var wrapped = function () {
+        setEngineProgress(1);
+        try { return fn.apply(this, arguments); } catch (_) {}
+      };
+      wrapped.__jqrgWrapped = true;
+      return wrapped;
+    }
+    try {
+      var existing = window.EJS_onGameStart;
+      Object.defineProperty(window, 'EJS_onGameStart', {
+        configurable: true,
+        get: function () { return stored; },
+        set: function (v) { stored = wrap(v); },
+      });
+      stored = existing ? wrap(existing) : wrap(function () {});
+    } catch (_) {}
+  }
+
+  // 6. GameMaker HTML5 - hook GameMaker_Init/Start to know when boot is done.
+  // The runtime exposes `g_GMResourceManager` whose loaded count is a useful
+  // progress signal, but its API differs across versions; we settle for the
+  // generic "boot complete -> mark 100%" approach plus PerformanceObserver.
+  function hookGameMaker() {
+    var trackedKeys = ['GameMaker_Init', 'gml_Script_init', 'GM4HTML5_loadingscreen'];
+    function wrapInit(fn) {
+      if (typeof fn !== 'function') return fn;
+      if (fn.__jqrgWrapped) return fn;
+      var wrapped = function () {
+        var r = fn.apply(this, arguments);
+        // GameMaker_Init runs synchronously at the *end* of boot, so reaching
+        // it means we're effectively done.
+        setEngineProgress(1);
+        return r;
+      };
+      wrapped.__jqrgWrapped = true;
+      return wrapped;
+    }
+    for (var i = 0; i < trackedKeys.length; i++) {
+      (function (k) {
+        defineTrap(k, function (v) { return wrapInit(v); }, wrapInit);
+      })(trackedKeys[i]);
+    }
+  }
+
+  // 7. Construct 2/3 - the runtime emits a 'loaded' event on cr_runtime, but
+  // its detection is ugly. PerformanceObserver + window.load handles it well
+  // enough; we still try to hook cr_createRuntime as a "we're starting" cue.
+  function hookConstruct() {
+    function maybeStart(fn) {
+      if (typeof fn !== 'function') return fn;
+      if (fn.__jqrgWrapped) return fn;
+      var wrapped = function () {
+        var r = fn.apply(this, arguments);
+        // The runtime was instantiated; that's the last interesting milestone
+        // before the game starts. Schedule completion shortly after.
+        scheduleComplete(400);
+        return r;
+      };
+      wrapped.__jqrgWrapped = true;
+      return wrapped;
+    }
+    defineTrap('cr_createRuntime', maybeStart, maybeStart);
+  }
+
+  // 8. Plain HTML/JS, fallback for anything we missed: PerformanceObserver
+  // tracks bytes; window.load tells us the page itself is ready.
+
+  // ---------- Completion scheduling -----------------------------------------
+  function scheduleComplete(delayMs) {
+    if (completed) return;
+    var elapsed = Date.now() - startTime;
+    var wait = Math.max(delayMs || 0, MIN_LOADING_MS - elapsed);
+    if (wait < 0) wait = 0;
+    if (loadCompletionTimer) clearTimeout(loadCompletionTimer);
+    loadCompletionTimer = setTimeout(complete, wait);
+  }
+
+  // deferredCompleteCheck runs after window.load when no engine hook caught.
+  // It completes when activity has settled. The quiet window is short for
+  // pages whose loading finished by window.load (plain HTML/JS), and long for
+  // pages that keep loading after window.load via JS-driven fetches (Hollow
+  // Knight downloads its data via fetch then injects the Unity loader script).
+  function deferredCompleteCheck() {
+    if (completed) return;
+    if (deferredCompleteTimer) {
+      clearTimeout(deferredCompleteTimer);
+      deferredCompleteTimer = null;
+    }
+    if (hasEngineProgress) {
+      // An engine progress callback fired - it'll drive completion through
+      // setEngineProgress(1). We just stop deferring.
+      return;
+    }
+    // Refresh engine globals; if one just appeared, give it room to run.
+    rewrapEngineGlobals();
+    var now = Date.now();
+    var sinceLoad = loadFiredTime > 0 ? now - loadFiredTime : 0;
+    var sinceResource = lastResourceTime > 0 ? now - lastResourceTime : sinceLoad;
+    var sinceEngineSeen = firstEngineGlobalSeenTime > 0
+      ? now - firstEngineGlobalSeenTime
+      : -1;
+
+    // If an engine global is sitting on the window without firing progress
+    // (rare, but possible if hooking missed), give it a generous grace window.
+    if (firstEngineGlobalSeenTime > 0 && sinceEngineSeen < ENGINE_WAIT_MS) {
+      deferredCompleteTimer = setTimeout(deferredCompleteCheck, 300);
+      return;
+    }
+
+    // In-flight network requests keep the wait alive. PerformanceObserver only
+    // fires on completion, so a single big fetch could otherwise look quiet.
+    if (inflightRequests > 0) {
+      deferredCompleteTimer = setTimeout(deferredCompleteCheck, 300);
+      return;
+    }
+
+    var quietResourceNeeded = hadPostLoadResource ? QUIET_AFTER_RESOURCE_MS : 300;
+    var quietLoadNeeded = hadPostLoadResource ? QUIET_AFTER_LOAD_MS : 200;
+    if (sinceLoad >= quietLoadNeeded && sinceResource >= quietResourceNeeded) {
+      // Activity has settled; nothing left to wait for.
+      scheduleComplete(0);
+      return;
+    }
+    deferredCompleteTimer = setTimeout(deferredCompleteCheck, 200);
+  }
+
+  function complete() {
+    if (completed) return;
+    completed = true;
+    if (loadCompletionTimer) { clearTimeout(loadCompletionTimer); loadCompletionTimer = null; }
+    if (maxLoadingTimer) { clearTimeout(maxLoadingTimer); maxLoadingTimer = null; }
+    if (deferredCompleteTimer) { clearTimeout(deferredCompleteTimer); deferredCompleteTimer = null; }
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    if (resourceObserver) {
+      try { resourceObserver.disconnect(); } catch (_) {}
+      resourceObserver = null;
+    }
+    if (!hasEngineProgress) {
+      // Snap the bar full when only PerformanceObserver was driving it.
+      hasEngineProgress = true;
+      engineProgress = 1;
+      if (loadedBytes > 0 && totalBytes < loadedBytes) {
+        totalBytes = loadedBytes;
+        totalBytesKnown = true;
+      }
+      refreshUI();
+    } else {
+      engineProgress = 1;
+      refreshUI();
+    }
+    startSoundGate();
+  }
+
+  // ---------- Sound gate ----------------------------------------------------
+  // Loading is done. Browsers gate Web Audio behind a real user gesture, so
+  // hold the splash until the user clicks "Click me to enable sounds". The
+  // click also fires `jqrg-user-gesture` on window so games (TurboWarp etc.)
+  // can bind their engine.start() to it instead of their native flag.
+  function startSoundGate() {
+    if (disposed || !overlay) { cleanup(); return; }
+    if (window.__jqrgUserGestureFired) { startSplash(); return; }
+    var content = document.getElementById('jqrg-loader-content');
+    if (content) content.style.display = 'none';
+    var btn = document.createElement('button');
+    btn.id = 'jqrg-loader-sound-gate';
+    btn.type = 'button';
+    btn.innerHTML = '<span class="jqrg-sound-gate-card"><span class="jqrg-sound-gate-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="jqrg-sound-gate-copy"><span class="jqrg-sound-gate-title">Click me to enable sounds</span><span class="jqrg-sound-gate-subtitle">Unlock audio, then start</span></span><span class="jqrg-sound-gate-arrow" aria-hidden="true">&gt;</span></span>';
+    btn.setAttribute('aria-label', 'Click me to enable sounds');
+    overlay.appendChild(btn);
+    function dismiss(e) {
+      if (e && e.cancelable && typeof e.preventDefault === 'function') {
+        try { e.preventDefault(); } catch (_) {}
+      }
+      if (!btn) return;
+      try { btn.removeEventListener('click', dismiss); } catch (_) {}
+      try { btn.removeEventListener('touchend', dismiss); } catch (_) {}
+      try { if (btn.parentNode) btn.parentNode.removeChild(btn); } catch (_) {}
+      btn = null;
+      window.__jqrgUserGestureFired = true;
+      try { window.dispatchEvent(new Event('jqrg-user-gesture')); } catch (_) {}
+      startSplash();
+    }
+    btn.addEventListener('click', dismiss);
+    btn.addEventListener('touchend', dismiss, { passive: false });
+    try { btn.focus(); } catch (_) {}
+  }
+
+  // ---------- Splash sequence -----------------------------------------------
+  function preloadImage(url, slot) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      var done = false;
+      function finish() { if (done) return; done = true; splashAssets[slot] = img; resolve(img); }
+      img.onload = finish;
+      img.onerror = finish;
+      img.src = url;
+      // Hard timeout so a missing image cannot stall the splash forever.
+      setTimeout(finish, 4000);
+    });
+  }
+
+  function preloadSplashAssets() {
+    if (splashAssetsReady) return splashAssetsReady;
+    splashAssetsReady = Promise.all([
+      preloadImage(BG_URL, 'bg'),
+      preloadImage(getEffectiveBannerUrl(), 'banner'),
+    ]);
+    return splashAssetsReady;
+  }
+
+  function startSplash() {
+    if (splashStarted || disposed) return;
+    splashStarted = true;
+    if (!overlay) {
+      // No overlay (DOM creation failed?) - just bail and let the game show.
+      cleanup();
+      return;
+    }
+    overlay.classList.add('jqrg-splash');
+    preloadSplashAssets().then(playSplash);
+  }
+
+  function playSplash() {
+    if (disposed || !overlay) { cleanup(); return; }
+    if (bgEl) {
+      bgEl.style.backgroundImage = useBlackSplashBackground()
+        ? 'none'
+        : 'url("' + BG_URL + '")';
+    }
+    if (bannerEl) bannerEl.src = getEffectiveBannerUrl();
+
+    // Phase 1: background fades from black to image (BG_FADE_IN_MS, linear).
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (bgEl) bgEl.style.opacity = '1';
+      });
+    });
+
+    // Phase 2: banner scale + fade in (BANNER_ANIM_MS, linear) once the
+    // background is fully visible.
+    setTimeout(function () {
+      if (bannerEl && !disposed) bannerEl.classList.add('jqrg-banner-anim');
+    }, BG_FADE_IN_MS);
+
+    // Phase 3: banner fades out while still expanding (BANNER_FADE_OUT_MS).
+    setTimeout(function () {
+      if (bannerEl && !disposed) bannerEl.classList.add('jqrg-banner-out');
+    }, BG_FADE_IN_MS + BANNER_ANIM_MS);
+
+    // Phase 4: background fades back to black (BG_FADE_OUT_MS, linear).
+    setTimeout(function () {
+      if (bgEl && !disposed) {
+        bgEl.style.transition = 'opacity ' + (BG_FADE_OUT_MS / 1000) + 's linear';
+        bgEl.style.opacity = '0';
+      }
+    }, BG_FADE_IN_MS + BANNER_ANIM_MS + BANNER_FADE_OUT_MS);
+
+    // Phase 5: tear down the overlay so the game is interactable. The +50ms
+    // buffer covers any subpixel jitter in CSS animation completion timing.
+    setTimeout(cleanup,
+      BG_FADE_IN_MS + BANNER_ANIM_MS + BANNER_FADE_OUT_MS + BG_FADE_OUT_MS + 50);
+  }
+
+  function cleanup() {
+    if (disposed) return;
+    disposed = true;
+    if (overlay && overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+    if (tipTimer) { clearTimeout(tipTimer); tipTimer = null; }
+    if (tipTransitionTimer) { clearTimeout(tipTransitionTimer); tipTransitionTimer = null; }
+    tipEl = null;
+    tipLines = null;
+    overlay = barFillEl = sizeTextEl = pctTextEl = bgEl = bannerEl = null;
+    document.documentElement.classList.remove('jqrg-loader-active');
+    seenResources = null;
+  }
+
+  // ---------- Tip footer ----------------------------------------------------
+  // Pull /js/jqrg-loader-lines.js once per overlay (cached after the
+  // first game) and start cycling. window.__JqrgLoaderLines is set as a
+  // side effect of that script. If the file errors out we just stay
+  // silent — the loader still works.
+  function loadTipLines() {
+    if (disposed || !tipEl) return;
+    if (window.__JqrgLoaderLines && window.__JqrgLoaderLines.length) {
+      primeTips(window.__JqrgLoaderLines);
+      return;
+    }
+    try {
+      var s = document.createElement('script');
+      s.src = '/js/jqrg-loader-lines.js';
+      s.async = true;
+      s.onload = function () {
+        if (disposed) return;
+        if (window.__JqrgLoaderLines && window.__JqrgLoaderLines.length) {
+          primeTips(window.__JqrgLoaderLines);
+        }
+      };
+      (document.head || document.documentElement).appendChild(s);
+    } catch (_) {}
+  }
+
+  // Fisher-Yates shuffle so each load shows a different sequence; first
+  // line appears immediately, subsequent ones rotate every TIP_HOLD_MS.
+  function primeTips(lines) {
+    if (disposed || !tipEl) return;
+    var arr = lines.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    tipLines = arr;
+    tipIndex = 0;
+    showCurrentTip();
+  }
+
+  // Set text, fade in, hold, fade out, advance, repeat. Two timers chain
+  // hold -> fade-out so cleanup() can cancel either half cleanly.
+  function showCurrentTip() {
+    if (disposed || !tipEl || !tipLines || !tipLines.length) return;
+    var line = tipLines[tipIndex % tipLines.length];
+    tipEl.textContent = line;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (tipEl) tipEl.classList.add('jqrg-tip-show');
+      });
+    });
+    tipTimer = setTimeout(function () {
+      tipTimer = null;
+      if (disposed || !tipEl) return;
+      tipEl.classList.remove('jqrg-tip-show');
+      tipTransitionTimer = setTimeout(function () {
+        tipTransitionTimer = null;
+        if (disposed) return;
+        tipIndex++;
+        showCurrentTip();
+      }, 380); // a hair longer than the .35s opacity transition
+    }, 4500);
+  }
+
+  // ---------- Polling fallbacks ---------------------------------------------
+  // Hoisted top-level `function createUnityInstance(...)` declarations replace
+  // our accessor trap with a data property during script evaluation. Continuous
+  // polling re-wraps whatever the engine ended up exposing. The wrap helpers
+  // are idempotent thanks to __jqrgWrapped.
+  function rewrapEngineGlobals() {
+    var sawEngine = false;
+    try {
+      if (window.UnityLoader && !window.UnityLoader.__jqrgWrapped) {
+        wrapUnityLoader(window.UnityLoader);
+      }
+      if (window.UnityLoader) sawEngine = true;
+    } catch (_) {}
+    try {
+      if (typeof window.createUnityInstance === 'function') {
+        if (!window.createUnityInstance.__jqrgWrapped) {
+          window.createUnityInstance = wrapCreateUnityInstance(window.createUnityInstance);
+        }
+        sawEngine = true;
+      }
+    } catch (_) {}
+    try {
+      if (window.Engine) {
+        if (!window.Engine.__jqrgWrapped) wrapGodotEngine(window.Engine);
+        sawEngine = true;
+      }
+    } catch (_) {}
+    if (sawEngine && !firstEngineGlobalSeenTime) {
+      firstEngineGlobalSeenTime = Date.now();
+    }
+  }
+
+  function startPolling() {
+    pollTimer = setInterval(function () {
+      if (completed) {
+        if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+        return;
+      }
+      rewrapEngineGlobals();
+    }, POLL_INTERVAL_MS);
+  }
+
+  // Script-tag load events fire as soon as a script finishes evaluating. That
+  // is the earliest moment we can re-wrap any engine globals it just defined,
+  // *before* the engine code itself uses them. Capture phase catches scripts
+  // injected anywhere in the document.
+  function startScriptLoadHook() {
+    if (typeof document === 'undefined' || !document.addEventListener) return;
+    document.addEventListener('load', function (e) {
+      if (completed) return;
+      var t = e && e.target;
+      if (!t || t.tagName !== 'SCRIPT') return;
+      rewrapEngineGlobals();
+    }, true);
+  }
+
+  // ---------- Bootstrap ------------------------------------------------------
+  // Hook the engines synchronously - this is why the script must NOT defer.
+  hookUnityLoader();
+  hookCreateUnityInstance();
+  hookGodot();
+  hookRuffle();
+  hookEmulatorJS();
+  hookGameMaker();
+  hookConstruct();
+  hookNetwork();
+  startResourceObserver();
+  startPolling();
+  startScriptLoadHook();
+  // Kick off the splash image preload immediately so by the time loading
+  // completes the images are warm and the black-screen gap is sub-frame.
+  preloadSplashAssets();
+
+  // Build the overlay as soon as we have any DOM to attach to. The loader
+  // script runs in <head>, so document.body usually does not exist yet; we
+  // mount on DOMContentLoaded in that case. If the body somehow already
+  // exists (script tag placed at the bottom, dynamic injection, etc.) we
+  // mount synchronously so we paint over any native loading UI immediately.
+  function mountWhenReady() {
+    if (overlay || disposed) return;
+    if (document.body) {
+      try { ensureOverlay(); } catch (_) {}
+      return;
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountWhenReady, { once: true });
+    } else {
+      // Edge case: readyState is interactive/complete but body is gone (very
+      // unusual). Bail to a microtask to give the browser a chance to settle.
+      setTimeout(mountWhenReady, 0);
+    }
+  }
+  mountWhenReady();
+
+  // window.load is the universal completion signal. We give engine-specific
+  // hooks a small grace period after load to fire their own callbacks. Some
+  // pages drive their own fetch loops *after* load (e.g. Hollow Knight downloads
+  // its .data/.wasm in an IIFE then injects the Unity loader script), so we
+  // defer completion until activity has actually settled.
+  function onWindowLoad() {
+    if (completed) return;
+    loadFiredTime = Date.now();
+    if (hasEngineProgress && engineProgress < 0.999) {
+      // Engine actively reporting progress - it'll drive completion at 100%.
+      // No need to schedule anything; setEngineProgress handles it.
+      return;
+    }
+    if (hasEngineProgress) {
+      // Engine already reported 100% (rare but possible) - finish promptly.
+      scheduleComplete(150);
+      return;
+    }
+    // No engine progress yet. Watch resource activity to decide when done.
+    deferredCompleteCheck();
+  }
+  if (document.readyState === 'complete') {
+    setTimeout(onWindowLoad, 0);
+  } else {
+    window.addEventListener('load', onWindowLoad);
+  }
+
+  // Hard cap: if the game never reports done, force-complete after the max.
+  maxLoadingTimer = setTimeout(function () {
+    if (!completed) complete();
+  }, MAX_LOADING_MS);
+
+  // Public API for niche cases (e.g. the bloxd.io wrapper) that need to
+  // drive the splash manually instead of waiting on engine signals.
+  window.JqrgLoader = {
+    setProgress: function (p) { setEngineProgress(p); },
+    setBytes: function (loaded, total) {
+      manualBytesMode = true;
+      setBytesLoaded(loaded);
+      if (total != null) setBytesTotal(total);
+    },
+    complete: function () { complete(); },
+    isComplete: function () { return completed; },
+    // Total time (ms) the post-load splash sequence takes to finish, from
+    // complete()/auto-complete to the overlay being torn down. Kept on the
+    // public API so wrappers (bloxd.io etc.) can schedule any post-splash
+    // work without having to duplicate the constants below.
+    splashDurationMs: BG_FADE_IN_MS + BANNER_ANIM_MS + BANNER_FADE_OUT_MS + BG_FADE_OUT_MS,
+  };
+})();
+
+</script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <link rel="stylesheet" type="text/css" href="./Editor_files/main.css">
+  <link rel="stylesheet" type="text/css" href="./Editor_files/editor.css">
+  <link rel="stylesheet" type="text/css" href="./Editor_files/font.css">
+  
+<style type="text/css"></style><style id="ace_editor">.ace_editor {
+    position: absolute;
+    overflow: hidden;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Droid Sans Mono', 'Consolas', monospace;
+    font-size: 12px;
+}
+
+.ace_scroller {
+    position: absolute;
+    overflow: hidden;
+}
+
+.ace_content {
+    position: absolute;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    cursor: text;
+}
+
+.ace_gutter {
+    position: absolute;
+    overflow : hidden;
+    height: 100%;
+    width: auto;
+    cursor: default;
+    z-index: 4;
+}
+
+.ace_gutter_active_line {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.ace_scroller.horscroll {
+    box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;
+}
+
+.ace_gutter-cell {
+    padding-left: 19px;
+    padding-right: 6px;
+    background-repeat: no-repeat;
+}
+
+.ace_gutter-cell.ace_error {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUM2OEZDQTQ4RTU0MTFFMUEzM0VFRTM2RUY1M0RBMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUM2OEZDQTU4RTU0MTFFMUEzM0VFRTM2RUY1M0RBMjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQzY4RkNBMjhFNTQxMUUxQTMzRUVFMzZFRjUzREEyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQzY4RkNBMzhFNTQxMUUxQTMzRUVFMzZFRjUzREEyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkgXxbAAAAJbSURBVHjapFNNaBNBFH4zs5vdZLP5sQmNpT82QY209heh1ioWisaDRcSKF0WKJ0GQnrzrxasHsR6EnlrwD0TagxJabaVEpFYxLWlLSS822tr87m66ccfd2GKyVhA6MMybgfe97/vmPUQphd0sZjto9XIn9OOsvlu2nkqRzVU+6vvlzPf8W6bk8dxQ0NPbxAALgCgg2JkaQuhzQau/El0zbmUA7U0Es8v2CiYmKQJHGO1QICCLoqilMhkmurDAyapKgqItezi/USRdJqEYY4D5jCy03ht2yMkkvL91jTTX10qzyyu2hruPRN7jgbH+EOsXcMLgYiThEgAMhABW85oqy1DXdRIdvP1AHJ2acQXvDIrVHcdQNrEKNYSVMSZGMjEzIIAwDXIo+6G/FxcGnzkC3T2oMhLjre49sBB+RRcHLqdafK6sYdE/GGBwU1VpFNj0aN8pJbe+BkZyevUrvLl6Xmm0W9IuTc0DxrDNAJd5oEvI/KRsNC3bQyNjPO9yQ1YHcfj2QvfQc/5TUhJTBc2iM0U7AWDQtc1nJHvD/cfO2s7jaGkiTEfa/Ep8coLu7zmNmh8+dc5lZDuUeFAGUNA/OY6JVaypQ0vjr7XYjUvJM37vt+j1vuTK5DgVfVUoTjVe+y3/LxMxY2GgU+CSLy4cpfsYorRXuXIOi0Vt40h67uZFTdIo6nLaZcwUJWAzwNS0tBnqqKzQDnjdG/iPyZxo46HaKUpbvYkj8qYRTZsBhge+JHhZyh0x9b95JqjVJkT084kZIPwu/mPWqPgfQ5jXh2+92Ay7HedfAgwA6KDWafb4w3cAAAAASUVORK5CYII=");
+    background-repeat: no-repeat;
+    background-position: 2px center;
+}
+
+.ace_gutter-cell.ace_warning {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUM2OEZDQTg4RTU0MTFFMUEzM0VFRTM2RUY1M0RBMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUM2OEZDQTk4RTU0MTFFMUEzM0VFRTM2RUY1M0RBMjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQzY4RkNBNjhFNTQxMUUxQTMzRUVFMzZFRjUzREEyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQzY4RkNBNzhFNTQxMUUxQTMzRUVFMzZFRjUzREEyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pgd7PfIAAAGmSURBVHjaYvr//z8DJZiJgUIANoCRkREb9gLiSVAaQx4OQM7AAkwd7XU2/v++/rOttdYGEB9dASEvOMydGKfH8Gv/p4XTkvRBfLxeQAP+1cUhXopyvzhP7P/IoSj7g7Mw09cNKO6J1QQ0L4gICPIv/veg/8W+JdFvQNLHVsW9/nmn9zk7B+cCkDwhL7gt6knSZnx9/LuCEOcvkIAMP+cvto9nfqyZmmUAksfnBUtbM60gX/3/kgyv3/xSFOL5DZT+L8vP+Yfh5cvfPvp/xUHyQHXGyAYwgpwBjZYFT3Y1OEl/OfCH4ffv3wzc4iwMvNIsDJ+f/mH4+vIPAxsb631WW0Yln6ZpQLXdMK/DXGDflh+sIv37EivD5x//Gb7+YWT4y86sl7BCCkSD+Z++/1dkvsFRl+HnD1Rvje4F8whjMXmGj58YGf5zsDMwcnAwfPvKcml62DsQDeaDxN+/Y0qwlpEHqrdB94IRNIDUgfgfKJChGK4OikEW3gTiXUB950ASLFAF54AC94A0G9QAfOnmF9DCDzABFqS08IHYDIScdijOjQABBgC+/9awBH96jwAAAABJRU5ErkJggg==");
+    background-position: 2px center;
+}
+
+.ace_gutter-cell.ace_info {
+    background-image: url("data:image/gif;base64,R0lGODlhEAAQAMQAAAAAAEFBQVJSUl5eXmRkZGtra39/f4WFhYmJiZGRkaampry8vMPDw8zMzNXV1dzc3OTk5Orq6vDw8P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABQALAAAAAAQABAAAAUuICWOZGmeaBml5XGwFCQSBGyXRSAwtqQIiRuiwIM5BoYVbEFIyGCQoeJGrVptIQA7");
+    background-position: 2px center;
+}
+.ace_dark .ace_gutter-cell.ace_info {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGRTk5MTVGREIxNDkxMUUxOTc5Q0FFREQyMTNGMjBFQyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGRTk5MTVGRUIxNDkxMUUxOTc5Q0FFREQyMTNGMjBFQyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZFOTkxNUZCQjE0OTExRTE5NzlDQUVERDIxM0YyMEVDIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkZFOTkxNUZDQjE0OTExRTE5NzlDQUVERDIxM0YyMEVDIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+SIDkjAAAAJ1JREFUeNpi/P//PwMlgImBQkB7A6qrq/+DMC55FkIGKCoq4pVnpFkgTp069f/+/fv/r1u37r+tre1/kg0A+ptn9uzZYLaRkRHpLvjw4cNXWVlZhufPnzOcO3eOdAO0tbVPAjHDmzdvGA4fPsxIsgGSkpJmv379Ynj37h2DjIyMCMkG3LhxQ/T27dsMampqDHZ2dq/pH41DxwCAAAMAFdc68dUsFZgAAAAASUVORK5CYII=");
+}
+
+.ace_editor .ace_sb {
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    right: 0;
+}
+
+.ace_editor .ace_sb div {
+    position: absolute;
+    width: 1px;
+    left: 0;
+}
+
+.ace_editor .ace_print_margin_layer {
+    z-index: 0;
+    position: absolute;
+    overflow: hidden;
+    margin: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.ace_editor .ace_print_margin {
+    position: absolute;
+    height: 100%;
+}
+
+.ace_editor > textarea {
+    position: absolute;
+    z-index: 0;
+    width: 0.5em;
+    height: 1em;
+    opacity: 0;
+    background: transparent;
+    appearance: none;
+    -moz-appearance: none;
+    border: none;
+    resize: none;
+    outline: none;
+    overflow: hidden;
+}
+
+.ace_editor > textarea.ace_composition {
+    background: #fff;
+    color: #000;
+    z-index: 1000;
+    opacity: 1;
+    border: solid lightgray 1px;
+    margin: -1px
+}
+
+.ace_layer {
+    z-index: 1;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    /* setting pointer-events: auto; on node under the mouse, which changes
+        during scroll, will break mouse wheel scrolling in Safari */
+    pointer-events: none;
+}
+
+.ace_gutter .ace_layer {
+    position: relative;
+    width: auto;
+    text-align: right;
+    pointer-events: auto;
+}
+
+.ace_text-layer {
+    color: black;
+    font: inherit !important;
+}
+
+.ace_cjk {
+    display: inline-block;
+    text-align: center;
+}
+
+.ace_cursor-layer {
+    z-index: 4;
+}
+
+.ace_cursor {
+    z-index: 4;
+    position: absolute;
+}
+
+.ace_cursor.ace_hidden {
+    opacity: 0.2;
+}
+
+.ace_editor.multiselect .ace_cursor {
+    border-left-width: 1px;
+}
+
+.ace_line {
+    white-space: nowrap;
+}
+
+.ace_marker-layer .ace_step {
+    position: absolute;
+    z-index: 3;
+}
+
+.ace_marker-layer .ace_selection {
+    position: absolute;
+    z-index: 5;
+}
+
+.ace_marker-layer .ace_bracket {
+    position: absolute;
+    z-index: 6;
+}
+
+.ace_marker-layer .ace_active_line {
+    position: absolute;
+    z-index: 2;
+}
+
+.ace_marker-layer .ace_selected_word {
+    position: absolute;
+    z-index: 4;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.ace_line .ace_fold {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+    display: inline-block;
+    height: 11px;
+    margin-top: -2px;
+    vertical-align: middle;
+
+    background-image:
+        url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%11%00%00%00%09%08%06%00%00%00%D4%E8%C7%0C%00%00%03%1EiCCPICC%20Profile%00%00x%01%85T%DFk%D3P%14%FE%DAe%9D%B0%E1%8B%3Ag%11%09%3Eh%91ndStC%9C%B6kW%BA%CDZ%EA6%B7!H%9B%A6m%5C%9A%C6%24%ED~%B0%07%D9%8Bo%3A%C5w%F1%07%3E%F9%07%0C%D9%83o%7B%92%0D%C6%14a%F8%AC%88%22L%F6%22%B3%9E%9B4M'S%03%B9%F7%BB%DF%F9%EE9'%E7%E4%5E%A0%F9qZ%D3%14%2F%0F%14USO%C5%C2%FC%C4%E4%14%DF%F2%01%5E%1CC%2B%FChM%8B%86%16J%26G%40%0F%D3%B2y%EF%B3%F3%0E%1E%C6lt%EEo%DF%AB%FEc%D5%9A%95%0C%11%F0%1C%20%BE%945%C4%22%E1Y%A0i%5C%D4t%13%E0%D6%89%EF%9D15%C2%CDLsX%A7%04%09%1Fg8oc%81%E1%8C%8D%23%96f45%40%9A%09%C2%07%C5B%3AK%B8%408%98i%E0%F3%0D%D8%CE%81%14%E4'%26%A9%92.%8B%3C%ABER%2F%E5dE%B2%0C%F6%F0%1Fs%83%F2_%B0%A8%94%E9%9B%AD%E7%10%8Dm%9A%19N%D1%7C%8A%DE%1F9%7Dp%8C%E6%00%D5%C1%3F_%18%BDA%B8%9DpX6%E3%A35~B%CD%24%AE%11%26%BD%E7%EEti%98%EDe%9A%97Y)%12%25%1C%24%BCbT%AE3li%E6%0B%03%89%9A%E6%D3%ED%F4P%92%B0%9F4%BF43Y%F3%E3%EDP%95%04%EB1%C5%F5%F6KF%F4%BA%BD%D7%DB%91%93%07%E35%3E%A7)%D6%7F%40%FE%BD%F7%F5r%8A%E5y%92%F0%EB%B4%1E%8D%D5%F4%5B%92%3AV%DB%DB%E4%CD%A6%23%C3%C4wQ%3F%03HB%82%8E%1Cd(%E0%91B%0Ca%9Ac%C4%AA%F8L%16%19%22J%A4%D2itTy%B28%D6%3B(%93%96%ED%1CGx%C9_%0E%B8%5E%16%F5%5B%B2%B8%F6%E0%FB%9E%DD%25%D7%8E%BC%15%85%C5%B7%A3%D8Q%ED%B5%81%E9%BA%B2%13%9A%1B%7Fua%A5%A3n%E17%B9%E5%9B%1Bm%AB%0B%08Q%FE%8A%E5%B1H%5Ee%CAO%82Q%D7u6%E6%90S%97%FCu%0B%CF2%94%EE%25v%12X%0C%BA%AC%F0%5E%F8*l%0AO%85%17%C2%97%BF%D4%C8%CE%DE%AD%11%CB%80q%2C%3E%AB%9ES%CD%C6%EC%25%D2L%D2%EBd%B8%BF%8A%F5B%C6%18%F9%901CZ%9D%BE%24M%9C%8A9%F2%DAP%0B'%06w%82%EB%E6%E2%5C%2F%D7%07%9E%BB%CC%5D%E1%FA%B9%08%AD.r%23%8E%C2%17%F5E%7C!%F0%BE3%BE%3E_%B7o%88a%A7%DB%BE%D3d%EB%A31Z%EB%BB%D3%91%BA%A2%B1z%94%8F%DB'%F6%3D%8E%AA%13%19%B2%B1%BE%B1~V%08%2B%B4%A2cjJ%B3tO%00%03%25mN%97%F3%05%93%EF%11%84%0B%7C%88%AE-%89%8F%ABbW%90O%2B%0Ao%99%0C%5E%97%0CI%AFH%D9.%B0%3B%8F%ED%03%B6S%D6%5D%E6i_s9%F3*p%E9%1B%FD%C3%EB.7U%06%5E%19%C0%D1s.%17%A03u%E4%09%B0%7C%5E%2C%EB%15%DB%1F%3C%9E%B7%80%91%3B%DBc%AD%3Dma%BA%8B%3EV%AB%DBt.%5B%1E%01%BB%0F%AB%D5%9F%CF%AA%D5%DD%E7%E4%7F%0Bx%A3%FC%06%A9%23%0A%D6%C2%A1_2%00%00%00%09pHYs%00%00%0B%13%00%00%0B%13%01%00%9A%9C%18%00%00%00%B5IDAT(%15%A5%91%3D%0E%02!%10%85ac%E1%05%D6%CE%D6%C6%CE%D2%E8%ED%CD%DE%C0%C6%D6N.%E0V%F8%3D%9Ca%891XH%C2%BE%D9y%3F%90!%E6%9C%C3%BFk%E5%011%C6-%F5%C8N%04%DF%BD%FF%89%DFt%83DN%60%3E%F3%AB%A0%DE%1A%5Dg%BE%10Q%97%1B%40%9C%A8o%10%8F%5E%828%B4%1B%60%87%F6%02%26%85%1Ch%1E%C1%2B%5Bk%FF%86%EE%B7j%09%9A%DA%9B%ACe%A3%F9%EC%DA!9%B4%D5%A6%81%86%86%98%CC%3C%5B%40%FA%81%B3%E9%CB%23%94%C16Azo%05%D4%E1%C1%95a%3B%8A'%A0%E8%CC%17%22%85%1D%BA%00%A2%FA%DC%0A%94%D1%D1%8D%8B%3A%84%17B%C7%60%1A%25Z%FC%8D%00%00%00%00IEND%AEB%60%82"),
+        url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%05%00%00%007%08%06%00%00%00%C4%DD%80C%00%00%03%1EiCCPICC%20Profile%00%00x%01%85T%DFk%D3P%14%FE%DAe%9D%B0%E1%8B%3Ag%11%09%3Eh%91ndStC%9C%B6kW%BA%CDZ%EA6%B7!H%9B%A6m%5C%9A%C6%24%ED~%B0%07%D9%8Bo%3A%C5w%F1%07%3E%F9%07%0C%D9%83o%7B%92%0D%C6%14a%F8%AC%88%22L%F6%22%B3%9E%9B4M'S%03%B9%F7%BB%DF%F9%EE9'%E7%E4%5E%A0%F9qZ%D3%14%2F%0F%14USO%C5%C2%FC%C4%E4%14%DF%F2%01%5E%1CC%2B%FChM%8B%86%16J%26G%40%0F%D3%B2y%EF%B3%F3%0E%1E%C6lt%EEo%DF%AB%FEc%D5%9A%95%0C%11%F0%1C%20%BE%945%C4%22%E1Y%A0i%5C%D4t%13%E0%D6%89%EF%9D15%C2%CDLsX%A7%04%09%1Fg8oc%81%E1%8C%8D%23%96f45%40%9A%09%C2%07%C5B%3AK%B8%408%98i%E0%F3%0D%D8%CE%81%14%E4'%26%A9%92.%8B%3C%ABER%2F%E5dE%B2%0C%F6%F0%1Fs%83%F2_%B0%A8%94%E9%9B%AD%E7%10%8Dm%9A%19N%D1%7C%8A%DE%1F9%7Dp%8C%E6%00%D5%C1%3F_%18%BDA%B8%9DpX6%E3%A35~B%CD%24%AE%11%26%BD%E7%EEti%98%EDe%9A%97Y)%12%25%1C%24%BCbT%AE3li%E6%0B%03%89%9A%E6%D3%ED%F4P%92%B0%9F4%BF43Y%F3%E3%EDP%95%04%EB1%C5%F5%F6KF%F4%BA%BD%D7%DB%91%93%07%E35%3E%A7)%D6%7F%40%FE%BD%F7%F5r%8A%E5y%92%F0%EB%B4%1E%8D%D5%F4%5B%92%3AV%DB%DB%E4%CD%A6%23%C3%C4wQ%3F%03HB%82%8E%1Cd(%E0%91B%0Ca%9Ac%C4%AA%F8L%16%19%22J%A4%D2itTy%B28%D6%3B(%93%96%ED%1CGx%C9_%0E%B8%5E%16%F5%5B%B2%B8%F6%E0%FB%9E%DD%25%D7%8E%BC%15%85%C5%B7%A3%D8Q%ED%B5%81%E9%BA%B2%13%9A%1B%7Fua%A5%A3n%E17%B9%E5%9B%1Bm%AB%0B%08Q%FE%8A%E5%B1H%5Ee%CAO%82Q%D7u6%E6%90S%97%FCu%0B%CF2%94%EE%25v%12X%0C%BA%AC%F0%5E%F8*l%0AO%85%17%C2%97%BF%D4%C8%CE%DE%AD%11%CB%80q%2C%3E%AB%9ES%CD%C6%EC%25%D2L%D2%EBd%B8%BF%8A%F5B%C6%18%F9%901CZ%9D%BE%24M%9C%8A9%F2%DAP%0B'%06w%82%EB%E6%E2%5C%2F%D7%07%9E%BB%CC%5D%E1%FA%B9%08%AD.r%23%8E%C2%17%F5E%7C!%F0%BE3%BE%3E_%B7o%88a%A7%DB%BE%D3d%EB%A31Z%EB%BB%D3%91%BA%A2%B1z%94%8F%DB'%F6%3D%8E%AA%13%19%B2%B1%BE%B1~V%08%2B%B4%A2cjJ%B3tO%00%03%25mN%97%F3%05%93%EF%11%84%0B%7C%88%AE-%89%8F%ABbW%90O%2B%0Ao%99%0C%5E%97%0CI%AFH%D9.%B0%3B%8F%ED%03%B6S%D6%5D%E6i_s9%F3*p%E9%1B%FD%C3%EB.7U%06%5E%19%C0%D1s.%17%A03u%E4%09%B0%7C%5E%2C%EB%15%DB%1F%3C%9E%B7%80%91%3B%DBc%AD%3Dma%BA%8B%3EV%AB%DBt.%5B%1E%01%BB%0F%AB%D5%9F%CF%AA%D5%DD%E7%E4%7F%0Bx%A3%FC%06%A9%23%0A%D6%C2%A1_2%00%00%00%09pHYs%00%00%0B%13%00%00%0B%13%01%00%9A%9C%18%00%00%00%3AIDAT8%11c%FC%FF%FF%7F%18%03%1A%60%01%F2%3F%A0%891%80%04%FF%11-%F8%17%9BJ%E2%05%B1ZD%81v%26t%E7%80%F8%A3%82h%A12%1A%20%A3%01%02%0F%01%BA%25%06%00%19%C0%0D%AEF%D5%3ES%00%00%00%00IEND%AEB%60%82");
+    background-repeat: no-repeat, repeat-x;
+    background-position: center center, top left;
+    color: transparent;
+
+    border: 1px solid black;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ace_dark .ace_fold {
+}
+
+.ace_fold:hover{
+    background-image:
+        url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%11%00%00%00%09%08%06%00%00%00%D4%E8%C7%0C%00%00%03%1EiCCPICC%20Profile%00%00x%01%85T%DFk%D3P%14%FE%DAe%9D%B0%E1%8B%3Ag%11%09%3Eh%91ndStC%9C%B6kW%BA%CDZ%EA6%B7!H%9B%A6m%5C%9A%C6%24%ED~%B0%07%D9%8Bo%3A%C5w%F1%07%3E%F9%07%0C%D9%83o%7B%92%0D%C6%14a%F8%AC%88%22L%F6%22%B3%9E%9B4M'S%03%B9%F7%BB%DF%F9%EE9'%E7%E4%5E%A0%F9qZ%D3%14%2F%0F%14USO%C5%C2%FC%C4%E4%14%DF%F2%01%5E%1CC%2B%FChM%8B%86%16J%26G%40%0F%D3%B2y%EF%B3%F3%0E%1E%C6lt%EEo%DF%AB%FEc%D5%9A%95%0C%11%F0%1C%20%BE%945%C4%22%E1Y%A0i%5C%D4t%13%E0%D6%89%EF%9D15%C2%CDLsX%A7%04%09%1Fg8oc%81%E1%8C%8D%23%96f45%40%9A%09%C2%07%C5B%3AK%B8%408%98i%E0%F3%0D%D8%CE%81%14%E4'%26%A9%92.%8B%3C%ABER%2F%E5dE%B2%0C%F6%F0%1Fs%83%F2_%B0%A8%94%E9%9B%AD%E7%10%8Dm%9A%19N%D1%7C%8A%DE%1F9%7Dp%8C%E6%00%D5%C1%3F_%18%BDA%B8%9DpX6%E3%A35~B%CD%24%AE%11%26%BD%E7%EEti%98%EDe%9A%97Y)%12%25%1C%24%BCbT%AE3li%E6%0B%03%89%9A%E6%D3%ED%F4P%92%B0%9F4%BF43Y%F3%E3%EDP%95%04%EB1%C5%F5%F6KF%F4%BA%BD%D7%DB%91%93%07%E35%3E%A7)%D6%7F%40%FE%BD%F7%F5r%8A%E5y%92%F0%EB%B4%1E%8D%D5%F4%5B%92%3AV%DB%DB%E4%CD%A6%23%C3%C4wQ%3F%03HB%82%8E%1Cd(%E0%91B%0Ca%9Ac%C4%AA%F8L%16%19%22J%A4%D2itTy%B28%D6%3B(%93%96%ED%1CGx%C9_%0E%B8%5E%16%F5%5B%B2%B8%F6%E0%FB%9E%DD%25%D7%8E%BC%15%85%C5%B7%A3%D8Q%ED%B5%81%E9%BA%B2%13%9A%1B%7Fua%A5%A3n%E17%B9%E5%9B%1Bm%AB%0B%08Q%FE%8A%E5%B1H%5Ee%CAO%82Q%D7u6%E6%90S%97%FCu%0B%CF2%94%EE%25v%12X%0C%BA%AC%F0%5E%F8*l%0AO%85%17%C2%97%BF%D4%C8%CE%DE%AD%11%CB%80q%2C%3E%AB%9ES%CD%C6%EC%25%D2L%D2%EBd%B8%BF%8A%F5B%C6%18%F9%901CZ%9D%BE%24M%9C%8A9%F2%DAP%0B'%06w%82%EB%E6%E2%5C%2F%D7%07%9E%BB%CC%5D%E1%FA%B9%08%AD.r%23%8E%C2%17%F5E%7C!%F0%BE3%BE%3E_%B7o%88a%A7%DB%BE%D3d%EB%A31Z%EB%BB%D3%91%BA%A2%B1z%94%8F%DB'%F6%3D%8E%AA%13%19%B2%B1%BE%B1~V%08%2B%B4%A2cjJ%B3tO%00%03%25mN%97%F3%05%93%EF%11%84%0B%7C%88%AE-%89%8F%ABbW%90O%2B%0Ao%99%0C%5E%97%0CI%AFH%D9.%B0%3B%8F%ED%03%B6S%D6%5D%E6i_s9%F3*p%E9%1B%FD%C3%EB.7U%06%5E%19%C0%D1s.%17%A03u%E4%09%B0%7C%5E%2C%EB%15%DB%1F%3C%9E%B7%80%91%3B%DBc%AD%3Dma%BA%8B%3EV%AB%DBt.%5B%1E%01%BB%0F%AB%D5%9F%CF%AA%D5%DD%E7%E4%7F%0Bx%A3%FC%06%A9%23%0A%D6%C2%A1_2%00%00%00%09pHYs%00%00%0B%13%00%00%0B%13%01%00%9A%9C%18%00%00%00%B5IDAT(%15%A5%91%3D%0E%02!%10%85ac%E1%05%D6%CE%D6%C6%CE%D2%E8%ED%CD%DE%C0%C6%D6N.%E0V%F8%3D%9Ca%891XH%C2%BE%D9y%3F%90!%E6%9C%C3%BFk%E5%011%C6-%F5%C8N%04%DF%BD%FF%89%DFt%83DN%60%3E%F3%AB%A0%DE%1A%5Dg%BE%10Q%97%1B%40%9C%A8o%10%8F%5E%828%B4%1B%60%87%F6%02%26%85%1Ch%1E%C1%2B%5Bk%FF%86%EE%B7j%09%9A%DA%9B%ACe%A3%F9%EC%DA!9%B4%D5%A6%81%86%86%98%CC%3C%5B%40%FA%81%B3%E9%CB%23%94%C16Azo%05%D4%E1%C1%95a%3B%8A'%A0%E8%CC%17%22%85%1D%BA%00%A2%FA%DC%0A%94%D1%D1%8D%8B%3A%84%17B%C7%60%1A%25Z%FC%8D%00%00%00%00IEND%AEB%60%82"),
+        url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%05%00%00%007%08%06%00%00%00%C4%DD%80C%00%00%03%1EiCCPICC%20Profile%00%00x%01%85T%DFk%D3P%14%FE%DAe%9D%B0%E1%8B%3Ag%11%09%3Eh%91ndStC%9C%B6kW%BA%CDZ%EA6%B7!H%9B%A6m%5C%9A%C6%24%ED~%B0%07%D9%8Bo%3A%C5w%F1%07%3E%F9%07%0C%D9%83o%7B%92%0D%C6%14a%F8%AC%88%22L%F6%22%B3%9E%9B4M'S%03%B9%F7%BB%DF%F9%EE9'%E7%E4%5E%A0%F9qZ%D3%14%2F%0F%14USO%C5%C2%FC%C4%E4%14%DF%F2%01%5E%1CC%2B%FChM%8B%86%16J%26G%40%0F%D3%B2y%EF%B3%F3%0E%1E%C6lt%EEo%DF%AB%FEc%D5%9A%95%0C%11%F0%1C%20%BE%945%C4%22%E1Y%A0i%5C%D4t%13%E0%D6%89%EF%9D15%C2%CDLsX%A7%04%09%1Fg8oc%81%E1%8C%8D%23%96f45%40%9A%09%C2%07%C5B%3AK%B8%408%98i%E0%F3%0D%D8%CE%81%14%E4'%26%A9%92.%8B%3C%ABER%2F%E5dE%B2%0C%F6%F0%1Fs%83%F2_%B0%A8%94%E9%9B%AD%E7%10%8Dm%9A%19N%D1%7C%8A%DE%1F9%7Dp%8C%E6%00%D5%C1%3F_%18%BDA%B8%9DpX6%E3%A35~B%CD%24%AE%11%26%BD%E7%EEti%98%EDe%9A%97Y)%12%25%1C%24%BCbT%AE3li%E6%0B%03%89%9A%E6%D3%ED%F4P%92%B0%9F4%BF43Y%F3%E3%EDP%95%04%EB1%C5%F5%F6KF%F4%BA%BD%D7%DB%91%93%07%E35%3E%A7)%D6%7F%40%FE%BD%F7%F5r%8A%E5y%92%F0%EB%B4%1E%8D%D5%F4%5B%92%3AV%DB%DB%E4%CD%A6%23%C3%C4wQ%3F%03HB%82%8E%1Cd(%E0%91B%0Ca%9Ac%C4%AA%F8L%16%19%22J%A4%D2itTy%B28%D6%3B(%93%96%ED%1CGx%C9_%0E%B8%5E%16%F5%5B%B2%B8%F6%E0%FB%9E%DD%25%D7%8E%BC%15%85%C5%B7%A3%D8Q%ED%B5%81%E9%BA%B2%13%9A%1B%7Fua%A5%A3n%E17%B9%E5%9B%1Bm%AB%0B%08Q%FE%8A%E5%B1H%5Ee%CAO%82Q%D7u6%E6%90S%97%FCu%0B%CF2%94%EE%25v%12X%0C%BA%AC%F0%5E%F8*l%0AO%85%17%C2%97%BF%D4%C8%CE%DE%AD%11%CB%80q%2C%3E%AB%9ES%CD%C6%EC%25%D2L%D2%EBd%B8%BF%8A%F5B%C6%18%F9%901CZ%9D%BE%24M%9C%8A9%F2%DAP%0B'%06w%82%EB%E6%E2%5C%2F%D7%07%9E%BB%CC%5D%E1%FA%B9%08%AD.r%23%8E%C2%17%F5E%7C!%F0%BE3%BE%3E_%B7o%88a%A7%DB%BE%D3d%EB%A31Z%EB%BB%D3%91%BA%A2%B1z%94%8F%DB'%F6%3D%8E%AA%13%19%B2%B1%BE%B1~V%08%2B%B4%A2cjJ%B3tO%00%03%25mN%97%F3%05%93%EF%11%84%0B%7C%88%AE-%89%8F%ABbW%90O%2B%0Ao%99%0C%5E%97%0CI%AFH%D9.%B0%3B%8F%ED%03%B6S%D6%5D%E6i_s9%F3*p%E9%1B%FD%C3%EB.7U%06%5E%19%C0%D1s.%17%A03u%E4%09%B0%7C%5E%2C%EB%15%DB%1F%3C%9E%B7%80%91%3B%DBc%AD%3Dma%BA%8B%3EV%AB%DBt.%5B%1E%01%BB%0F%AB%D5%9F%CF%AA%D5%DD%E7%E4%7F%0Bx%A3%FC%06%A9%23%0A%D6%C2%A1_2%00%00%00%09pHYs%00%00%0B%13%00%00%0B%13%01%00%9A%9C%18%00%00%003IDAT8%11c%FC%FF%FF%7F%3E%03%1A%60%01%F2%3F%A3%891%80%04%FFQ%26%F8w%C0%B43%A1%DB%0C%E2%8F%0A%A2%85%CAh%80%8C%06%08%3C%04%E8%96%18%00%A3S%0D%CD%CF%D8%C1%9D%00%00%00%00IEND%AEB%60%82");
+    background-repeat: no-repeat, repeat-x;
+    background-position: center center, top left;
+}
+
+.ace_dragging .ace_content {
+    cursor: move;
+}
+
+.ace_gutter_tooltip {
+    background-color: #FFFFD5;
+    border: 1px solid gray;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    color: black;
+    display: inline-block;
+    padding: 4px;
+    position: absolute;
+    z-index: 300;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    cursor: default;
+}
+
+.ace_folding-enabled > .ace_gutter-cell {
+    padding-right: 13px;
+}
+
+.ace_fold-widget {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+    margin: 0 -12px 0 1px;
+    display: inline-block;
+    width: 11px;
+    vertical-align: top;
+
+    background-image: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%05%00%00%00%05%08%06%00%00%00%8Do%26%E5%00%00%004IDATx%DAe%8A%B1%0D%000%0C%C2%F2%2CK%96%BC%D0%8F9%81%88H%E9%D0%0E%96%C0%10%92%3E%02%80%5E%82%E4%A9*-%EEsw%C8%CC%11%EE%96w%D8%DC%E9*Eh%0C%151(%00%00%00%00IEND%AEB%60%82");
+    background-repeat: no-repeat;
+    background-position: center;
+
+    border-radius: 3px;
+    
+    border: 1px solid transparent;
+}
+
+.ace_fold-widget.end {
+    background-image: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%05%00%00%00%05%08%06%00%00%00%8Do%26%E5%00%00%004IDATx%DAm%C7%C1%09%000%08C%D1%8C%ECE%C8E(%8E%EC%02)%1EZJ%F1%C1'%04%07I%E1%E5%EE%CAL%F5%A2%99%99%22%E2%D6%1FU%B5%FE0%D9x%A7%26Wz5%0E%D5%00%00%00%00IEND%AEB%60%82");
+}
+
+.ace_fold-widget.closed {
+    background-image: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%03%00%00%00%06%08%06%00%00%00%06%E5%24%0C%00%00%009IDATx%DA5%CA%C1%09%000%08%03%C0%AC*(%3E%04%C1%0D%BA%B1%23%A4Uh%E0%20%81%C0%CC%F8%82%81%AA%A2%AArGfr%88%08%11%11%1C%DD%7D%E0%EE%5B%F6%F6%CB%B8%05Q%2F%E9tai%D9%00%00%00%00IEND%AEB%60%82");
+}
+
+.ace_fold-widget:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.2);
+    -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+    -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+.ace_fold-widget:active {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+/**
+ * Dark version for fold widgets
+ */
+.ace_dark .ace_fold-widget {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");
+}
+.ace_dark .ace_fold-widget.end {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");
+}
+.ace_dark .ace_fold-widget.closed {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");
+}
+.ace_dark .ace_fold-widget:hover {
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.ace_dark .ace_fold-widget:active {
+    -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+    -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+    
+    
+    
+.ace_fold-widget.invalid {
+    background-color: #FFB4B4;
+    border-color: #DE5555;
+}
+
+.ace_fade-fold-widgets .ace_fold-widget {
+       -moz-transition: opacity 0.4s ease 0.05s;
+    -webkit-transition: opacity 0.4s ease 0.05s;
+         -o-transition: opacity 0.4s ease 0.05s;
+        -ms-transition: opacity 0.4s ease 0.05s;
+            transition: opacity 0.4s ease 0.05s;
+    opacity: 0;
+}
+
+.ace_fade-fold-widgets:hover .ace_fold-widget {
+       -moz-transition: opacity 0.05s ease 0.05s;
+    -webkit-transition: opacity 0.05s ease 0.05s;
+         -o-transition: opacity 0.05s ease 0.05s;
+        -ms-transition: opacity 0.05s ease 0.05s;
+            transition: opacity 0.05s ease 0.05s;
+    opacity:1;
+}
+
+.ace_underline {
+    text-decoration: underline;
+}
+
+.ace_bold {
+    font-weight: bold;
+}
+
+.ace_italic {
+    font-style: italic;
+}
+</style><style id="ace-tm">.ace-tm .ace_editor {
+  border: 2px solid rgb(159, 159, 159);
+}
+
+.ace-tm .ace_editor.ace_focus {
+  border: 2px solid #327fbd;
+}
+
+.ace-tm .ace_gutter {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.ace-tm .ace_print_margin {
+  width: 1px;
+  background: #e8e8e8;
+}
+
+.ace-tm .ace_fold {
+    background-color: #6B72E6;
+}
+
+.ace-tm .ace_scroller {
+  background-color: #FFFFFF;
+}
+
+.ace-tm .ace_cursor {
+  border-left: 2px solid black;
+}
+
+.ace-tm .ace_cursor.ace_overwrite {
+  border-left: 0px;
+  border-bottom: 1px solid black;
+}
+        
+.ace-tm .ace_line .ace_invisible {
+  color: rgb(191, 191, 191);
+}
+
+.ace-tm .ace_line .ace_storage,
+.ace-tm .ace_line .ace_keyword {
+  color: blue;
+}
+
+.ace-tm .ace_line .ace_constant {
+  color: rgb(197, 6, 11);
+}
+
+.ace-tm .ace_line .ace_constant.ace_buildin {
+  color: rgb(88, 72, 246);
+}
+
+.ace-tm .ace_line .ace_constant.ace_language {
+  color: rgb(88, 92, 246);
+}
+
+.ace-tm .ace_line .ace_constant.ace_library {
+  color: rgb(6, 150, 14);
+}
+
+.ace-tm .ace_line .ace_invalid {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: red;
+}
+
+.ace-tm .ace_line .ace_support.ace_function {
+  color: rgb(60, 76, 114);
+}
+
+.ace-tm .ace_line .ace_support.ace_constant {
+  color: rgb(6, 150, 14);
+}
+
+.ace-tm .ace_line .ace_support.ace_type,
+.ace-tm .ace_line .ace_support.ace_class {
+  color: rgb(109, 121, 222);
+}
+
+.ace-tm .ace_line .ace_keyword.ace_operator {
+  color: rgb(104, 118, 135);
+}
+
+.ace-tm .ace_line .ace_string {
+  color: rgb(3, 106, 7);
+}
+
+.ace-tm .ace_line .ace_comment {
+  color: rgb(76, 136, 107);
+}
+
+.ace-tm .ace_line .ace_comment.ace_doc {
+  color: rgb(0, 102, 255);
+}
+
+.ace-tm .ace_line .ace_comment.ace_doc.ace_tag {
+  color: rgb(128, 159, 191);
+}
+
+.ace-tm .ace_line .ace_constant.ace_numeric {
+  color: rgb(0, 0, 205);
+}
+
+.ace-tm .ace_line .ace_variable {
+  color: rgb(49, 132, 149);
+}
+
+.ace-tm .ace_line .ace_xml_pe {
+  color: rgb(104, 104, 91);
+}
+
+.ace-tm .ace_entity.ace_name.ace_function {
+  color: #0000A2;
+}
+
+
+.ace-tm .ace_markup.ace_heading {
+  color: rgb(12, 7, 255);
+}
+
+.ace-tm .ace_markup.ace_list {
+  color:rgb(185, 6, 144);
+}
+
+.ace-tm .ace_meta.ace_tag {
+  color:rgb(0, 22, 142);
+}
+
+.ace-tm .ace_string.ace_regex {
+  color: rgb(255, 0, 0)
+}
+
+.ace-tm .ace_marker-layer .ace_selection {
+  background: rgb(181, 213, 255);
+}
+.ace-tm.multiselect .ace_selection.start {
+  box-shadow: 0 0 3px 0px white;
+  border-radius: 2px;
+}
+.ace-tm .ace_marker-layer .ace_step {
+  background: rgb(252, 255, 0);
+}
+
+.ace-tm .ace_marker-layer .ace_stack {
+  background: rgb(164, 229, 101);
+}
+
+.ace-tm .ace_marker-layer .ace_bracket {
+  margin: -1px 0 0 -1px;
+  border: 1px solid rgb(192, 192, 192);
+}
+
+.ace-tm .ace_marker-layer .ace_active_line {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.ace-tm .ace_gutter_active_line {
+    background-color : #dcdcdc;
+}
+
+.ace-tm .ace_marker-layer .ace_selected_word {
+  background: rgb(250, 250, 255);
+  border: 1px solid rgb(200, 200, 250);
+}
+
+.ace-tm .ace_indent-guide {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;
+}
+</style><script src="./Editor_files/theme-monokai.js"></script><script src="./Editor_files/mode-json.js"></script><style id="ace-monokai">.ace-monokai .ace_editor {  border: 2px solid rgb(159, 159, 159)}.ace-monokai .ace_editor.ace_focus {  border: 2px solid #327fbd}.ace-monokai .ace_gutter {  background: #2f3129;  color: #f1f1f1}.ace-monokai .ace_print_margin {  width: 1px;  background: #555651}.ace-monokai .ace_scroller {  background-color: #272822}.ace-monokai .ace_text-layer {  color: #F8F8F2}.ace-monokai .ace_cursor {  border-left: 2px solid #F8F8F0}.ace-monokai .ace_cursor.ace_overwrite {  border-left: 0px;  border-bottom: 1px solid #F8F8F0}.ace-monokai .ace_marker-layer .ace_selection {  background: #49483E}.ace-monokai.multiselect .ace_selection.start {  box-shadow: 0 0 3px 0px #272822;  border-radius: 2px}.ace-monokai .ace_marker-layer .ace_step {  background: rgb(102, 82, 0)}.ace-monokai .ace_marker-layer .ace_bracket {  margin: -1px 0 0 -1px;  border: 1px solid #49483E}.ace-monokai .ace_marker-layer .ace_active_line {  background: #202020}.ace-monokai .ace_gutter_active_line {  background-color: #272727}.ace-monokai .ace_marker-layer .ace_selected_word {  border: 1px solid #49483E}.ace-monokai .ace_invisible {  color: #49483E}.ace-monokai .ace_entity.ace_name.ace_tag,.ace-monokai .ace_keyword,.ace-monokai .ace_meta,.ace-monokai .ace_storage {  color: #F92672}.ace-monokai .ace_constant.ace_character,.ace-monokai .ace_constant.ace_language,.ace-monokai .ace_constant.ace_numeric,.ace-monokai .ace_constant.ace_other {  color: #AE81FF}.ace-monokai .ace_invalid {  color: #F8F8F0;  background-color: #F92672}.ace-monokai .ace_invalid.ace_deprecated {  color: #F8F8F0;  background-color: #AE81FF}.ace-monokai .ace_support.ace_constant,.ace-monokai .ace_support.ace_function {  color: #66D9EF}.ace-monokai .ace_fold {  background-color: #A6E22E;  border-color: #F8F8F2}.ace-monokai .ace_storage.ace_type,.ace-monokai .ace_support.ace_class,.ace-monokai .ace_support.ace_type {  font-style: italic;  color: #66D9EF}.ace-monokai .ace_entity.ace_name.ace_function,.ace-monokai .ace_entity.ace_other.ace_attribute-name,.ace-monokai .ace_variable {  color: #A6E22E}.ace-monokai .ace_variable.ace_parameter {  font-style: italic;  color: #FD971F}.ace-monokai .ace_string {  color: #E6DB74}.ace-monokai .ace_comment {  color: #75715E}.ace-monokai .ace_markup.ace_underline {  text-decoration: underline}.ace-monokai .ace_indent-guide {  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNQ11D6z7Bq1ar/ABCKBG6g04U2AAAAAElFTkSuQmCC) right repeat-y}</style>
+<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
+</head>
+<body>
+
+<div id="panel-left">
+	<div id="modules"><ul data-path="$path"><li data-path="aquarium.pmod">aquarium.pmod</li><li data-path="fish.pmod" class="active">fish.pmod</li><li data-path="sprite.pmod">sprite.pmod</li></ul></div>
+	<div id="left-separator"></div>
+</div>
+
+<div id="panel-center">
+	<div id="editor" class=" ace_editor ace-monokai ace_dark ace_focus" style="font-size: 16px;"><textarea wrap="off" style="top: 237px; height: 14px; width: 8px; left: 269px;"></textarea><div class="ace_gutter"><div class="ace_gutter_active_line" style="top: 238px; height: 14px;"></div><div class="ace_layer ace_gutter-layer ace_folding-enabled" style="margin-top: 0px; height: 334px; width: 49px;"><div class="ace_gutter-cell " style="height:14px;">1<span class="ace_fold-widget start open" style="height:14px"></span></div><div class="ace_gutter-cell " style="height:14px;">2</div><div class="ace_gutter-cell " style="height:14px;">3</div><div class="ace_gutter-cell " style="height:14px;">4<span class="ace_fold-widget start open" style="height:14px"></span></div><div class="ace_gutter-cell " style="height:14px;">5</div><div class="ace_gutter-cell " style="height:14px;">6</div><div class="ace_gutter-cell " style="height:14px;">7</div><div class="ace_gutter-cell " style="height:14px;">8</div><div class="ace_gutter-cell " style="height:14px;">9</div><div class="ace_gutter-cell " style="height:14px;">10</div><div class="ace_gutter-cell " style="height:14px;">11</div><div class="ace_gutter-cell " style="height:14px;">12<span class="ace_fold-widget start open" style="height:14px"></span></div><div class="ace_gutter-cell " style="height:14px;">13<span class="ace_fold-widget start open" style="height:14px"></span></div><div class="ace_gutter-cell " style="height:14px;">14</div><div class="ace_gutter-cell " style="height:14px;">15</div><div class="ace_gutter-cell " style="height:14px;">16</div><div class="ace_gutter-cell " style="height:14px;">17</div><div class="ace_gutter-cell " style="height:14px;">18</div><div class="ace_gutter-cell " style="height:14px;">19</div><div class="ace_gutter-cell " style="height:14px;">20</div><div class="ace_gutter-cell " style="height:14px;">21</div></div></div><div class="ace_scroller" style="height: 321px; left: 49px; right: 15px; overflow-x: scroll;"><div class="ace_content" style="margin-top: 0px; width: 392px; height: 334px;"><div class="ace_layer ace_marker-layer"><div class="ace_active_line start" style="height:14px;right:0;top:238px;left:0px;"></div><div class="ace_active_line" style="height:14px;width:0px;top:252px;left:0px;"></div><div class="ace_active_line" style="height:0px;right:0;top:252px;left:0px;"></div></div><div class="ace_print_margin_layer"><div class="ace_print_margin" style="left: 644px; visibility: visible;"></div></div><div class="ace_layer ace_text-layer" style="padding: 0px 4px;"><div class="ace_line" style="height:14px"><span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"name"</span>:&nbsp;<span class="ace_string">"Fish"</span>,</div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"desc"</span>:&nbsp;<span class="ace_string">"Fish&nbsp;aquarium&nbsp;example"</span>,</div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"vars"</span>:&nbsp;<span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"sf"</span>:&nbsp;<span class="ace_string">"#random(@smin,&nbsp;@smax)"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"wf"</span>:&nbsp;<span class="ace_string">"@fishw&nbsp;*&nbsp;@sf"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"hf"</span>:&nbsp;<span class="ace_string">"@fishh&nbsp;*&nbsp;@sf"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"xf"</span>:&nbsp;<span class="ace_string">"#random(0,&nbsp;@w&nbsp;-&nbsp;@wh)"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"yf"</span>:&nbsp;<span class="ace_string">"#random(0,&nbsp;@h&nbsp;-&nbsp;@hf)"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"url"</span>:&nbsp;<span class="ace_string">"@resources/fish#random(1,5).png"</span></div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_paren ace_rparen">}</span>,</div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"layers"</span>:&nbsp;<span class="ace_paren ace_lparen">[</span></div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_paren ace_lparen">{</span></div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"use"</span>:&nbsp;<span class="ace_string">"sprite.pmod"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"x"</span>:&nbsp;<span class="ace_string">"@xf"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"y"</span>:&nbsp;<span class="ace_string">"@yf"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"width"</span>:&nbsp;<span class="ace_string">"@wf"</span>,</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_variable">"height"</span>:&nbsp;<span class="ace_string">"@hf"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="ace_line" style="height:14px"><span class="ace_indent-guide">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_paren ace_rparen">}</span></div><div class="ace_line" style="height:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ace_paren ace_rparen">]</span></div><div class="ace_line" style="height:14px"><span class="ace_paren ace_rparen">}</span></div></div><div class="ace_layer ace_marker-layer"></div><div class="ace_layer ace_cursor-layer" style=""><div class="ace_cursor" style="left: 220px; top: 238px; width: 8px; height: 14px;"></div></div></div></div><div style="height: auto; width: auto; top: -100px; left: -100px; visibility: hidden; position: fixed; overflow: visible; white-space: nowrap;">X</div><div class="ace_sb" style="width: 20px; height: 306px;"><div style="height: 378px;"></div></div><div class="ace_gutter_tooltip" style="max-width: 500px; display: none;"></div></div>
+	<div id="editor-separator"></div>
+	<div id="diagram"><div style="position: relative; display: inline-block; width: 342px; height: 320px;" class="kineticjs-content"><canvas width="342" height="320" style="position: absolute;"></canvas><canvas width="342" height="320" style="position: absolute;"></canvas><canvas width="342" height="320" style="position: absolute;"></canvas></div></div>
+</div>
+
+<div id="panel-right">
+	<div id="right-separator"></div>
+	<div id="preview"><canvas style="width: 288.90000000000003px; height: 288.90000000000003px; margin-top: 16.049999999999983px; margin-left: 53.54999999999998px;" width="288" height="288"></canvas></div>
+	<div id="preview-separator"></div>
+	<div id="console"><textarea id="console-text" readonly="">#Starting renderer...
+#Render: Aquarium
+#  Found repeat layer [n from 1 to 30]
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+#Render: Fish
+#Render: Sprite
+</textarea></div>
+</div>
+	
+<script src="./Editor_files/jquery-1.8.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/kinetic.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Timer.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/class.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/gamecore.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/jhashtable.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/pooled.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/hashlist.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="./Editor_files/App.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Project.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Parser.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Iterator.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/ModuleList.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Diagram.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Links.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/Node.js" type="text/javascript" charset="utf-8"></script>
+<script src="./Editor_files/CanvasRenderer.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+	$(function() {
+		/*$.ajax({
+			url : "files/facade.pmod",
+			dataType: "text",
+			success : function (data) {
+				editor.getSession().setValue(data);
+			}
+		});*/
+
+		var app = new pgli.App("diagram", "modules", "editor", "preview");
+		//app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
+		window.app = app;
+  }); 
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,39 @@
+.gui-container
+  classes = [ 'profile-card' ]
+  if editable
+    - classes.push('editable');
+  if purchased
+    - classes.push('purchased');
+  div(class="#{classes.join(' ')}")
+    .badges
+      .label Status
+      each badge in badges
+        a.route(href=badge.href)
+          img(src=badge.img_src, title=badge.img_title)
+          //- object(data=badge.img_src)
+    span &nbsp;
+    .picture
+      if loaded && editable
+        if purchased
+          .img-overlay Click to choose your avatar
+        else
+          //- .img-overlay Buy the 
+          //-   a.route(href="/ignition") Ignition Pack
+          //-   |  to choose your avatar!
+    span &nbsp;
+    h1
+      div #{title}&nbsp;
+    span &nbsp;
+    .user-id= id
+    span &nbsp;
+    .user-name= name
+    span &nbsp;
+    .user-name-error
+    span &nbsp;
+    .issued Issued: 
+      span.issuedate= issueDate
+    span &nbsp;
+    span.tracks
+      a.route(href="/user/#{id}/tracks") Tracks
+      | , 
+      a.route(href="/user/#{id}/favorites") Favorites

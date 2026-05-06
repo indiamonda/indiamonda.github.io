@@ -1,0 +1,43 @@
+.gui-container
+  .text-panel
+    .mayhem-promo-image
+
+    h2
+      span.highlight Mayhem
+      |  Monster Truck
+
+    ul
+      li Powerful and fast <b>monster truck</b>
+      li Built for <b>off-road</b> with huge wheels and soft suspension
+      //- li Includes an upgrade to <b>Rally License</b> so you can choose your avatar
+      //- li <b>Support</b> the development of Trigger Rally
+
+    if user
+      if purchased
+        p.purchased-thanks Switch between cars using the <b>Cars</b> menu.
+
+      .checkout-box
+        table
+          tr
+            td: img.pack(src="/images/packs/mayhem.png")
+            td
+              h3 Mayhem Monster Truck
+              if purchased
+                .purchased Purchased.
+                  br
+                  | Thank you!
+              else
+                span.ca-credit 400
+                span &nbsp;
+                a.buybutton(href="/checkout?method=credits&pack=mayhem")
+                  span BUY
+    else
+      p.purchased-thanks
+        a.login(href="/login") Log in required
+
+    p Need help? Please email <b>sup<span class="hidden">.remove.</span>port@codeartemis.com</b>
+
+    p Use is subject to the 
+      a.route(href="/license") License and Terms of Use
+      | .
+    .clear-both

@@ -1,0 +1,9 @@
+0,CombatZoneResize,261,266,386,391
+0,HeartTeleport,320,324,,
+0,HeartMode,0,,,
+0,SansHead,ClosedEyes,,,
+0,SansText,...,,,
+0,SansHead,Wink,,,
+0,SansTorso,Shrug,,,
+0,BoneStab,1,150,0,60
+70,EndAttack,,,,

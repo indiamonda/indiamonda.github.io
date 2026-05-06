@@ -1,0 +1,905 @@
+{
+  "name": "Capture",
+  "settings": {
+    "physics": {
+      "gravity": [
+        0,
+        -9.8,
+        0
+      ]
+    },
+    "render": {
+      "fog_end": 1000,
+      "fog_start": 1,
+      "global_ambient": [
+        1,
+        1,
+        1
+      ],
+      "fog_color": [
+        0,
+        0,
+        0
+      ],
+      "fog": "none",
+      "fog_density": 0.01,
+      "gamma_correction": 1,
+      "tonemapping": 0,
+      "exposure": 1,
+      "skybox": null,
+      "skyboxIntensity": 1,
+      "skyboxMip": 0,
+      "lightmapSizeMultiplier": 16,
+      "lightmapMaxResolution": 2048,
+      "lightmapMode": 1
+    }
+  },
+  "entities": {
+    "679a15cb-3539-42fd-bcab-10bdd0e65e3c": {
+      "name": "Root",
+      "parent": null,
+      "resource_id": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "tags": [],
+      "enabled": true,
+      "components": {
+        "script": {
+          "enabled": true,
+          "order": [
+            "thumbnail"
+          ],
+          "scripts": {
+            "thumbnail": {
+              "enabled": true,
+              "attributes": {
+                "model": "1db0988d-5572-4d84-8ff5-997032f7147c",
+                "textures": [
+                  35569112,
+                  35620993
+                ]
+              }
+            }
+          }
+        }
+      },
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "children": [
+        "43a8d509-800f-4cba-8e60-4fcbd9ce6320",
+        "ebd53a73-7c9a-4c69-b67e-680ab4f103cd",
+        "f24d0f6e-23ed-4ec8-89f4-89bb25955e70",
+        "b81c4cde-96ff-47ce-ac11-a4b51e1821ad",
+        "17ee2779-81fa-4328-9e81-4f084bee821d",
+        "364d9cda-fc10-4ab3-b8e1-779f9c32bd14",
+        "1e835930-6e99-4076-a911-b68688d9766a",
+        "9d969d10-fed9-4692-828b-9e044775f19e",
+        "1db0988d-5572-4d84-8ff5-997032f7147c",
+        "d441fd4e-83c2-488c-978e-6046f0d18189",
+        "76a043e2-4dec-42e0-9192-5067d44c7496",
+        "d1a3c537-303e-46a5-a454-b8550778de44",
+        "ecc5079e-1ee6-4a11-8a0d-76afb9438732",
+        "9fb7f5f9-02d6-4423-90ef-76597f332867",
+        "8b305c62-972d-4a5f-b2ad-cdf76b495ab1"
+      ]
+    },
+    "43a8d509-800f-4cba-8e60-4fcbd9ce6320": {
+      "name": "Camera",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "resource_id": "43a8d509-800f-4cba-8e60-4fcbd9ce6320",
+      "tags": [],
+      "enabled": true,
+      "components": {
+        "camera": {
+          "fov": 45,
+          "projection": 1,
+          "clearColor": [
+            0.11764705882352941,
+            0.11764705882352941,
+            0.11764705882352941,
+            0
+          ],
+          "clearColorBuffer": true,
+          "clearDepthBuffer": true,
+          "frustumCulling": true,
+          "enabled": true,
+          "orthoHeight": 6.9,
+          "farClip": 1000,
+          "nearClip": 0.1,
+          "priority": 0,
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "layers": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        0,
+        0.955295205116272,
+        16.987490797683822
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "children": []
+    },
+    "ebd53a73-7c9a-4c69-b67e-680ab4f103cd": {
+      "name": "Light",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "resource_id": "ebd53a73-7c9a-4c69-b67e-680ab4f103cd",
+      "tags": [],
+      "enabled": true,
+      "components": {
+        "light": {
+          "enabled": true,
+          "bake": false,
+          "bakeDir": true,
+          "affectDynamic": true,
+          "affectLightmapped": false,
+          "isStatic": false,
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "intensity": 2.07,
+          "type": "directional",
+          "shadowDistance": 16,
+          "range": 8,
+          "innerConeAngle": 40,
+          "outerConeAngle": 45,
+          "falloffMode": 0,
+          "castShadows": true,
+          "shadowUpdateMode": 2,
+          "shadowType": 0,
+          "shadowResolution": 1024,
+          "shadowBias": 0.2,
+          "normalOffsetBias": 0.05,
+          "vsmBlurMode": 1,
+          "vsmBlurSize": 11,
+          "vsmBias": 0.01,
+          "cookieAsset": null,
+          "cookieIntensity": 1,
+          "cookieFalloff": true,
+          "cookieChannel": "rgb",
+          "cookieAngle": 0,
+          "cookieScale": [
+            1,
+            1
+          ],
+          "cookieOffset": [
+            0,
+            0
+          ],
+          "layers": [
+            0
+          ]
+        }
+      },
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        3.6201567862151474,
+        1.792115569114685,
+        6.270376682281494
+      ],
+      "rotation": [
+        20,
+        0,
+        0
+      ],
+      "children": []
+    },
+    "f24d0f6e-23ed-4ec8-89f4-89bb25955e70": {
+      "name": "Shin-Thumbnail-1",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "f24d0f6e-23ed-4ec8-89f4-89bb25955e70",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [
+        "6c7503a4-190e-43b4-9740-5b7d70e75201"
+      ],
+      "position": [
+        -0.7794497013092041,
+        -5.211650171348548,
+        0.806024968624115
+      ],
+      "rotation": [
+        0,
+        29.21133002628096,
+        0
+      ],
+      "scale": [
+        7.045162041006092,
+        7.045162041006092,
+        7.045162041006092
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 30953267,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        },
+        "animation": {
+          "enabled": true,
+          "assets": [
+            31838516
+          ],
+          "speed": 0.1,
+          "loop": true,
+          "activate": true
+        }
+      }
+    },
+    "b81c4cde-96ff-47ce-ac11-a4b51e1821ad": {
+      "name": "Hammer",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "b81c4cde-96ff-47ce-ac11-a4b51e1821ad",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        1.4147075414657593,
+        -4.350233310424443,
+        -4.937611103057861
+      ],
+      "rotation": [
+        3.1543733753724483,
+        15.511875140171071,
+        68.94483572408602
+      ],
+      "scale": [
+        5.693353512169148,
+        5.693353512169148,
+        5.693353512169148
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 30283157,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "17ee2779-81fa-4328-9e81-4f084bee821d": {
+      "name": "pillar_round_floor_red",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "17ee2779-81fa-4328-9e81-4f084bee821d",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0,
+        0.1980632905978319,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 30015910,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "a77b23a6-2dce-43b2-9390-59f5ebe19d68": {
+      "name": "Weapon-Scar",
+      "tags": [],
+      "enabled": true,
+      "resource_id": "a77b23a6-2dce-43b2-9390-59f5ebe19d68",
+      "parent": "6c7503a4-190e-43b4-9740-5b7d70e75201",
+      "children": [],
+      "position": [
+        -0.29146956799924784,
+        -0.08748467249583658,
+        0.02406063126957932
+      ],
+      "rotation": [
+        115.31773808423405,
+        -9.198222441939285,
+        178.68647770385496
+      ],
+      "scale": [
+        0.16184227231084913,
+        0.16184227231084913,
+        0.16184227231084913
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 29307548,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "6c7503a4-190e-43b4-9740-5b7d70e75201": {
+      "name": "Attachment",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "6c7503a4-190e-43b4-9740-5b7d70e75201",
+      "parent": "f24d0f6e-23ed-4ec8-89f4-89bb25955e70",
+      "children": [
+        "a77b23a6-2dce-43b2-9390-59f5ebe19d68"
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {}
+    },
+    "364d9cda-fc10-4ab3-b8e1-779f9c32bd14": {
+      "name": "Weapon-Scar",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "364d9cda-fc10-4ab3-b8e1-779f9c32bd14",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        -0.26746445079816616,
+        0.659953236579895,
+        0
+      ],
+      "rotation": [
+        -167.13582757987953,
+        -25.890136842133106,
+        158.82719551740692
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 29307548,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "76a043e2-4dec-42e0-9192-5067d44c7496": {
+      "name": "wall_lower_straight_double",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "76a043e2-4dec-42e0-9192-5067d44c7496",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0,
+        6.46116113955258,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 33782885,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "d1a3c537-303e-46a5-a454-b8550778de44": {
+      "name": "doorway_entrance_dark_walkable",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "d1a3c537-303e-46a5-a454-b8550778de44",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0,
+        5.5213048267949585,
+        0
+      ],
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 33782885,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "ecc5079e-1ee6-4a11-8a0d-76afb9438732": {
+      "name": "doorway_entrance_dark_archway",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "ecc5079e-1ee6-4a11-8a0d-76afb9438732",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0,
+        6.0913216604533105,
+        0
+      ],
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 33787669,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "9fb7f5f9-02d6-4423-90ef-76597f332867": {
+      "name": "pillar_wall_lower",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "9fb7f5f9-02d6-4423-90ef-76597f332867",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0,
+        5.703571097251096,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 33782843,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "8b305c62-972d-4a5f-b2ad-cdf76b495ab1": {
+      "name": "pillar",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "8b305c62-972d-4a5f-b2ad-cdf76b495ab1",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0.05769921466708183,
+        5.750828577644856,
+        4994.126890922569
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 33783527,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "9d969d10-fed9-4692-828b-9e044775f19e": {
+      "name": "Weapon-Shotgun",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "9d969d10-fed9-4692-828b-9e044775f19e",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        -0.13568231698726763,
+        1.2698631286621094,
+        0
+      ],
+      "rotation": [
+        -167.13582757987953,
+        -25.890136842133106,
+        158.82719551740692
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 29973366,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "0c06cde5-bb31-467c-a021-0912e526e6fd": {
+      "name": "Weapon-sniper",
+      "tags": [],
+      "enabled": true,
+      "resource_id": "0c06cde5-bb31-467c-a021-0912e526e6fd",
+      "parent": "d441fd4e-83c2-488c-978e-6046f0d18189",
+      "children": [],
+      "position": [
+        0,
+        0,
+        3.7024638068191713
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4553618615318865,
+        0.4553618615318865,
+        0.4553618615318865
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 31055964,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "d441fd4e-83c2-488c-978e-6046f0d18189": {
+      "name": "Sniper",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "d441fd4e-83c2-488c-978e-6046f0d18189",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [
+        "0c06cde5-bb31-467c-a021-0912e526e6fd"
+      ],
+      "position": [
+        0,
+        -0.3727515072691121,
+        0
+      ],
+      "rotation": [
+        -21.499619136956493,
+        -53.529250216271734,
+        0
+      ],
+      "scale": [
+        1.204074594897172,
+        1.204074594897172,
+        1.204074594897172
+      ],
+      "components": {}
+    },
+    "1db0988d-5572-4d84-8ff5-997032f7147c": {
+      "name": "Weapon-Tec-9",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "1db0988d-5572-4d84-8ff5-997032f7147c",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        0.9360249765726449,
+        0.9499005675315857,
+        0
+      ],
+      "rotation": [
+        -167.13582757987953,
+        -25.890136842133106,
+        158.82719551740692
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 31196825,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    },
+    "1e835930-6e99-4076-a911-b68688d9766a": {
+      "name": "Charm",
+      "tags": [],
+      "enabled": false,
+      "resource_id": "1e835930-6e99-4076-a911-b68688d9766a",
+      "parent": "679a15cb-3539-42fd-bcab-10bdd0e65e3c",
+      "children": [],
+      "position": [
+        -0.946881413688057,
+        2.657414674758911,
+        0
+      ],
+      "rotation": [
+        0.4125261784409794,
+        -8.241077158440325,
+        19.166933244171037
+      ],
+      "scale": [
+        2.2454129720723266,
+        2.2454129720723266,
+        2.2454129720723266
+      ],
+      "components": {
+        "model": {
+          "enabled": true,
+          "type": "asset",
+          "asset": 34621985,
+          "materialAsset": null,
+          "castShadows": true,
+          "castShadowsLightmap": true,
+          "receiveShadows": true,
+          "lightmapped": false,
+          "lightmapSizeMultiplier": 1,
+          "castShadowsLightMap": true,
+          "lightMapped": false,
+          "lightMapSizeMultiplier": 1,
+          "isStatic": false,
+          "layers": [
+            0
+          ],
+          "batchGroupId": null
+        }
+      }
+    }
+  },
+  "created": "2020-04-29T11:43:55.464Z",
+  "id": 913313
+}

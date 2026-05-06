@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Games Collection</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif']
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        accent: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .section-card {
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        .metric-card {
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(239,246,255,0.95) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+        }
+        .game-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            background: linear-gradient(180deg, rgba(249,250,251,0.92) 0%, rgba(255,255,255,0.96) 100%);
+        }
+        .game-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+        .copy-btn {
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background-color: #1e40af;
+        }
+        .copy-btn.copied {
+            background-color: #10b981;
+        }
+        .audit-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border-radius: 9999px;
+            border: 1px solid #dbeafe;
+            background: #eff6ff;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.875rem;
+            color: #1e3a8a;
+        }
+        .surface-grid {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 26px 26px;
+            background-position: center center;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-900 min-h-screen" data-disable-embed-protection="true">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(96,165,250,0.28),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(245,158,11,0.18),_transparent_22%),linear-gradient(180deg,_#f8fbff_0%,_#eaf2ff_36%,_#f8fafc_100%)]"></div>
+        <div class="surface-grid absolute inset-0 opacity-50"></div>
+        <div class="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-300/20 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+        <!-- Header -->
+        <header class="section-card rounded-[28px] p-6 md:p-10 mb-8 md:mb-10 overflow-hidden relative">
+            <div class="absolute right-0 top-0 h-48 w-48 translate-x-10 -translate-y-10 rounded-full bg-blue-200/40 blur-3xl"></div>
+            <div class="absolute left-0 bottom-0 h-40 w-40 -translate-x-8 translate-y-8 rounded-full bg-amber-200/35 blur-3xl"></div>
+            <div class="relative">
+                <div class="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-800 shadow-sm">
+                    Embed Control Dashboard
+                </div>
+                <h1 class="mt-5 text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 max-w-4xl">
+                    Manage game embeds, public play links, and domain overrides in one place.
+                </h1>
+                <p class="mt-4 text-base md:text-xl text-slate-600 max-w-3xl leading-8">
+                    This static dashboard resolves each game into the exact embed URLs, allowed domains, and public play destinations your Cloudflare Pages setup should expose.
+                </p>
+                <div class="mt-8 grid gap-3 md:grid-cols-3">
+                    <div class="metric-card rounded-2xl p-4">
+                        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Games</div>
+                        <div id="hero-total-games" class="mt-2 text-3xl font-extrabold text-slate-900">0</div>
+                    </div>
+                    <div class="metric-card rounded-2xl p-4">
+                        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Global Embed Hosts</div>
+                        <div id="hero-global-hosts" class="mt-2 text-3xl font-extrabold text-slate-900">0</div>
+                    </div>
+                    <div class="metric-card rounded-2xl p-4">
+                        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Game Overrides</div>
+                        <div id="hero-override-games" class="mt-2 text-3xl font-extrabold text-slate-900">0</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Configuration Info -->
+        <div class="section-card rounded-[24px] p-6 md:p-7 mb-8">
+            <h2 class="text-2xl font-semibold text-slate-900 mb-2">Configuration</h2>
+            <p class="text-sm text-slate-500 mb-5">Global defaults applied before any game-specific override is considered.</p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl border border-slate-200 bg-white/80 p-4">
+                    <h3 class="font-medium text-slate-700 mb-3">Global Embed Hosts</h3>
+                    <div id="base-urls" class="space-y-1"></div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white/80 p-4">
+                    <h3 class="font-medium text-slate-700 mb-3">Global Allowed Embed Domains</h3>
+                    <div id="allowed-domains" class="space-y-1"></div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white/80 p-4">
+                    <h3 class="font-medium text-slate-700 mb-3">Global Play URLs</h3>
+                    <div id="play-urls" class="space-y-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card rounded-[24px] p-6 md:p-7 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-2xl font-semibold text-slate-900">Game-Specific Embed Permissions</h2>
+                    <p class="text-sm text-slate-500 mt-1">Quick audit of games that allow extra embed domains beyond the global defaults.</p>
+                </div>
+                <p id="embed-audit-count" class="text-sm text-slate-500"></p>
+            </div>
+            <div id="embed-audit" class="flex flex-wrap gap-2">
+                <!-- Game-specific embed permissions will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Games List -->
+        <div class="section-card rounded-[24px] p-6 md:p-7">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="text-2xl font-semibold text-slate-900">Available Games</h2>
+                    <p id="games-count" class="text-sm text-slate-500 mt-1"></p>
+                </div>
+                <div class="w-full lg:w-[360px]">
+                    <label for="game-search" class="sr-only">Search games</label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">Search</span>
+                        <input
+                            id="game-search"
+                            type="search"
+                            placeholder="Search by game, domain, or URL"
+                            class="w-full rounded-2xl border border-slate-300 bg-white/90 px-20 py-4 text-sm text-slate-800 shadow-sm focus:border-primary focus:outline-none focus:ring-4 focus:ring-blue-100"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div id="games-list" class="grid gap-4">
+                <!-- Games will be populated by JavaScript -->
+            </div>
+            <div id="no-results" class="hidden rounded-2xl border border-dashed border-slate-300 bg-slate-50/90 px-6 py-10 text-center mt-4">
+                <div class="text-lg font-semibold text-slate-800">No games match this search.</div>
+                <p class="mt-2 text-sm text-slate-500">Try a game name, domain, or embed URL.</p>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="section-card rounded-[24px] p-6 md:p-7 mt-8 border-l-4 border-amber-400">
+            <h3 class="text-lg font-semibold text-amber-900 mb-2">How to Use</h3>
+            <ul class="text-amber-800 space-y-1.5">
+                <li>• Copy an embed URL from the game card and use it in your iframe</li>
+                <li>• Allowed embed domains are resolved per game from global and game-specific settings</li>
+                <li>• Play URLs are public destinations shown in the protection modal after the delay</li>
+                <li>• Update <code class="bg-amber-100 px-1.5 py-0.5 rounded">js/app.js</code> to manage global defaults and per-game overrides</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

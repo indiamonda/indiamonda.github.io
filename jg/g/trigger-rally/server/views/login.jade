@@ -1,0 +1,22 @@
+extends layout
+
+block body
+  include partial/header
+
+  .content
+
+    - if (user)
+      p You are already logged in.
+      a(href="/")
+        .button Home
+      a(href="/logout")
+        .button Log out
+    - else
+
+      include partial/thirdparty
+
+    .section Terms of use
+
+    p Please read the 
+      a.route(href="/license") License, Terms of Use and Privacy Policy
+      | .

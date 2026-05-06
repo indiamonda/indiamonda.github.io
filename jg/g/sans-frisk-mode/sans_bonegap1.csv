@@ -1,0 +1,22 @@
+0,CombatZoneResize,133,251,508,391,TLResume
+0,HeartTeleport,320,376,,,
+0,HeartMode,1,,,,
+0,TLPause,,,,,
+0,SansTorso,Shrug,,,,
+0,SansHead,Wink,,,,
+0,SansText,what?you think I'm just            gonna stand there and           take it?,,,,
+0,SansHead,Default,,,,
+0,SansTorso,Default,,,,
+0,SET,L,18,,,
+0,SET,A,0,,,
+0,ADD,A,$A,45,,
+0,SIN,F,$A,,,
+0,MUL,F,0.06,$F,,
+0,ADD,T,0.495,$F,,
+0,SUB,L,$L,1,,
+$T,BoneV,128,256,105,0,230
+0,BoneV,128,376,10,0,230
+0,BoneV,508,256,105,2,230
+0,BoneV,508,376,10,2,230
+0,JMPNZ,12,$L,,,
+0.5,EndAttack,,,,,

@@ -1,0 +1,54 @@
+.gui-container
+  //- unless loggedIn
+  //-   a.twitter-promo.outgoing(href="https://twitter.com/jareiko", target="_blank")
+  //-     img(src="/images/i-made-this.svg")
+  //- a.promo-ludo(href="https://ludo.io/triggerrally", target="_blank")
+    img(src="/images/ludo.svg")
+  //- a.promo-ludo(href="http://blog.triggerrally.com/post/87782409138/new-trigger-rally-development-ideas", target="_blank")
+    | New Trigger Rally development ideas
+  //- a.promo-discount
+    img(src="/images/70pc-off.svg")
+  //- a(class="coinbase-button",
+    data-code="d643757174823d79851bb34cd8a489e6",
+    data-button-style="donation_large",
+    href="https://coinbase.com/checkouts/d643757174823d79851bb34cd8a489e6") Donate Bitcoins
+  //- form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top")
+  //-   input(type="hidden", name="cmd", value="_s-xclick")
+  //-   input(type="hidden", name="hosted_button_id", value="WT7DH7FMW7DQ6")
+  //-   input.donate-button(type="image", src="/images/btn_donateCC_LG.gif", border="0", name="submit", alt="PayPal - The safer, easier way to pay online!")
+    //- img(alt="", border="0", src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif", width="1", height="1")
+  a.promo-wikia.outgoing(href="http://trigger-rally.wikia.com/", target="_blank")
+    // img(src="/images/wikia.svg")
+    //- .new-marker New!
+  menu
+    //- div Code Artemis presents
+    //- .promo-donate Donations welcome at BTC 1ATrJJfJjfxhD5VbtT3yCrYCMBkWPKCPsm :)
+    h1 Trigger Rally
+    menu.home-left
+      li
+        a.btn.route.highlight.drivebutton(href="/") &gt; Drive &lt;
+      li.ignition-promo.hidden
+        a.btn.route(href="ignition") Icarus
+      //-     .new-marker New!
+      li.mayhem-promo.hidden
+        a.btn.route(href="mayhem") Mayhem
+      //-     .new-marker New!
+      //- li
+      //-   a.route(href="/track/Alpina/drive") Alpina
+      //- li
+      //-   a.route(href="/track/KaXCxxFv/drive") Engelberg Descent
+      unless loggedIn
+        li
+          a.btn.login(href="login") Log in
+    menu.home-right
+      //- li
+      //-   a.btn.route(href="/tracklist/featured") Featured tracks
+      li
+        a.btn.route(href="tracklist/favhot") Most favorited
+          //- .new-marker New!
+      li
+        a.btn.route(href="tracklist/recent") Published tracks
+      li
+        a.btn.route(href="tracklist/all") All tracks
+      li
+        a.btn.route(href="track/v3-base-1/edit") Create a track

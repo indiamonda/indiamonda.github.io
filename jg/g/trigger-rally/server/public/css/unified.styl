@@ -1,0 +1,520 @@
+
+@import common
+@import drive
+@import editor
+@import profile
+@import purchase
+@import track
+
+body
+  background #888
+  -moz-user-select none
+  -webkit-user-select none
+  user-select none
+  cursor default
+
+  // Disable scrolling
+  overflow hidden
+  position fixed
+  width 100%
+
+// WTF?
+h2
+  display inline
+
+input[type="range"]
+  width 60%
+
+// input:checked + label
+//   color #e77
+
+#statusbar,
+#editor-inspector,
+#editor-helpbox,
+.close-tab
+  background #fda
+  position absolute
+
+#editor-inspector,
+#editor-helpbox,
+.close-tab
+  box-shadow 0 0 10px black
+
+#statusbar
+  top 0
+  width 100%
+  z-index 4
+  font-weight bold
+
+#statusbar > table
+  border-spacing 0
+  width 100%
+
+#statusbar > table td:nth-child(1)
+  width 12em
+// #statusbar > table td:nth-child(2)
+//   width 30em
+// #statusbar > table td:nth-child(3)
+//   width 25%
+// #statusbar > table td:nth-child(4)
+//   width 30%
+
+// #statusbar > table td:nth-child(3)
+//   text-align center
+
+#statusbar > table td:last-child
+  text-align right
+
+#statusbar .status
+  font-weight initial
+
+#statusbar > table td.navigation > *
+  margin 0 0.5em
+.dropdownmenu
+  position relative
+.dropdownmenu > menu
+  font-weight initial
+  position absolute
+  left -1em
+  top 100%
+  width 20em
+  background rgba(255, 221, 170, 0.95)
+  margin 0
+  padding 0.8em 0 0.4em
+  display none
+  border-radius 0 0 0.4em 0.4em
+.dropdownmenu:hover > menu
+  display inline-block
+  // line-height 1.3em
+.dropdownmenu > menu > *
+  padding 0.1em 1em
+// .dropdownmenu > menu > li
+//   border-radius 0.4em
+// .dropdownmenu > menu > li:hover
+//   background #fec
+.dropdownmenu > menu > hr
+  padding 0
+  margin 0.4em 1em
+.dropdownmenu > menu label
+  border-radius 0.4em
+.dropdownmenu > menu label:hover
+  background #fec
+.dropdownmenu > menu .label
+  font-style italic
+  opacity 0.5
+.dropdownmenu > menu > ul
+  padding-left 2.5em
+
+// Music player
+audio
+  width 18em
+.callout
+  background rgba(255,255,255,0.5)
+  border-radius 0.4em
+  padding 0.5em
+.musiccontrol
+  background-color rgba(255,255,255,0.5)
+  background-position center
+  background-size cover
+  border 1px solid black
+  border-radius 0.3em
+  cursor pointer
+  display inline-block
+  width 2em
+  height 1.3em
+  margin 0 0.2em
+  vertical-align -20%
+.musiccontrol:hover
+  background-color white
+.musiccontrol.play
+  background-image url("/icons/appbar.control.play.png")
+.musiccontrol.pause
+  background-image url("/icons/appbar.control.pause.png")
+.musiccontrol.next
+  background-image url("/icons/appbar.control.fastforward.png")
+
+#unified-child
+  position relative
+  height 0  // So that it doesn't get in the way of mouse events.
+
+.modal
+  z-index 2
+
+.modal-blocker
+  position absolute
+  width 100%
+  height 100%
+  z-index -1
+
+.gui-container
+  position absolute
+  width 32em
+  height 18em
+  overflow auto
+  left 50%
+  margin-left -16em
+
+.gui-container h1
+  margin 0.2em 0
+  text-shadow 0 1px 0 white, 0 0 0.2em white, 0 0 0.4em white
+
+.text-panel
+  user-select auto
+  -moz-user-select auto
+  -webkit-user-select auto
+  user-select auto
+  font-size 0.6em
+  background white
+  opacity 0.95
+  padding 1em
+  cursor auto
+
+img.github
+  float right
+  width 8em
+  height 8em
+  margin-top -1em
+  margin-right -1em
+  // position absolute
+  // top 0
+  // right 0
+  // border 0
+
+.gui-container menu
+  position absolute
+  width 100%
+  // height 100%
+  // background rgba(0,0,0,0.6)
+  z-index 2
+  font-size 1em
+  margin auto
+  padding 0.6em 0
+  text-align center
+
+.gui-container menu.home-left
+  width 45%
+  left 0
+
+.gui-container menu.home-right
+  width 45%
+  right 0
+
+.gui-container menu a.btn
+  display block
+  margin 0.3em auto
+  padding 0.3em
+  width 70%
+  color black
+  text-shadow 0 0 0.3em #6f1
+  background white //rgba(255, 255, 255, 0.8)
+  border-radius 0.5em
+  opacity 0.7
+  // transform scale(1)
+  // -moz-transform scale(1)
+  // -webkit-transform scale(1)
+  // transition -webkit-transform 0.1s
+  // transition 0.1s
+  position relative
+
+.gui-container menu a.btn:hover
+  opacity 1
+  // transform scale(1.05)
+  // -moz-transform scale(1.05)
+  // -webkit-transform scale(1.05)
+
+// .gui-container menu a.btn:active
+//   transform scale(0.95)
+//   -moz-transform scale(0.95)
+//   -webkit-transform scale(0.95)
+
+menu > li
+  list-style none
+  display block
+
+.gui-container .new-marker
+.gui-container .label-marker
+  background red
+  border-radius 0.4em
+  color white
+  font-size 0.8em
+  left 0
+  padding 0 0.2em
+  position absolute
+  top 0
+  left -1em
+  transform rotate(-20deg)
+  -moz-transform rotate(-20deg)
+  -webkit-transform rotate(-20deg)
+  transition 0.1s
+
+.gui-container .label-marker
+  background #f83
+
+.gui-container a:hover .new-marker
+  transform rotate(-10deg)
+  -moz-transform rotate(-10deg)
+  -webkit-transform rotate(-10deg)
+
+#view3d
+  background gray
+  position absolute
+  width 100%
+
+.highlight
+  font-weight bold
+  color #f33
+
+#track-list
+  max-height 7.5em
+  overflow auto
+
+#track-list .track.selected
+  background #fec
+
+#webgl-warning img.browserlogo
+  width 5em
+  height 5em
+
+table.credits
+  border-spacing 0
+table.credits td
+  padding-bottom 0.7em
+  vertical-align top
+table.credits td:first-child
+  padding-right 3em
+
+.checkout-box
+.purchased-thanks
+  display inline-block
+  background #dfd
+  border-radius 0.5em
+  padding 1em
+  border 1px solid black
+
+.checkout-box
+  margin 1em 3em
+  background-color #f0f8ff
+  // background-color:#ffffff;
+  // background-image: -moz-radial-gradient(66% 65%, circle cover, #ffffff 30%, rgb(168, 197, 224));
+  // background-image: -webkit-radial-gradient(66% 65%, circle cover, #ffffff 30%, rgb(168, 197, 224));
+  // background-image: radial-gradient(66% 65%, circle cover, #ffffff 30%, rgb(168, 197, 224))
+
+.checkout-box table
+  // text-align center
+  border-spacing 0
+  // padding-right 0.6em
+
+.checkout-box td
+  vertical-align top
+
+.checkout-box .checkout-buttons
+  text-align center
+
+.checkout-box img.pack
+  width 4em
+  height 4em
+
+.checkout-box .price
+  display inline-block
+  // padding-bottom 0.8em
+  // padding-right 1em
+  padding 0.8em 1em
+
+// .checkout-box .purchased
+//   text-align left
+
+.checkout-box input[type="radio"]
+  font-size inherit
+  width 0.8em
+  height 0.8em
+
+.checkout-box input[type="text"].customprice
+  font-size inherit
+  width 8em
+  margin 0 0.5em
+  opacity 1
+  transition opacity 0.5s
+
+.checkout-box .zeroalpha
+  opacity 0 !important
+
+.checkout-box .message
+  background white
+  font-size 0.8em
+  border 1px solid rgba(0,0,0,0.4)
+  border-radius 0.5em
+  margin 0.2em
+  padding 0.2em
+  width 22em
+  transition opacity 0.5s
+
+a.checkout img
+input.checkout
+  // margin-left 1em
+  // margin 1em 1em -0.8em 1em
+  // margin-bottom -0.8em
+  font-size inherit
+  width 145em * 0.05
+  //height 42em * 0.05
+  height 24em * 0.05
+
+.ignition-promo-image
+  display inline-block
+  float right
+  width (1680/80)em
+  height (1066/80)em
+  background-image url("/images/ignition-promo.jpg")
+  background-size cover
+  border-radius 0.5em
+.mayhem-promo-image
+  display inline-block
+  float right
+  width (1680/80)em
+  height (1066/80)em
+  background-image url("/images/promo-mayhem.jpg")
+  background-size cover
+  border-radius 0.5em
+.packa-promo-image
+  display inline-block
+  float right
+  margin-left 0.5em
+  width (1680/80)em
+  height (1066/80)em
+  background-image url("/images/promo-mayhem.jpg")
+  background-size cover
+  border-radius 0.5em
+
+.smaller
+  font-size 0.6em
+
+#status-message
+  color #000
+  position absolute
+  top 2em
+  left 0
+  right 0
+  font-size 1.5em
+  font-weight bold
+  text-shadow 0 0 0.1em #fff, 0 0 0.4em #fff
+  text-align center
+  z-index 2
+  opacity 1
+
+#status-message.fadeout
+  transition all 1.5s ease-in 0.5s
+  transform translateY(-0.7em)
+  -moz-transition all 1.5s ease-in 0.5s
+  -moz-transform translateY(-0.7em)
+  -webkit-transition all 1.5s ease-in 0.5s
+  -webkit-transform translateY(-0.7em)
+  opacity 0
+
+.twitter-promo
+  bottom 0
+  left 0.5em
+  position absolute
+
+.twitter-promo img
+  width 5em
+
+.promo-wikia
+  bottom 0.5em
+  right 0.5em
+  position absolute
+
+.promo-wikia img
+  width 5em
+
+.promo-discount
+  position absolute
+  left 4em
+  top 0.3em
+  opacity 0.6
+  z-index 3
+
+.promo-discount img
+  width 4em
+
+.promo-ludo
+  position absolute
+  bottom 0.5em
+  left 0.5em
+
+.promo-ludo img
+  width 5em
+
+// For "new development ideas" tumblr link
+.promo-ludo
+  bottom 1em
+  left 1em
+  background white
+  border-radius 0.2em
+  padding 0.5em 1em
+  font-size 0.8em
+
+.donate-button
+  font-size inherit
+  bottom 0.5em
+  right 6.5em
+  position absolute
+  width 5em
+
+.dialog
+  background white
+  box-shadow inset 0 0 4em rgba(0,0,0,0.3), 0 0.3em 1em black
+  border-radius 0.8em
+  scale = 0.75
+  font-size scale * 1em
+  // padding 0.5em
+  position absolute
+  // Total space is 32em by 18em.
+  // Card size is 21 by 13.
+  width 21em
+  height 13em
+  top (18/scale * 1em - @height) * 0.1
+  left (32/scale * 1em - @width) * 0.5
+  border 0.3em solid #fda
+  overflow hidden
+  // font-family monospace
+  // -moz-user-select auto
+  // -webkit-user-select auto
+  // user-select auto
+  opacity 0.95
+
+.dialogpadding
+  padding 0.5em
+
+.muted
+  opacity 0.6
+
+.sharebutton
+  // border-radius 0.1em 0.4em 0.4em 0.1em
+  background-repeat no-repeat
+  background-size 1.2em 1.2em
+  background-position left center
+  padding 0.1em 0.1em 0.1em 1.7em
+
+.sharebutton.facebook
+  background-image url('/images/facebook_64.png')
+
+.sharebutton.twitter
+  background-image url('/images/twitter.svg')
+
+.linespacing
+  line-height 1.5em
+
+.promo-donate
+  font-size 0.5em
+  text-shadow none
+  // text-shadow 0 1px 0 white, 0 0 0.2em white, 0 0 0.4em white
+  -moz-user-select initial
+  -webkit-user-select initial
+  user-select initial
+  cursor initial
+
+.drivebutton
+  background #cfc
+  border-radius 0.5em
+
+.strikethrough
+  text-decoration line-through

@@ -1,0 +1,43 @@
+.gui-container
+  .text-panel
+    .ignition-promo-image
+
+    h2 Ignition 
+      span.highlight Icarus
+
+    ul
+      li An <b>experimental vehicle</b> from Code Artemis Labs
+      li Equipped with a powerful engine
+      li Auto-retracting <b>wings</b> for controlled gliding
+      li No scientists were harmed in making this vehicle
+      //- li Includes an upgrade to <b>Rally License</b> so you can choose your avatar
+
+    if user
+      if purchased
+        p.purchased-thanks Switch between cars using the <b>Cars</b> menu.
+
+      .checkout-box
+        table
+          tr
+            td: img.pack(src="/images/packs/ignition.svg")
+            td
+              h3 Ignition Icarus
+              if purchased
+                .purchased Purchased.
+                  br
+                  | Thank you!
+              else
+                span.ca-credit 750
+                span &nbsp;
+                a.buybutton(href="/checkout?method=credits&pack=ignition")
+                  span BUY
+    else
+      p.purchased-thanks
+        a.login(href="/login") Log in required
+
+    p Need help? Please email <b>sup<span class="hidden">.remove.</span>port@codeartemis.com</b>
+
+    p Use is subject to the 
+      a.route(href="/license") License and Terms of Use
+      | .
+    .clear-both

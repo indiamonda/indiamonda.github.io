@@ -1,0 +1,131 @@
+table
+  tr
+    td
+      a.route(href="/")
+        h2 Trigger Rally
+    td.navigation
+      a(href="javascript:history.back()") &lt; Back
+      //- a.route(href="/about") About
+      //- | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      //- a(href="javascript:location.reload()") Reload
+      span.dropdownmenu Tracks &blacktriangledown;
+        menu.trackinfo
+          .label Current track:
+          li
+            span.favorite
+            a.route.name
+            |  by 
+            span.author
+          ul
+            li
+              a.route.drive Drive
+              span.label  (<b>R</b> to restart)
+            li: a.route.info Top times and Comments
+            li: a.route.edit Edit
+          hr
+          .label Other tracks:
+          //- li: a.route(href="/tracklist/featured") Featured Tracks
+          li: a.route(href="/tracklist/favhot") Most Favorited
+          li: a.route(href="/tracklist/recent") Published Tracks
+          li: a.route(href="/tracklist/all") All Tracks
+          li: a.route.mytracks(href="") My Tracks
+          li: a.route.myfavorites(href="") My Favorites 
+            img.emoji(src="/emojis/star.png")
+      span.dropdownmenu Cars &blacktriangledown;
+        menu.trackinfo
+          .car-section
+      span.dropdownmenu.challenge.hidden Challenge &blacktriangledown;
+        menu.trackinfo
+          .label Press <b>R</b> to restart the race.
+          hr
+          //- .label Pure race
+          li: label
+            input(type="radio", name="challenge", value='none')
+            | Hide clock
+          li: label
+            input(type="radio", name="challenge", value='clock')
+            | Show clock
+          //- .label Race with split times
+          //- li: label
+          //-   input(type="radio", name="challenge", value='personal')
+          //-   | Versus your personal best
+          li: label
+            input(type="radio", name="challenge", value='world')
+            | Show clock and leader ghost
+      span.dropdownmenu Settings &blacktriangledown;
+        menu
+          li: label
+            input#pref-audio(type="checkbox", checked=prefs.audio)
+            | Sound effects
+          li Volume 
+            input#pref-volume(type="range", min=0, max=1, step="any", value=prefs.volume)
+          hr
+          .label Graphics options: the game may run faster if you turn these off.
+            | They take effect after reloading the page.
+          li: label
+            input#pref-shadows(type="checkbox", checked=prefs.shadows)
+            | Shadows
+          li: label
+            input#pref-terrainhq(type="checkbox", checked=prefs.terrainhq)
+            | High detail terrain
+          li: label
+            input#pref-antialias(type="checkbox", checked=prefs.antialias)
+            | Antialiasing
+          hr
+          .label Resolution
+          each pd in pixdens
+            li: label.pixeldensity
+              input(type="radio", name="pixdens", value=pd.value, checked=pd.checked)
+              | #{pd.label}
+      span.dropdownmenu Help &blacktriangledown;
+        menu
+          li Made by 
+            a.outgoing(target="_blank", href="https://twitter.com/jareiko") @jareiko
+          li: a.route(href="/about") About Trigger Rally
+          hr
+          .label Get news and updates on:
+          li: a.outgoing(target="_blank", href="http://blog.triggerrally.com")
+            img.inline(src="/images/tumblr_64.png")
+            | Tumblr
+          li: a.outgoing(target="_blank", href="https://twitter.com/TriggerRally")
+            img.inline(src="/images/twitter_64.png")
+            | Twitter
+          li: a.outgoing(target="_blank", href="https://www.facebook.com/TriggerRally")
+            img.inline(src="/images/facebook_64.png")
+            | Facebook
+          li: a.outgoing(target="_blank", href="https://plus.google.com/104685285638239390202")
+            img.inline(src="/images/google_64.png")
+            | Google+
+          //- hr
+          //- <!-- AddThis Button BEGIN -->
+          //- <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+          //- <a class="addthis_button_preferred_1"></a>
+          //- <a class="addthis_button_preferred_2"></a>
+          //- <a class="addthis_button_preferred_3"></a>
+          //- <a class="addthis_button_preferred_4"></a>
+          //- <a class="addthis_button_compact"></a>
+          //- <a class="addthis_counter addthis_bubble_style"></a>
+          //- </div>
+          //- <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-5196095b5a500fd7"></script>
+          //- <!-- AddThis Button END -->
+          hr
+          div Controls:
+          ul
+            li <b>Up</b> arrow to accelerate
+            li <b>Down</b> arrow to brake
+            li <b>Left</b> and <b>right</b> to steer
+            li <b>Space</b> for handbrake (locks the rear wheels)
+            li <b>C</b> to change camera view
+            li <b>R</b> to restart race
+          div
+            a.outgoing(target="_blank", href="https://github.com/CodeArtemis/TriggerRally/wiki/Controllers") Click here
+            |  for info on <b>gamepad and wheel support</b> in Chrome
+          hr
+          .label Something broken? Suggestions?
+          li: a.outgoing(target="_blank", href="https://github.com/CodeArtemis/TriggerRally/issues") File an issue on GitHub
+          .label or email support@codeartemis.com
+    //- td.status
+    //-   span Status:&nbsp;
+    //-   span#status Loading
+    td
+      .userinfo
