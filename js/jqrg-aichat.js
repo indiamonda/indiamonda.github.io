@@ -924,9 +924,10 @@
    *   , flags: number       // total flag count, escalates ban tier
    *   , until: number       // epoch ms — ban active while now < until
    *   } */
+  var RATE_VERSION = 2;
   function rateState() {
     var s = safeParse(localStorage.getItem(SK_RATE), null);
-    if (!s || typeof s !== 'object') s = { hits: [], flags: 0, until: 0 };
+    if (!s || typeof s !== 'object' || s._v !== RATE_VERSION) s = { hits: [], flags: 0, until: 0, _v: RATE_VERSION };
     if (!Array.isArray(s.hits)) s.hits = [];
     if (typeof s.flags !== 'number') s.flags = 0;
     if (typeof s.until !== 'number') s.until = 0;
