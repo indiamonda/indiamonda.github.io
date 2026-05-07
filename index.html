@@ -4777,7 +4777,10 @@ function openSettings(){
     btn.innerHTML='<svg viewBox="0 0 24 24">'+s.icon+'</svg><span>'+s.label+'</span>';
     btn.onclick=function(){
       var target=document.getElementById(s.id);
-      if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+      if(target){
+        var panel=document.getElementById('settings-body');
+        panel.scrollTo({top:target.offsetTop-panel.offsetTop,behavior:'smooth'});
+      }
       nav.querySelectorAll('.settings-nav-btn').forEach(function(b){b.classList.remove('active')});
       btn.classList.add('active');
     };
