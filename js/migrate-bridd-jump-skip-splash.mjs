@@ -10,7 +10,7 @@
  *   - any back/forward navigation between bridd-jump pages
  *
  * Detection strategy: document.referrer. If the previous page is on
- * the same origin and lives under /jg/g/bridd-jump/ we
+ * the same origin and lives under /q/g/bridd-jump/ we
  * mark `window.__JqrgLoaderLoaded = true` *before* the loader IIFE
  * runs, which trips the loader's existing early-bail and prevents it
  * from creating any DOM, timers, or animations.
@@ -53,7 +53,7 @@ const SHIM = '<script>\n' +
   '    var u;\n' +
   '    try { u = new URL(ref); } catch (_) { return; }\n' +
   '    if (u.origin !== location.origin) return;\n' +
-  '    if (u.pathname.indexOf(\'/jg/g/bridd-jump/\') !== 0) return;\n' +
+  '    if (u.pathname.indexOf(\'/q/g/bridd-jump/\') !== 0) return;\n' +
   '    window.__JqrgLoaderLoaded = true;\n' +
   '  } catch (_) {}\n' +
   '})();\n' +

@@ -1,6 +1,6 @@
 (function(){
   var p=window.location.pathname;
-  if(p.indexOf('/jg/g/')!==-1)return;
+  if(p.indexOf('/q/g/')!==-1||p.indexOf('/jg/g/')!==-1)return;
   if(localStorage.getItem('mainPageCloak')==='false')return;
   var ct=localStorage.getItem('mainCloakTitle')||atob('SW5ib3ggLSBHbWFpbA==');
   var ci=localStorage.getItem('mainCloakIcon')||'/cloak-images/gmail.png';

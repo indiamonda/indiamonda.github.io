@@ -1450,7 +1450,7 @@
   /** Detect game engines and auto-enable IDB sync once per page load.
    *  Covers: Unity WebGL, Construct 2/3, Godot, EmulatorJS, Ruffle/Flash,
    *  GameMaker HTML5, Eaglercraft (1.5.2, 1.8.x, 1.12.x). Falls back to a timed
-   *  trigger on any /jg/g/ or /jg/e/ path. */
+   *  trigger on any /q/g/, /jg/g/, /q/e/ or /jg/e/ path. */
   function autoWireCommonEngines() {
     if (window.__jqrg_idb_auto_wired) return;
     try {
@@ -1527,18 +1527,18 @@
       if (window.eaglercraftXOpts || window.eaglercraftXOptsHints || window.eaglercraftOpts) trigger();
       if (poll > 120) clearInterval(poller);
     }, 1000);
-    // Fallback: any page under /jg/g/ or /jg/e/
+    // Fallback: any page under /q/g/, /jg/g/, /q/e/ or /jg/e/
     // triggers after 3s regardless. Eaglercraft variants don't expose any of the
     // engine globals the poller looks for, so this fallback is the main hook
     // that gets world-save IndexedDBs (`worlds`, `_eaglercraft.*`) backed up.
     try {
       var p = location.pathname || '';
       // Only eaglercraft needs the early timer — it never exposes createUnityInstance.
-      // A 3s trigger on /jg/g/* ran before slow Unity builds assigned
+      // A 3s trigger on /q/g/* ran before slow Unity builds assigned
       // createUnityInstance, so restoreIdb/repair could touch IndexedDB while a
       // WebGL title was still streaming assets (e.g. Hollow Knight), which broke
       // Unity's own IDBFS init ("IndexedDB is not available").
-      if (p.indexOf('/jg/e/') === 0) {
+      if (p.indexOf('/q/e/') === 0 || p.indexOf('/jg/e/') === 0) {
         setTimeout(function () { trigger(); }, 3000);
       }
     } catch (_) {}

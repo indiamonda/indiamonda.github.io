@@ -4,7 +4,7 @@
  * root-absolute path on the page to that CDN host, which silently breaks:
  *
  *   1. The loader's brand image (`<img id="jqrg-loader-brand">`) and the
- *      splash banner — both fetched via `/jg/g/<game>/...png` paths that
+ *      splash banner — both fetched via `/q/g/<game>/...png` paths that
  *      now resolve against the CDN host and 404.
  *   2. The cloud + auth scripts that ride alongside the loader. The old
  *      `<script src="/js/jqrg-cloud.js" defer>` ends up trying to fetch
@@ -62,8 +62,8 @@ const CFG_NEW =
 /* ------------------------------------------------------------------ *
  *  Anchor 2: getBannerUrlOverride — pin root-absolute meta paths to  *
  *  ORIGIN as well. Without this, e.g. Silksong's per-page logo path  *
- *  /jg/g/silksong/StreamingAssets/logo.png is rewritten by <base>    *
- *  to https://cdn.../jg/g/silksong/StreamingAssets/logo.png (404).   *
+ *  /q/g/silksong/StreamingAssets/logo.png is rewritten by <base>    *
+ *  to https://cdn.../q/g/silksong/StreamingAssets/logo.png (404).   *
  * ------------------------------------------------------------------ */
 const META_OLD =
   "      if (/^https?:\\/\\//i.test(raw) || raw.charAt(0) === '/') return raw;\n";
