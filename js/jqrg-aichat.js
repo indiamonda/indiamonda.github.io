@@ -828,14 +828,14 @@
 
   /* Rate limit knobs */
   var RATE_WINDOW_MS = 10 * 1000;
-  var RATE_THRESHOLD = 5;                        // > N msgs in window = flag
+  var RATE_THRESHOLD = 8;
   var BAN_LADDER_MS  = [
-    5    * 60 * 1000,  // 1st flag: 5 min
-    30   * 60 * 1000,  // 2nd flag: 30 min
-    60   * 60 * 1000,  // 3rd flag: 1 h
-    180  * 60 * 1000,  // 4th flag: 3 h
-    1440 * 60 * 1000   // 5th+ flag: 24 h
+    2    * 60 * 1000,  // 1st flag: 2 min
+    10   * 60 * 1000,  // 2nd flag: 10 min
+    30   * 60 * 1000,  // 3rd flag: 30 min
+    60   * 60 * 1000,  // 4th+ flag: 1 h
   ];
+  var FLAG_DECAY_MS  = 30 * 60 * 1000;
 
   /* File upload limits */
   var MAX_FILE_BYTES   = 256 * 1024;             // 256 KB per file
@@ -944,6 +944,9 @@
     var s = rateState();
     var now = Date.now();
     if (s.until > now) return { ok: false, remaining: s.until - now };
+    if (s.flags > 0 && s.until > 0 && now - s.until > FLAG_DECAY_MS) {
+      s.flags = Math.max(0, s.flags - 1);
+    }
     s.hits = s.hits.filter(function (t) { return now - t < RATE_WINDOW_MS; });
     s.hits.push(now);
     if (s.hits.length > RATE_THRESHOLD) {
