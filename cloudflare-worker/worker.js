@@ -45,14 +45,16 @@
  */
 
 const ALLOWED_ORIGINS = [
+  'https://tintly555.github.io',
   'https://jimmyqrg.github.io',
-  'https://jimmyq-r-g.github.io',
-  'https://jimmyqrg.com',
-  'https://www.jimmyqrg.com',
   'https://chat.jimmyqrg.com',
-  'https://jchat.fly.dev',
-  'https://ulw-app.fly.dev',
+  'https://lausd.schoology.com',
+  'https://unlinewize.jimmyqrg.com',
   'https://abs-unlinewize.jimmyqrg.com',
+  'https://mcraft.fly.dev',
+  'https://rammerhead.fly.dev',
+  'https://ulw-app.fly.dev',
+  'https://jchat.fly.dev',
 ];
 
 /* Local dev origins — anything on localhost / 127.0.0.1 (any port). We match
