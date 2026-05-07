@@ -1,0 +1,84 @@
+name: Export Single-File HTML
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_html:
+        description: "Path to the source HTML file"
+        required: true
+        default: "index.html"
+      output_name:
+        description: "Output filename for the single-file export"
+        required: true
+        default: "single-file-export.html"
+
+jobs:
+  export-single-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install export dependency
+        run: npm install --no-save inliner
+
+      - name: Build single-file HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SOURCE="${{ github.event.inputs.source_html }}"
+          OUTPUT_NAME="${{ github.event.inputs.output_name }}"
+          OUTPUT_DIR="/tmp/single-file-export"
+          OUTPUT_FILE="${OUTPUT_DIR}/${OUTPUT_NAME}"
+
+          if [ ! -f "${SOURCE}" ]; then
+            echo "::error::Source HTML not found: ${SOURCE}"
+            exit 1
+          fi
+
+          mkdir -p "${OUTPUT_DIR}"
+
+          # Use the library API instead of the CLI because the CLI can exit 0
+          # while emitting an empty stdout stream in CI for large/local files.
+          SOURCE_PATH="${SOURCE}" OUTPUT_PATH="${OUTPUT_FILE}" node <<'NODE'
+          const fs = require("fs");
+          const path = require("path");
+          const Inliner = require("inliner");
+
+          const sourcePath = path.resolve(process.env.SOURCE_PATH);
+          const outputPath = path.resolve(process.env.OUTPUT_PATH);
+
+          new Inliner(sourcePath, (error, html) => {
+            if (error) {
+              console.error(error && error.stack ? error.stack : error);
+              process.exit(1);
+            }
+
+            if (!html || html.length === 0) {
+              console.error("Generated HTML is empty.");
+              process.exit(1);
+            }
+
+            fs.writeFileSync(outputPath, html);
+          });
+          NODE
+
+          if [ ! -s "${OUTPUT_FILE}" ]; then
+            echo "::error::Generated file is empty: ${OUTPUT_FILE}"
+            exit 1
+          fi
+
+          echo "Single-file export created: ${OUTPUT_FILE}"
+
+      - name: Upload single-file HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: single-file-html
+          path: /tmp/single-file-export/*.html

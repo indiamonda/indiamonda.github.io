@@ -1,0 +1,27 @@
+name: Obfuscation lint
+
+on:
+  pull_request:
+    paths: ['index.html', 'js/**']
+  push:
+    branches: [main]
+    paths: ['index.html', 'js/**']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for plaintext game data in index.html
+        run: |
+          if grep -qE 'img:"|url:"|GAMES =|APPS =|UNBLOCKS =|CONTACTS =' index.html; then
+            echo "::error::index.html contains plaintext game data. Use atob() encoding."
+            exit 1
+          fi
+
+      - name: Check for suspicious keywords in JS
+        run: |
+          if grep -rliE 'unblock|bypass|circumvent|proxy' js/*.js | grep -v bot-shield | grep -v educational-context; then
+            echo "::warning::Found suspicious plaintext keywords in JS files. Consider obfuscating."
+          fi
