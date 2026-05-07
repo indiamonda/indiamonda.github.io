@@ -1220,20 +1220,28 @@
         </style>
     </head>
     <body>
+  <script>
+    // Prevent the cross-origin iframe from redirecting the parent page.
+    // Some game hosts use top.location busting; this locks it down.
+    (function(){
+      var _origLoc = window.location.href;
+      Object.defineProperty(window, '__preventNav', {value:true});
+      window.addEventListener('beforeunload', function(e){
+        if(document.activeElement && document.activeElement.tagName==='IFRAME'){
+          e.preventDefault();
+          e.returnValue='';
+        }
+      });
+    })();
+  </script>
   <iframe id="iframehtml5"
           class="iframe-default"
           src="https://geometrylitegame.org/game/geometry-dash-lite/"
           title="Geometry Dash Lite"
           allowfullscreen="true"
-          sandbox="allow-forms allow-modals allow-same-origin allow-scripts allow-pointer-lock allow-orientation-lock allow-presentation allow-downloads"></iframe>
+          sandbox="allow-forms allow-modals allow-scripts allow-pointer-lock allow-orientation-lock allow-presentation allow-downloads"
+          referrerpolicy="no-referrer"></iframe>
   <script>
-    // The upstream frame is cross-origin so the loader's
-    // PerformanceObserver only sees one entry (the iframe document
-    // itself). That's plenty to drive the loading bar, but we still
-    // need an explicit completion signal so the splash plays once
-    // the game is actually visible. iframe.onload fires for
-    // cross-origin loads (without exposing details) so we lean on
-    // it.
     (function () {
       var f = document.getElementById('iframehtml5');
       if (!f) return;
@@ -1245,8 +1253,6 @@
         } catch (_) {}
       }
       f.addEventListener('load', done, { once: true });
-      // Belt-and-suspenders: if a back/forward cache restore lands
-      // here with the iframe already loaded, fire completion now.
       try {
         if (f.contentWindow && f.contentWindow.document.readyState === 'complete') done();
       } catch (_) {}
