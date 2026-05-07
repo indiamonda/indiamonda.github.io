@@ -53,7 +53,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=Oxygen+Mono&display=swap" rel="stylesheet">
 <script src="/js/bot-shield.js?v=6"></script>
 <script src="/js/ban-enforce.js?v=1"></script>
-<link rel="stylesheet" href="/learn/style.css?v=3">
+<link rel="stylesheet" href="/learn/style.css?v=4">
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Josefin+Sans:wght@600&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 <script src="/js/jqrg-gate.js?v=9"></script>
 <script src="/js/mainPageCloak.js?v=71"></script>
@@ -81,13 +81,6 @@ html:not(.gate-pass) #ov-1,
 html:not(.gate-pass) .grecaptcha-badge{display:none !important}
 html:not(.gate-pass){background:#f6f9fc !important}
 html:not(.gate-pass) body{background:#f6f9fc !important;overflow:hidden !important}
-@media(prefers-color-scheme:dark){html:not(.gate-pass),html:not(.gate-pass) body{background:#0f172a !important}}
-#learn-cover{
-  position:fixed !important;inset:0 !important;z-index:2147483647 !important;
-  background:#f6f9fc !important;overflow-y:auto !important;
-  isolation:isolate !important;
-}
-@media(prefers-color-scheme:dark){#learn-cover{background:#000 !important}}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 /* Keep only the funding-choices presence iframe hidden — that one is meant
  * to be invisible, it is just a probe Google injects to detect that its
@@ -1428,6 +1421,7 @@ html,body{
   opacity:0;
 }
 .modal-overlay.open .modal{transform:translateY(0) scale(1);opacity:1}
+#announcement-modal .modal{max-width:520px}
 .modal-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 22px;border-bottom:1px solid var(--border-light);flex-shrink:0;

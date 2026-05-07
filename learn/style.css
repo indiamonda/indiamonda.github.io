@@ -13,15 +13,6 @@
     box-sizing:border-box;
     isolation:isolate;
 }
-@media(prefers-color-scheme:dark){
-    #learn-cover{
-        --lc-bg:#000000;
-        --lc-text:#9cafc9;
-        --lc-muted:#6b7280;
-        --lc-accent:#112c67;
-        --lc-header-blue:#133591;
-    }
-}
 #learn-cover *{box-sizing:border-box;margin:0;padding:0}
 #learn-cover .lc-top{
     position:fixed;top:0;left:0;width:100%;
