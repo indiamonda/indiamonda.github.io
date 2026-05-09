@@ -3,7 +3,7 @@
   <head>
 <meta charset="UTF-8">
 <meta name="google-adsense-account" content="ca-pub-6461283206674206">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="Student web development portfolio — interactive HTML5 canvas demos, front-end experiments, and embedded iframe prototypes built for a web design class.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="application-name" content="Home">
@@ -130,14 +130,10 @@ html,body{
 }
 
 .top-bar{
-  box-sizing:border-box;
-  /* Fill the notch / status inset so the bar background meets the physical top
-   * of the screen (avoids a “gap” of gradient/particles above the chrome). */
-  padding-top:env(safe-area-inset-top,0px);
-  min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
+  height:var(--top-bar-h);min-height:var(--top-bar-h);
   background:var(--bg-deep);
   display:flex;align-items:center;
-  padding-right:16px;padding-bottom:0;padding-left:16px;gap:12px;
+  padding:0 16px;gap:12px;
   position:relative;z-index:900;
 }
 
@@ -229,23 +225,20 @@ html,body{
 .top-bar .settings-top:hover svg{opacity:1}
 
 .tb-section{display:none;flex:1;align-items:center;gap:10px;min-width:0}
-#app[data-page="home"] .tb-home,
 #app[data-page="games"] .tb-s1,
 #app[data-page="apps"] .tb-apps{display:flex}
-.tb-section.tb-exiting{display:flex;pointer-events:none}
-/* Defensive: when home is the active page and the section is NOT mid-exit, force it
-   back to its normal flex/relative box. This wipes any inline "position:absolute /
-   flex:none" leftover from an interrupted exitSection cleanup, which otherwise made
-   the URL bar + back/forward/refresh row look like it had vanished after the user
-   hovered (the hover triggers searchPulse which made the half-cleaned bar visible
-   for a moment before it reverted). */
+/* Home keeps `.tb-home` in the DOM for legacy `animateTopBar` paths, but the
+   section is empty — letting it stay `flex:1` created a huge blank band in the
+   top bar (often reported as a "gap at the top"). Hide it on home at all sizes. */
+#app[data-page="home"] .tb-home,
 #app[data-page="home"] .tb-home:not(.tb-exiting){
-  position:relative !important;
-  display:flex !important;
-  flex:1 1 auto !important;
-  left:auto !important;top:auto !important;width:auto !important;height:auto !important;
+  display:none !important;
+  flex:0 0 0 !important;
+  width:0 !important;min-width:0 !important;max-width:0 !important;
+  height:0 !important;min-height:0 !important;overflow:hidden !important;
+  padding:0 !important;margin:0 !important;pointer-events:none !important;
 }
-#app[data-page="home"] .tb-home:not(.tb-exiting) .nav-btns button:not(:disabled){opacity:1}
+.tb-section.tb-exiting{display:flex;pointer-events:none}
 
 .tb-section .nav-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
 .tb-section .nav-btns button{
@@ -1957,23 +1950,21 @@ body.particles-on .settings-main button{text-shadow:none}
 }
 @media(max-width:700px){
   .top-bar{
-    height:auto;
-    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
+    height:auto;min-height:var(--top-bar-h);
     flex-wrap:wrap;align-content:center;
-    padding-top:max(8px,env(safe-area-inset-top,0px));
-    padding-right:max(10px,env(safe-area-inset-right));
-    padding-bottom:8px;
-    padding-left:max(10px,env(safe-area-inset-left));
+    padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));
     gap:8px;
   }
   .tb-section{
     order:3;flex:0 0 100%;width:100%;gap:8px;
   }
-  #app[data-page="home"] .tb-home,
-  #app[data-page="home"] .tb-home:not(.tb-exiting){display:none !important}
   #app[data-page="home"] .top-bar{
     flex-wrap:nowrap;
-    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
+    height:var(--top-bar-h);
+    min-height:var(--top-bar-h);
+    max-height:var(--top-bar-h);
+    overflow:hidden;
+    align-items:center;
   }
   .sidebar{width:44px;min-width:44px;padding:8px 0 10px}
   .sidebar .logo{width:28px;height:38px}
@@ -2030,12 +2021,8 @@ body.particles-on .settings-main button{text-shadow:none}
    * ~104px (which previously looked like a "large empty gap" at the top
    * of the page). */
   .top-bar{
-    padding-top:max(8px,env(safe-area-inset-top,0px));
-    padding-right:max(10px,env(safe-area-inset-right));
-    padding-bottom:8px;
-    padding-left:max(10px,env(safe-area-inset-left));
+    padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));
     gap:8px;
-    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
   }
   .top-bar .brand-wrap{
     min-width:44px;min-height:44px;justify-content:flex-start;
@@ -3791,7 +3778,7 @@ function animateTopBar(from,to){
   function applyNavOut(cls,animName){navBtns.forEach(function(b){b.classList.add(cls);b.style.animationName=animName})}
 
   if(from==='home'&&to==='games'){
-    exitSection(tbHome,350);
+    if (tbHome && tbHome.getBoundingClientRect().width > 2) exitSection(tbHome,350);
     applyNavOut('nav-flow-out-right',outR);
     if(dropdown) dropdown.classList.add('tb-item-in');
     if(_gsb) _gsb.classList.add('tb-item-in');
@@ -3800,7 +3787,7 @@ function animateTopBar(from,to){
     applyNavOut('nav-flow-in-from-right',inR);
 
   }else if(from==='home'&&to==='apps'){
-    exitSection(tbHome,350);
+    if (tbHome && tbHome.getBoundingClientRect().width > 2) exitSection(tbHome,350);
     applyNavOut('nav-flow-out-left',outL);
     if(appSearchBar) appSearchBar.classList.add('tb-item-in');
 
