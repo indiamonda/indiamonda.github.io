@@ -1005,7 +1005,7 @@
   }
 
   function buildSignupForm() {
-    var BLOCKED_DOMAINS = ['student.auhsd.us', 'chehalisschools.org'];
+    var BLOCKED_DOMAINS = ['student.auhsd.us', 'chehalisschools.org', 'kcusd.net'];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
     function isBlockedDomain(email) {
