@@ -280,6 +280,14 @@ async function verifyRecaptcha(token, ip, env) {
 const ACTIVE_STATUSES = new Set(['active', 'trialing']);
 const ADMIN_USERNAMES = new Set(['jimmyqrg', 'jeko1107', 'glaeesas']);
 
+/* Complimentary Premium — same product access as a paid Premium subscriber,
+ * enforced server-side (Stripe subscription not required). */
+const NORMAL_PREMIUM_USERNAMES = new Set(['tianqiansheng9']);
+
+function isNormalPremiumUser(username) {
+  return NORMAL_PREMIUM_USERNAMES.has((username || '').toLowerCase());
+}
+
 const BANNED_EMAILS = new Set([
   'weeee@outlook.com',
 ]);
@@ -532,7 +540,8 @@ async function handleChat(request, env, origin) {
       }, 401, origin);
     }
     if (isUserBanned(user)) return bannedResponse(origin);
-    if (!ADMIN_USERNAMES.has((user.username || '').toLowerCase())) {
+    if (!ADMIN_USERNAMES.has((user.username || '').toLowerCase()) &&
+        !isNormalPremiumUser(user.username)) {
       const sub = await readSubscription(env, user.id);
       if (!isSubscriptionActive(sub)) {
         return jsonResponse({
@@ -616,6 +625,16 @@ async function handleSubStatus(request, env, origin) {
     return jsonResponse({
       active:               true,
       status:               'admin',
+      current_period_end:   null,
+      cancel_at_period_end: false,
+      user:                 { id: user.id, username: user.username },
+    }, 200, origin);
+  }
+  if (isNormalPremiumUser(user.username)) {
+    return jsonResponse({
+      active:               true,
+      status:               'complimentary',
+      tier:                 'premium',
       current_period_end:   null,
       cancel_at_period_end: false,
       user:                 { id: user.id, username: user.username },
@@ -1051,7 +1070,7 @@ async function handleProxySessionCreate(request, env, origin) {
   if (isUserBanned(user)) return bannedResponse(origin);
 
   const isAdmin = ADMIN_USERNAMES.has((user.username || '').toLowerCase());
-  if (!isAdmin) {
+  if (!isAdmin && !isNormalPremiumUser(user.username)) {
     const sub = await readSubscription(env, user.id);
     if (!isSubscriptionActive(sub)) {
       return jsonResponse({ error: 'subscription_required' }, 403, origin);
@@ -1127,6 +1146,13 @@ async function handleUlwGate(request, env, origin) {
   }
   if (ADMIN_USERNAMES.has((user.username || '').toLowerCase())) {
     return jsonResponse({ allowed: true, tier: 'admin', user: { id: user.id, username: user.username } }, 200, origin);
+  }
+  if (isNormalPremiumUser(user.username)) {
+    return jsonResponse({
+      allowed: true,
+      tier:    'premium',
+      user:    { id: user.id, username: user.username },
+    }, 200, origin);
   }
   const sub = await readSubscription(env, user.id);
   if (isSubscriptionActive(sub)) {

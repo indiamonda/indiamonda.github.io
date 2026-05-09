@@ -3,7 +3,7 @@
   <head>
 <meta charset="UTF-8">
 <meta name="google-adsense-account" content="ca-pub-6461283206674206">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="description" content="Student web development portfolio — interactive HTML5 canvas demos, front-end experiments, and embedded iframe prototypes built for a web design class.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="application-name" content="Home">
@@ -130,10 +130,14 @@ html,body{
 }
 
 .top-bar{
-  height:var(--top-bar-h);min-height:var(--top-bar-h);
+  box-sizing:border-box;
+  /* Fill the notch / status inset so the bar background meets the physical top
+   * of the screen (avoids a “gap” of gradient/particles above the chrome). */
+  padding-top:env(safe-area-inset-top,0px);
+  min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
   background:var(--bg-deep);
   display:flex;align-items:center;
-  padding:0 16px;gap:12px;
+  padding-right:16px;padding-bottom:0;padding-left:16px;gap:12px;
   position:relative;z-index:900;
 }
 
@@ -1953,9 +1957,13 @@ body.particles-on .settings-main button{text-shadow:none}
 }
 @media(max-width:700px){
   .top-bar{
-    height:auto;min-height:var(--top-bar-h);
+    height:auto;
+    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
     flex-wrap:wrap;align-content:center;
-    padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));
+    padding-top:max(8px,env(safe-area-inset-top,0px));
+    padding-right:max(10px,env(safe-area-inset-right));
+    padding-bottom:8px;
+    padding-left:max(10px,env(safe-area-inset-left));
     gap:8px;
   }
   .tb-section{
@@ -1963,7 +1971,10 @@ body.particles-on .settings-main button{text-shadow:none}
   }
   #app[data-page="home"] .tb-home,
   #app[data-page="home"] .tb-home:not(.tb-exiting){display:none !important}
-  #app[data-page="home"] .top-bar{flex-wrap:nowrap;height:var(--top-bar-h)}
+  #app[data-page="home"] .top-bar{
+    flex-wrap:nowrap;
+    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
+  }
   .sidebar{width:44px;min-width:44px;padding:8px 0 10px}
   .sidebar .logo{width:28px;height:38px}
   .sidebar nav button{width:32px;height:32px}
@@ -2019,8 +2030,12 @@ body.particles-on .settings-main button{text-shadow:none}
    * ~104px (which previously looked like a "large empty gap" at the top
    * of the page). */
   .top-bar{
-    padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));
+    padding-top:max(8px,env(safe-area-inset-top,0px));
+    padding-right:max(10px,env(safe-area-inset-right));
+    padding-bottom:8px;
+    padding-left:max(10px,env(safe-area-inset-left));
     gap:8px;
+    min-height:calc(var(--top-bar-h) + env(safe-area-inset-top,0px));
   }
   .top-bar .brand-wrap{
     min-width:44px;min-height:44px;justify-content:flex-start;
