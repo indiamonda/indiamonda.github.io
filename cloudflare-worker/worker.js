@@ -288,6 +288,13 @@ function isNormalPremiumUser(username) {
   return NORMAL_PREMIUM_USERNAMES.has((username || '').toLowerCase());
 }
 
+/* Complimentary Premium Plus — same product access as paid Premium Plus. */
+const NORMAL_PLUS_USERNAMES = new Set(['kyle']);
+
+function isNormalPlusUser(username) {
+  return NORMAL_PLUS_USERNAMES.has((username || '').toLowerCase());
+}
+
 const BANNED_EMAILS = new Set([
   'weeee@outlook.com',
 ]);
@@ -541,6 +548,7 @@ async function handleChat(request, env, origin) {
     }
     if (isUserBanned(user)) return bannedResponse(origin);
     if (!ADMIN_USERNAMES.has((user.username || '').toLowerCase()) &&
+        !isNormalPlusUser(user.username) &&
         !isNormalPremiumUser(user.username)) {
       const sub = await readSubscription(env, user.id);
       if (!isSubscriptionActive(sub)) {
@@ -625,6 +633,16 @@ async function handleSubStatus(request, env, origin) {
     return jsonResponse({
       active:               true,
       status:               'admin',
+      current_period_end:   null,
+      cancel_at_period_end: false,
+      user:                 { id: user.id, username: user.username },
+    }, 200, origin);
+  }
+  if (isNormalPlusUser(user.username)) {
+    return jsonResponse({
+      active:               true,
+      status:               'complimentary',
+      tier:                 'plus',
       current_period_end:   null,
       cancel_at_period_end: false,
       user:                 { id: user.id, username: user.username },
@@ -1070,7 +1088,7 @@ async function handleProxySessionCreate(request, env, origin) {
   if (isUserBanned(user)) return bannedResponse(origin);
 
   const isAdmin = ADMIN_USERNAMES.has((user.username || '').toLowerCase());
-  if (!isAdmin && !isNormalPremiumUser(user.username)) {
+  if (!isAdmin && !isNormalPlusUser(user.username) && !isNormalPremiumUser(user.username)) {
     const sub = await readSubscription(env, user.id);
     if (!isSubscriptionActive(sub)) {
       return jsonResponse({ error: 'subscription_required' }, 403, origin);
@@ -1146,6 +1164,13 @@ async function handleUlwGate(request, env, origin) {
   }
   if (ADMIN_USERNAMES.has((user.username || '').toLowerCase())) {
     return jsonResponse({ allowed: true, tier: 'admin', user: { id: user.id, username: user.username } }, 200, origin);
+  }
+  if (isNormalPlusUser(user.username)) {
+    return jsonResponse({
+      allowed: true,
+      tier:    'plus',
+      user:    { id: user.id, username: user.username },
+    }, 200, origin);
   }
   if (isNormalPremiumUser(user.username)) {
     return jsonResponse({
