@@ -1005,7 +1005,7 @@
   }
 
   function buildSignupForm() {
-    var BLOCKED_DOMAINS = ['student.auhsd.us'];
+    var BLOCKED_DOMAINS = ['student.auhsd.us', 'chehalisschools.org'];
     function isBlockedDomain(email) {
       var d = (email || '').split('@')[1];
       return d && BLOCKED_DOMAINS.indexOf(d.toLowerCase()) !== -1;
