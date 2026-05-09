@@ -1006,9 +1006,16 @@
 
   function buildSignupForm() {
     var BLOCKED_DOMAINS = ['student.auhsd.us', 'chehalisschools.org'];
+    /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
+    var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
     function isBlockedDomain(email) {
       var d = (email || '').split('@')[1];
       return d && BLOCKED_DOMAINS.indexOf(d.toLowerCase()) !== -1;
+    }
+    function shouldSkipEmailVerify(email) {
+      var e = (email || '').trim().toLowerCase();
+      if (e && VERIFY_SKIP_EMAILS.indexOf(e) !== -1) return true;
+      return isBlockedDomain(email);
     }
 
     var err = h('div', { class: 'jqrg-auth-error' });
@@ -1083,7 +1090,7 @@
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         err.textContent = 'Please enter a valid email address.'; return;
       }
-      if (isBlockedDomain(email)) { activateBlockedSkip(); return; }
+      if (shouldSkipEmailVerify(email)) { activateBlockedSkip(); return; }
       sendCodeBtn.disabled = true; sendCodeBtn.textContent = 'Sending\u2026';
       Cloud.sendVerifyCode(email).then(function (resp) {
         if (resp && resp.skipped) { activateBlockedSkip(); return; }
@@ -1125,6 +1132,7 @@
       var pw2 = form.elements['pw2'].value;
       if (!/^[a-z0-9]{1,32}$/.test(username)) { err.textContent = 'Username must be 1-32 lowercase letters or numbers.'; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+      if (!emailSkipped && shouldSkipEmailVerify(email)) { activateBlockedSkip(); }
       if (!emailSkipped) {
         if (!emailCodeSent) { err.textContent = 'Please send and enter the email verification code first.'; return; }
         if (!code || code.length !== 6) { err.textContent = 'Please enter the 6-digit verification code.'; return; }
@@ -1175,7 +1183,7 @@
           cantReceiveMsg.style.display = 'none';
           if (resendInterval) { clearInterval(resendInterval); resendInterval = null; }
         }
-        if (isBlockedDomain(val)) {
+        if (shouldSkipEmailVerify(val)) {
           activateBlockedSkip();
         } else {
           sendCodeBtn.style.display = '';
