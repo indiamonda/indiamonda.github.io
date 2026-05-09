@@ -16,8 +16,10 @@
  *   - Per-device rate limiting with escalating bans (5min → 30min → 1h →
  *     3h → 24h). Stored under a `__jqrg_` prefix so it stays per-device
  *     and never syncs.
- *   - File upload (text-extractable files inlined as code blocks; images
- *     OCR'd client-side via Tesseract.js and extracted text sent to model)
+ *   - File upload: text/code inlined; images OCR'd (Tesseract) + optional
+ *     object detection (COCO-SSD tools); audio clips (data URL) with tools
+ *     for metadata, transcription (server Whisper), lyrics transcript, song ID
+ *     (AudD when configured). Client <<<TOOL:...>>> markers for file tools.
  *   - Site-aware system prompt so the assistant can answer questions
  *     about navigation
  *   - Easter egg: requests for the access code trigger a confirmation
@@ -172,7 +174,7 @@
     init.headers = init.headers || {};
     var tok = getAuthToken();
     if (tok) init.headers['Authorization'] = 'Bearer ' + tok;
-    var needsCaptcha = /^\/v1\/(chat|checkout)$/.test(path);
+    var needsCaptcha = /^\/v1\/(chat|checkout|media-tools)$/.test(path);
     if (!needsCaptcha) {
       return fetch(WORKER_URL + path, init);
     }
@@ -557,6 +559,84 @@
    * ==================================================================*/
   var TOOL_RE = /<<<TOOL:(\w+)\(([^)]*)\)>>>/g;
 
+  var toolFileContext = null;
+  var cocoSsdLoadPromise = null;
+
+  function mimeFromDataUrl(dataUrl) {
+    if (!dataUrl || typeof dataUrl !== 'string') return '';
+    var m = /^data:([^;,]+)/i.exec(dataUrl);
+    return m ? m[1].trim() : '';
+  }
+  function base64PayloadFromDataUrl(dataUrl) {
+    if (!dataUrl || typeof dataUrl !== 'string') return '';
+    var i = dataUrl.indexOf('base64,');
+    if (i >= 0) return dataUrl.slice(i + 7).replace(/\s/g, '');
+    return String(dataUrl).replace(/\s/g, '');
+  }
+  function audioMetaFromDataUrl(dataUrl) {
+    return new Promise(function (resolve) {
+      var a = document.createElement('audio');
+      a.preload = 'metadata';
+      function fin() {
+        var d = a.duration;
+        var sec = (typeof d === 'number' && isFinite(d)) ? d : null;
+        try { a.removeAttribute('src'); a.load(); } catch (_) {}
+        resolve({ durationSec: sec });
+      }
+      a.onloadedmetadata = fin;
+      a.onerror = function () { fin(); };
+      a.src = dataUrl;
+    });
+  }
+  function loadCocoSsdModel() {
+    if (cocoSsdLoadPromise) return cocoSsdLoadPromise;
+    cocoSsdLoadPromise = new Promise(function (resolve, reject) {
+      function loadScript(src) {
+        return new Promise(function (res, rej) {
+          var s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          s.crossOrigin = 'anonymous';
+          s.onload = function () { res(); };
+          s.onerror = function () { rej(new Error(src)); };
+          document.head.appendChild(s);
+        });
+      }
+      loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js')
+        .then(function () {
+          return loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js');
+        })
+        .then(function () {
+          if (!window.cocoSsd || typeof window.cocoSsd.load !== 'function') {
+            throw new Error('cocoSsd global missing');
+          }
+          return window.cocoSsd.load({ base: 'mobilenet_v2' });
+        })
+        .then(resolve)
+        .catch(function (e) {
+          cocoSsdLoadPromise = null;
+          reject(e);
+        });
+    });
+    return cocoSsdLoadPromise;
+  }
+  function pickAudioFromContext(ctx, index) {
+    if (!ctx || !ctx.attachments) return null;
+    var list = ctx.attachments.filter(function (a) { return a.kind === 'audio' && a.dataUrl; });
+    if (!list.length) return null;
+    var idx = parseInt(index, 10);
+    if (isNaN(idx) || idx < 0) return list[0];
+    return list[idx] != null ? list[idx] : list[0];
+  }
+  function pickImageFromContext(ctx, index) {
+    if (!ctx || !ctx.attachments) return null;
+    var list = ctx.attachments.filter(function (a) { return a.kind === 'image' && a.dataUrl; });
+    if (!list.length) return null;
+    var idx = parseInt(index, 10);
+    if (isNaN(idx) || idx < 0) return list[0];
+    return list[idx] != null ? list[idx] : list[0];
+  }
+
   var tools = {
     weather: function (args) {
       var loc = args.location || args.city || 'New York';
@@ -771,6 +851,204 @@
             + '\n\n||Answer: ' + decode(q.correct_answer) + '||';
         })
         .catch(function () { return 'Trivia service unavailable.'; });
+    },
+
+    file_info: function (args) {
+      var ctx = toolFileContext;
+      if (!ctx || !ctx.attachments || !ctx.attachments.length) {
+        return Promise.resolve('No file attachments found on the user\'s last message with uploads. Ask them to attach files, send the message, then use this tool.');
+      }
+      var only = args.index;
+      var tasks = ctx.attachments.map(function (a, i) {
+        if (only !== undefined && only !== null && only !== '' && String(only) !== String(i)) return Promise.resolve(null);
+        var bits = ['[' + i + '] ' + a.name, 'kind: ' + (a.kind || '?'), 'size_bytes: ' + (a.size != null ? a.size : '?')];
+        if (a.mime) bits.push('mime: ' + a.mime);
+        var duMime = a.dataUrl ? mimeFromDataUrl(a.dataUrl) : '';
+        if (duMime) bits.push('data_url_mime: ' + duMime);
+        if (a.kind === 'audio' && a.dataUrl) {
+          return audioMetaFromDataUrl(a.dataUrl).then(function (meta) {
+            bits.push('duration_sec: ' + (meta.durationSec != null ? Math.round(meta.durationSec * 1000) / 1000 : 'unknown'));
+            return bits.join(' | ');
+          });
+        }
+        if (a.kind === 'text' && a.text) bits.push('text_chars: ' + a.text.length);
+        return Promise.resolve(bits.join(' | '));
+      });
+      return Promise.all(tasks).then(function (lines) {
+        var out = lines.filter(Boolean);
+        return 'ATTACHED FILES (metadata):\n' + out.join('\n');
+      });
+    },
+
+    audio_info: function (args) {
+      var ctx = toolFileContext;
+      var att = pickAudioFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No audio attachment found. Attach MP3/WAV/WEBM/etc., send your message, then run this tool.');
+      var mime = att.mime || mimeFromDataUrl(att.dataUrl) || 'unknown';
+      return audioMetaFromDataUrl(att.dataUrl).then(function (meta) {
+        var lines = [
+          'AUDIO FILE: ' + att.name,
+          'mime: ' + mime,
+          'size_bytes: ' + att.size,
+          'duration_sec: ' + (meta.durationSec != null ? Math.round(meta.durationSec * 1000) / 1000 : 'unknown (browser could not read metadata)')
+        ];
+        return lines.join('\n');
+      });
+    },
+
+    audio_transcribe: function (args) {
+      var ctx = toolFileContext;
+      var att = pickAudioFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No audio attachment. User must attach a clip, send, then you call audio_transcribe.');
+      var b64 = base64PayloadFromDataUrl(att.dataUrl);
+      var mime = att.mime || mimeFromDataUrl(att.dataUrl) || 'audio/mpeg';
+      return authedFetch('/v1/media-tools', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'transcribe',
+          audio_base64: b64,
+          mime_type: mime,
+          filename: att.name || 'audio.mp3'
+        })
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: false, error: 'bad_json', status: r.status }; });
+      }).then(function (d) {
+        if (!d) return 'Transcription failed (empty response).';
+        if (d.error === 'subscription_required' || d.error === 'auth_required') return 'Transcription requires sign-in and an active Premium subscription.';
+        if (d.ok === false && d.error === 'not_configured') return d.message || 'Speech-to-text is not configured on the server (OPENAI_API_KEY).';
+        if (d.ok && d.text) return 'TRANSCRIPTION:\n' + d.text;
+        if (d.text) return 'TRANSCRIPTION:\n' + d.text;
+        return 'Transcription failed: ' + (d.message || d.error || JSON.stringify(d).slice(0, 400));
+      }).catch(function (e) { return 'Transcription request failed: ' + (e && e.message ? e.message : String(e)); });
+    },
+
+    recognize_song: function (args) {
+      var ctx = toolFileContext;
+      var att = pickAudioFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No audio attachment for song recognition.');
+      var b64 = base64PayloadFromDataUrl(att.dataUrl);
+      var mime = att.mime || mimeFromDataUrl(att.dataUrl) || 'audio/mpeg';
+      return authedFetch('/v1/media-tools', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'recognize_song',
+          audio_base64: b64,
+          mime_type: mime,
+          filename: att.name || 'clip.mp3'
+        })
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: false, error: 'bad_json', status: r.status }; });
+      }).then(function (d) {
+        if (!d) return 'Song recognition failed.';
+        if (d.error === 'subscription_required' || d.error === 'auth_required') return 'Song ID requires sign-in and Premium.';
+        if (d.ok === false && d.error === 'not_configured') return d.message || 'Song recognition is not configured (AUDD_API_TOKEN).';
+        if (!d.ok || !d.audd) return 'Song recognition failed: ' + (d.message || d.error || 'unknown');
+        var a = d.audd;
+        if (a.status === 'success' && a.result) {
+          var t = a.result;
+          var lines = ['SONG MATCH (AudD):'];
+          if (t.artist) lines.push('Artist: ' + t.artist);
+          if (t.title) lines.push('Title: ' + t.title);
+          if (t.album) lines.push('Album: ' + t.album);
+          if (t.release_date) lines.push('Release: ' + t.release_date);
+          if (t.label) lines.push('Label: ' + t.label);
+          if (t.song_link) lines.push('Link: ' + t.song_link);
+          if (t.timecode) lines.push('Match timecode: ' + t.timecode);
+          return lines.join('\n');
+        }
+        return 'SONG RECOGNITION: ' + (a.error && a.error.message ? a.error.message : JSON.stringify(a).slice(0, 800));
+      }).catch(function (e) { return 'Song recognition failed: ' + (e && e.message ? e.message : String(e)); });
+    },
+
+    recognize_lyrics: function (args) {
+      var ctx = toolFileContext;
+      var att = pickAudioFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No audio attachment for lyrics transcription.');
+      var b64 = base64PayloadFromDataUrl(att.dataUrl);
+      var mime = att.mime || mimeFromDataUrl(att.dataUrl) || 'audio/mpeg';
+      return authedFetch('/v1/media-tools', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'transcribe',
+          audio_base64: b64,
+          mime_type: mime,
+          filename: att.name || 'vocals.mp3'
+        })
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: false }; });
+      }).then(function (d) {
+        if (!d || d.ok === false) {
+          if (d && d.error === 'not_configured') return d.message || 'Lyrics tool needs server transcription (OPENAI_API_KEY).';
+          return 'Could not transcribe audio for lyrics.';
+        }
+        var txt = (d && d.text) ? String(d.text).trim() : '';
+        if (!txt) return 'Transcription returned empty — the clip may be instrumental or too quiet.';
+        return 'LYRICS / VOCAL TRANSCRIPT (speech-to-text; may contain errors):\n\n' + txt;
+      }).catch(function (e) { return 'Lyrics transcription failed: ' + (e && e.message ? e.message : String(e)); });
+    },
+
+    recognize_objects: function (args) {
+      var ctx = toolFileContext;
+      var att = pickImageFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No image attachment for object detection. User should attach an image first.');
+      return loadCocoSsdModel().then(function (model) {
+        var img = new Image();
+        return new Promise(function (resolve, reject) {
+          img.onload = function () {
+            model.detect(img).then(function (preds) {
+              if (!preds || !preds.length) {
+                resolve('OBJECT DETECTION: no objects detected above the confidence threshold.');
+                return;
+              }
+              preds.sort(function (x, y) { return (y.score || 0) - (x.score || 0); });
+              var lines = ['OBJECT DETECTION (COCO-SSD):'];
+              preds.slice(0, 15).forEach(function (p, i) {
+                lines.push((i + 1) + '. ' + p.class + ' — score ' + (Math.round((p.score || 0) * 1000) / 1000));
+                if (p.bbox) lines.push('   bbox: [' + p.bbox.map(function (n) { return Math.round(n); }).join(', ') + ']');
+              });
+              resolve(lines.join('\n'));
+            }).catch(reject);
+          };
+          img.onerror = function () { reject(new Error('Image load failed')); };
+          img.src = att.dataUrl;
+        });
+      }).catch(function (e) {
+        return 'Object detection failed (model load or GPU): ' + (e && e.message ? e.message : String(e));
+      });
+    },
+
+    extract_image_text: function (args) {
+      var ctx = toolFileContext;
+      var att = pickImageFromContext(ctx, args.index);
+      if (!att) return Promise.resolve('No image attachment for OCR.');
+      return extractTextFromImage(att.dataUrl).then(function (txt) {
+        txt = (txt || '').trim();
+        if (!txt) return 'OCR: no readable text found in the image.';
+        return 'OCR TEXT:\n```\n' + txt + '\n```';
+      }).catch(function (e) {
+        return 'OCR failed: ' + (e && e.message ? e.message : String(e));
+      });
+    },
+
+    read_file_text: function (args) {
+      var ctx = toolFileContext;
+      if (!ctx || !ctx.attachments || !ctx.attachments.length) {
+        return Promise.resolve('No attachments on the last user message.');
+      }
+      var idx = parseInt(args.index, 10);
+      if (isNaN(idx)) idx = 0;
+      var att = ctx.attachments[idx];
+      if (!att) return Promise.resolve('No attachment at index ' + idx + '.');
+      if (att.kind !== 'text' || !att.text) {
+        return Promise.resolve('Attachment "' + att.name + '" is not a stored text/code file (binary/audio/image).');
+      }
+      var t = att.text;
+      var max = 16000;
+      if (t.length > max) t = t.slice(0, max) + '\n… [truncated at ' + max + ' chars]';
+      return Promise.resolve('FILE: ' + att.name + '\n```\n' + t + '\n```');
     }
   };
 
@@ -815,15 +1093,21 @@
     return calls;
   }
 
-  function executeTools(toolCalls) {
+  function executeTools(toolCalls, fileContext) {
+    toolFileContext = fileContext || null;
     var promises = toolCalls.map(function (tc) {
       var fn = tools[tc.name];
       if (!fn) return Promise.resolve({ call: tc, result: 'Unknown tool: ' + tc.name });
       var r = fn(tc.args);
-      if (r && typeof r.then === 'function') return r.then(function (res) { return { call: tc, result: res }; });
+      if (r && typeof r.then === 'function') {
+        return r.then(function (res) { return { call: tc, result: res }; });
+      }
       return Promise.resolve({ call: tc, result: r });
     });
-    return Promise.all(promises);
+    return Promise.all(promises).then(function (results) {
+      toolFileContext = null;
+      return results;
+    });
   }
 
   /* Rate limit knobs */
@@ -840,9 +1124,11 @@
   /* File upload limits */
   var MAX_FILE_BYTES   = 256 * 1024;             // 256 KB per file
   var MAX_IMAGE_BYTES  = 2 * 1024 * 1024;        // 2 MB per image (OCR needs quality)
+  var MAX_AUDIO_BYTES  = 8 * 1024 * 1024;        // 8 MB per audio clip (transcription / ID)
   var MAX_FILES_TOTAL  = 6;                       // per message
   var TEXT_EXTENSIONS  = /\.(?:txt|md|markdown|csv|tsv|json|jsonl|xml|yaml|yml|toml|ini|html|htm|css|scss|js|mjs|cjs|jsx|ts|tsx|py|rb|rs|go|java|c|h|cpp|hpp|cs|swift|kt|sh|bash|zsh|sql|log|conf)$/i;
   var IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|webp|bmp|svg)$/i;
+  var AUDIO_EXTENSIONS = /\.(?:mp3|m4a|aac|wav|ogg|oga|opus|webm|flac)$/i;
   var SK_IMG_INFO_DISMISSED = '__jqrg_ai_img_info_v1';
 
   /* Skip rate-limit + device key from sync if JqrgCloud is around. */
@@ -1375,6 +1661,36 @@
       '',
       '13. trivia — Fetch a random trivia question.',
       '    <<<TOOL:trivia({})>>>',
+      '',
+      'FILE / IMAGE / AUDIO TOOLS (need the user to attach files, send the',
+      'message, then you use these in your NEXT reply — they read from the',
+      'most recent user message that still has attachments):',
+      '',
+      '14. file_info — Names, kinds, sizes, MIME, audio duration (if known).',
+      '    <<<TOOL:file_info({})>>>  all files',
+      '    <<<TOOL:file_info({"index":0})>>>  one attachment index',
+      '',
+      '15. audio_info — Duration, MIME, size for an attached audio clip.',
+      '    <<<TOOL:audio_info({})>>>  first audio',
+      '    <<<TOOL:audio_info({"index":0})>>>  nth audio attachment',
+      '',
+      '16. audio_transcribe — Speech-to-text (server Whisper; needs OPENAI_API_KEY).',
+      '    <<<TOOL:audio_transcribe({})>>>',
+      '',
+      '17. recognize_lyrics — Same pipeline as transcribe; use for sung/vocal text.',
+      '    <<<TOOL:recognize_lyrics({})>>>',
+      '',
+      '18. recognize_song — Identify title/artist from audio (AudD; needs AUDD_API_TOKEN).',
+      '    <<<TOOL:recognize_song({})>>>',
+      '',
+      '19. recognize_objects — COCO-SSD object boxes/labels on an attached image.',
+      '    <<<TOOL:recognize_objects({})>>>',
+      '',
+      '20. extract_image_text — OCR on an attached image (Tesseract).',
+      '    <<<TOOL:extract_image_text({})>>>',
+      '',
+      '21. read_file_text — Full text of an attached code/text file (by index).',
+      '    <<<TOOL:read_file_text({"index":0})>>>',
       '',
       'TOOL RULES:',
       '- Output the marker on its own line within your response.',
@@ -2119,9 +2435,9 @@
 
     /* ----- composer ----- */
     var composer = el('form', { class: 'jq-aichat-composer', onsubmit: function (e) { e.preventDefault(); onSend(); } }, [
-      el('label', { class: 'jq-aichat-attach-btn', title: 'Attach files (text, code, images)' }, [
+      el('label', { class: 'jq-aichat-attach-btn', title: 'Attach files (text, code, images, audio)' }, [
         iconSvg('clip'),
-        el('input', { type: 'file', multiple: 'multiple', accept: '.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.toml,.ini,.html,.htm,.css,.scss,.js,.mjs,.cjs,.jsx,.ts,.tsx,.py,.rb,.rs,.go,.java,.c,.h,.cpp,.hpp,.cs,.swift,.kt,.sh,.bash,.zsh,.sql,.log,.conf,image/*', onchange: onPickFiles })
+        el('input', { type: 'file', multiple: 'multiple', accept: '.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.toml,.ini,.html,.htm,.css,.scss,.js,.mjs,.cjs,.jsx,.ts,.tsx,.py,.rb,.rs,.go,.java,.c,.h,.cpp,.hpp,.cs,.swift,.kt,.sh,.bash,.zsh,.sql,.log,.conf,image/*,audio/*', onchange: onPickFiles })
       ]),
       el('textarea', {
         id: 'jq-aichat-input', rows: '1', placeholder: 'Type a question. Math, code, or anything about the site.',
@@ -2659,12 +2975,13 @@
       }
       var isImage = IMAGE_EXTENSIONS.test(f.name) || /^image\//.test(f.type);
       var isText  = TEXT_EXTENSIONS.test(f.name) || /^text\//.test(f.type) || /\+xml$|json$|javascript$|html$|css$/i.test(f.type);
-      var limit = isImage ? MAX_IMAGE_BYTES : MAX_FILE_BYTES;
+      var isAudio = AUDIO_EXTENSIONS.test(f.name) || /^audio\//.test(f.type);
+      var limit = isImage ? MAX_IMAGE_BYTES : (isAudio ? MAX_AUDIO_BYTES : MAX_FILE_BYTES);
       if (f.size > limit) {
         toast('Skipped ' + f.name + ' (too large)');
         return;
       }
-      if (!isImage && !isText) {
+      if (!isImage && !isText && !isAudio) {
         toast('Unsupported: ' + f.name);
         return;
       }
@@ -2673,12 +2990,21 @@
         if (isImage) {
           state.attached.push({ name: f.name, size: f.size, kind: 'image', dataUrl: reader.result });
           showImageInfoBox();
+        } else if (isAudio) {
+          state.attached.push({
+            name: f.name,
+            size: f.size,
+            kind: 'audio',
+            mime: f.type || '',
+            dataUrl: reader.result
+          });
+          showImageInfoBox();
         } else {
           state.attached.push({ name: f.name, size: f.size, kind: 'text', text: String(reader.result || '') });
         }
         renderAttach();
       };
-      if (isImage) reader.readAsDataURL(f);
+      if (isImage || isAudio) reader.readAsDataURL(f);
       else         reader.readAsText(f);
     });
   }
@@ -2734,7 +3060,7 @@
     if (existing) return;
     var box = el('div', { id: 'jq-aichat-img-info', class: 'jq-aichat-img-info' }, [
       el('span', { class: 'jq-aichat-img-info-icon' }, '\u2139\uFE0F'),
-      el('span', { class: 'jq-aichat-img-info-text' }, 'The AI can only extract text from images.'),
+      el('span', { class: 'jq-aichat-img-info-text' }, 'Attach images, audio, or text files. Use AI tools for OCR, objects, audio info, transcription, lyrics, and song ID.'),
       el('button', {
         type: 'button', class: 'jq-aichat-img-info-close',
         'aria-label': 'Dismiss',
@@ -3242,10 +3568,13 @@
       if (a.kind === 'text') {
         var lang = a.name.replace(/^.*\./, '').toLowerCase();
         attachmentNotes += '\n\n--- ' + a.name + ' ---\n```' + lang + '\n' + a.text + '\n```';
-        } else if (a.ocrText) {
-          attachmentNotes += '\n\n--- Extracted text from ' + a.name + ' ---\n```\n' + a.ocrText + '\n```';
+      } else if (a.kind === 'audio') {
+        attachmentNotes += '\n\n[Audio attached: ' + a.name + ' (' + fmtBytes(a.size) + '). MIME: ' + (a.mime || mimeFromDataUrl(a.dataUrl) || 'unknown')
+          + '. Tools: file_info, audio_info, audio_transcribe, recognize_lyrics, recognize_song.]';
+      } else if (a.ocrText) {
+        attachmentNotes += '\n\n--- Extracted text from ' + a.name + ' ---\n```\n' + a.ocrText + '\n```';
       } else {
-          attachmentNotes += '\n\n[Image attached: ' + a.name + ' (' + fmtBytes(a.size) + '). No text could be extracted from this image.]';
+        attachmentNotes += '\n\n[Image attached: ' + a.name + ' (' + fmtBytes(a.size) + '). No text could be extracted from this image.]';
       }
     });
 
@@ -3253,7 +3582,13 @@
       role: 'user',
       content: text + attachmentNotes,
       displayContent: text || '(Attached files)',
-        attachments: attachments.map(function (a) { return { name: a.name, size: a.size, kind: a.kind, dataUrl: a.dataUrl }; }),
+        attachments: attachments.map(function (a) {
+          var o = { name: a.name, size: a.size, kind: a.kind };
+          if (a.dataUrl) o.dataUrl = a.dataUrl;
+          if (a.mime) o.mime = a.mime;
+          if (a.kind === 'text' && a.text) o.text = a.text;
+          return o;
+        }),
       ts: Date.now()
     };
       doSendMessage(userMessage);
@@ -3371,12 +3706,23 @@
         asst.content = cleanContent;
         if (state.chats.active === streamingChatId) renderTranscript(false, true);
 
-        executeTools(toolCalls).then(function (results) {
+        var targetChat = state.chats.list.find(function (c) { return c.id === streamingChatId; });
+        var fileCtxUserMsg = null;
+        if (targetChat && targetChat.messages) {
+          for (var uix = targetChat.messages.length - 1; uix >= 0; uix--) {
+            var umsg = targetChat.messages[uix];
+            if (umsg.role === 'user' && umsg.attachments && umsg.attachments.length) {
+              fileCtxUserMsg = umsg;
+              break;
+            }
+          }
+        }
+
+        executeTools(toolCalls, fileCtxUserMsg).then(function (results) {
           var toolResultText = results.map(function (r) {
             return '[Tool result for ' + r.call.name + ']: ' + r.result;
           }).join('\n\n');
 
-          var targetChat = state.chats.list.find(function (c) { return c.id === streamingChatId; });
           if (!targetChat) return;
 
           asst.content = asst.content.replace(/⏳ \*Fetching \w+…\*/g, '').trim();

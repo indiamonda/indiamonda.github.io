@@ -18,6 +18,7 @@
  *   POST /v1/checkout                 -> { url } Stripe Checkout Session
  *   POST /v1/billing-portal           -> { url } Stripe Customer Portal
  *   POST /v1/stripe-webhook           Stripe -> us, signed
+ *   POST /v1/media-tools              audio transcribe (Whisper) + song ID (AudD); optional secrets
  *   POST /v1/proxy-session             create one-time proxy session (auth+sub)
  *   GET  /v1/proxy-session/:id        validate & consume a proxy session
  *   GET  /v1/ulw-gate                 premium check for Absolute Unlinewize
@@ -36,6 +37,8 @@
  *   TURNSTILE_SECRET          Cloudflare Turnstile secret key (siteverify)
  *   RECAPTCHA_SECRET_KEY      Google reCAPTCHA v3 secret key (second CAPTCHA layer)
  *   SYNC_KEY                  shared secret for /v1/portal-announcements
+ *   OPENAI_API_KEY            optional — Whisper for /v1/media-tools transcribe
+ *   AUDD_API_TOKEN            optional — AudD.io song recognition for /v1/media-tools
  *
  * Optional bindings:
  *   RATE_KV                   KV namespace for per-IP rate limits
@@ -98,6 +101,7 @@ const RATE_MAX        = 30;     // 30 requests/min/IP
 const ATTACHMENT_MARKERS = [
   '\n\n--- ',                       // text file fence header
   '\n\n[Image attached:',           // OCR failure note
+  '\n\n[Audio attached:',           // audio clip marker
 ];
 
 function corsHeaders(origin) {
@@ -1191,6 +1195,173 @@ async function handleUlwGate(request, env, origin) {
 }
 
 /* ====================================================================
+ * /v1/media-tools — optional OpenAI Whisper + AudD (song ID), gated like
+ * file uploads (Turnstile + reCAPTCHA + active subscription / comp list).
+ * Secrets: OPENAI_API_KEY (transcribe), AUDD_API_TOKEN (recognize_song).
+ * ==================================================================*/
+
+const MEDIA_AUDIO_B64_MAX = 14_000_000; // ~10.5 MiB binary after base64 decode budget
+
+async function gateMediaToolsUser(request, env, origin) {
+  const token = getBearer(request);
+  const user  = await resolveUser(token);
+  if (!user) {
+    return jsonResponse({
+      error:   'auth_required',
+      message: 'Sign in to use audio/media tools.',
+    }, 401, origin);
+  }
+  if (isUserBanned(user)) return bannedResponse(origin);
+  const uname = (user.username || '').toLowerCase();
+  if (ADMIN_USERNAMES.has(uname) || isNormalPlusUser(user.username) || isNormalPremiumUser(user.username)) {
+    return { user };
+  }
+  const sub = await readSubscription(env, user.id);
+  if (!isSubscriptionActive(sub)) {
+    return jsonResponse({
+      error:   'subscription_required',
+      message: 'Media tools require an active Premium subscription.',
+    }, 402, origin);
+  }
+  return { user };
+}
+
+async function handleMediaTools(request, env, origin) {
+  if (origin && !isAllowedOrigin(origin)) {
+    return jsonResponse({ error: 'Forbidden origin' }, 403, origin);
+  }
+
+  const tsToken = request.headers.get('X-Turnstile-Token');
+  const rcToken = request.headers.get('X-Recaptcha-Token');
+  const tsIp    = request.headers.get('CF-Connecting-IP') || '';
+  const tsResult = await verifyTurnstile(tsToken, tsIp, env);
+  if (!tsResult.ok) {
+    return jsonResponse({ error: 'captcha_failed', message: 'Bot check failed — please refresh the page.' }, 403, origin);
+  }
+  const rcResult = await verifyRecaptcha(rcToken, tsIp, env);
+  if (!rcResult.ok) {
+    return jsonResponse({ error: 'captcha_failed', message: 'Bot check failed — please refresh the page.' }, 403, origin);
+  }
+
+  const gate = await gateMediaToolsUser(request, env, origin);
+  if (gate instanceof Response) return gate;
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (_) {
+    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
+  }
+
+  const action = body && body.action;
+  const b64raw = body && typeof body.audio_base64 === 'string' ? body.audio_base64.replace(/\s/g, '') : '';
+  const mime = (body && body.mime_type) || 'audio/mpeg';
+  const filename = (body && body.filename) || 'audio.mp3';
+
+  if (action === 'transcribe') {
+    if (!b64raw) return jsonResponse({ error: 'audio_base64 required' }, 400, origin);
+    if (b64raw.length > MEDIA_AUDIO_B64_MAX) {
+      return jsonResponse({ error: 'audio_too_large' }, 413, origin);
+    }
+    if (!env.OPENAI_API_KEY) {
+      return jsonResponse({
+        ok:      false,
+        error:   'not_configured',
+        message: 'Server has no OPENAI_API_KEY — Whisper transcription is disabled.',
+      }, 200, origin);
+    }
+
+    let bytes;
+    try {
+      const b64 = b64raw.replace(/^data:[^;]+;base64,/, '');
+      const bin = atob(b64);
+      bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    } catch (_) {
+      return jsonResponse({ error: 'invalid_base64' }, 400, origin);
+    }
+    if (bytes.length > 24 * 1024 * 1024) {
+      return jsonResponse({ error: 'audio_too_large' }, 413, origin);
+    }
+
+    const blob = new Blob([bytes], { type: mime });
+    const fd   = new FormData();
+    fd.append('file', blob, filename.slice(0, 120));
+    fd.append('model', 'whisper-1');
+
+    let up;
+    try {
+      up = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method:  'POST',
+        headers: { Authorization: 'Bearer ' + env.OPENAI_API_KEY },
+        body:    fd,
+      });
+    } catch (e) {
+      return jsonResponse({ ok: false, error: 'upstream', message: String(e) }, 502, origin);
+    }
+    const text = await up.text();
+    if (!up.ok) {
+      return jsonResponse({ ok: false, error: 'whisper_failed', status: up.status, detail: text.slice(0, 500) }, 502, origin);
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch (_) {
+      return jsonResponse({ ok: true, text: text.trim() }, 200, origin);
+    }
+    const out = (parsed && parsed.text) || text.trim();
+    return jsonResponse({ ok: true, text: out }, 200, origin);
+  }
+
+  if (action === 'recognize_song') {
+    if (!b64raw) return jsonResponse({ error: 'audio_base64 required' }, 400, origin);
+    if (b64raw.length > MEDIA_AUDIO_B64_MAX) {
+      return jsonResponse({ error: 'audio_too_large' }, 413, origin);
+    }
+    if (!env.AUDD_API_TOKEN) {
+      return jsonResponse({
+        ok:      false,
+        error:   'not_configured',
+        message: 'Server has no AUDD_API_TOKEN — song recognition is disabled.',
+      }, 200, origin);
+    }
+
+    let bytes;
+    try {
+      const b64 = b64raw.replace(/^data:[^;]+;base64,/, '');
+      const bin = atob(b64);
+      bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    } catch (_) {
+      return jsonResponse({ error: 'invalid_base64' }, 400, origin);
+    }
+
+    const blob = new Blob([bytes], { type: mime });
+    const fd   = new FormData();
+    fd.append('api_token', env.AUDD_API_TOKEN);
+    fd.append('method', 'recognize');
+    fd.append('file', blob, filename.slice(0, 120));
+    fd.append('return', 'apple_music,spotify,deezer');
+
+    let up;
+    try {
+      up = await fetch('https://api.audd.io/', { method: 'POST', body: fd });
+    } catch (e) {
+      return jsonResponse({ ok: false, error: 'upstream', message: String(e) }, 502, origin);
+    }
+    let data;
+    try {
+      data = await up.json();
+    } catch (_) {
+      return jsonResponse({ ok: false, error: 'bad_response' }, 502, origin);
+    }
+    return jsonResponse({ ok: true, audd: data }, 200, origin);
+  }
+
+  return jsonResponse({ error: 'unsupported_action' }, 400, origin);
+}
+
+/* ====================================================================
  * Router
  * ==================================================================*/
 
@@ -1233,6 +1404,9 @@ export default {
 
     if (url.pathname === '/v1/chat' && request.method === 'POST') {
       return handleChat(request, env, origin);
+    }
+    if (url.pathname === '/v1/media-tools' && request.method === 'POST') {
+      return handleMediaTools(request, env, origin);
     }
     if (url.pathname === '/v1/subscription-status' && request.method === 'GET') {
       return handleSubStatus(request, env, origin);
