@@ -357,6 +357,7 @@ const urlsToCache = [
   '/q/g/haunted-dorn/index.html',
   '/q/g/haunted-dorn/minigame.json',
   '/q/g/haunted-dorn/js/1.1/minigame.js',
+  '/q/g/haunted-dorn/js/self-host-bootstrap.js',
   '/q/g/haunted-dorn/white.json',
   '/q/g/hex-gl/',
   '/q/g/hypper-sandbox/',

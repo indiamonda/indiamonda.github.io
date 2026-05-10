@@ -71,6 +71,10 @@ def rewrite_index_html_local_sdk() -> None:
     needle = "https://sdk.minigame.vip/js/1.1/minigame.js"
     if needle in text:
         text = text.replace(needle, "js/1.1/minigame.js")
+    boot = '<script src="js/self-host-bootstrap.js"></script>'
+    mg = '<script src = "js/1.1/minigame.js"></script>'
+    if mg in text and boot not in text:
+        text = text.replace(mg, mg + "\n    " + boot)
     apple = "<meta name='apple-mobile-web-app-capable' content='yes' />"
     mobile = "<meta name='mobile-web-app-capable' content='yes' />"
     if mobile not in text and apple in text:
