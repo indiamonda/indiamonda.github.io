@@ -1200,10 +1200,76 @@
   <script src="/js/style.js"></script>
     <script src="/js/cursor.js"></script>
   <style>
+    html { height: 100%; }
     body.portal-page {
-      background: url("background.png") no-repeat center center fixed;
+      position: relative;
+      min-height: 100%;
+      margin: 0;
+      color: #fff;
+      background: #06030d url("background.png") no-repeat center center fixed;
       background-size: cover;
     }
+
+    /* Distant layer: same art, blurred + darkened for depth behind the sharp bg */
+    .portal-bg-depth {
+      position: fixed;
+      inset: -8%;
+      z-index: 0;
+      background: url("background.png") no-repeat center 55%;
+      background-size: cover;
+      background-attachment: fixed;
+      filter: blur(44px) brightness(0.2) saturate(0.88);
+      transform: scale(1.14);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    body.portal-page > *:not(.portal-bg-depth) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Soft shadow pool following the pointer on this menu */
+    #portal-pointer-shadow {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 220px;
+      margin: -110px 0 0 -110px;
+      border-radius: 50%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      background: radial-gradient(
+        ellipse 45% 36% at 50% 50%,
+        rgba(0, 0, 0, 0.62) 0%,
+        rgba(40, 24, 80, 0.22) 42%,
+        rgba(130, 100, 220, 0.1) 58%,
+        transparent 74%
+      );
+      filter: blur(20px);
+    }
+    #portal-pointer-shadow.is-active {
+      opacity: 1;
+    }
+
+    body.portal-page .btn,
+    body.portal-page button.btn {
+      position: relative;
+      display: inline-block;
+      margin: 10px 0;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 2px solid white;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       cursor: pointer;
       transition: transform 0.5s ease, box-shadow 0.8s ease, background 1s ease, border-color 0.8s ease, letter-spacing 0.8s ease;
       background-size: 300% 300%;
@@ -1408,15 +1474,18 @@
       background: white;
       color: black;
     }
-    /* Custom Cursor */
-      * {
-        cursor: url('/cursor/cursor.png') 24 24, auto !important;
-      }
+    /* Custom cursor (scoped to this hub) */
+    body.portal-page,
+    body.portal-page * {
+      cursor: url('/cursor/cursor.png') 24 24, auto !important;
+    }
   </style>
 
 <!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
 </head>
 <body class="portal-page">
+  <div class="portal-bg-depth" aria-hidden="true"></div>
+  <div id="portal-pointer-shadow" aria-hidden="true"></div>
 <!-- Back button -->
   <a href="../" class="back-btn">⬅ Back</a>
 
@@ -1450,12 +1519,30 @@
   <p>Some games are made with Scratch</p>
 
   <script>
+    (function () {
+      var el = document.getElementById('portal-pointer-shadow');
+      if (!el) return;
+      function onMove(e) {
+        el.style.left = e.clientX + 'px';
+        el.style.top = e.clientY + 'px';
+        el.classList.add('is-active');
+      }
+      function onOut() {
+        el.classList.remove('is-active');
+      }
+      window.addEventListener('mousemove', onMove, { passive: true });
+      document.body.addEventListener('mouseleave', onOut);
+    })();
+  </script>
+
+  <script>
     const modal = document.getElementById('announcementModal');
     const content = document.getElementById('announcementContent');
     const openBtn = document.querySelector('.announcement-link');
     const closeBtn = document.getElementById('closeModal');
 
     function openModal() {
+      if (!modal || !content) return;
       modal.classList.remove('hide');
       content.classList.remove('hide');
       modal.style.display = 'flex';
@@ -1466,6 +1553,7 @@
     }
 
     function closeModal() {
+      if (!modal || !content) return;
       modal.classList.remove('show');
       content.classList.remove('show', 'active');
       content.classList.add('hide');
@@ -1476,13 +1564,14 @@
       }, 400);
     }
 
-    // open when the website is visited
-    window.addEventListener('load', openModal);
-    openBtn.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
+    if (modal && content && closeBtn) {
+      window.addEventListener('load', openModal);
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      closeBtn.addEventListener('click', closeModal);
+    }
+    if (openBtn) openBtn.addEventListener('click', openModal);
   </script>
 
 </body>
