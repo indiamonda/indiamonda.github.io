@@ -99,6 +99,9 @@ def main() -> int:
             fail += 1
 
     extras = [
+        "index.html",
+        "index.js",
+        "js/bundle.js",
         "version.json",
         "libs/min/laya.core.min.js",
         "libs/min/laya.ani.min.js",
