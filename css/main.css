@@ -67,12 +67,13 @@ html,body{
   height:var(--top-bar-h);min-height:var(--top-bar-h);
   background:var(--bg-deep);
   border:1.5px solid var(--border);
+  border-top:none;
   border-bottom:none;
-  border-radius:var(--radius) var(--radius) 0 0;
+  border-radius:0;
   display:flex;align-items:center;
   padding:0 16px;gap:12px;
   box-shadow:0 0 31px rgba(0,0,0,0.5);
-  margin:8px 8px 0 8px;
+  margin:0;
 }
 
 .body-row{
@@ -411,7 +412,7 @@ html,body{
 
 /* ══════════ RESPONSIVE ══════════ */
 @media(max-width:700px){
-  .top-bar{margin:4px 4px 0 4px;padding:0 10px;height:48px;min-height:48px}
+  .top-bar{margin:0;padding:0 10px;height:48px;min-height:48px}
   .body-row{margin:0 4px 4px 4px}
   .sidebar{width:44px;min-width:44px;padding:8px 0 10px}
   .sidebar .logo{width:28px;height:28px}

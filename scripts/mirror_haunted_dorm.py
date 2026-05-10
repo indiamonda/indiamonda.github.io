@@ -62,19 +62,20 @@ def mirror_minigame_sdk() -> bool:
 
 
 def rewrite_index_html_local_sdk() -> None:
-    """Upstream index.html points at sdk.minigame.vip; keep a local copy of that script."""
+    """Upstream index.html points at sdk.minigame.vip; use local lite stub (vendor SDK stalls off-platform)."""
     path = os.path.join(ROOT, "index.html")
     if not os.path.isfile(path):
         return
     with open(path, "r", encoding="utf-8", errors="ignore") as f:
         text = f.read()
+    lite = "js/haunted-minigame-lite.js"
     needle = "https://sdk.minigame.vip/js/1.1/minigame.js"
     if needle in text:
-        text = text.replace(needle, "js/1.1/minigame.js")
+        text = text.replace(needle, lite)
+    text = text.replace("js/1.1/minigame.js", lite)
     boot = '<script src="js/self-host-bootstrap.js"></script>'
-    mg = '<script src = "js/1.1/minigame.js"></script>'
-    if mg in text and boot not in text:
-        text = text.replace(mg, mg + "\n    " + boot)
+    if boot in text:
+        text = text.replace(boot, "")
     apple = "<meta name='apple-mobile-web-app-capable' content='yes' />"
     mobile = "<meta name='mobile-web-app-capable' content='yes' />"
     if mobile not in text and apple in text:
