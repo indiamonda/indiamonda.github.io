@@ -135,16 +135,25 @@ def main() -> int:
         extras.append(f"res/sound/{o}")
 
     ui_names = []
+    prefab_json_names: list[str] = []
     if os.path.isfile(BUNDLE):
         with open(BUNDLE, "r", encoding="utf-8", errors="ignore") as bf:
             bs = bf.read()
         ui_names = sorted(
             set(re.findall(r"gameAssets/asset/UIJson/Dialogs/[A-Za-z0-9_]+", bs))
         )
+        # Prefabs/*.json referenced by bundle (UI scenes, strips, menus).
+        prefab_json_names = sorted(
+            set(
+                m.split("/", 1)[1]
+                for m in re.findall(r"Prefabs/[A-Za-z0-9_]+\.json", bs)
+            )
+        )
 
     for u in ui_names:
         extras.append(u + ".json")
 
+    # .prefab on disk is often mirrored from CDN as .json (see loop below).
     prefabs = [
         "AngleSkill",
         "CritUIPrefab",
@@ -158,6 +167,8 @@ def main() -> int:
     ]
     for pf in prefabs:
         extras.append(f"gameAssets/asset/Prefabs/{pf}.json")
+    for jf in prefab_json_names:
+        extras.append(f"gameAssets/asset/Prefabs/{jf}")
 
     for rel in extras:
         if try_fetch(rel):
@@ -166,15 +177,16 @@ def main() -> int:
             print("MISS extra", rel, file=sys.stderr)
             fail += 1
 
-    # equipmentData: CDN hosts under /data/; game loads gameAssets/asset/data/equipmentData_<Lang>.json
+    # equipmentData: CDN hosts under /data/. Runtime also requests data/ at page root
+    # (see bundle EquipmentManager), so mirror to both locations.
     for langs in "English Chinese Thai Spanish German French Indonesian Portuguese Vietnamese".split():
         src = f"data/equipmentData_{langs}.json"
         url = BASE + src
         try:
             _, data = fetch_bytes(url)
-            dst = f"gameAssets/asset/data/equipmentData_{langs}.json"
-            save(dst, data)
-            ok += 1
+            save(f"gameAssets/asset/data/equipmentData_{langs}.json", data)
+            save(src, data)
+            ok += 2
         except Exception as e:
             print("MISS equipment copy", langs, e, file=sys.stderr)
             fail += 1
@@ -190,9 +202,9 @@ def main() -> int:
         ok += 1
 
     # Prefabs: engine loads .prefab; CDN stores .json
-    for pf in prefabs:
-        js_path = os.path.join(ROOT, "gameAssets", "asset", "Prefabs", f"{pf}.json")
-        pf_path = os.path.join(ROOT, "gameAssets", "asset", "Prefabs", f"{pf}.prefab")
+    def copy_json_to_prefab(name: str) -> None:
+        js_path = os.path.join(ROOT, "gameAssets", "asset", "Prefabs", f"{name}.json")
+        pf_path = os.path.join(ROOT, "gameAssets", "asset", "Prefabs", f"{name}.prefab")
         if os.path.isfile(js_path):
             with open(js_path, "rb") as f:
                 blob = f.read()
@@ -200,12 +212,27 @@ def main() -> int:
             with open(pf_path, "wb") as f:
                 f.write(blob)
 
+    for pf in prefabs:
+        copy_json_to_prefab(pf)
+    for jf in prefab_json_names:
+        base = jf.replace(".json", "")
+        copy_json_to_prefab(base)
+
     # mg_N.sk and player_N.sk under gameAssets/asset/res/Skeleton/
     for i in range(7):
         try_fetch(f"gameAssets/asset/res/Skeleton/mg/mg_{i}.sk")
-    for folder, nmax in [("puppet", 6), ("player", 1)]:
+    for folder, nmax in [("puppet", 6), ("player", 6)]:
         for i in range(nmax):
-            try_fetch(f"gameAssets/asset/res/Skeleton/{folder}/player_{i}.sk")
+            rel = f"gameAssets/asset/res/Skeleton/{folder}/player_{i}"
+            try_fetch(rel + ".sk")
+            try_fetch(rel + ".png")
+            if folder == "player" and i == 0:
+                try_fetch(rel + ".json")
+            elif folder == "puppet":
+                try_fetch(rel + ".json")
+
+    # Laya basePath is gameAssets/asset/; English/* lives at CDN host root.
+    try_fetch("English/loading1.png")
 
     print(f"mirror_haunted_dorm: wrote under {ROOT} (approx ok={ok}, reported_miss={fail})")
     return 0 if fail == 0 else 0

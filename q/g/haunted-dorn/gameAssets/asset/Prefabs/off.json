@@ -1,0 +1,1 @@
+{"type":"View","props":{"y":45,"x":45,"width":90,"presetID":1,"pivotY":45,"pivotX":45,"name":"off","isPresetRoot":true,"height":90},"compId":99,"child":[{"type":"Image","props":{"y":45,"x":45,"width":90,"skin":"pipei/closeDoor.png","presetID":2,"pivotY":25,"pivotX":45,"name":"offImg","height":50},"compId":108}],"loadList":["pipei/closeDoor.png"],"loadList3D":[]}
