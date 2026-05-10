@@ -1,0 +1,35 @@
+{
+  "platform": "minigame",
+  "sdk": "https://sdk.minigame.vip/js/1.0/minigame-sdk.js",
+  "instance": "FBInstant",
+  "features": {
+    "ads": {
+      "enabled": true,
+      "isTest": false,
+      "config": {
+        "interstitial": "4864743603539728_5070034729677280",
+        "banner": "4864743603539728_5082905605056859",
+        "rewarded_video": "4864743603539728_5070034119677341",
+        "rewarded_interstitial": "4864743603539728_5070034119677341"
+      },
+      "options": {
+        "fb_max_ad_instance": 3,
+        "fb_init_ad_count": 3,
+        "fb_banner_refresh_interval": 40,
+        "fb_interstitial_refresh_interval": 40,
+        "fb_rewarded_video_refresh_interval": 0,
+        "fb_max_banner_error": 1,
+        "fb_max_interstitial_error": 3,
+        "fb_max_rewarded_video_error": 3,
+        "fb_auto_load_on_play": true,
+        "fb_auto_reload_delay": 1,
+        "fb_ad_delay_for_first_banner": 0,
+        "fb_ad_delay_for_first_interstitial": 30,
+        "fb_ad_delay_for_first_rewarded_video": 0
+      }
+    },
+    "leaderboard": {
+      "enabled": true
+    }
+  }
+}

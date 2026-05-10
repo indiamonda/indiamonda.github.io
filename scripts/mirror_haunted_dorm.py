@@ -69,10 +69,14 @@ def rewrite_index_html_local_sdk() -> None:
     with open(path, "r", encoding="utf-8", errors="ignore") as f:
         text = f.read()
     needle = "https://sdk.minigame.vip/js/1.1/minigame.js"
-    if needle not in text:
-        return
+    if needle in text:
+        text = text.replace(needle, "js/1.1/minigame.js")
+    apple = "<meta name='apple-mobile-web-app-capable' content='yes' />"
+    mobile = "<meta name='mobile-web-app-capable' content='yes' />"
+    if mobile not in text and apple in text:
+        text = text.replace(apple, apple + "\n    " + mobile)
     with open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text.replace(needle, "js/1.1/minigame.js"))
+        f.write(text)
 
 
 def atlas_companion_paths(atlas_rel: str, atlas_json: dict) -> list[str]:
@@ -134,6 +138,7 @@ def main() -> int:
     extras = [
         "index.html",
         "index.js",
+        "minigame.json",
         "js/bundle.js",
         "version.json",
         "libs/min/laya.core.min.js",
