@@ -13,6 +13,8 @@ import sys
 import urllib.request
 
 BASE = "https://haunted-dorm.apps.minigame.vip/"
+SDK_MINIGAME_JS = "https://sdk.minigame.vip/js/1.1/minigame.js"
+SDK_SAVE_REL = "js/1.1/minigame.js"
 UA = "Mozilla/5.0 (compatible; JQRG-mirror/1.0; +https://github.com/jimmyqrg/jimmyqrg.github.io)"
 ROOT = os.path.join(os.path.dirname(__file__), "..", "q", "g", "haunted-dorn")
 BUNDLE = os.path.join(ROOT, "js", "bundle.js")
@@ -47,6 +49,32 @@ def try_fetch(rel: str) -> bool:
     return False
 
 
+def mirror_minigame_sdk() -> bool:
+    """Vendor minigame.js (same bytes as sdk.minigame.vip)."""
+    try:
+        _, data = fetch_bytes(SDK_MINIGAME_JS)
+        if data:
+            save(SDK_SAVE_REL, data)
+            return True
+    except Exception as e:
+        print("FAIL", SDK_MINIGAME_JS, e, file=sys.stderr)
+    return False
+
+
+def rewrite_index_html_local_sdk() -> None:
+    """Upstream index.html points at sdk.minigame.vip; keep a local copy of that script."""
+    path = os.path.join(ROOT, "index.html")
+    if not os.path.isfile(path):
+        return
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        text = f.read()
+    needle = "https://sdk.minigame.vip/js/1.1/minigame.js"
+    if needle not in text:
+        return
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text.replace(needle, "js/1.1/minigame.js"))
+
+
 def atlas_companion_paths(atlas_rel: str, atlas_json: dict) -> list[str]:
     out = []
     meta = atlas_json.get("meta") or {}
@@ -65,6 +93,11 @@ def main() -> int:
     cfg = json.loads(raw.decode("utf-8"))
     save("fileconfig.json", raw)
     ok += 1
+
+    if mirror_minigame_sdk():
+        ok += 1
+    else:
+        fail += 1
 
     for atlas_key in cfg:
         if not atlas_key.endswith(".atlas"):
@@ -236,6 +269,8 @@ def main() -> int:
 
     # Laya basePath is gameAssets/asset/; English/* lives at CDN host root.
     try_fetch("English/loading1.png")
+
+    rewrite_index_html_local_sdk()
 
     print(f"mirror_haunted_dorm: wrote under {ROOT} (approx ok={ok}, reported_miss={fail})")
     return 0 if fail == 0 else 0
