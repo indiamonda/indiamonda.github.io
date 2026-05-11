@@ -2636,40 +2636,23 @@ button.nav-discover{
   box-shadow:0 0 8px rgba(136,65,214,.15);
 }
 
-/* --- Search/URL bar: glow ring on focus, icon rotate, placeholder shimmer, border pulse --- */
-@keyframes searchGlow{0%,100%{box-shadow:0 0 12px rgba(136,65,214,.3)}50%{box-shadow:0 0 20px rgba(136,65,214,.45)}}
-@keyframes searchPulse{0%,100%{border-color:rgba(136,65,214,.2)}50%{border-color:rgba(136,65,214,.5)}}
-@keyframes searchExpandIn{from{opacity:0;transform:scaleX(.85)}to{opacity:1;transform:scaleX(1)}}
-@keyframes searchShakeIn{0%{transform:translateX(-4px)}25%{transform:translateX(4px)}50%{transform:translateX(-2px)}75%{transform:translateX(2px)}100%{transform:translateX(0)}}
-@keyframes searchIconSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+/* --- Search/URL bar --- */
 @keyframes searchIconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes searchBorderGradient{0%{border-color:rgba(136,65,214,.3)}33%{border-color:rgba(214,65,136,.3)}66%{border-color:rgba(65,136,214,.3)}100%{border-color:rgba(136,65,214,.3)}}
-@keyframes searchUnderline{from{background-size:0 2px}to{background-size:100% 2px}}
-@keyframes searchFocusLift{from{transform:translateY(0);box-shadow:none}to{transform:translateY(-2px);box-shadow:0 4px 16px rgba(136,65,214,.2)}}
-@keyframes searchPlaceholderFade{0%,100%{opacity:.5}50%{opacity:.8}}
-@keyframes searchRipple{0%{box-shadow:0 0 0 0 rgba(136,65,214,.3)}100%{box-shadow:0 0 0 10px rgba(136,65,214,0)}}
-.url-bar:focus-within,.search-bar:focus-within{animation:searchGlow 2s ease infinite}
+/* Search/URL bars: subtle, non-looping decoration on hover/focus.
+   Earlier we ran `searchGlow` (box-shadow pulse) + `searchPulse` (border
+   pulse) as `infinite` animations on these bars. With the lg-on glass
+   skin (`body.lg-on .url-bar/.search-bar`) and the static
+   `transition:border-color .35s ease, box-shadow .35s ease`, the two
+   loops fought each other — the easing transition kept restarting on
+   every keyframe sample, producing an intense "flashing" effect on
+   hover. We now use a one-shot hover bump on the icon + a static
+   focus-within glow (already declared up in the base rule) instead. */
 .url-bar:focus-within svg,.search-bar:focus-within svg{
   transform:scale(1.1) rotate(-8deg);
 }
-.url-bar:hover,.search-bar:hover{animation:searchPulse 1.5s ease infinite}
+.url-bar:hover,.search-bar:hover{border-color:rgba(255,255,255,.18)}
 .url-bar:hover svg,.search-bar:hover svg{animation:searchIconBounce .5s ease}
-/* IMPORTANT: keep the entry animation (`fadeInUp ... both`) FIRST in the
-   list and exactly identical to the static rule. Per CSS Animations,
-   when the animation list changes, animations whose name matches an
-   existing one are kept running - they are NOT restarted. Adding the
-   pulse/glow as the *second* item therefore lets us decorate the bar on
-   hover/focus without ever touching the entry animation. If we instead
-   wrote `animation:searchPulse ...` here, the entry animation would be
-   removed -> static opacity reverts -> bar disappears -> on un-hover
-   the entry replays from `opacity:0` and "flows in upward". */
-.home-search-bar:focus-within{
-  animation:fadeInUp .5s ease .08s both,searchGlow 2s ease infinite;
-}
 .home-search-bar:focus-within svg{transform:scale(1.1) rotate(-8deg)}
-.home-search-bar:hover{
-  animation:fadeInUp .5s ease .08s both,searchPulse 1.5s ease infinite;
-}
 .home-search-bar:hover svg{animation:searchIconBounce .5s ease}
 
 /* --- Game/App tiles: image zoom, label slide up, glow border, pressed sink --- */
@@ -3967,7 +3950,7 @@ var _D1=[
   {n:_('Q3JhenkgQ2F0dGxl'),img:_("Y3JhenktY2F0dGxl"),url:_("L3EvZy9jcmF6eS1jYXR0bGUv"),tags:["touch"]},
   {n:_('Q3Jvc3N5IFJvYWQ='),img:_("Y3Jvc3N5LXJvYWQ="),url:_("L3EvZy9jcm9zc3ktcm9hZC8="),tags:["touch"]},
   {n:_('Q3VydmVCYWxsIDNE'),img:_("Y3VydmViYWxs"),url:_("L3EvZy9jdXJ2ZWJhbGwv"),tags:["touch"]},
-  {n:_('RGFuY2luZyBMaW5l'),img:_("ZGFuY2luZy1saW5l"),url:_("L2RhbmNpbmctbGluZS8="),tags:["featured","touch","jqrg"],wo:true},
+  {n:_('RGFuY2luZyBMaW5l'),img:_("ZGFuY2luZy1saW5l"),url:_("L2RhbmNpbmctbGluZS8="),tags:["featured","touch","jqrg"]},
   {n:_('RGlubw=='),img:_("ZGlubw=="),url:_("L2Rpbm8v"),tags:["touch"],wo:true},
   {n:_('RG9uJ3QgVGFrZSBUaGlzIENhdCBIb21l'),img:_("ZG9ub3R0YWtldGhpc2NhdGhvbWU="),url:_("L3EvZy9kb25vdHRha2V0aGlzY2F0aG9tZS8="),tags:[]},
   {n:_('RG9vZGxlIEp1bXA='),img:_("ZG9vZGxlLWp1bXA="),url:_("L3EvZy9kb29kbGUtanVtcC8="),tags:[]},
