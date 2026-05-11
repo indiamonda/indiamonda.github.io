@@ -3317,7 +3317,7 @@ body.ui-hidden .top-bar > .tb-actions > *:not(.hide-ui-btn) *::after{
 
   <template data-auth-required="originals-section"><div class="home-section">
     <div class="home-section-head">
-      <div class="home-section-title">JimmyQrg Originals</div>
+      <div class="home-section-title">JimmyQrg</div>
     </div>
     <div class="home-banner" id="home-o-container" data-direction="right"></div>
   </div></template>
@@ -3967,6 +3967,7 @@ var _D1=[
   {n:_('Q3JhenkgQ2F0dGxl'),img:_("Y3JhenktY2F0dGxl"),url:_("L3EvZy9jcmF6eS1jYXR0bGUv"),tags:["touch"]},
   {n:_('Q3Jvc3N5IFJvYWQ='),img:_("Y3Jvc3N5LXJvYWQ="),url:_("L3EvZy9jcm9zc3ktcm9hZC8="),tags:["touch"]},
   {n:_('Q3VydmVCYWxsIDNE'),img:_("Y3VydmViYWxs"),url:_("L3EvZy9jdXJ2ZWJhbGwv"),tags:["touch"]},
+  {n:_('RGFuY2luZyBMaW5l'),img:_("ZGFuY2luZy1saW5l"),url:_("L2RhbmNpbmctbGluZS8="),tags:["featured","touch","jqrg"],wo:true},
   {n:_('RGlubw=='),img:_("ZGlubw=="),url:_("L2Rpbm8v"),tags:["touch"],wo:true},
   {n:_('RG9uJ3QgVGFrZSBUaGlzIENhdCBIb21l'),img:_("ZG9ub3R0YWtldGhpc2NhdGhvbWU="),url:_("L3EvZy9kb25vdHRha2V0aGlzY2F0aG9tZS8="),tags:[]},
   {n:_('RG9vZGxlIEp1bXA='),img:_("ZG9vZGxlLWp1bXA="),url:_("L3EvZy9kb29kbGUtanVtcC8="),tags:[]},
@@ -4360,7 +4361,7 @@ function _rG(){
 function _fG(){_rG();updateUrl()}
 
 var activeTagFilters=[];
-var _TF={'featured':_('RmVhdHVyZWQ='),'touch':_('VG91Y2ggRnJpZW5kbHk='),'jqrg':_('SmltbXlRcmcgT3JpZ2luYWxz')};
+var _TF={'featured':_('RmVhdHVyZWQ='),'touch':_('VG91Y2ggRnJpZW5kbHk='),'jqrg':_('SmltbXlRcmc=')};
 
 function toggleSearchFilter(e){
           e.stopPropagation();
@@ -5031,7 +5032,8 @@ window.SPOTLIGHT_BLURBS=window.SPOTLIGHT_BLURBS||{
   'hypper-sandbox':'Drop in. Mess around. Sandbox shooter with friends and bots.',
   'tomb-of-the-mask':'Climb forever. The mask makes you fast. The pixels are dangerous.',
   'bluechasm':'Descend the chasm. Watch your step. Every drop matters.',
-  'haunted-dorm':'Tower-defense dorm survival — fortify your room and survive the night.'
+  'haunted-dorm':'Tower-defense dorm survival — fortify your room and survive the night.',
+  'dancing-line':'A JimmyQrg original — tap in time with the music to weave the line through obstacles.'
 };
 
 function __jqrgBootSite(){
@@ -5404,7 +5406,7 @@ function renderHomeOriginals(){
   if(!c) return;
   var pool=_D1.filter(function(g){return g&&g.tags&&g.tags.indexOf('jqrg')!==-1});
   if(!pool.length){
-    renderHomeBanner(c,[],{empty:'JimmyQrg Originals coming soon.'});
+    renderHomeBanner(c,[],{empty:'JimmyQrg games coming soon.'});
     return;
   }
   renderHomeBanner(c,_shuffleHome(pool));

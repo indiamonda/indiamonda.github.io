@@ -1,4 +1,4 @@
-const CACHE_NAME = 'app-v140';
+const CACHE_NAME = 'app-v141';
 
 const urlsToCache = [
   // ============ ROOT ============
@@ -114,6 +114,7 @@ const urlsToCache = [
   '/game-images/games/crossy-road.png',
   '/game-images/games/csgo.png',
   '/game-images/games/curveball.png',
+  '/game-images/games/dancing-line.png',
   '/game-images/games/deltarune.png',
   '/game-images/games/dino.png',
   '/game-images/games/donottakethiscathome.png',
