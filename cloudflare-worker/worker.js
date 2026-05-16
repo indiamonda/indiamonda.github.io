@@ -1,5 +1,5 @@
 /**
- * DeepSeek proxy + Stripe subscription gate for jimmyqrg.github.io.
+ * DeepSeek proxy + Stripe subscription gate for indiamonda.github.io.
  *
  * Why this exists:
  *   1. The static site can't safely embed a DeepSeek API key in frontend
@@ -46,7 +46,7 @@
 
 const ALLOWED_ORIGINS = [
   'https://tintly555.github.io',
-  'https://jimmyqrg.github.io',
+  'https://indiamonda.github.io',
   'https://chat.jimmyqrg.com',
   'https://lausd.schoology.com',
   'https://unlinewize.jimmyqrg.com',
@@ -994,7 +994,7 @@ async function handleStripeWebhook(request, env, origin) {
  * The response is the raw HTML from the main site, which the chat server
  * parses for "Latest updates" / "History" lists.
  * ==================================================================*/
-const PORTAL_URL = 'https://jimmyqrg.github.io/?directly=1';
+const PORTAL_URL = 'https://indiamonda.github.io/?directly=1';
 const SYNC_UA_RE = /^JimmyQrg-Chat-Sync\//;
 
 async function handlePortalAnnouncements(request, env, origin) {
@@ -1160,31 +1160,16 @@ async function handleUlwGate(request, env, origin) {
   const token = getBearer(request);
   const user  = await resolveUser(token);
   if (!user) {
-    return jsonResponse({ allowed: false, reason: 'auth_required' }, 200, origin);
+    return jsonResponse({ allowed: true, tier: 'free', reason: 'no_auth_required' }, 200, origin);
   }
   if (isUserBanned(user)) {
     return jsonResponse({ allowed: false, reason: 'banned' }, 200, origin);
   }
-  if (ADMIN_USERNAMES.has((user.username || '').toLowerCase())) {
-    return jsonResponse({ allowed: true, tier: 'admin', user: { id: user.id, username: user.username } }, 200, origin);
-  }
-  const comp = complimentaryTier(user);
-  if (comp) {
-    return jsonResponse({
-      allowed: true,
-      tier:    comp,
-      user:    { id: user.id, username: user.username },
-    }, 200, origin);
-  }
-  const sub = await readSubscription(env, user.id);
-  if (isSubscriptionActive(sub)) {
-    return jsonResponse({
-      allowed: true,
-      tier:    sub.tier || 'premium',
-      user:    { id: user.id, username: user.username },
-    }, 200, origin);
-  }
-  return jsonResponse({ allowed: false, reason: 'subscription_required' }, 200, origin);
+  return jsonResponse({
+    allowed: true,
+    tier:    'free',
+    user:    { id: user.id, username: user.username },
+  }, 200, origin);
 }
 
 /* ====================================================================

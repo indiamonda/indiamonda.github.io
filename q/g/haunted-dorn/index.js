@@ -1,1 +1,0 @@
-window.screenOrientation="portrait",loadLib("libs/min/laya.core.min.js"),loadLib("libs/min/laya.ani.min.js"),loadLib("libs/min/laya.ui.min.js"),loadLib("js/bundle.js");
