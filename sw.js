@@ -1,4 +1,4 @@
-const CACHE_NAME = 'app-v144';
+const CACHE_NAME = 'app-v145';
 
 const urlsToCache = [
   // ============ ROOT ============

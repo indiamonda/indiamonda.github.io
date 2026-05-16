@@ -255,7 +255,7 @@
       var swUrl = (navigator.serviceWorker.controller.scriptURL || '').toLowerCase();
       var swPatterns = ['uv.', 'ultraviolet', 'scramjet', 'stomp', 'bare', 'dynamic', 'epoxy'];
       for (var si = 0; si < swPatterns.length; si++) {
-        if (swUrl.indexOf(swPatterns[si]) !== -1 && swUrl.indexOf('jimmyqrg') === -1) {
+        if (swUrl.indexOf(swPatterns[si]) !== -1 && swUrl.indexOf('jimmyqrg') === -1 && swUrl.indexOf('indiamonda') === -1) {
           flag(5, 'proxy:sw-url');
           break;
         }
