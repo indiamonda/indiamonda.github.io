@@ -1,6 +1,6 @@
 # Announcements
 
-**05/16/2026** Added Bullet Force, Added Pokemon Emerald. In total **112** games.
+**05/16/2026** Added Bullet Force. In total **111** games.
 
 **05/15/2026** Added Curve Rush, Added Flappy Bird Nightmares, Added Eugene's Life. Removed Haunted Dorm. In total **110** games.
 
