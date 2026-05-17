@@ -1188,6 +1188,7 @@
 
 
   <meta charset="utf-8">
+  <meta name="jqrg-loader-banner-url" content="/game-images/games/subway-surfers.png">
   <title>Subway Surfers</title>
    <link rel="stylesheet" href="style.css" type="text/css">
 
@@ -1225,7 +1226,23 @@
   var score = document.getElementById('GameScore');
 
   var music;
+  var soundEnabled = false;
   music = new sound("assets/bgmusic.mp3");
+  music.sound.muted = true;
+
+  // JQRG sound gate — when the loader's "Click me to enable sounds" button is
+  // clicked, it fires jqrg-user-gesture. We use that to unmute the game music.
+  window.addEventListener('jqrg-user-gesture', function () {
+    soundEnabled = true;
+    music.sound.muted = false;
+  });
+
+  // Load and display saved high score on start
+  var savedHighScore = parseInt(localStorage.getItem('subway-surfers-highscore') || '0', 10);
+  if (savedHighScore > 0) {
+    var hsEl = document.querySelector(".game_score");
+    if (hsEl) hsEl.textContent = "Best: " + savedHighScore;
+  }
 
   function start() {
     modal.style.display = "flex";
@@ -1233,6 +1250,8 @@
     x.textContent = "Subway Surfers";
     y = document.querySelector(".play_again");
     y.style.display = "none";
+    var hs = document.querySelector(".game_score");
+    if (hs) hs.style.display = savedHighScore > 0 ? "flex" : "none";
   }
 
   document.getElementById("arrow").addEventListener("click", start_box);
@@ -1240,7 +1259,7 @@
 
   function start_box() {
     game_start = true;
-    music.play();
+    if (soundEnabled) music.play();
     modal.style.display = "none";
     score.style.display = "flex";
   }
@@ -1276,6 +1295,13 @@
     w.textContent = "Play Again"
 
     music.stop();
+
+    // Save high score to localStorage (JqrgCloud syncs it to the cloud)
+    var cur = objects[0].score || 0;
+    var best = parseInt(localStorage.getItem('subway-surfers-highscore') || '0', 10);
+    if (cur > best) {
+      localStorage.setItem('subway-surfers-highscore', String(cur));
+    }
   }
 
   function sound(src) {
