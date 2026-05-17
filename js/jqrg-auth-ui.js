@@ -1175,6 +1175,10 @@
       h('strong', null, 'comes with you and won\u2019t be lost'),
       '. Anything already saved in this browser stays on this device too \u2014 it gets uploaded to your new account automatically as soon as it\u2019s created.'
     ]));
+    form.appendChild(h('div', { style: 'font-size:12px;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:10px;padding:8px 10px;background:rgba(136,65,214,.1);border-radius:8px;border-left:3px solid #8841d6' }, [
+      h('strong', { style: 'color:rgba(255,255,255,.8)' }, 'NOTE:'),
+      ' If your school district blocks external emails, click \u201cCan\u2019t receive email?\u201d after entering your email. Your organization will be added to the allow-list so you can still verify.'
+    ]));
     form.appendChild(h('label', null, [
       'Username (lowercase, letters + numbers)',
       h('input', { type: 'text', name: 'username', autocomplete: 'username', required: 'required', maxlength: '32', pattern: '[a-z0-9]+', autofocus: 'autofocus' }),
