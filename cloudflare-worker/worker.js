@@ -282,7 +282,7 @@ const ADMIN_USERNAMES = new Set(['jimmyqrg', 'jeko1107', 'glaeesas']);
 
 /** Manual complimentary access (no Stripe record). Tier matches paid plans. */
 const COMPLIMENTARY_PREMIUM_USERNAMES = new Set(['tianqiansheng9']);
-const COMPLIMENTARY_PLUS_USERNAMES = new Set(['kyle']);
+const COMPLIMENTARY_PLUS_USERNAMES = new Set(['kyle', 'glaeesas', 'glaxyias']);
 
 function complimentaryTier(user) {
   if (!user) return null;
