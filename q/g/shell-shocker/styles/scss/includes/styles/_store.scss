@@ -1,0 +1,508 @@
+/* ----------------------------------------------------------------- Egg Shop -- */
+.btn_buy_item img {
+	width: .8em;
+}
+
+
+.screen-shop .right_panel {
+	padding-right: var(--ss-space-md);
+}
+
+.eggshop_subtitle {
+	font-weight: bold;
+	line-height: 1.2em;
+	margin: 0 0 var(--ss-space-lg);
+	font-size: 1.3em;
+}
+
+.eggshop_subtitle span {
+	font-size: 1em;
+	color: var(--ss-red-btn-fill);
+}
+
+.eggshop_pricebox {
+	font-size: 1em;
+	font-weight: 900;
+	margin-bottom: 0.2em;
+	margin-top: 0.2em;
+	line-height: 1;
+}
+
+.eggshop_pricebox span.eggshop-currency-type {
+	font-size: .7em;
+	font-weight: 700;
+}
+.eggshop_pricebox span.eggshop-dollar-sign {
+	font-size: .7em;
+    vertical-align: super;
+}
+.eggshop_goldchicken_right .eggshop_pricebox {
+	width: 12.3em !important;
+}
+
+.eggshop_bigtitle {
+	font-size: .8em !important;
+}
+
+.eggshop_chicken_box {
+	align-items: center;
+}
+
+.eggshop_chicken_box li {
+	text-align: left;
+	font-size: 1.5em;
+}
+
+.eggshop_image {
+	height: 5em;
+	margin: 0 auto;
+}
+
+.eggshop_chicken {
+	height: 12em;
+	margin: 0;
+}
+
+#eggshop_banner {
+	position: absolute;
+	top: 0.5em;
+	left: -0.65em;
+	display: flex;
+	flex-direction: row;
+	background-color: var(--ss-yolk);
+	box-shadow: -0.25em 0.25em 0 0 rgba(0, 0, 0, 0.2);
+}
+
+#eggshop_banner.sale {
+	background-color: var(--ss-red);
+}
+
+#eggshop_banner.sale, .single-egg-store-item-is-item #eggshop_banner {
+	padding-left: .5em;
+}
+
+// .single-egg-store-item.single-egg-store-item-is-item {
+// 	order: -1;
+// 	margin-bottom: var(--ss-space-lg);
+// }
+
+// .single-egg-store-item.single-egg-store-item-is-item > div {
+// 	border-radius: 0 0 var(--ss-space-md) var(--ss-space-md);
+// 	/* background: linear-gradient(146deg, rgba(254,216,56,1) 5%, rgba(255,255,255,1) 26%, rgba(254,216,56,1) 50%); */
+// 	background: var(--ss-vip-store-bg);
+// 	padding: var(--ss-space-lg);
+// }
+
+// .single-egg-store-item.single-egg-store-item-is-item > div, .single-egg-store-item-is-item .eggshop_image {
+// 	border: .2em solid var(--ss-gold);
+// 	text-align: center;
+// }
+
+
+.single-egg-store-item-is-currency {
+	border: var(--ss-border-blue5);
+	padding: var(--ss-space-sm);
+	display: grid;
+	height: 6em;
+	
+	.single-egg-store-info {
+		justify-content: center;
+	}
+}
+
+.single-egg-store-item.egg_pack_small, .single-egg-store-item.egg_pack_giant {
+	background: var(--egg-pack-small-bg);
+}
+
+.single-egg-store-item.egg_pack_medium {
+	background: var(--egg-pack-md-bg);
+}
+
+.single-egg-store-item.egg_pack_large {
+	background: var(--egg-pack-lg-bg);
+}
+
+// .single-egg-store-item-is-item {
+// 	margin-top: var(--ss-space-md);
+// }
+
+// .single-egg-store-item-is-item .eggshop_image {
+// 	width: 6em;
+// 	height: 6em;
+// }
+
+// .single-egg-store-item-is-item header {
+// 	background-color: var(--ss-gold);
+// 	padding: var(--ss-space-sm) var(--ss-space-lg);
+// 	border-radius: var(--ss-space-md) var(--ss-space-md) 0 0;
+// }
+
+// .single-egg-store-item-is-item h6 {
+// 	color: var(--ss-vip-brown);
+// }
+
+// .single-egg-store-item-is-item .eggshop_subtitle {
+// 	font-size: 1em;
+// }
+
+//  Premium items
+.single-egg-store-item {
+	margin-bottom: var(--ss-space-sm);
+
+	.eggshop_image:hover {
+		cursor: pointer;
+	}
+
+	s {
+		opacity: .5;
+		font-size: .9em;
+	}
+
+	h6 {
+		img {
+			width: 2em;
+			height: auto;
+		}
+	}
+
+	&.single-egg-store-item-is-bundle,
+	&.single-egg-store-item-is-pass,
+	&.single-egg-store-item-is-item {
+
+		.single-egg-store-header {
+			font-family: 'Nunito', sans-serif;
+			font-size: 1em;
+			display: block;
+			width: 10em;
+			font-weight: 700;
+			padding: 0.3em !important;
+			position: relative;
+
+			&:before {
+				content: '';
+				position: absolute;
+				transform: skew(31deg);
+				height: 100%;
+				width: 1em;
+				top: 0;
+				left: -0.1em;
+			}
+		}
+
+		header {
+			display: flex;
+			justify-content: end;
+		}
+
+		.single-egg-store-price {
+			width: 15em;
+		}
+
+		.eggshop_image {
+			position: absolute;
+			height: auto;
+			width: 8em;
+			left: -3em;
+		}
+
+		.eggshop_subtitle {
+			font-size: .9em;
+			width: 12em;
+			justify-self: end;
+			margin-top: 0.2em !important;
+		}
+
+	}
+
+	&.single-egg-store-item-is-item {
+
+		background: var(--ss-premium-gradient);
+		border: var(--ss-common-border-width) solid var(--ss-premium-dark-green);
+
+		.single-egg-store-header {
+			background-color: var(--ss-premium-dark-green);
+			padding-right: 1.5em !important;
+			width: auto;
+	
+			&:before {
+				background-color: var(--ss-premium-dark-green);
+			}
+		}
+
+		.single-egg-store-info,
+		.single-egg-store-wrapper {
+			width: 16em;
+		}
+	}
+
+	&.single-egg-store-item-is-bundle,
+	&.single-egg-store-item-is-pass {
+
+		overflow: visible;
+	
+		.single-egg-store-header {
+			background-color: var(--bundle-color);
+			color: var(--bundle-text-color);
+	
+			&:before {
+				background-color: var(--bundle-color);
+			}
+		}
+	}
+}
+
+/*  Bundles */
+
+#bundlePopup, .single-egg-store-item.single-egg-store-item-is-bundle {
+	background-image: linear-gradient(to bottom,#6a14d1, #9200bf, #ab00ae, #bd029e, #c82090);
+	border: var(--ss-common-border-width) solid var(--bundle-color);
+	overflow: visible;
+}
+
+#equip_grid .tool-tip > span {
+    top: -3em;
+    bottom: auto;
+	text-wrap: nowrap;
+	width: auto;
+	min-width: 20em;
+	max-width: 26em;
+	z-index: 1;
+}
+
+.single-egg-store-item.single-egg-store-item-is-bundle .single-egg-store-header {
+	text-align: center;
+}
+
+
+.single-egg-store-item.single-egg-store-item-is-pass {
+	height: 7em;
+	border: var(--ss-common-border-width) solid var(--ss-blue5);
+
+	.pass-title-img {
+		width: 10em;
+		margin: .75em auto .25em;
+		display: block;
+	}
+
+	.single-egg-store-price {
+		width: 15em;
+		margin: .25em 0 auto 4em;
+	}
+
+	.eggshop_image {
+		height: auto;
+		width: 11em;
+		left: -2em;
+		top: 3.4em;
+	}
+}
+
+.egg-store-item-type {
+	width: 1.2em;
+	height: 1em;
+	fill: var(--ss-white);
+}
+
+
+.btn_store:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+
+.sale-desc {
+	left: 0;
+    border-bottom: 1.9em solid var(--ss-red-bright);
+    border-left: 0 solid transparent;
+    border-right: 1.3em solid transparent;
+    height: 0;
+    font-size: .6em;
+    font-style: italic;
+    min-width: 12em;
+    padding-left: 0.5em;
+    color: var(--ss-white);
+    line-height: 2;
+    font-weight: 700;
+}
+
+#bundlePopup #equip_grid {
+	grid-template-columns: repeat(2, 1fr) !important;
+	padding-bottom: 0;
+}
+
+#bundlePopup #popup_title {
+	text-shadow: var(--ss-btn-common-txt-shadow)
+}
+
+#bundlePopup .equip-item-banner {
+    bottom: 0.85em;
+    clip-path: polygon(-6% 0%, 107% 0%, 77% 97%, 25% 100%);
+    font-size: .6em;
+    font-weight: 700;
+    letter-spacing: .02em;
+    padding: 0.3em 2em;
+    position: absolute;
+    right: -2.2em;
+    transform: rotate(-45deg);
+    z-index: 1;
+}
+
+#bundlePopup .equip-item-banner.shadow {
+    bottom: 0.8em;
+    right: -1.3em;
+}
+
+#bundlePopup .tool-tip > span:after, #bundlePopup.tool-tip div.tool-tip--bubble:after {
+	left: 50%;
+	top: auto;
+	transform: translate(-50%, 0);
+}
+
+.bundle-popup-img {
+	width: 16em;
+	left: -10em;
+}
+
+#popupEggStoreSingle {
+	background: none;
+	border: 0;
+}
+
+#eggshop_banner img {
+	width: 2em;
+	height: 2em;
+}
+
+#eggshop_banner:after {
+	content: "";
+	position: absolute;
+	right: -0.9em;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	border-bottom: 1em solid var(--ss-yolk);
+	border-right: 1em solid transparent;
+}
+
+#eggshop_banner:after {
+	content: "";
+	position: absolute;
+	right: -0.9em;
+	top: 0;
+	width: 0;
+	height: 0;
+	border-top: 1em solid var(--ss-yolk);
+	border-right: 1em solid transparent;
+}
+
+.sale#eggshop_banner:after {
+	border-bottom-color: var(--ss-red);
+	border-top-color: var(--ss-red);
+}
+
+.eggshop_banner_mid {
+	text-align: left;
+	font-weight: bold;
+	font-size: 0.9em;
+	line-height: 2.4em;
+	white-space: nowrap;
+	color: var(--ss-yellow0);
+	padding-right: 0.75em;
+	min-width: 8em;
+    height: 2.2em;
+}
+
+.eggshop_megatitle {
+	background: none !important;
+	color: var(--ss-white) !important;
+	font-size: 2.5em;
+	line-height: 1em;
+	width: auto !important;
+}
+
+.eggshop_pricebox.slashed {
+    font-size: .8em;
+	color: rgba(12,87,111, .6);
+	position: relative;
+}
+
+.eggshop_pricebox.slashed::after {
+    position: absolute;
+    top: 50%;
+    left: -0.3em;
+    width: 61%;
+    height: 0.1em;
+    background: var(--ss-blue5);
+    transform: translate(0%, -50%);
+    content: '';
+}
+
+.single-egg-store-item-is-item .eggshop_banner_mid,
+.single-egg-store-item-is-item  #eggshop_banner{
+	background-color: var(--ss-pink);
+}
+
+.single-egg-store-item-is-item #eggshop_banner:after {
+	border-top: 1em solid var(--ss-pink);
+	border-bottom: 1em solid var(--ss-pink);
+}
+
+.single-egg-store-item-purchased {
+	background: var(--ss-red);
+    clip-path: polygon(4.5% 0%, 100% 0%, 96% 100%, 0% 100%);
+    transform: rotate(-10deg);
+    width: 8em;
+    position: absolute;
+    left: -.6em;
+    padding: .3em;
+    font-style: italic;
+    font-size: 1.9em;
+	box-shadow: .4em .4em 0 var(--ss-blueshadow);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+.egg-store-sale-notify button {
+	background-color: var(--ss-red);
+	border: 0;
+	color: var(--ss-white);
+	text-transform: uppercase;
+	box-shadow: .1em .1em 0 var(--ss-blueshadow);
+	margin-right: var(--ss-space-sm);
+}
+
+.egg-store-sale-notify button:hover {
+	background-color: var(--ss-red-bright);
+	cursor: pointer;
+}
+
+.egg-store-sale-notify .text {
+	display: block;
+	font-size: .6em;
+	font-family: 'Sigmar One', Sans-Serif;
+	line-height: 1;
+}
+
+.egg-store-sale-notify.white-blue button {
+	background-color: var(--ss-white);
+	color: var(--ss-blue3);
+}
+
+.egg-store-sale-notify.white-blue button:hover {
+	color: var(--ss-white);
+	background-color: var(--ss-blue3);
+}
+
+.btn_store {
+	&.is_item_btn {
+		height: 2.1em;
+	}
+		svg {
+		width: 1.2em;
+		height: 1.2em;
+		fill: #fff;
+		filter: drop-shadow(.1em .1em .1em rgba(0, 0, 0, .5));
+	}
+
+}

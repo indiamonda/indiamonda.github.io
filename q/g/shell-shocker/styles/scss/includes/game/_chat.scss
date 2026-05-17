@@ -1,0 +1,81 @@
+.chat-wrapper {
+	pointer-events: none;
+	.is-paused & {
+		left: 0;
+		pointer-events: all;
+	}
+}
+
+.chat-wrapper.pause-ui-element {
+	bottom: var(--ss-space-lg);
+    width: 30%;
+	left: 1em;
+	z-index: 2;
+}
+
+.is-paused .pause-ui-element.chat-hidden.has-announcement  {
+	height: auto;
+}
+
+.is-paused #chatIn {
+	position: absolute;
+	display: block;
+	width: 11em;
+    left: var(--ss-space-md);
+}
+
+.is-paused .chat-container {
+    display: block;
+    height: calc(var(--ss--chat-height) - 3.5em);
+    margin-right: var(--ss-space-md);
+    margin-left: var(--ss-space-md);
+    overflow-x: hidden;
+	margin-top: var(--ss-space-md);
+}
+
+.chat {
+	color: var(--ss-white);
+	text-shadow: 0.05em 0.05em 0px rgba(0,0,0,0.35);
+	z-index: 5;
+	font-weight: bold;
+}
+
+.is-paused .chat-item:first-child.chat-pinned-item {
+	color: #fff100;
+	font-weight: bold;
+	background-color: #5B9DB3;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.chat-pinned-item {
+	color: #fff100;
+}
+
+.chat-item {
+	hyphens: auto;
+}
+
+.chat-player-name {
+	font-weight: bold;
+}
+
+#chatOut {
+	display: none;
+	bottom: 2.5em;
+	left: 1em;
+}
+
+#chatIn {
+	display: none;
+	color: #fff100;
+	bottom: 1em;
+	left: 1em;
+	width: 100%;
+	border: none;
+	background: none;
+	font-family: 'Nunito';
+	font-weight: bold;
+}

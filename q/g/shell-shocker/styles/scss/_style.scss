@@ -1,0 +1,481 @@
+@import
+'includes/styles/utilities',
+'includes/styles/overlay',
+'includes/styles/loading',
+'includes/styles/equip',
+'includes/styles/panels',
+'includes/styles/account',
+'includes/styles/media-tabs',
+'includes/styles/house-ads',
+'includes/styles/private-game-popup',
+'includes/styles/play_component',
+'includes/styles/store',
+'includes/styles/vip',
+'includes/styles/footer',
+'includes/styles/server',
+'includes/styles/settings-popup',
+'includes/styles/popup-default',
+'includes/styles/faq',
+'includes/styles/photobooth',
+'includes/styles/tooltip',
+'includes/styles/give_stuff_popup',
+'includes/styles/chickn-winner',
+'includes/styles/announcement',
+'includes/styles/select',
+'includes/styles/main-menu',
+'includes/styles/option-box-component',
+'includes/styles/profile',
+'includes/styles/tutorial',
+'includes/styles/notifications',
+'includes/styles/freegames',
+'includes/styles/firebase-signin',
+'includes/styles/challenges',
+'includes/styles/custom-popups',
+'includes/styles/hero-vs-mosnters';
+
+/* --------------------- Stuff ----------------*/
+#ss_background {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	/* background: var(--ss-lightoverlay) no-repeat center center fixed; */
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-position: center;
+}
+
+/* ----------------------------------------------------------------- Scrolling -- */
+
+::-webkit-scrollbar {
+    width: 0.7em;
+    height: 1em;
+	-webkit-border-radius: 0.5em;
+	border-radius: 0.5em;
+}
+::-webkit-scrollbar,
+::-webkit-scrollbar-track {
+	background: var(--ss-blue3)
+}
+::-webkit-scrollbar-thumb {
+    height: 0.6em;
+    border: 0.1em solid var(--ss-blue4);
+    background-clip: padding-box;
+	-webkit-border-radius: 0.5em;
+	border-radius: 0.5em;
+    background-color: var(--ss-blue1);
+	/* -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+	box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); */
+}
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.v_scroll {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.noscroll, .noScrollIngame {
+	overflow: hidden;
+}
+
+/* ----------------------------------------------------------------- Main content-- */
+
+.main-content {
+	width: 100%;
+    grid-template-columns: var(--ss-aside-panel-width) 1fr;
+}
+
+.main-aside {
+	width: 15em;
+	z-index: 2;
+
+}
+
+.game-screen {
+
+	.main-aside {
+		pointer-events: none;
+	}
+
+	&.is-paused {
+		.main-aside {
+			pointer-events: all;
+		}
+	}
+}
+
+/* ----------------------------------------------------------------- gdpr -- */
+.gdpr_banner {
+	position: absolute;
+	bottom: 0em;
+	left: 0;
+	width: 100%;
+	background-color: var(--ss-blue5);
+	border-top: 0.1em solid var(--ss-blue0);
+	color: var(--ss-white);
+	font-weight: bold;
+	z-index: 10000000000;
+	padding: var(--ss-space-md);
+}
+
+.gdpr_banner a {
+	color: var(--ss-red0);
+	font-size: 1em;
+}
+
+.gdpr_banner div {
+	font-size: 1em;
+}
+
+/* ----------------------------------------------------------------- Logo -- */
+
+.home-screen-logo {
+	filter: drop-shadow(1mm 2mm 0mm rgba(0, 0 , 0, .3));
+}
+
+#logo {
+	width: calc(var(--ss-space-lg)*13);
+	height: auto;
+	pointer-events: auto;
+	margin: var(--ss-space-lg) 0 var(--ss-space-lg) var(--ss-space-lg);
+}
+
+.egg-org-logo {
+    height: auto;
+    width: 10em;
+    position: absolute;
+    bottom: 0;
+    transform: translate(-8em, 2em) rotate(8deg);
+}
+
+
+/* ----------------------------------------------------------------- Egg / Equip -- */
+
+.item-search-label .fa-search {
+	position: absolute;
+    right: 0;
+    bottom: -0.3em;
+}
+
+#equip_weapon_panel {
+	margin-bottom: var(--ss-account-panel-height);
+}
+
+.screen-inventory #equip_weapon_panel {
+	margin-bottom: 0;
+}
+
+#weapon_select {
+	zoom: 0.85;
+	width: 30em;
+}
+
+.pause-container #weapon_select {
+	width: auto;
+	margin-bottom: 0 !important;
+}
+
+.weapon_img {
+	box-sizing: border-box;
+	background-color: var(--ss-blue3);
+	height: 4em;
+	width: 4em;
+	border: var(--ss-common-border-width) solid var(--ss-blue3);
+	fill: var(--ss-white);
+	cursor: pointer;
+}
+
+.pause-container .weapon_img {
+	width: 3em;
+	height: 3em;
+}
+
+.weapon-grid {
+	width: 16em;
+}
+
+.weapon_img:hover, #weapon_select .weapon_selected{
+	border: var(--ss-common-border-width) solid var(--ss-white);
+	box-shadow: var(--ss-box-shadow-1);
+}
+
+#weapon_select .weapon_selected {
+	background-color: var(--ss-yolk);
+}
+
+#weapon_select .weapon_disabled {
+	background-image: url('../img/svg-icons/ico-disabled.svg');
+	fill: var(--ss-blue1);
+	border-color: var(--ss-blue2);
+	background-color: var(--ss-blue2);
+}
+
+#weapon_select .noclick {
+	cursor: not-allowed;
+}
+
+#popupGoldenChicken #popupInnards:first-of-type {
+	margin-right: var(--ss-space-lg);
+}
+
+/* #popupInnards li {
+	font-weight: bold;
+	font-size: 1em;
+	width: 13em;
+} */
+
+.pause-bg {
+	background: var(--ss-lightoverlay) no-repeat;
+	border: var(--ss-common-border-width) solid var(--ss-blue5);
+	padding: 0;
+	text-align: center;
+    min-width: 20em;
+	width: 100%;
+}
+
+.flex-auto {
+	flex: 1 0 auto;
+}
+
+.pause-bg h3 {
+	background: none;
+	margin: var(--ss-space-md) 0 0 0;
+	padding: 0;
+	font-weight: 100;
+	font-size: 1.2em;
+	color: var(--ss-white);
+}
+
+.blueTeam { 
+	color: var(--ss-white) !important;
+}
+
+.redTeam { 
+	color: var(--ss-white) !important; 
+}
+
+
+/* ----------------------------------------------------------------- Pause Button Classes -- */
+
+.pauseButtons {
+	display: flex;
+	flex-direction: column;
+	padding-right: 1em;
+	flex: 0 0 14em;
+}
+
+.pauseButtons button {
+	text-align: left;
+	width: 13em;
+	margin: 0 0 var(--ss-space-sm) 0;
+	margin-bottom: .5em;
+	height: 2.3em;	
+}
+
+#pauseButtons .ss_button {
+	min-width: 12em;
+}
+
+/* ----------------------------------------------------------------- Language Specific Stuff -- */
+
+#app.zh h1, #app.zh h2, #app.zh h3, #app.zh h4, #app.zh h5, #app.zh h6 {
+	font-weight: bold;
+}
+
+#app.ko h1, #app.ko h2, #app.ko h3, #app.ko h4, #app.ko h5, #app.ko h6 {
+	font-weight: bold;
+}
+
+#app.ru h1, #app.ru h2, #app.ru h3, #app.ru h4, #app.ru h5, #app.ru h6 {
+	font-weight: bold;
+}
+
+#app.ko #footer_links_panel a, #app.zh #footer_links_panel a  { 
+	font-weight: 600 !important;
+}
+
+#app.ko #buyPassChickenSpeech, #app.zh #buyPassChickenSpeech {
+	line-height: 1.2em;
+}
+
+#app.ru .ss_bigtab {
+	font-weight: bold;
+}
+
+/* ----------------------------------------------------------------- Responsive Stuff -- */
+
+@media (max-aspect-ratio: 4/3) {
+	.ss_bigtab {
+		min-width: 6em;
+	}
+
+	.ico_itemtype {
+		width: 3.25em;
+		height: 3.25em;
+		margin-bottom: 0.25em;
+	}
+}
+  
+
+/* ----------------------------------------------------------------- Dev Classes -- */
+
+.devborder {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #F00;
+}
+
+.devbutton {
+	position: absolute;
+	z-index: 1000;
+	top: 0;
+	right: 50%;
+	margin-right: -100px;
+	padding: 5px;
+	width: 200px;
+}
+
+.devad {
+	width: 100%;
+	height: 4em;
+	margin: 0;
+}
+
+.firebaseID {
+	display: none;
+	position: absolute;
+	top: 0; left: 50%;
+	margin-left: -10em;
+	width: 20em;
+	text-align: center;
+}
+
+/* ----------------------------------------------------------------- Dev Classes -- */
+/* #anonWarningPopup {
+	background: var(--ss-yolk);
+	border-color: var(--ss-brown);
+}
+#anonWarningPopup .popup_sm_content {
+	text-align: left;
+}
+#anonWarningPopup #popup_title.shadow_blue4 {
+	background: var(--ss-yolk2);
+	padding: .2em 1em !important;
+	text-shadow: none;
+} */
+
+#anonWarningPopup {
+	.egg_icon {
+		vertical-align: middle;
+	}
+}
+/* ----------------------------------------------------------------- ASC video player -- */
+.video_ad_wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
+.ima-controls-div {
+	display: none !important;
+}
+
+.paper-doll-click-container {
+	height: 26em;
+    width: 25em;
+}
+
+
+	/* 
+	#event-notifications {
+		margin-top: -3.9em;
+	} */
+
+
+/* Ad blocker 8 */
+.ad-blocker-popup {
+	position: relative;
+	z-index: 4;
+}
+
+/* .wrapper .spinner,
+.wrapper .filler,
+.wrapper.mask {
+	animation-delay: -1500s;
+} */
+
+.twitchDrops .item-name {
+	bottom: 0;
+}
+
+/** ---------------------------------------------- Localization layouts */
+
+.ru .vip-item--inner {
+	padding: 1em 0;
+}
+
+.ru .vip-item .ss_button {
+	font-size: .8em;
+}
+
+.zh .vip-item--inner .banner {
+	width: 4em;
+}
+
+.ko .vip-item,
+.zh .vip-item {
+	display: flex;
+	justify-content: center;
+}
+
+@keyframes swing {
+    0% { transform: rotate(12deg); }
+    100% { transform: rotate(-12deg); }
+}
+
+/* adBlockerVideo */
+#adBlockerVideo {
+    background: var(--ss-white);
+    border: 0;
+    padding: 0;
+	border-radius: 0 !important;
+	max-width: 32em;
+}
+
+#adBlockerVideo p {
+	color: var(--ss-adblocker-text);
+	margin: 0;
+	padding: 1em 2em;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+#adBlockerVideo img {
+	width: 100%;
+	height: auto;
+}
+
+/* NEW HOME SCREENS */
+
+/* .main-screens-wrapper {
+	grid-template-columns: auto var(--ss-sidebar-width);
+} */
+
+
+/* ICONS */
+
+.map-avg-size-icon {
+	width: 1.5em;
+	height: 1.5em;
+}
+

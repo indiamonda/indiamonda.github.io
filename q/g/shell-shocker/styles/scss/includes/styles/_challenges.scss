@@ -1,0 +1,156 @@
+/* Challenges */
+.player-challenges-container {
+	width: 100%;
+	background: rgb(0,192,255);
+	background: linear-gradient(-124deg, rgba(0,192,255,1) 0%, rgba(17,146,188,1) 100%);
+}
+
+.player-challenge-single-wrap {
+	grid-template-columns: 4em 2fr;
+}
+
+.player-challenges-container .player-challenge-single {
+	border-bottom: var(--ss-common-border-width) solid var(--ss-blue3);
+	height: 5.3em;
+}
+
+.player-challenges-container .player-challenge-single:last-child {
+	border-bottom: 0
+}
+
+.player-challenge-single-progress {
+	grid-template-columns: 70% auto;
+}
+.player-challenge-single-progress-wrap, .player-challenge-single-progress-bar {
+	height: .5em;
+}
+
+.player-challenge-single-content {
+	order: 1;
+}
+
+.player-challenge-single-content-icon {
+	order: 0;
+}
+
+.player-challenge-single-reward {
+	font-weight: bold;
+    color: var(--ss-white);
+	font-size: .7em;
+}
+
+.player-challenge-single-reward img{
+	width: .7em;
+}
+
+.player-challenge-single-icon img {
+    width: 3.9em;
+}
+
+.player-challenge-single-action .btn_sm {
+	min-width: auto;
+}
+
+.player-challenge-single-action .bevel_pink {
+	border-color: var(--ss-pink1);
+}
+
+.player-challenge-single-action .btn_sm i {
+	font-size: .9em;
+}
+
+.media-tab-challenges {
+	grid-template-columns: auto 1fr !important;
+}
+
+.media-tab-challenges p {
+	font-size: .8em;
+}
+
+#game_screen .media-tab-challenges p {
+	width: 8.4em;
+}
+
+.media-tab-challenges span {
+    min-width: 1.4em;
+    display: inline-block;
+}
+
+.player-challenge-single-action .bevel_pink span {
+	font-size: 1em;
+}
+
+.player-challenge-single-action-btn:disabled {
+	opacity: .2;
+}
+
+.player-challenge-single-action-claimed {
+    background: var(--ss-blue5);
+    width: 35%;
+    padding: 0.2em 0 0.2em 1em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform-origin: bottom left;
+    -ms-transform: skew(-30deg, 0deg);
+    -webkit-transform: skew(-30deg, 0deg);
+    transform: skew(-30deg, 0deg);
+    overflow: hidden;
+}
+
+.player-challenge-claimed {
+    transform: skew(30deg, 0deg);
+}
+
+.player-challenge-single-action-claimed,
+.player-challenge-single-action-claimed:before {
+	height: 1.8em;
+}
+
+/* .player-challenge-single-action-claimed:before {
+	content: '';
+    position: absolute;
+	background: var(--ss-blue5);
+	transform: skew(340deg);
+    width: 1em;
+	bottom: .03em;
+    left: -0.5em;
+} */
+
+.player-challenge-tool-tip .tool-tip-text {
+    top: -.5em;
+    width: 7em;
+	right: 1em;
+    left: auto;
+    line-height: .9;
+    font-size: .8em;
+}
+
+.player-challenge-tool-tip .tool-tip > span:after {
+    right: -.7rem;
+
+}
+
+.tool-tip > span:after, .tool-tip div.tool-tip--bubble:after {
+    top: 30%;
+    transform: rotate(270deg);
+	left: auto;
+}
+
+.player-challenge-single .checkmark-wrap {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 3em solid var(--ss-pink);
+    border-right: 3em solid transparent;
+}
+
+.player-challenge-single .checkmark-wrap svg {
+    width: 1.4em;
+    height: 1.4em;
+    position: absolute;
+    top: -2.8em;
+    left: 0.4em;
+}

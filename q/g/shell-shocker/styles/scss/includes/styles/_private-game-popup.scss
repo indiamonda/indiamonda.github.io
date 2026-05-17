@@ -1,0 +1,147 @@
+/* ----------------------------------------------------------------- Private Game -- */
+
+#private_left {
+	width: 17em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#createPrivateGame h3 {
+	line-height: 1em;
+	margin-bottom: var(--ss-space-sm) !important;
+}
+
+#private_left .ss_select {
+	width: 15em;
+}
+
+#private_maps {
+	position: relative;
+    border: solid var(--ss-common-border-width) var(--ss-blue5);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#private_maps img {
+	width: 100%;
+	height: auto;
+}
+
+#private_maps #mapThumb {
+	display: block;
+}
+
+.create-game-map-select {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: .5em;
+    grid-row-gap: .5em;
+}
+
+.create-game-header {
+    grid-area: 1 / 1 / 2 / 3;
+	margin: 0;
+}
+
+.create-game-header, .create-game-map-search {
+	align-self: end;
+}
+
+.create-game-map-search {
+	grid-area: 1 / 3 / 1 / 3;
+}
+
+.create-game-map-search input {
+	margin-bottom: 0;
+}
+
+.create-game-map-search input, .create-game-map-btn-random {
+	height: 100%;
+}
+
+.create-game-map-btn-random {
+	padding: 0.1em 0.6em;
+}
+
+.create-game-map-search label,
+.item-search-label {
+	right: .5em;
+	z-index: 1;
+}
+
+.create-game-map-search .fa-times-circle:hover {
+	color: var(--ss-red) !important;
+	cursor: pointer;
+}
+
+#private_maps {
+    grid-area: 2 / 1 / 5 / 3;
+}
+.btn-1 { grid-area: 2 / 3 / 4 / 3; }
+.btn-2 { grid-area: 3 / 3 / 3 / 3; }
+.btn-3 { grid-area: 4 / 3 / 4 / 3; }
+.btn-4 { grid-area: 4 / 1 / 5 / 3; }
+
+.btn-1, .btn-2, .btn-3 {
+	margin-bottom: 0;
+	width: 6em;
+}
+
+.btn-3 svg {
+	width: 1.5em;
+	height: 1.5em;
+}
+
+#private_maps #mapNav {
+	position: absolute;
+	height: 100%; width: 100%;
+	left: 0; top: 0;
+	display: flex;
+	z-index: 10;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.map-arrows {
+	background: none;
+	width: 2em;
+	height: 2em;
+	border: none;
+	text-shadow: var(--ss-box-shadow-2);
+	transition: text-shadow .3s ease-in-out;
+}
+
+.map-arrows:hover {
+	text-shadow: var(--ss-box-shadow-3);
+}
+  
+.map-arrows:active {
+	  text-shadow: none;
+}
+
+.map-arrows:active i {
+	font-size: 2.8em;
+}
+
+#private_maps #mapText {
+	margin: 0; padding: 0;
+	line-height: 1em;
+	text-align: center;
+	color: var(--ss-white);
+	word-wrap:break-word;
+}
+
+.map_playercount {
+	bottom: 0.2em;
+	right: var(--ss-space-md);
+}
+
+.map_playercount img {
+	width: 1.5em !important;
+}
+
+#gameOptionsPopup .weapon-grid, #gameOptionsPopup #weapon_select {
+	width: auto;
+}

@@ -1,0 +1,157 @@
+/* ----------------------------------------------------------------- Footer -- */
+
+#mainFooter {
+	display: flex;
+	flex-direction: row;
+	height: var(--ss-footer-height);
+	margin: 0 auto;
+	text-align: center;
+	font-size: 0.8em;
+	letter-spacing: 0.01em;
+	min-width: var(--ss-min-width);
+    bottom: 0;
+}
+
+.game-info {
+	min-width: 70em;
+	padding: 1em 10em;
+}
+
+.game-info .eggIcon {
+	color: #FFF;
+	padding-top: 0.3em;
+}
+
+.game-info a {
+	color: var(--ss-black);
+}
+
+.game-info li {
+	font-weight: 600;
+}
+
+#mainFooter, .main-footer  {
+	width: 100%;
+}
+
+.main-footer {
+	align-items: center;
+	margin-top: var(--ss-space-md);
+}
+
+.main-footer--logo-blue-wiz-mini {
+    width: 4.5em;
+    opacity: .6;
+    vertical-align: middle;
+}
+
+#footer_links_panel a,
+#footer_links_panel button {
+	position: relative;
+	font-size: .8em;
+	color: var(--ss-blue3);
+	white-space: nowrap;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.footer-nav button {
+	margin: 0 var(--ss-space-sm);
+}
+
+.social-icons {
+    display: flex;
+	margin: 0 auto;
+}
+
+.social-icons .tool-tip {
+	margin: 0;
+}
+
+.social-icons .tool-tip > span,
+.social-icons .tool-tip div.tool-tip--bubble {
+    width: 10.5em;
+    text-transform: uppercase;
+    left: auto;
+    right: 0;
+    transform: none;
+    bottom: -3.7em;
+}
+
+.social-icons .tool-tip > span:after, .social-icons .tool-tip div.tool-tip--bubble:after {
+	z-index: 1;
+    left: auto;
+    top: -13.6em;
+    right: 3px;
+    transform: rotate(180deg) translate(12px, 16px);
+    filter: drop-shadow(-3px 3px 0 var(--ss-blue2));
+    border-right: 0.3rem solid transparent;
+    border-left: 0.3rem solid transparent;
+}
+
+.social-icons section {
+    font-size: .6em;
+}
+
+.discord-bubble-img {
+    position: absolute;
+    left: -.1em;
+    bottom: -0.7em;
+    width: 3.4em;
+	height: auto;
+}
+
+.social-icons .tool-tip--text {
+    padding: 0.6em 0.5em 0.5em 0em;
+}
+
+.discord .tool-tip div.tool-tip--bubble {
+	left: -2em;
+}
+.discord .tool-tip div.tool-tip--bubble:after {
+	left: 68%;
+}
+
+.tool-tip--image {
+    overflow: hidden;
+    border-radius: 1em;
+	width: 4.3em;
+}
+
+.tool-tip--text {
+	padding: 0.6em 0.5em 0.5em 0.5em;
+}
+
+.social_icon {
+	height: 3em;
+}
+
+.social_icons .icon-wrap {
+	height: var(--social-icons-dimen);
+	width: var(--social-icons-dimen);
+}
+
+.social-media a {
+	text-decoration: none;
+}
+
+.social-media a:hover {
+	color: var(--ss-white) !important;
+}
+
+.social_icons .fab,
+.social_icons .fas {
+	font-size: 1.2em;
+}
+
+/*-- One Signal position and size -- */
+.onesignal-bell-launcher-button {
+	width: 6.2vh !important;
+	height: 6.2vh !important;
+}
+
+#onesignal-bell-container {
+	bottom: 0.1vh !important;
+	right: 0.1vh !important;
+	display: none !important;
+}

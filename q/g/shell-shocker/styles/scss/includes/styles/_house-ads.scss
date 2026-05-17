@@ -1,0 +1,102 @@
+// house ads
+#big-house-ad {
+	display: flex;
+	position: absolute;
+	left: 0px; top: 0px;
+	z-index: 1000;
+	width: 100vw;
+	height: 100vh;
+	background: var(--ss-darkoverlay);
+
+}
+
+.splash_ad_image {
+	border: 1em solid var(--ss-white);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 1000;
+	height: 35em;
+}
+
+.splash_ad_close {
+	position: absolute;
+	width: 1.5em;
+	height: 1.5em;
+	top: 50% !important;
+	right: 50% !important;
+	margin-top: -19em;
+	margin-right: -25em;
+	cursor: pointer;
+}
+
+.house-wrap {
+	margin: 0;
+}
+/* ----------------------------------------------------------------- Title screen ad -- */
+.house-small {
+    width: 350px;
+    min-height: 250px;
+    overflow: hidden;
+    z-index: 5;	
+    top: 48vh;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+	@media screen and ( max-width: 1717px )  {
+		left: auto;
+		right: -1.5em;
+		transform: none;
+
+		.playing-crazy-games & {
+			right: 0.5em !important;
+		}
+	}
+
+
+	.playing-crazy-games & {
+		right: -3em !important;
+
+		@media screen and ( max-width: 1128px ) {
+			margin-top: -4em;
+		}
+	}
+}
+
+.house-small iframe {
+	display:block;
+	margin: 0 auto;
+}
+
+.house-ad-wrapper {
+	max-width: 15em;
+}
+
+/* ----------------------------------------------------------------- Title screen ad and news responsive -- */
+
+@media screen and ( max-height: 690px ) {
+	/* #news_feed,
+	.front_panel {
+		min-width:300px;
+		max-width: 300px;
+	} */
+	#news_feed,
+	.house-ad-small iframe {
+		margin: 0;
+	}
+}
+
+/* @media screen and ( max-height: 520px ) {
+	#news_scroll {
+		height: 5.8em;
+	}
+} */
+
+@media screen and ( max-height: 480px ) {
+	/* #news_scroll {
+		height: 28em;
+	} */
+	.house-ad-small {
+		display: none;
+	}
+}

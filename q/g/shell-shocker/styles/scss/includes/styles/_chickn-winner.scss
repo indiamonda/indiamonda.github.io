@@ -1,0 +1,485 @@
+
+.incentivized-egg-chick {
+	z-index: 2;
+}
+
+#chicknWinner .incentivized-egg-chick.centered {
+	top: 6em;
+	width: 10em;
+}
+
+#chicknWinner .equip_cost, 
+#chicknWinner .equip-cost-is-owned {
+	display: none !important;
+}
+
+.egg-chick-wrapper {
+	margin: var(--ss-space-lg) auto;
+    height: 15em;
+    align-items: end;
+	min-width: 51em;
+}
+
+.egg-chick-wrapper h2 {
+	bottom: -.5em;
+	top: auto;
+}
+
+.egg-chick-box {
+    width: auto;
+	height: 19em;
+}
+
+.egg-chick-box img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+.chw-reward-amount {
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+    bottom: 1.5em;
+	-webkit-animation: incentivizedslidein .5s ease-in-out;
+	-moz-animation: incentivizedslidein .5s ease-in-out;
+	-o-animation: incentivizedslidein .5s ease-in-out;
+	-ms-animation: incentivizedslidein .5s ease-in-out;
+	animation: incentivizedslidein .5s ease-in-out;
+	z-index: 3;
+}
+
+.chw-reward-amount .chw-winner-egg {
+	height: 4em;
+	width: 4em;
+}
+
+.chw-reward-amount h2 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 3em;
+    font-weight: 600;
+    color: var(--ss-white);
+}
+
+.chw-winner-egg {
+    display: inline !important;
+    vertical-align: top;
+    margin-left: -1em !important;
+}
+
+.incentivized-egg-shadow {
+	width: 20em;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	bottom: 0;
+}
+
+.hideme.incentivized-show {
+	display: block !important;
+}
+
+.cyborg-egg {
+	margin-top: 5em !important;
+}
+
+.nugget-footer {
+	z-index: 8;
+}
+
+.chickn-winner-clicked {
+	-webkit-animation: jello .6s infinite linear;
+	-moz-animation: jello .6s infinite linear;
+	-o-animation: jello .6s infinite linear;
+	-ms-animation: jello .6s infinite linear;
+	animation: jello .6s infinite linear;
+}
+
+.chw-icon-watch-ads {
+	width: 1em;
+	height: 1em;
+	vertical-align: bottom;
+	filter: var(--ss-shadow-filter);
+}
+
+.chw-popup-title {
+	-webkit-text-stroke: 0.08em var(--ss-vip-red);
+}
+
+.chw-popup-img {
+	width: 35em;
+}
+
+@keyframes jello {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	30% {
+		transform: scale3d(0.75, 1.25, 1);
+	}
+
+	40% {
+		transform: scale3d(1.25, 0.75, 1);
+	}
+
+	50% {
+		transform: scale3d(0.85, 1.15, 1);
+	}
+
+	65% {
+		transform: scale3d(1.05, 0.95, 1);
+	}
+
+	75% {
+		transform: scale3d(0.95, 1.05, 1);
+	}
+
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes incentivizedslidein {
+	0% {
+		opacity: 0;
+		transform: translateY(250px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Chickn Winner progress */
+.chw-progress-wrapper {
+	margin: var(--ss-space-md) auto 0;
+	width: 25em;
+	/* height: calc(var(--ss-space-lg)*3); */
+    position: absolute;
+    right: 0;
+    top: 18em;
+}
+
+.chw-progress-bar-wrap {
+    width: auto;
+    height: auto;
+	background-color: var(--ss-blue5);
+	box-shadow: var(--ss-btn-dark-shadow) !important;
+}
+
+.chw-progress-bar-wrap-popup  {
+    width: 95%;
+}
+
+.chw-progress-bar-wrap-popup {
+	height: 3em;
+	padding: 0;
+}
+
+.chw-progress-bar-wrap-popup,
+.chw-progress-bar-wrap  {
+	overflow: hidden;
+}
+
+.chw-progress-bar-msg {
+	font-weight: 900;
+	color: var(--ss-white);
+    font-size: .8em;
+	width: 18em;
+	span {
+		font-size: 1em;
+	}
+}
+
+.chw-progress-bar-inner,
+.chw-progress-bar-inner-popup {
+	height: 6em;
+	width: 0%;
+	background: var(--ss-blue1);
+	border: 0;
+    transition: all .3s linear;
+}
+
+.chw-progress-bar-inner-popup {
+	height: 100%;
+}
+
+.chw-progress-bar-wrap-complete {
+	border-color: var(--ss-brown);
+	.chw-progress-bar-inner {
+		background: var(--ss-yolk);
+		&.chw-ready {
+			width: 100% !important;
+		}
+	}
+}
+
+.chw-progress-bar-wrap-complete .chw-progress-bar-msg {
+	color: var(--ss-white);
+}
+
+.chw-progress-img {
+	width: 3em;
+	top: 0;
+	height: auto;
+}
+
+#game_screen .chw-chick {
+	position: absolute;
+}
+
+.chw-chick {
+    left: -1em;
+    z-index: 1;
+    top: -1.25em;
+    width: 4em;
+    left: -3em;
+    top: -4em;
+    width: 9em;
+}
+
+.chw-eggs {
+	right: 0;
+    width: 5.2em;
+    top: -0.8em;
+    height: auto;
+}
+
+.chw-circular-timer-container .ss_button {
+	margin: 0;
+    position: absolute;
+    right: 0;
+    bottom: -1.5em;
+
+	&.chw-limit-reached {
+		bottom: -2.5em;
+		display: flex;
+		align-items: center;
+		line-height: 1.6;
+		gap: .3em;
+	}
+}
+
+#chw-circular-timer-outer {
+	display: block;
+    width: 3em;
+    height: 3.5em;
+	border-radius: 50%;
+}
+
+#chw-circular-timer-inner {
+	font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    color: var(--ss-white);
+    font-size: 1.2em;
+    transform: translateY(-3.45em);
+}
+
+.chw-circular-timer-bar {
+	transform-origin: center;
+	transform: rotate(90deg);
+	fill: transparent;
+	stroke: var(--ss-yolk);
+	stroke-width: 3em;
+	stroke-dasharray: 14.4513em;
+	transition: all 0.3s ease-in-out;
+}
+
+.chw-circular-timer-bar-inner {
+	fill: orange;
+}
+
+.chw-circular-timer-svg {
+    transform: translateX(-6em) scale(.3) translateY(-7em);
+}
+
+.chw-bubble-wrap {
+	top: -1.65em;
+    left: 1em;
+}
+
+.chw-circular-timer-container {
+    background: var(--ss-white);
+	opacity: 1;
+    width: var(--chw-bubble-width);
+    height: var(--chw-bubble-height);
+    align-items: center;
+	position: relative;
+	border-radius: .5em;
+    padding: .4em 1em;
+	z-index: 3;
+    top: -1.6em;
+    left: 3em;
+}
+
+.chw-circular-timer-container-shadow {
+    background: rgba(11, 147, 189,.5);
+	opacity: 1;
+    width: var(--chw-bubble-width);
+    height: var(--chw-bubble-height);
+    align-items: center;
+	position: relative;
+	border-radius: .5em;
+    padding: .4em 1em;
+	z-index: 2;
+	position: absolute;
+    left: 3.2em;
+    bottom: 1.4em;
+	z-index: 1;
+}
+
+.speech-tail {
+    content: "";
+    position: absolute;
+    background: var(--ss-white);
+	bottom: -0.7em;
+    left: -0.8em;
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 50%;
+    box-shadow: 0.6em 0.6em 0 0 var(--ss-white), 0.7em 0.9em 0 0 var(--ss-blue2);
+    background: 0;
+	transform: rotate(344deg);
+    z-index: 2;
+    position: absolute;
+    bottom: 2.6em;
+    left: 1em;
+}
+
+.chw-bubble-wrap,
+.chw-circular-timer-container,
+.chw-circular-timer-container-shadow {
+	transition: opacity .3s ease-in-out;
+}
+
+.chw-home-screen-max-watched {
+	gap: 1em
+}
+
+.chw-bubble-wrap {
+	opacity: 0;
+
+	.game-screen & {
+		transform: scale(.8);
+	}
+}
+
+
+.chw-home-timer:hover .chw-bubble-wrap,
+.is-ready.chw-bubble-wrap {
+	opacity: 1;
+
+}
+
+.chw-circular-timer-countdown {
+	font-weight: 900;
+    line-height: 1;
+    color: var(--ss-yolk);
+	font-size: .9em;
+}
+
+.chw-circular-timer-container.grid-column-1-2  .chw-circular-timer-countdown {
+	font-size: .7em;
+}
+
+.chw-pie-num {
+    line-height: .8;
+}
+
+.chw-pie-remaining {
+    font-size: .8em;
+    text-transform: uppercase;
+}
+
+.chw-home-timer {
+	width: 10em;
+	bottom: calc(var(--ss-space-lg)*3);
+	position: absolute;
+    bottom: 2em;
+    left: 1em;
+
+	.game-screen & {
+		bottom: 16em;
+		z-index: 2;
+	}
+
+	.has-announcement & {
+		bottom: 20em;
+	}
+}
+
+.chw-home-timer-chick {
+	width: 9em;
+	/* width: 4em; */
+    /* transform: translate(0, 2.5em); */
+	/* transform: translate(0, -3.8em); */
+	transform: translate(-2em, -6.1em);
+}
+.chw-loot-img {
+	width: 4.5em;
+}
+
+#chw-pie {
+	width: 2.23em;
+}
+
+.chw-bubble-tail {
+    width: 2em;
+    bottom: 0.4em;
+    left: 4.5em;
+}
+
+.chw-home-screen-timer {
+	margin: 0 auto;
+    display: flex;
+}
+
+
+.chw-home-screen-max-watched .chw-bubble-tail {
+	display: none;
+}
+
+  /** incentivized ad egg game **/
+  .btn_shiny {
+	z-index: 2;
+	width: auto;
+    margin: 0 auto;
+}
+
+
+#chickenNugget header {
+	height: 4em;
+	font-size: 170%;
+}
+
+#chickenNugget .chickn-winner-title {
+	color: var(--ss-white);
+	background: none;
+}
+
+#chickenNugget .grid-item canvas {
+    width: 12em !important;
+    height: 12em !important;
+	position: relative !important;
+    transform: none !important;
+    top: 0 !important;
+    left: auto !important;
+}
+
+#chickenNugget .grid-item {
+	box-shadow: none;
+}
+
+#goldChickenPopup.popup_window {
+	padding: 0;
+    border: 0;
+    background: 0;
+}
+
+#shellshockers_chicken_nugget_banner_ad {
+	margin: 1em auto 0;
+}

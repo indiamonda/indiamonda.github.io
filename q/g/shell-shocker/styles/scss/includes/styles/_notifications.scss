@@ -1,0 +1,197 @@
+/* Notifications */
+#notificationPopup {
+	background: none;
+    border: 0;
+}
+#notificationPopup.popup_lg h1 {
+	min-height: 2em;
+	line-height: 1.2;
+}
+.notify-group {
+	height: 36em;
+	width: 23em;
+	padding: var(--ss-space-lg);
+    color: var(--ss-white);
+    background-image: var(--ss-popupbackground);
+    border: var(--ss-common-border-width) solid var(--ss-blue5);
+}
+
+.notify-group-subscription {
+	background: var(--ss-vip-store-bg);
+}
+.notification-content .equip_icon.centered {
+	position: relative;
+    transform: none;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    height: 13em !important;
+    width: auto !important;
+    margin: 0 auto;
+    display: block;
+}
+
+.notify-group {
+	grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+}
+.notify-group-items .common-box-shadow {
+	box-shadow: none;
+}
+
+.notify-group .item-name {
+	color: var(--ss-blue5) !important;
+	font-size: 1.6em !important;
+	margin-top: 0;
+}
+.notify-group-subscription.notify-group-items .item-name,
+#notificationPopup.popup_lg .notify-group-subscription h1,
+#notificationPopup.popup_lg .notify-group-eggs h1 {
+	color: var(--ss-vip-brown) !important;
+	text-shadow: none;
+}
+#notificationPopup.popup_lg .notify-group-eggs h1 {
+	color: var(--ss-blue5) !important;
+}
+.notify-group-items .equip-item-banner {
+	position: relative;
+}
+
+.notify-group-items .notification-banner img {
+	width: 12em;
+    margin: 0 auto;
+    display: block;
+}
+
+.notify-group .is-vip .equip-vip-icon {
+    position: absolute;
+    top: -0.2em;
+    left: 0em;
+    width: 1.7em;
+    height: 1.7em;
+    z-index: 2;
+}
+
+.notify-group .equip-item-banner {
+    z-index: 1;
+    bottom: auto;
+    transform: none;
+    clip-path: none;
+    left: 0;
+    text-align: center;
+    width: 8em;
+    padding: 0.5em 0 0.5em 1em;
+	font-size: 1em;
+}
+
+.notify-group .equip-vip-icon {
+	display: none;
+}
+
+.notify-group .vip-emblem {
+	width: 6em;
+	top: -2em;
+}
+
+.notify-group .notification-banner-icon {
+    background: green;
+    padding: 0.4em;
+    border-radius: 100%;
+    left: -1.6em;
+    width: 3em;
+    height: 3em;
+    display: flex;
+}
+
+.notify-group .notification-banner-icon,
+.notify-group .equip-item-banner {
+	border: 0.2em solid var(--ss-blue5);
+} 
+
+.notify-group button {
+	min-width: auto;
+    width: auto;
+    font-size: 1.5em;
+	text-shadow: none;
+}
+
+.notify-group button.popup_close {
+    top: 0.4em;
+    right: 0.7em;
+	font-size: 1em;
+}
+
+.notify-group button .fa-caret-right {
+	margin-left: .2em;
+}
+
+.notify-group .egg-give-stuff h2 {
+    font-size: 3em;
+	color: var(--ss-red-btn-fill);
+	margin: 0;
+}
+.notify-group .egg-give-stuff .egg-img {
+	width: 2em;
+}
+
+.notify-group.egg_pack_small {
+	background: var(--egg-pack-small-bg);
+}
+
+.notify-group.egg_pack_medium {
+	background: var(--egg-pack-md-bg);
+}
+
+.notify-group.egg_pack_large {
+	background: var(--egg-pack-lg-bg);
+}
+
+.notification-banner svg {
+	transform: rotate(335deg);
+	color: var(--ss-blue5);
+	fill: var(--ss-blue3);
+    outline: beige;
+    stroke: aliceblue;
+    stroke-width: 0.2em;
+    width: 2.4em;
+    height: 2em;
+}
+.notify-group .equip-item-banner.shadow {
+	display: none;
+}
+
+.chlg-icon {
+	width: 9em;
+
+}
+
+.notify-group-challenges {
+	height: auto;
+}
+
+.notify-group-challenges-checkmark-wrap {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 6em solid var(--ss-pink);
+    border-right: 6em solid transparent;
+    border-top-left-radius: var(--ss-space-md);
+}
+
+.notify-group-challenges-checkmark-wrap svg {
+	width: 3em;
+    height: 3em;
+    position: absolute;
+    top: -5.5em;
+    left: 0.4em;
+}
+
+.notify-group.notify-group-challenges .ss_button {
+	width: 15em;
+    font-size: 1em;
+    display: block;
+    margin: 0 auto var(--ss-space-lg);
+
+}

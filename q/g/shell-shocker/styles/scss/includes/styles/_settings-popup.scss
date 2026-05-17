@@ -1,0 +1,73 @@
+/* ----------------------------------------------------------------- Settings Popup -- */
+
+#joinPrivateGamePopup {
+	background-image: none;
+    border: 0;
+	width: 36em;
+    margin-top: -4em;
+	padding: 0;
+}
+
+#joinPrivateGamePopup .popup_close {
+    top: 0.5em;
+    right: -0.5em;
+}
+
+#joinPrivateGamePopup.join-request-only .popup_close {
+    top: 1em;
+}
+
+#joinPrivateGamePopup #popupInnards {
+	margin-top: 2em;
+	min-height: auto;
+}
+
+/* #joinPrivateGamePopup .inner-wrapper {
+	background-color: var(--ss-blue3);
+	padding: var(--ss-space-md) var(--ss-space-xxl) var(--ss-space-lg);
+} */
+
+.play-panel-panels {
+	width: 38em;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--ss-space-xl);
+    color: var(--ss-white);
+    background-image: var(--ss-popupbackground);
+    border: var(--ss-common-border-width) solid var(--ss-blue5);
+}
+
+.play-panel-panels-join {
+	margin-top: var(--ss-space-md);
+}
+.play-panel-panels-join h1, .create-game-header {
+	font-size: 1.2em;
+}
+
+#createPrivateGame {
+	width: 100%;
+}
+
+
+#popupInnards {
+	min-height: 25em;
+}
+
+#settings_right {
+	margin-left: 3em;
+}
+
+.settings-section {
+	width: 35em;
+}
+
+.settings-footer .ss_button {
+	white-space: normal;
+    height: 3em;
+}
+
+/* Settings popup */
+#settingsPopup h2, #settingsPopup h3, #settingsPopup h4 {
+	color: var(--ss-blue5);
+}

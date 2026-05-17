@@ -1,0 +1,116 @@
+/* ----------------------------------------------------------------- LoadingScreen -- */
+
+.load_screen {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	position: absolute;
+	top: 0; left: 0;
+	z-index: 20;
+	width: 100%; height: 100%;
+	background-image: var(--ss-lightoverlay);
+}
+
+.load_message {
+	color: var(--ss-blue4);
+	margin-top: 5em;
+	margin-bottom: 3.5em;
+}
+
+.load_message.tips {
+	margin: 1.5em auto
+}
+
+.load_eggcontainer {
+	position: relative;
+	height: 3rem;
+	transform: scale(4);
+}
+
+.spinner-tips {
+	&.tipMsg {
+		bottom: 37em;
+		background: var(--ss-white);
+		padding: 1em 2em;
+		border-radius: 10em;
+		max-width: 28em;
+		transition: height 1s ease-in-out;
+
+		p {
+			margin: 0;
+		}
+
+		&:after {
+			content: '';
+			position: absolute;
+			left: .5em;
+			width: 0;
+			height: 0;
+			border: 1.188em solid transparent;
+			border-top-color: var(--ss-white);
+			border-bottom: 0;
+			border-left: 0;
+			left: 36%;
+			bottom: -.4em;
+			transform: rotate(300deg);
+		}
+	}
+	&.LoadingMsgs {
+		bottom: 4em;
+		p {
+			color: #643219 !important;
+			text-shadow: none !important;
+		}
+	}
+}
+.spinner-tips img {
+	width: 7em;
+	align-self: end;
+}
+
+.spinner-tips p {
+	position: relative;
+
+}
+
+// .spinner-tips p:after {
+//     content: '';
+//     position: absolute;
+//     bottom: 1.2em;
+//     left: .5em;
+//     width: 0;
+//     height: 0;
+//     border: 1.188em solid transparent;
+//     border-top-color: var(--ss-white);
+//     border-bottom: 0;
+//     border-left: 0;
+//     margin-left: -0.594em;
+//     margin-bottom: -1.187em;
+//     transform: rotate(151deg);
+// }
+
+// .noanimate {
+// 	animation:  none !important;
+// }
+
+// .load_eggyolk {
+// 	transform-origin: center;
+// 	animation: load_yolkwobble infinite ease-in-out alternate 160ms;
+// }
+
+// .load_eggwhite {
+// 	transform-origin: center;
+// 	animation: load_eggwobble infinite ease-in-out alternate 140ms;
+// }
+
+// @keyframes load_eggwobble {
+// 	0% { transform: skew(1deg, 1deg); }
+// 	50% { transform: skew(2deg, -2deg);	}
+// 	100% { transform: skew(-1deg, 0deg); }
+// }
+
+// @keyframes load_yolkwobble {
+// 	0% { transform: skew(3deg, 4deg) translate(-.2em, -.1em); }
+// 	50% { transform: skew(6deg, -5deg) translate(.1em, -.2em); }
+// 	100% { transform: skew(-3deg, 2deg) translate(-.1em, .2em); }
+// }

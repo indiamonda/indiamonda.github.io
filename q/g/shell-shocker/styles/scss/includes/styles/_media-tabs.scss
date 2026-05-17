@@ -1,0 +1,242 @@
+/* ----------------------------------------------------------------- Media tabs -- */
+
+.panel_streamer {
+    width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+
+/* .is-vip .media-tab-scroll {
+    height: 29.5em;
+} */
+
+.is-vip #news_scroll.media-tab-scroll {
+}
+
+#stream_mask {
+	position: absolute;
+	bottom: 0;
+	/* left: 0.25em; */
+	right: 1.1em;
+	height: 2em;
+	background: var(--ss-scrollmask2);
+	width: 100%;
+	pointer-events: none;
+}
+
+.stream_head {
+	background-color: var(--ss-blue2);
+	background-repeat: no-repeat;
+	background-position-x: var(--ss-space-sm);
+	background-position-y: 0.2em;
+	background-size: 1.8em;
+	padding: 0.1em 0.4em 0.1em 2.4em;
+	font-family: 'Sigmar One', Sans-Serif;
+	font-weight: bold;
+	font-size: 1em;
+	color: var(--ss-white);
+	margin-bottom: var(--ss-space-md);
+	white-space: nowrap;
+}
+
+.ico_twitch { background-image: url('../img/ico_twitch.webp'); }
+.ico_youtube { background-image: url('../img/ico_youtube.webp'); }
+
+.no-stream {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    /* background: var(--ss-blue3); */
+    padding: 0 0.5em;
+    color: white;
+}
+
+.no-stream p {
+    font-size: 1.2em;
+	letter-spacing: .05em;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-blueshadow);
+	font-weight: 900;
+    line-height: 1.2;
+}
+
+.no-stream strong {
+    font-size: 1.2em;
+	text-transform: uppercase;
+    font-family: 'Sigmar One', Sans-Serif;
+}
+
+#stream_scroll {
+	/* height: 6.5em; */
+	padding-right: var(--ss-space-md);
+}
+
+.stream_img {
+	margin: 0 calc(var(--ss-space-md)/2) var(--ss-space-sm) 0;
+	float: left;
+}
+
+.stream_item a {
+	color: var(--ss-blue5);
+	text-decoration: none;
+}
+
+.stream_viewers {
+	padding: 0;
+	margin: 0;
+	font-weight: 200;
+	font-size: 0.9em;
+}
+
+.btn_media-nav {
+	min-width: auto;
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+.btn_media-nav i {
+	font-size: .7em;
+}
+
+.changelog_content {
+	overflow-y: auto;
+	height: 24em;
+	padding: var(--ss-space-lg);
+	color: var(--ss-blue4);
+	font-weight: 600;
+	background: rgba(255,255,255,.4);
+}
+
+#changelogPopup h3 {
+	margin: 0;
+	padding: 0;
+	font-family: 'Nunito', sans-serif;
+	font-weight: bold;
+}
+
+/* ----------------------------------------------------------------- News Feed -- */
+.news-container {
+	position: relative;
+	min-height: 16em;
+	max-height: 17.5em;
+}
+
+#news_feed {
+	position: relative;
+	padding-top: var(--ss-space-sm);
+    display: block;
+    margin: 0 auto;
+}
+
+.news_mask {
+	position: absolute;
+	bottom: 0;
+	left: 0.25em;
+	height: 2em;
+	background: var(--ss-scrollmask1);
+	width: 100%;
+	pointer-events: none;
+}
+
+#news_scroll,
+.media-tab-scroll {
+	padding-right: var(--ss-space-sm);
+	width: 100%;
+}
+
+.news-panel.v_scroll {
+	height: 17.9em;
+}
+
+.news_img,
+.stream_img {
+	width: calc(var(--ss-space-lg)*2.5);
+	height: calc(var(--ss-space-lg)*2.5);
+
+}
+
+.news_img {
+	margin: 0 var(--ss-space-md) 0 0;
+}
+
+.media-item {
+	color: var(--ss-blue5);
+	text-align: left;
+	height: 4em;
+	margin: 0;
+	padding: 0 var(--ss-space-sm);
+	display: flex;
+	transition: opacity .2s ease-in-out;
+	align-items: center;
+	display: flex;
+	overflow: hidden;
+}
+
+.media-item-border {
+	border-bottom: calc(var(--ss-common-border-width)/1.5) solid var(--ss-blue3);
+}
+
+.media-item a {
+	align-items: center;
+	width: 100%;
+}
+
+.media-item {
+
+	p {
+		line-height: 1.3em;
+		margin: 0;
+		font-size: .7em;
+		font-weight: 700;
+		width: 13em;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.tab-content .media-item:nth-child(even) {
+	background: var(--ss-blue1);
+}
+
+.tab-content.media-item-border:last-child {
+	border: 0;
+}
+
+.media-item:hover {
+	opacity: .7;
+}
+
+.ytube-item strong {
+    font-size: .85em;
+    font-weight: 900;
+}
+
+.ytube-item .image-wrap {
+	width: 7em;
+}
+
+.ytube-item .image-wrap img {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+}
+
+.ytube-item .content-wrap {
+	width: 100%;
+}
+
+.image-wrap {
+	object-fit: cover;
+}
+
+.news_banner {
+	width: 21.2em;
+	height: 13em;
+	max-width: 100%;
+	margin-top: var(--ss-space-sm);
+	border: var(--ss-space-sm) solid var(--ss-blue3);
+	cursor: pointer;
+}

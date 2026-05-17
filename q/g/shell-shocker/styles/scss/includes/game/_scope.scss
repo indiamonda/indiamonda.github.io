@@ -1,0 +1,192 @@
+#scopeBorder {
+	box-sizing: initial;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100vw; height: 100vh;
+	position: absolute;
+	top: 0px; left: 0px;
+	pointer-events: none;
+	overflow-x: hidden;
+}
+
+#maskleft, #maskright {
+	background: var(--ss-black);
+	flex: 1;
+}
+
+#maskmiddle {
+	background: url('../img/scope.webp') center center no-repeat;
+	background-size: contain;
+	width: 100vh;
+	height: 100vh;
+}
+
+.crosshair {
+	position: absolute;
+	transform-origin: 50% top;
+	top: 50%;
+	border: solid 0.05em black;
+	height: 0.8em;
+	margin-bottom: 0.12em;
+	opacity: 0.7;
+}
+
+.crosshair.normal {
+	left: calc(50% - 0.15em);
+	background: white;
+	width: 0.3em;
+}
+
+.crosshair.powerful {
+	left: calc(50% - 0.25em);
+	background: red;
+	width: 0.5em;
+}
+
+#reticleDot {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	background: white;
+	border: solid 0.05em black;
+	width: 0.3em;
+	height: 0.3em;
+	opacity: 0.7;
+}
+
+#redDotReticle {
+	position: absolute;
+	left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+	background: var(--ss-yolk);
+	width: 0.7em; height: 0.7em;
+	border-radius: 100%;
+}
+
+#shotReticleContainer {
+	position: absolute;
+	text-align: center;
+	left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 0.7;
+	overflow-x: hidden;
+}
+
+#reticleContainer {
+	width: 6em; height: 6em;
+	pointer-events: none;
+}
+
+#crosshairContainer {
+	position: absolute;
+	left: 50%; top: 50%;
+	transform: perspective(0px);
+}
+
+.shotReticle {
+	box-sizing: border-box;
+	position: absolute;
+	left: 50%;
+	transform-origin: center;
+	background: transparent;
+	border: solid;
+	border-radius: 30%;
+}
+
+.shotReticle:nth-child(odd) {
+	transform: translate(-50%, 33%) rotate(0deg);
+	width: 4em;
+	height: 60%;
+}
+
+.shotReticle:nth-child(2n) {
+	transform: translateX(-50%) rotate(90deg);
+	width: 2.5em;
+	height: 100%;
+}
+
+.shotReticle.fill.normal {
+	border-color: white;
+	border-left: solid transparent;
+	border-right: solid transparent;
+	border-width: 0.18em;
+	padding: 0.18em;
+}
+
+.shotReticle.fill.powerful {
+	border-color: red;
+	border-left: solid transparent;
+	border-right: solid transparent;
+	border-width: 0.3em;
+	padding: 0.1em;
+}
+
+.shotReticle.border.normal {
+	border-color: black;
+	border-left: solid transparent;
+	border-right: solid transparent;
+	border-width: 0.2em;
+}
+
+.shotReticle.border.powerful {
+	border-color: black;
+	border-left: solid transparent;
+	border-right: solid transparent;
+	border-width: 0.4em;
+}
+
+
+@keyframes armed {
+    0% { transform: translate(-50%, -50%) scale(1.25); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes unarmed {
+    0% { transform: translate(-50%, -50%) scale(0.8); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+#readyBrackets {
+	position: absolute;
+	left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 0.5;
+}
+
+#readyBrackets.ready {
+	animation: armed 0.2s linear;
+	width: 4em; height: 4em;
+	border-color: rgb(0, 255, 0);
+}
+
+#readyBrackets.notReady {
+	animation: unarmed 0.2s linear;
+	width: 8em; height: 8em;
+	border-color: rgb(255, 0, 0);
+}
+
+.readyBracket {
+	position: absolute;
+	width: 0.8em; height: 0.8em;
+	border: solid;
+	border-color: inherit;
+	border-width: 0.3em 0 0 0.3em;
+	transform-origin: top left;
+}
+
+.readyBracket:nth-child(1) {
+	left: 100%;
+	transform: rotate(90deg);
+}
+
+.readyBracket:nth-child(2) {
+	left: 100%; top: 100%;
+	transform: rotate(180deg);
+}
+
+.readyBracket:nth-child(3) {
+	top: 100%;
+	transform: rotate(270deg);
+}

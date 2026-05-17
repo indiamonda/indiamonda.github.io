@@ -1,0 +1,95 @@
+/* ----------------------------------------------------------------- Fields -- */
+input:focus, textarea:focus { outline: none; }
+
+.ss_keybind {
+	border-radius: var(--ss-space-md);
+	border: none;
+	margin: 0 0 var(--ss-space-sm) 0;
+	padding: var(--ss-space-sm);
+	color: var(--ss-blue4);
+	background: var(--ss-white);
+	font-weight: bold;
+	width: 9em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.ss_keybind:hover {
+	background-color: var(--ss-blue0);
+}
+
+.ss_keybind:focus {
+	color: var(--ss-blue2);
+}
+
+.ss_keybind_undefined {
+	font-style: italic;
+	color: var(--ss-red);
+}
+
+.ss_buttonbind_icon {
+	height: 0.85em;
+}
+
+.label {
+	display: inline;
+	color: var(--ss-blue4);
+	font-weight: bold;
+	margin-left: var(--ss-space-md);
+	font-size: 1em;
+}
+
+.ss_select {
+	border-radius: var(--ss-space-sm);
+	border: var(--ss-common-border-width) solid var(--ss-blue4);
+	margin: 0 0 var(--ss-space-md) 0;
+	padding: var(--ss-space-sm);
+	box-shadow: 
+		inset 3px 3px 10px var(--ss-blue1),
+		0.1em 0.1em 3px var(--ss-blue3);
+	background: var(--ss-white);
+	color: var(--ss-blue3);
+	font-weight: bold;
+	min-height: 2.45em;
+}
+
+.ss_section {
+	border-radius: var(--ss-space-sm);
+	border: var(--ss-common-border-width) solid var(--ss-blue4);
+	margin: 0 0 var(--ss-space-md) 0;
+	padding: var(--ss-space-sm);
+}
+
+.ss_field, .firebaseui-input {
+	border-radius: var(--ss-space-sm) !important;
+	border: var(--ss-common-border-width) solid var(--ss-blue4) !important;
+	margin: 0 0 var(--ss-space-md) 0 !important;
+	padding: var(--ss-space-sm) var(--ss-space-md) !important;
+	box-shadow: inset 0.3em .3em .03em rgba(11,147,189, .3) !important;
+	background: var(--ss-white) !important;
+	color: var(--ss-blue3) !important;
+	font-weight: bold !important;
+	min-height: 2.45em !important;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	color: var(--ss-blue2);
+}
+::-moz-placeholder { /* Firefox 19+ */
+	color: var(--ss-blue2);
+}
+:-ms-input-placeholder { /* IE 10+ */
+	color: var(--ss-blue2);
+}
+:-moz-placeholder { /* Firefox 18- */
+	color: var(--ss-blue2);
+}
+
+.fld_number {
+	height: 2em;
+	font-size: 1.4em;
+	width: 3em;
+	margin: 0 var(--ss-space-lg);
+	text-align: center;
+	font-weight: bold;
+}

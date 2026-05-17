@@ -1,0 +1,11 @@
+#welcomeBundlePopup {
+	padding: 0;
+    background: 0;
+    border: 0;
+	img {
+		width: 50em;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}

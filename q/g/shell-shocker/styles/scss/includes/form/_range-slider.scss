@@ -1,0 +1,88 @@
+/* ----------------------------------------------------------------- Range Slider -- */
+input[type=range] {
+	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+	width: 14em; /* Specific width is required for Firefox. */
+	background: transparent; /* Otherwise white in Chrome */
+  }
+  
+  input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+  }
+  
+  input[type=range]:focus {
+	outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  }
+  
+  input[type=range]::-ms-track {
+	width: 100%;
+	cursor: pointer;
+  
+	/* Hides the slider so custom styles can be added */
+	background: transparent; 
+	border-color: transparent;
+	color: transparent;
+  }
+  
+  /* Special styling for WebKit/Blink */
+  input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	border: 0.25em solid var(--ss-white);
+	height: 1em;
+	width: 1em;
+	border-radius: 1em;
+	background: var(--ss-yolk);
+	cursor: pointer;
+	margin-top: -0.35em; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  }
+  
+  /* All the same stuff for Firefox */
+  input[type=range]::-moz-range-thumb {
+	  border: 0.25em solid var(--ss-white);
+	height: 1em;
+	width: 1em;
+	border-radius: 1em;
+	background: var(--ss-yolk);
+	cursor: pointer;
+  }
+  
+  input[type=range]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 0.2em;
+	cursor: pointer;
+	background: var(--ss-white);
+	border-radius: 1em;
+  }
+  
+  input[type=range]::-moz-range-track {
+	width: 100%;
+	height: 0.2em;
+	cursor: pointer;
+	background: var(--ss-white);
+	border-radius: 1em;
+  }
+  
+  input[type=range]:disabled::-webkit-slider-thumb {
+	  border-color: var(--ss-blue3);
+	  background: var(--ss-blue3);
+  }
+  
+  input[type=range]:disabled::-moz-range-thumb {
+	  border-color: var(--ss-blue3);
+  }
+  
+  input[type=range]:disabled::-webkit-slider-runnable-track {
+	  background: var(--ss-blue3);
+  }
+  
+  input[type=range]:disabled::-moz-range-track {
+	  background: var(--ss-blue3);
+  }
+  
+  .ss_slider {
+	  margin-bottom: 0.5em;
+  }
+  
+  .ss_slider.label {
+	  width: 3em;
+	  color: var(--ss-white);
+  }
