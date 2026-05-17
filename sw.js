@@ -18,6 +18,7 @@ const urlsToCache = [
   '/jqrg-jiushifen.png',
   '/u/ubgu-logo.png',
   '/cloak.js',
+  '/o/index.html',
 
   // ============ LEARN COVER ============
   '/learn/style.css',

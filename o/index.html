@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Loading...</title>
+<script>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var url=params.get('url');
+  var name=params.get('app')||'';
+
+  if(!url){
+    document.body.textContent='Missing url parameter';
+    throw new Error('no url');
+  }
+
+  // Apply tab cloak from localStorage before navigating away.
+  // mainPageCloak.js reads localStorage on load; we pre-set it here
+  // so the new tab gets the correct title + icon instantly.
+  var cloakTitle=localStorage.getItem('mainCloakTitle')||'Inbox - Gmail';
+  var cloakIcon=localStorage.getItem('mainCloakIcon')||'/cloak-images/gmail.png';
+
+  document.title=cloakTitle;
+
+  // Convert cloak PNG path to favicon ICO path for the new tab.
+  function toFav(u){
+    if(!u||u.indexOf('data:')===0)return u;
+    var m=u.match(/^(\/?cloak-images\/)([^/]+)\.png$/);
+    return m?m[1]+'favicon/'+m[2]+'.ico':u;
+  }
+  function favType(u){
+    if(!u)return '';
+    if(u.indexOf('data:image/')===0)return u.slice(5,u.indexOf(';'));
+    if(/\.ico(\?|#|$)/i.test(u))return 'image/x-icon';
+    if(/\.png(\?|#|$)/i.test(u))return 'image/png';
+    if(/\.svg(\?|#|$)/i.test(u))return 'image/svg+xml';
+    return '';
+  }
+  var fav=toFav(cloakIcon),ft=favType(fav);
+  var fi=document.querySelector('link[rel="icon"]');
+  if(!fi){fi=document.createElement('link');fi.rel='icon';document.head.appendChild(fi);}
+  fi.href=fav;if(ft)fi.type=ft;else fi.removeAttribute('type');
+  var si=document.querySelector('link[rel="shortcut icon"]');
+  if(!si){si=document.createElement('link');si.rel='shortcut icon';document.head.appendChild(si);}
+  si.href=fav;if(ft)si.type=ft;else si.removeAttribute('type');
+
+  // Small delay so the favicon/title paint before the nav fires
+  setTimeout(function(){
+    window.location.href=url;
+  },50);
+})();
+</script>
+</head>
+<body>Redirecting...</body>
+</html>
