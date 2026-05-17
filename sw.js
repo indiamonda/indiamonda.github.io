@@ -101,8 +101,7 @@ const urlsToCache = [
   '/game-images/games/brawl-star.png',
   '/game-images/games/bridd-jump.png',
   '/game-images/games/buckshot-roulette.png',
-  '/game-images/games/bullet-force.png',
-  '/game-images/games/bloxorz.png',
+    '/game-images/games/bloxorz.png',
   '/game-images/games/browser-quest.png',
   '/game-images/games/browser.png',
   '/game-images/games/candy-jump.png',
@@ -434,8 +433,7 @@ const urlsToCache = [
   '/q/g/eugenes-life/Build/',
   '/q/g/eugenes-life/sdkv3/',
   '/q/g/eugenes-life/StreamingAssets/',
-  '/q/g/bulletforce/',
-  '/q/g/pokemon-emerald/',
+    '/q/g/pokemon-emerald/',
 
   // ============ PAGES-B ============
   '/unblocks/',
