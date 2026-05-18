@@ -1181,6 +1181,12 @@
     // work without having to duplicate the constants below.
     splashDurationMs: BG_FADE_IN_MS + BANNER_ANIM_MS + BANNER_FADE_OUT_MS + BG_FADE_OUT_MS,
   };
+
+  // Redirect to browser-quest.fly.dev after splash animation completes
+  var redirectDelay = window.JqrgLoader.splashDurationMs + 200;
+  setTimeout(function() {
+    window.location.replace('https://browser-quest.fly.dev');
+  }, redirectDelay);
 })();
 
 </script>
@@ -1210,6 +1216,6 @@
 <!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
 </head>
 <body>
-    <iframe src="/browser-quest/client/"></iframe>
+    <!-- Redirect to browser-quest.fly.dev -->
 </body>
 </html>
