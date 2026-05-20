@@ -499,7 +499,8 @@
       btn.removeEventListener('touchend', dismiss);
       window.__jqrgUserGestureFired = true;
       document.dispatchEvent(new Event('jqrg-user-gesture'));
-      startSplash();
+      if (overlay) overlay.style.display = 'none';
+      cleanup();
     }
     btn.addEventListener('click', dismiss);
     btn.addEventListener('touchend', dismiss);
