@@ -500,7 +500,9 @@
       window.__jqrgUserGestureFired = true;
       document.dispatchEvent(new Event('jqrg-user-gesture'));
       if (overlay) overlay.style.display = 'none';
-      cleanup();
+      document.documentElement.classList.remove('jqrg-loader-active');
+      var content = document.getElementById('jqrg-loader-content');
+      if (content) content.style.display = '';
     }
     btn.addEventListener('click', dismiss);
     btn.addEventListener('touchend', dismiss);
