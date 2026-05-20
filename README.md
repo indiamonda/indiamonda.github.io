@@ -4,6 +4,8 @@
 
 A web application with various features and tools.
 
+[OPEN](https://indiamonda.github.io)
+
 ### NOTE
 The `LICENSE` clearly indicates that this repo is not allowing any copy or forking, so please do not fork this repo.
 
