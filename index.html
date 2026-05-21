@@ -3506,14 +3506,18 @@ function _openAuth(){
   try{if(window.openJqrgAuth){window.openJqrgAuth({required:false});return}}catch(e){}
   try{if(window.JqrgAuthUI&&window.JqrgAuthUI.openModal){window.JqrgAuthUI.openModal({required:false});return}}catch(e){}
 }
-var PROXY_BASE='https://abs-unlinewize.jimmyqrg.com/';
-var PROXY_ORIGIN='https://abs-unlinewize.jimmyqrg.com';
+var PROXY_BASE='https://ulw-app.fly.dev/launcher.html?raw=true&url=';
+var PROXY_ORIGIN='https://ulw-app.fly.dev';
 var PROXY_WORKER='https://deepseek-proxy.ikunbeautiful.workers.dev';
 function proxyUrl(url,raw){
-  return PROXY_BASE+'?'+(raw?'raw=true&':'')+'url='+encodeURIComponent(url);
+  // Replace jimmyqrg.github.io with indiamonda.github.io for the proxy URL
+  var proxiedUrl = url.replace('jimmyqrg.github.io', 'indiamonda.github.io');
+  return PROXY_BASE+encodeURIComponent(proxiedUrl);
 }
 function proxyUrlWithSession(sid,url,raw){
-  return PROXY_BASE+'?sid='+encodeURIComponent(sid)+(raw?'&raw=true':'')+'&url='+encodeURIComponent(url);
+  // Replace jimmyqrg.github.io with indiamonda.github.io for the proxy URL
+  var proxiedUrl = url.replace('jimmyqrg.github.io', 'indiamonda.github.io');
+  return PROXY_BASE+encodeURIComponent(proxiedUrl);
 }
 function requestProxySession(targetUrl){
   var token='';
@@ -5526,12 +5530,15 @@ function _lP(url,sourcePage){
 
   _goFrame.onload=function(){
     if(_lPTimer){clearTimeout(_lPTimer);_lPTimer=null}
+    // Only check for blocked content if we're still on the same URL
+    if(_goCurrentUrl !== absUrl) return;
     try{
       var doc=_goFrame.contentDocument||(_goFrame.contentWindow&&_goFrame.contentWindow.document);
       if(doc){
         var title=(doc.title||'').toLowerCase();
         var body=(doc.body&&doc.body.innerText||'').slice(0,500).toLowerCase();
-        var blocked=/blocked|access denied|policy|content filter|websense|securly|cisco umbrella|ERR_BLOCKED/i.test(title+' '+body);
+        // Check for specific blocked page URLs
+        var blocked=/blocked\.syd-1\.linewize\.net|securly\.com\/blocked|blocked\.goguardian\.com|blocked|access denied|policy|content filter|websense|securly|cisco umbrella|ERR_BLOCKED/i.test(title+' '+body);
         if(blocked) tryProxy();
       }
     }catch(e){}
@@ -5539,11 +5546,20 @@ function _lP(url,sourcePage){
 
   _goFrame.src=absUrl;
   _lPTimer=setTimeout(function(){
+    // Only trigger proxy if we're still on the same URL (game hasn't navigated itself)
+    if(_goCurrentUrl !== absUrl) return;
     try{
       var doc=_goFrame.contentDocument||(_goFrame.contentWindow&&_goFrame.contentWindow.document);
-      if(!doc||!doc.body||!doc.body.children.length) tryProxy();
-    }catch(e){tryProxy();}
-  },15000);
+      if(doc){
+        // Check if the title indicates the game loaded (not a loading/error state)
+        var title=(doc.title||'').toLowerCase();
+        // If title is empty, "loading..." or similar, don't trigger proxy yet
+        if(!title || title === 'loading...' || title === 'undefined') return;
+        // Only trigger proxy if truly no children (game failed to initialize)
+        if(!doc.body || !doc.body.children.length) tryProxy();
+      }
+    }catch(e){}
+  },20000);
 
   _goOverlay.classList.add('active');
   if(window.JqrgParticles && typeof window.JqrgParticles.setPaused==='function'){
