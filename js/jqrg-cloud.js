@@ -590,6 +590,35 @@
     }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || 'Failed'); return d; }); });
   }
 
+  function getRecaptchaToken(action) {
+    return new Promise(function (resolve) {
+      if (!window.grecaptcha || !window.grecaptcha.execute) { resolve(null); return; }
+      var meta = document.querySelector('meta[name="jqrg-recaptcha-sitekey"]');
+      var key = (meta && meta.content) || null;
+      if (!key) { resolve(null); return; }
+      try {
+        window.grecaptcha.ready(function () {
+          window.grecaptcha.execute(key, { action: action || 'forgot_password' })
+            .then(resolve).catch(function () { resolve(null); });
+        });
+      } catch (_) { resolve(null); }
+    });
+  }
+
+  function _captchaFetch(path, body, captchaAction) {
+    return getRecaptchaToken(captchaAction || 'forgot_password').then(function (token) {
+      var headers = { 'Content-Type': 'application/json' };
+      if (token) headers['X-Recaptcha-Token'] = token;
+      return fetch(SERVER + path, {
+        method: 'POST',
+        headers: headers,
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify(body || {}),
+      }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || 'Failed'); return d; }); });
+    });
+  }
+
   function _publicFetch(path, body) {
     return fetch(SERVER + path, {
       method: 'POST',
@@ -622,7 +651,7 @@
     return _publicFetch('/api/auth/recover/complete', body);
   }
   function recoverFreeze(token) { return _publicFetch('/api/auth/recover/freeze', { recovery_token: token }); }
-  function forgotPassword(identifier) { return _publicFetch('/api/auth/forgot-password', { identifier: identifier }); }
+  function forgotPassword(identifier) { return _captchaFetch('/api/auth/forgot-password', { identifier: identifier }); }
   function reportBlockedEmail(email) { return _publicFetch('/api/auth/report-blocked-email', { email: email }); }
 
   function register(fields) {
