@@ -1015,6 +1015,8 @@
       'student.cms.k12.nc.us',
       'panthers.pequannock.org',
       'pickettk12.net',
+      'student.sfx.vic.edu.au',
+      'go.tahomasd.us',
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
