@@ -5522,7 +5522,8 @@ function _lP(url,sourcePage){
     });
   }
 
-  _goFrame.onerror=tryProxy;
+  _goFrame.onerror=function(){};
+
   _goFrame.onload=function(){
     if(_lPTimer){clearTimeout(_lPTimer);_lPTimer=null}
     try{
@@ -5530,13 +5531,10 @@ function _lP(url,sourcePage){
       if(doc){
         var title=(doc.title||'').toLowerCase();
         var body=(doc.body&&doc.body.innerText||'').slice(0,500).toLowerCase();
-        var blocked=!doc.body||!doc.body.children.length
-          ||/blocked|access denied|policy|content filter|websense|securly|cisco umbrella|ERR_BLOCKED/i.test(title+' '+body);
+        var blocked=/blocked|access denied|policy|content filter|websense|securly|cisco umbrella|ERR_BLOCKED/i.test(title+' '+body);
         if(blocked) tryProxy();
       }
-    }catch(e){
-      tryProxy();
-    }
+    }catch(e){}
   };
 
   _goFrame.src=absUrl;

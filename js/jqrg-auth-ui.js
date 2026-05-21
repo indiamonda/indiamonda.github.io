@@ -1535,8 +1535,9 @@
     // into Erase, which is the worst possible misclick here.
     var erase = h('button', { type: 'button', class: 'jqrg-btn-danger' }, 'Erase');
     var notNow = h('button', { type: 'button', class: 'jqrg-btn-ghost' }, 'Not Now');
+    var merge = h('button', { type: 'button', class: 'jqrg-btn-ghost' }, 'Merge');
     var sync = h('button', { type: 'button', class: 'jqrg-auth-submit' }, 'Sync');
-    wrap.appendChild(h('div', { class: 'jqrg-confirm-actions' }, [erase, notNow, sync]));
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-actions' }, [erase, notNow, merge, sync]));
     content.appendChild(wrap);
 
     var finish = function (result, summary) {
@@ -1571,6 +1572,61 @@
         errBox.textContent = (err && err.message) || 'Sync failed.';
         erase.disabled = false; notNow.disabled = false; sync.disabled = false;
         sync.textContent = 'Sync';
+      });
+    };
+
+    merge.onclick = function () {
+      erase.disabled = true; notNow.disabled = true; merge.disabled = true; sync.disabled = true;
+      merge.textContent = 'Merging…';
+      errBox.textContent = '';
+      Cloud.isAccountEmpty().then(function (empty) {
+        if (empty) {
+          merge.textContent = 'Merging…';
+          return Cloud.mergeLocalToAccount().then(function (summary) { finish('merged', summary); });
+        }
+        showMergeWarning(finish);
+      }).catch(function (err) {
+        errBox.textContent = (err && err.message) || 'Merge failed.';
+        erase.disabled = false; notNow.disabled = false; merge.disabled = false; sync.disabled = false;
+        merge.textContent = 'Merge';
+      });
+    };
+  }
+
+  function showMergeWarning(onDone) {
+    if (!modalEl) { if (onDone) onDone('no-modal'); return; }
+    var content = modalEl.querySelector('.jqrg-auth-content');
+    var titleEl = modalEl.querySelector('.jqrg-auth-title');
+    if (!content) { if (onDone) onDone('no-content'); return; }
+    if (titleEl) titleEl.textContent = 'Merge data?';
+    content.innerHTML = '';
+
+    var wrap = h('div', { class: 'jqrg-auth-form' });
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-msg' }, [
+      'Your account already has saved data. The merge will ',
+      h('span', { class: 'jqrg-confirm-danger' }, 'only upload data for games that have local data'),
+      '. Games with only account data will be preserved.',
+    ]));
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-note' }, 'Games without local data will not be affected.'));
+    var errBox = h('div', { class: 'jqrg-auth-error' });
+    wrap.appendChild(errBox);
+    var cancel = h('button', { type: 'button', class: 'jqrg-btn-ghost' }, 'Cancel');
+    var proceed = h('button', { type: 'button', class: 'jqrg-btn-danger' }, 'Merge');
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-actions' }, [cancel, proceed]));
+    content.appendChild(wrap);
+
+    cancel.onclick = function () { if (onDone) onDone('cancelled'); };
+
+    proceed.onclick = function () {
+      cancel.disabled = true; proceed.disabled = true;
+      proceed.textContent = 'Merging…';
+      errBox.textContent = '';
+      Cloud.mergeLocalToAccount().then(function (summary) {
+        if (onDone) onDone('merged', summary);
+      }).catch(function (err) {
+        errBox.textContent = (err && err.message) || 'Merge failed.';
+        cancel.disabled = false; proceed.disabled = false;
+        proceed.textContent = 'Merge';
       });
     };
   }
@@ -1609,11 +1665,6 @@
     content.appendChild(wrap);
 
     cancel.onclick = function () {
-      // Re-render the parent prompt so the user can pick a different option.
-      // showSyncPrompt resets syncPromptInFlight and re-installs all three
-      // button handlers; chaining the original `finish` callback through it
-      // means the eventual `onDone` from the outer caller still fires once,
-      // with whatever result the user lands on after this detour.
       showSyncPrompt(function (result, summary) { finish(result, summary); });
     };
 
@@ -1652,7 +1703,7 @@
     var errBox = h('div', { class: 'jqrg-auth-error' });
     wrap.appendChild(errBox);
     var cancel = h('button', { type: 'button', class: 'jqrg-btn-ghost' }, 'Cancel');
-    var proceed = h('button', { type: 'button', class: 'jqrg-btn-danger' }, 'Upload & overwrite');
+    var proceed = h('button', { type: 'button', class: 'jqrg-btn-danger' }, 'Rewrite');
     wrap.appendChild(h('div', { class: 'jqrg-confirm-actions' }, [cancel, proceed]));
     content.appendChild(wrap);
 
@@ -1667,7 +1718,45 @@
       }).catch(function (err) {
         errBox.textContent = (err && err.message) || 'Upload failed.';
         cancel.disabled = false; proceed.disabled = false;
-        proceed.textContent = 'Upload & overwrite';
+        proceed.textContent = 'Rewrite';
+      });
+    };
+  }
+
+  function showMergeWarning(onDone) {
+    if (!modalEl) { if (onDone) onDone('no-modal'); return; }
+    var content = modalEl.querySelector('.jqrg-auth-content');
+    var titleEl = modalEl.querySelector('.jqrg-auth-title');
+    if (!content) { if (onDone) onDone('no-content'); return; }
+    if (titleEl) titleEl.textContent = 'Merge data?';
+    content.innerHTML = '';
+
+    var wrap = h('div', { class: 'jqrg-auth-form' });
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-msg' }, [
+      'Your account already has saved data. The merge will ',
+      h('span', { class: 'jqrg-confirm-danger' }, 'only upload data for games that have local data'),
+      '. Games with only account data will be preserved.',
+    ]));
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-note' }, 'Games without local data will not be affected.'));
+    var errBox = h('div', { class: 'jqrg-auth-error' });
+    wrap.appendChild(errBox);
+    var cancel = h('button', { type: 'button', class: 'jqrg-btn-ghost' }, 'Cancel');
+    var proceed = h('button', { type: 'button', class: 'jqrg-btn-danger' }, 'Merge');
+    wrap.appendChild(h('div', { class: 'jqrg-confirm-actions' }, [cancel, proceed]));
+    content.appendChild(wrap);
+
+    cancel.onclick = function () { if (onDone) onDone('cancelled'); };
+
+    proceed.onclick = function () {
+      cancel.disabled = true; proceed.disabled = true;
+      proceed.textContent = 'Merging…';
+      errBox.textContent = '';
+      Cloud.mergeLocalToAccount().then(function (summary) {
+        if (onDone) onDone('merged', summary);
+      }).catch(function (err) {
+        errBox.textContent = (err && err.message) || 'Merge failed.';
+        cancel.disabled = false; proceed.disabled = false;
+        proceed.textContent = 'Merge';
       });
     };
   }

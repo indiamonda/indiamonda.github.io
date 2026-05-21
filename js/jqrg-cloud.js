@@ -470,7 +470,65 @@
     });
   }
 
-  /** Record that the sync prompt was dismissed without uploading, so the user isn't pestered on
+  /** Merge local data to account without deleting account data for games that only exist on account.
+   *  Uses last-writer-wins semantics - only overwrites account data if local data is newer.
+   *  Unlike pushAllLocal, this only processes keys that have actual local data. */
+  function mergeLocalToAccount(opts) {
+    if (!authState) return Promise.reject(new Error('Not signed in'));
+    opts = opts || {};
+    var migrationTs = Date.now();
+    var items = [];
+    try {
+      for (var i = 0; i < LS.length; i++) {
+        var k = LS.key(i);
+        if (!k || !shouldSyncKey(k)) continue;
+        var v = LS.getItem(k);
+        if (v == null) continue;
+        if (v.length > MAX_VALUE_BYTES) continue;
+        // Skip empty or whitespace-only values
+        if (typeof v === 'string' && v.trim().length === 0) continue;
+        var keyTs = keyTimes[k];
+        items.push({ key: k, value: v, updated_at: typeof keyTs === 'number' ? keyTs : migrationTs });
+      }
+    } catch (_) {}
+    var chain = items.length
+      ? request('/api/saves/bulk', {
+          method: 'POST',
+          body: JSON.stringify({ origin: STORAGE_NAMESPACE, items: items }),
+        })
+      : Promise.resolve({ accepted: 0, rejected: 0 });
+    return chain.then(function (res) {
+      // Only snapshot IDB databases that have actual game save data
+      // (skip empty IDB databases created by just opening a game)
+      return snapshotIdbWithData().then(function (idbResults) {
+        writeJSON(MIGRATION_KEY, { at: Date.now(), user: authState.user && authState.user.id });
+        return {
+          localStorage: items.length,
+          indexedDB: idbResults.length,
+          server: res || null,
+        };
+      }).catch(function () {
+        writeJSON(MIGRATION_KEY, { at: Date.now(), user: authState.user && authState.user.id });
+        return { localStorage: items.length, indexedDB: 0, server: res || null };
+      });
+    });
+  }
+
+  /** Snapshot IDB databases but only include those with actual game save data.
+   *  Empty IDB databases (created by just opening a game without playing) are skipped. */
+  function snapshotIdbWithData() {
+    return listIdbDatabases().then(function (names) {
+      var gameDbs = (names || []).filter(function (n) {
+        if (!n) return false;
+        if (isEngineCacheName(n)) return false;
+        if (isVirtualFsName(n)) return false;
+        // Only count databases that have actual content
+        return true;
+      });
+      if (!gameDbs.length) return Promise.resolve([]);
+      return snapshotIdb(gameDbs);
+    }).catch(function () { return []; });
+  }
    *  every page load. They can still manually trigger a push later. */
   function skipLocalMigration() {
     if (!authState) return;
@@ -1625,6 +1683,7 @@
     listLocalSyncableKeys: listLocalSyncableKeys,
     isAccountEmpty: isAccountEmpty,
     pushAllLocal: pushAllLocal,
+    mergeLocalToAccount: mergeLocalToAccount,
     wipeLocalSyncable: wipeLocalSyncable,
     skipLocalMigration: skipLocalMigration,
     hasRecordedMigration: hasRecordedMigration,
