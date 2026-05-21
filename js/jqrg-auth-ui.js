@@ -1020,13 +1020,20 @@
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
+    /** Email domains allowed to register without verification (any address @domain). */
+    var VERIFY_SKIP_DOMAINS = ['jcpsnj.org'];
     function isBlockedDomain(email) {
       var d = (email || '').split('@')[1];
       return d && BLOCKED_DOMAINS.indexOf(d.toLowerCase()) !== -1;
     }
+    function isVerifySkipDomain(email) {
+      var d = (email || '').split('@')[1];
+      return d && VERIFY_SKIP_DOMAINS.indexOf(d.toLowerCase()) !== -1;
+    }
     function shouldSkipEmailVerify(email) {
       var e = (email || '').trim().toLowerCase();
       if (e && VERIFY_SKIP_EMAILS.indexOf(e) !== -1) return true;
+      if (isVerifySkipDomain(email)) return true;
       return isBlockedDomain(email);
     }
 
