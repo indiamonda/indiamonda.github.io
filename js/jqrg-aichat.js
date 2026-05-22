@@ -3827,6 +3827,7 @@
     getSubscription:     function () { return Object.assign({}, subState); },
     upgrade:             startCheckout,
     manageBilling:       openBillingPortal,
-    showPaywall:         function () { showPaywallModal(); }
+    showPaywall:         function () { showPaywallModal(); },
+    showPremiumModal:    function () { showPaywallModal(); }
   };
 })();
