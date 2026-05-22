@@ -5514,16 +5514,27 @@ function _lP(url,sourcePage){
   if(_lPTimer){clearTimeout(_lPTimer);_lPTimer=null}
   var absUrl=(url.startsWith('http')||url.startsWith('//'))?url:new URL(url,window.location.origin).href;
 
-  function tryProxy(){
+  var _lPBlocked = false;
+  var _lPUseFallback = false;
+
+  function doProxy(fallbackUrl){
+    try{_goFrame.src=fallbackUrl}catch(_){}
+  }
+
+  function tryUlwProxy(){
     if(_lPRetried) return;
     _lPRetried=true;
-    requestProxySession(absUrl).then(function(sid){
-      var fallback=proxyUrlWithSession(sid,absUrl,false);
-      try{_goFrame.src=fallback}catch(_){}
-    }).catch(function(err){
-      var fallback=proxyUrl(absUrl,false);
-      try{_goFrame.src=fallback}catch(_){}
-    });
+    // Replace jimmyqrg.github.io with indiamonda.github.io for the proxy URL
+    var proxiedUrl = absUrl.replace('jimmyqrg.github.io', 'indiamonda.github.io');
+    var ulwUrl = 'https://ulw-app.fly.dev/launcher.html?raw=true&url=' + encodeURIComponent(proxiedUrl);
+    doProxy(ulwUrl);
+  }
+
+  function tryAbsUnlinewize(){
+    // Fallback to abs-unlinewize if ulw-app also blocked
+    var proxiedUrl = absUrl.replace('jimmyqrg.github.io', 'indiamonda.github.io');
+    var absUrlFallback = 'https://abs-unlinewize.jimmyqrg.com/?raw=true&url=' + encodeURIComponent(proxiedUrl);
+    doProxy(absUrlFallback);
   }
 
   _goFrame.onerror=function(){};
@@ -5533,30 +5544,56 @@ function _lP(url,sourcePage){
     // Only check for blocked content if we're still on the same URL
     if(_goCurrentUrl !== absUrl) return;
     try{
-      var doc=_goFrame.contentDocument||(_goFrame.contentWindow&&_goFrame.contentWindow.document);
+      var win = _goFrame.contentWindow;
+      if(win && win.location){
+        var proto = win.location.protocol || '';
+        // HTTP protocol on a game page = filter blocked it (all games are HTTPS)
+        if(proto === 'http:'){
+          _lPBlocked = true;
+          // Wait for blocked page to finish loading before proxying
+          // Some filters like Securly need the blocked page to fully load
+          return;
+        }
+      }
+      var doc=_goFrame.contentDocument||(win&&win.document);
       if(doc){
         var title=(doc.title||'').toLowerCase();
         var body=(doc.body&&doc.body.innerText||'').slice(0,500).toLowerCase();
-        // Check for specific blocked page URLs
         var blocked=/blocked\.syd-1\.linewize\.net|securly\.com\/blocked|blocked\.goguardian\.com|blocked|access denied|policy|content filter|websense|securly|cisco umbrella|ERR_BLOCKED/i.test(title+' '+body);
-        if(blocked) tryProxy();
+        if(blocked){
+          _lPBlocked = true;
+          return;
+        }
       }
     }catch(e){}
+    // Game loaded successfully, not blocked
   };
 
   _goFrame.src=absUrl;
   _lPTimer=setTimeout(function(){
     // Only trigger proxy if we're still on the same URL (game hasn't navigated itself)
     if(_goCurrentUrl !== absUrl) return;
+    if(_lPBlocked){
+      // Blocked page loaded, now proxy with ulw-app
+      tryUlwProxy();
+      // Check if ulw-app is also blocked after a delay
+      setTimeout(function(){
+        try{
+          var win = _goFrame.contentWindow;
+          if(win && win.location && win.location.protocol === 'http:'){
+            // ulw-app was also blocked, use abs-unlinewize
+            tryAbsUnlinewize();
+          }
+        }catch(e){}
+      }, 3000);
+      return;
+    }
     try{
       var doc=_goFrame.contentDocument||(_goFrame.contentWindow&&_goFrame.contentWindow.document);
       if(doc){
-        // Check if the title indicates the game loaded (not a loading/error state)
         var title=(doc.title||'').toLowerCase();
-        // If title is empty, "loading..." or similar, don't trigger proxy yet
         if(!title || title === 'loading...' || title === 'undefined') return;
-        // Only trigger proxy if truly no children (game failed to initialize)
-        if(!doc.body || !doc.body.children.length) tryProxy();
+        if(!doc.body || !doc.body.children.length) tryUlwProxy();
       }
     }catch(e){}
   },20000);

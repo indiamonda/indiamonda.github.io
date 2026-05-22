@@ -573,7 +573,8 @@ self.addEventListener('fetch', event => {
     '/q/g/stickman-rebirth/',
     '/q/g/hypper-sandbox/',
     '/q/g/crazy-cattle/',
-    '/q/g/cookie-clicker/'
+    '/q/g/cookie-clicker/',
+    '/q/g/tag/'
   ];
   for (let i = 0; i < noInterceptHosts.length; i++) {
     if (u.indexOf(noInterceptHosts[i]) !== -1) return;

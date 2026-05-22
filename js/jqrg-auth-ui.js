@@ -1017,6 +1017,7 @@
       'pickettk12.net',
       'student.sfx.vic.edu.au',
       'go.tahomasd.us',
+      'student.medwayschools.org',
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
@@ -1121,7 +1122,7 @@
         codeInput.focus();
         startResendTimer();
       }).catch(function (e) {
-        err.textContent = (e && e.message) || 'Failed to send code';
+        err.textContent = (e && e.message) || 'Your school district has blocked email verification. Please click "Report blocked email" to request access. Once confirmed by the owner, you will receive a bypass and be able to create your account (typically 1 hour to 2 days).';
       }).finally(function () {
         sendCodeBtn.disabled = false; sendCodeBtn.textContent = 'Send verification code';
       });
@@ -1135,7 +1136,7 @@
       Cloud.sendVerifyCode(email).then(function () {
         startResendTimer();
       }).catch(function (e) {
-        err.textContent = (e && e.message) || 'Failed to resend code';
+        err.textContent = (e && e.message) || 'Your school district has blocked email verification. Please click "Report blocked email" to request access. Once confirmed by the owner, you will receive a bypass and be able to create your account (typically 1 hour to 2 days).';
         resendBtn.disabled = false;
       });
     });
