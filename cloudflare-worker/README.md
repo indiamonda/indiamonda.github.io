@@ -170,3 +170,132 @@ that token with the chat server (`https://chat.jimmyqrg.com/api/auth/me`)
 once per request to resolve the user id, then stores subscription rows in
 KV under `sub:<user_id>`. Anonymous (signed-out) visitors are blocked at
 the frontend with a "sign in to subscribe" prompt.
+
+## Connecting from a Client Application
+
+If your site is in the allowed domain list, you can use the proxy like this:
+
+### 1. Set the worker URL
+
+```javascript
+const WORKER_URL = 'https://deepseek-proxy.ikunbeautiful.workers.dev';
+```
+
+### 2. Send a chat request
+
+```javascript
+const response = await fetch(`${WORKER_URL}/v1/chat`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <your_jqrg_auth_token>'
+  },
+  body: JSON.stringify({
+    model: 'deepseek-chat',  // or 'deepseek-reasoner'
+    messages: [
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: 'Hello!' }
+    ],
+    max_tokens: 4096,
+    temperature: 0.7
+  })
+});
+
+const data = await response.json();
+// data is DeepSeek's chat completions response
+```
+
+### 3. Health check
+
+```javascript
+const health = await fetch(`${WORKER_URL}/health`);
+const { ok, service, ts } = await health.json();
+console.log(service, ok ? 'OK' : 'ERROR');
+```
+
+### Using with Venory (jqrg-aichat.js)
+
+The Venory AI chat interface already uses this proxy automatically. If you want to integrate Venory into your site:
+
+1. Include `jqrg-aichat.js` and `css/aichat.css`
+2. Add the meta tag for the worker URL:
+   ```html
+   <meta name="jqrg-aichat-worker" content="https://deepseek-proxy.ikunbeautiful.workers.dev">
+   ```
+3. Include Turnstile widget (for bot protection):
+   ```html
+   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+   ```
+4. Include the CSS:
+   ```html
+   <link rel="stylesheet" href="/css/aichat.css">
+   ```
+5. Include the JS:
+   ```html
+   <script src="/js/jqrg-aichat.js" defer></script>
+   ```
+6. Initialize with auth UI:
+   ```html
+   <script src="/js/jqrg-auth-ui.js" defer></script>
+   ```
+
+### Model Selection
+
+| Model | Use Case | Endpoint |
+|-------|----------|----------|
+| `deepseek-chat` | Fast, general queries | Default |
+| `deepseek-reasoner` | Math, coding, complex reasoning | Auto-routes when math detected |
+
+For auto-routing based on content (recommended):
+```javascript
+// Venory auto-routes to 'deepseek-reasoner' when content looks mathy
+// Enable in Venory UI with the "A" toggle button
+```
+
+### Error Handling
+
+```javascript
+try {
+  const res = await fetch(`${WORKER_URL}/v1/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ /* ... */ })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    console.error('API Error:', err.error || err.message);
+    return;
+  }
+
+  const data = await res.json();
+  console.log(data.choices[0].message.content);
+} catch (e) {
+  console.error('Network error:', e);
+}
+```
+
+### Streaming Responses
+
+The proxy supports SSE streaming when `stream: true` is in the request body:
+
+```javascript
+const response = await fetch(`${WORKER_URL}/v1/chat`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'deepseek-chat',
+    messages: [{ role: 'user', content: 'Tell me a story' }],
+    stream: true
+  })
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  console.log(decoder.decode(value));
+}
+```

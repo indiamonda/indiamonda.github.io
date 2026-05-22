@@ -529,6 +529,8 @@
       return snapshotIdb(gameDbs);
     }).catch(function () { return []; });
   }
+
+  /** Record that the sync prompt was dismissed without uploading, so the user isn't pestered on
    *  every page load. They can still manually trigger a push later. */
   function skipLocalMigration() {
     if (!authState) return;
