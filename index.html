@@ -4030,7 +4030,6 @@ var _D3=[
 var _D4=[
   {n:_('QWJzb2x1dGUgVW5saW5ld2l6ZQ=='),img:_("YWJzb2x1dGUtdW5saW5ld2l6ZQ=="),url:_("L3Uv"),inPage:true,paywall:true},
   {n:_('VW5saW5ld2l6ZSBQcm94eQ=='),img:_("dW5saW5ld2l6ZQ=="),url:_("aHR0cHM6Ly91bmxpbmV3aXplLmppbW15cXJnLmNvbS91bmJsb2NrZXIuaHRtbD9yYXc9dHJ1ZSZ1cmw9aHR0cHM6Ly91bmxpbmV3aXplLmppbW15cXJnLmNvbQ==")},
-  {n:_('UmFtbWVyaGVhZCBQcm94eQ=='),img:_("cmFtbWVyaGVhZA=="),url:_("aHR0cHM6Ly9ub2Jsb2NrLmppbW15cXJnLmNvbQ==")},
   {n:_('SGFja1dpemUgUHJveHk='),img:_("aGFja3dpemU="),url:_("L3Byb3h5Lw==")},
   {n:_('SmltbXlRcmcgSW5mbw=='),img:_("amluZm8="),url:_("L2luZm8v"),inPage:true},
 ];
@@ -4459,16 +4458,20 @@ function filterApps(){_rA();updateUrl()}
 function _rU(){
   var c=document.getElementById('unblocks-container');
   var html='<div class="section-title">'+_t(_('VW5ibG9ja3M='))+'</div><div class="unblocks-grid">';
+  var authData;
+  try{authData=JSON.parse(localStorage.getItem('__jqrg_auth_v1')||'{}')}catch(_){authData={}}
   _D4.forEach(function(u){
     var escaped=u.url.replace(/'/g,"\\'");
     var isDev=!!u.dev;
     var authed=_iA();
     var locked=(isDev||u.paywall)&&!authed;
     var paywall=u.paywall&&authed;
+    var isOwner=authed&&authData&&authData.user==='jimmyqrg';
+    var showPremium=paywall&&!isOwner;
     var onclick;
     if(locked){
       onclick="_openAuth()";
-    }else if(paywall){
+    }else if(showPremium){
       onclick="if(window.JqrgAiChat&&window.JqrgAiChat.showPremiumModal)window.JqrgAiChat.showPremiumModal();else alert('Premium required')";
     }else if(u.inPage){
       onclick="_lP('"+escaped+"','unblocks')";
@@ -5182,7 +5185,7 @@ function renderHomeGreeting(){
       'Pick up where you left off, or jump into something new.',
       'New games drop weekly. Got a few minutes? Roll the dice.',
       'Your library, your rules. Star the ones you love.',
-      'Bored? Hit Random Game and let fate decide.',
+      'Bored? Hit Random Demo and let fate decide.',
       'Featured today: a fresh mix of classics and newcomers.'
     ];
     sub.textContent=subs[Math.floor(Math.random()*subs.length)];
