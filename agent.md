@@ -29,6 +29,11 @@ From committed `q/g/round-and-wound/index.html`:
 5. `overlay.classList.add('jqrg-splash')` + splash sequence
 6. `window.JqrgLoader` public API with `splashDurationMs`
 
+## Head Soccer Fix
+- URL in _D1 had `/0` suffix: `/q/g/head-soccer/0`
+- Fixed: changed base64 from `L3EvZy9oZWFkLXNvY2NlcjAv` to `L3EvZy9oZWFkLXNvY2Nlci8=` → `/q/g/head-soccer/`
+- Both entries (lines 3957, 4011) updated
+
 ## Site Owner Access
 - User `@jimmyqrg` is the site owner and can bypass any premium requirements
 - Unlimited features and usage across ALL repos:
