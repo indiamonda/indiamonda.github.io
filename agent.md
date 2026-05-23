@@ -29,6 +29,13 @@ From committed `q/g/round-and-wound/index.html`:
 5. `overlay.classList.add('jqrg-splash')` + splash sequence
 6. `window.JqrgLoader` public API with `splashDurationMs`
 
+## Site Owner Access
+- User `@jimmyqrg` is the site owner and can bypass any premium requirements
+- Unlimited features and usage across ALL repos:
+  - jimmyqrg.github.io (this repo)
+  - jimmyqrg chat (`../chat/`)
+  - absolute unlinewize (`../u/`)
+
 ## Files
 - `/Users/Benran/Downloads/Round and Wound.html` — FIXED game (needs animations added)
 - `q/g/round-and-wound/index.html` — committed version (has animations, game is broken)
