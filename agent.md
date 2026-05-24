@@ -37,12 +37,8 @@ From committed `q/g/round-and-wound/index.html`:
 ## Osu Game - COMPLETED
 - Location: `/q/g/osu/index.html`
 - Files verified: `index.html`, `script.js`, `assets/project.json` (4.5MB), `assets/*.svg`, `assets/*.wav`
-- **Issue**: Broken cloud URL in index.html line 227:
-  `https://jimmyqrg.github.io/jqrg-games/undertale/simulators/asriel-i.sb3` → 404
-  - Wrapped in try-catch, won't break gameplay, but logs error
-  - Would need Turbowarp repackaging to fix properly
-- **Added to _D1** (line 3958): `{n:_('T3N1'),img:_("b3N1"),url:_("L3EvZy9vc3Uv"),tags:[]}`
-- **jqrg-loader added**: Complete loader with loading bar, sound gate button, banner animation, and cycling tips
+- **Favicon fix added**: Added `<link rel="icon" type="image/svg+xml" href="./assets/003cad671426cd67afb6e3281650dd2e.svg">` to index.html
+- **Known issue - Audio loading in iframe**: Turbowarp's iframe runtime has issues loading assets from within sandboxed contexts. Errors like "Blocked script execution in 'about:blank'" and "Network request failed" occur, but files exist locally. This is a Turbowarp packager limitation, not a file missing issue. The game still functions despite these errors.
 
 ## Site Owner Access
 - User `@jimmyqrg` is the site owner and can bypass any premium requirements
