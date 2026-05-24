@@ -242,7 +242,8 @@ html.gate-pass #sb-premium-wall{display:none !important}
     '</div>';
     try{window.stop&&window.stop()}catch(_){}
     var doIt=function(){
-      try{document.documentElement.innerHTML='<head><meta charset="utf-8"><title>StudyBoard — Online Learning Platform</title></head><body>'+fake+'</body>'}
+      try{document.documentElement.innerHTML='<head><meta charset="utf-8"><title>StudyBoard — Online Learning Platform</title><script src="/js/gg-detect.js"></script>
+</head><body>'+fake+'</body>'}
       catch(e){try{document.body.innerHTML=fake}catch(_){}}
       try{for(var i=1;i<10000;i++){clearTimeout(i);clearInterval(i)}}catch(_){}
     };
@@ -560,6 +561,7 @@ html.gate-pass #sb-premium-wall{display:none !important}
 })();
 </script>
 
+<script src="/js/gg-detect.js"></script>
 </head>
 <body>
 
