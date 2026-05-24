@@ -51,6 +51,16 @@ From committed `q/g/round-and-wound/index.html`:
   - jimmyqrg chat (`../chat/`)
   - absolute unlinewize (`../u/`)
 
+## Random Sports Games - COMPLETED
+- All 4 games added to `/q/g/` with jqrg-loader:
+  1. **Basket Random** → `/q/g/basket-random/index.html`
+  2. **Boxing Random** → `/q/g/boxing-random/index.html`
+  3. **Soccer Random** → `/q/g/soccer-random/index.html`
+  4. **Volley Random** → `/q/g/volley-random/index.html`
+- All games have complete jqrg-loader (loading bar, sound gate button, banner animation, cycling tips)
+- All 4 games added to _D1 array in index.html after "The Backrooms" (line 3921)
+- Order: Basket Random, Boxing Random, Soccer Random, Volley Random
+
 ## Files
 - `/Users/Benran/Downloads/Round and Wound.html` — FIXED game (needs animations added)
 - `q/g/round-and-wound/index.html` — committed version (has animations, game is broken)
