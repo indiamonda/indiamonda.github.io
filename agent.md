@@ -34,6 +34,16 @@ From committed `q/g/round-and-wound/index.html`:
 - Fixed: changed base64 from `L3EvZy9oZWFkLXNvY2NlcjAv` to `L3EvZy9oZWFkLXNvY2Nlci8=` → `/q/g/head-soccer/`
 - Both entries (lines 3957, 4011) updated
 
+## Osu Game - COMPLETED
+- Location: `/q/g/osu/index.html`
+- Files verified: `index.html`, `script.js`, `assets/project.json` (4.5MB), `assets/*.svg`, `assets/*.wav`
+- **Issue**: Broken cloud URL in index.html line 227:
+  `https://jimmyqrg.github.io/jqrg-games/undertale/simulators/asriel-i.sb3` → 404
+  - Wrapped in try-catch, won't break gameplay, but logs error
+  - Would need Turbowarp repackaging to fix properly
+- **Added to _D1** (line 3958): `{n:_('T3N1'),img:_("b3N1"),url:_("L3EvZy9vc3Uv"),tags:[]}`
+- **jqrg-loader added**: Complete loader with loading bar, sound gate button, banner animation, and cycling tips
+
 ## Site Owner Access
 - User `@jimmyqrg` is the site owner and can bypass any premium requirements
 - Unlimited features and usage across ALL repos:
