@@ -1019,7 +1019,8 @@
       'go.tahomasd.us',
       'student.medwayschools.org',
       'arcatasd.org',
-      'indyde.org'
+      'indyde.org',
+      'jcpsnj.org'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
