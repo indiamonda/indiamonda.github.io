@@ -4431,7 +4431,7 @@ function _rA(){
     var cls='t-a';
     var click;
     if(a.proxy){
-      var rawUrl=('https://'+a.url).replace(/'/g,"\\'");
+      var rawUrl=(a.url.startsWith('http')?a.url:window.location.origin+'/'+a.url).replace(/'/g,"\\'");
       click=' onclick="_openProxiedApp(\''+rawUrl+'\')"';
     }else{
       var escaped=a.url.replace(/'/g,"\\'");
