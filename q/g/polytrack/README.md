@@ -1,1 +1,1 @@
-current:overlapping-enabled.svg
+current:pattern.svg
