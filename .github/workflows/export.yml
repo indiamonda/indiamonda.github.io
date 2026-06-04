@@ -1,0 +1,162 @@
+# Export Godot game to HTML5 (no threads) and upload as artifact.
+# Put your Godot project (with project.godot and export_presets.cfg) in the
+# folder set by project_path, then run this workflow from the Actions tab.
+
+name: Export Web Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_path:
+        description: 'Path to Godot project (folder containing project.godot)'
+        required: true
+        default: 'game'
+      godot_version:
+        description: 'Godot version (e.g. 4.2, 4.3, 4.4)'
+        required: true
+        default: '4.4'
+      disable_threads:
+        description: 'Disable threads (required for GitHub Pages)'
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: ${{ github.event.inputs.godot_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Godot project
+        run: |
+          if [ ! -f "${{ github.event.inputs.project_path }}/project.godot" ]; then
+            echo "::error::No project.godot found in '${{ github.event.inputs.project_path }}'."
+            exit 1
+          fi
+          if [ ! -f "${{ github.event.inputs.project_path }}/export_presets.cfg" ]; then
+            echo "::error::No export_presets.cfg in '${{ github.event.inputs.project_path }}'. Open your project in Godot → Project → Export → Add Web preset → Save."
+            exit 1
+          fi
+          echo "Found project.godot and export_presets.cfg."
+
+      - name: Disable threads in export preset
+        if: ${{ github.event.inputs.disable_threads == 'true' }}
+        env:
+          PROJECT_PATH: ${{ github.event.inputs.project_path }}
+        run: |
+          CFG="${PROJECT_PATH}/export_presets.cfg"
+          echo "=== Full export_presets.cfg ==="
+          cat "$CFG"
+          echo ""
+          echo "=== Patching threads... ==="
+
+          cat > /tmp/patch_threads.py << 'SCRIPT'
+          import re, os
+
+          cfg_path = os.environ["PROJECT_PATH"] + "/export_presets.cfg"
+          with open(cfg_path, "r") as f:
+              content = f.read()
+
+          original = content
+
+          content = re.sub(r'(variant/[Tt]hread[ _]?[Ss]upport\s*=\s*)true', r'\1false', content)
+          content = re.sub(r'(ensure_cross_origin_isolation_headers\s*=\s*)true', r'\1false', content)
+          content = re.sub(r',\s*"threads"', '', content)
+          content = re.sub(r'"threads"\s*,\s*', '', content)
+          content = re.sub(r'"threads"', '', content)
+
+          if content != original:
+              print("Changes made to export_presets.cfg")
+          else:
+              print("WARNING: No thread settings found to patch!")
+              print("Adding variant/thread_support=false to all preset options sections...")
+              content = re.sub(r'(\[preset\.\d+\.options\]\n)', r'\1variant/thread_support=false\n', content)
+
+          with open(cfg_path, "w") as f:
+              f.write(content)
+
+          print("\n=== Patched export_presets.cfg ===")
+          print(content)
+          SCRIPT
+          python3 /tmp/patch_threads.py
+
+      - name: Download Godot
+        run: |
+          GODOT_URL="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          TEMPLATES_URL="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+
+          echo "Downloading Godot from: $GODOT_URL"
+          echo "Downloading templates from: $TEMPLATES_URL"
+
+          mkdir -p /tmp/godot
+          wget -q "$GODOT_URL" -O /tmp/godot/godot.zip || { echo "::error::Failed to download Godot. Check that version '${GODOT_VERSION}' exists."; exit 1; }
+          wget -q "$TEMPLATES_URL" -O /tmp/godot/templates.tpz || { echo "::error::Failed to download export templates."; exit 1; }
+
+      - name: Install Godot
+        run: |
+          cd /tmp/godot
+          unzip -o godot.zip
+          GODOT_BIN=$(find . -maxdepth 1 -name 'Godot_v*' -type f | head -1)
+          chmod +x "$GODOT_BIN"
+          sudo mv "$GODOT_BIN" /usr/local/bin/godot
+          echo "Godot binary installed: $(godot --version 2>&1 || true)"
+
+      - name: Install export templates
+        run: |
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$TEMPLATE_DIR"
+          cd /tmp/godot
+          unzip -o templates.tpz
+          mv templates/* "$TEMPLATE_DIR/" 2>/dev/null || true
+          echo "=== Available templates ==="
+          ls "$TEMPLATE_DIR" | grep -i web
+          echo ""
+          echo "=== All templates ==="
+          ls "$TEMPLATE_DIR"
+
+      - name: Export project
+        run: |
+          mkdir -p /tmp/web-build
+          cd "${{ github.event.inputs.project_path }}"
+
+          echo "=== Final export_presets.cfg (thread/cross-origin lines) ==="
+          grep -in 'thread\|cross.origin\|variant/' export_presets.cfg || echo "(none found)"
+
+          # Let Godot import assets first
+          timeout 120 godot --headless --import . 2>&1 || true
+
+          # Find the Web export preset name
+          PRESET=$(grep -oP '(?<=name=").*?(?=")' export_presets.cfg | head -1)
+          echo "Using export preset: $PRESET"
+
+          # Export
+          godot --headless --export-release "$PRESET" /tmp/web-build/index.html 2>&1
+
+          echo "=== Export complete. Files: ==="
+          ls -la /tmp/web-build/
+
+          # Verify the exported build
+          if [ -f /tmp/web-build/index.html ]; then
+            echo "=== Thread status in exported HTML ==="
+            grep -i 'THREADS_ENABLED\|ensureCrossOrigin' /tmp/web-build/index.html || echo "(not found)"
+          fi
+
+      - name: Patch exported HTML (safety net)
+        if: ${{ github.event.inputs.disable_threads == 'true' }}
+        run: |
+          cd /tmp/web-build
+          if [ -f index.html ]; then
+            sed -i 's|GODOT_THREADS_ENABLED = true|GODOT_THREADS_ENABLED = false|g' index.html
+            sed -i 's|"ensureCrossOriginIsolationHeaders":true|"ensureCrossOriginIsolationHeaders":false|g' index.html
+            echo "=== Final index.html thread status ==="
+            grep -i 'THREADS_ENABLED\|ensureCrossOrigin' index.html || true
+          fi
+
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: /tmp/web-build/

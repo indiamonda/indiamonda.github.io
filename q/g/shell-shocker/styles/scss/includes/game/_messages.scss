@@ -1,0 +1,215 @@
+// .is-paused.is-vip #captureContainer, .is-paused #best_streak_container {
+//     transform: translateX(-50%) scale(var(--paused-ui-vip-scale));
+// }
+
+.in-game-notification {
+	padding: 1em;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+	background: rgba(0, 0, 0, 25%);
+	background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.5) 50%, rgba(255,255,255,0) 100%);
+}
+
+.in-game-notification.light-dark {
+	background: rgb(255,255,255);
+	background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 100%);
+}
+
+#killBox, #deathBox  {
+	display: none;
+	width: 20em;
+	bottom: 20%;
+	color: var(--ss-white);
+	text-align: center;
+}
+
+#kill-death-box {
+	width: 20em;
+	bottom: 20%;
+	color: var(--ss-white);
+	text-align: center;
+	transform: translate(-50%, 0) scale(1);
+	transition: all .3s;
+}
+
+.kill-death-msg {
+	transition: all .2s ease-in-out;
+}
+
+@keyframes shellStreakMessage {
+    from {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    10% {
+        transform: scale(2) rotate(360deg);
+        opacity: 1;
+
+    }
+
+    15% {
+        transform: scale(1) rotate(360deg);
+    }
+
+    85% {
+        opacity: 1;
+        transform: scale(1) translateY(0) rotate(360deg);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(1) translateY(10em) rotate(360deg);
+    }
+}
+
+#cts-message.in-game-notification {
+	right: 1.5em;
+	padding: .5em 1.5em .5em 0;
+}
+
+#cts-message .icon-spatula {
+	display: block;
+	position: static;
+    width: 2em;
+    height: 4em;
+    transform: rotate(10deg);
+	fill: var(--ss-gold);
+}
+
+#cts-message .team-title {
+	line-height: 1;
+}
+
+#cts-message.red .team-title {
+	color: var(--ss-team-red-light) !important;
+	text-shadow: .1em .1em 0 var(--ss-team-red-dark);
+}
+
+#cts-message.blue .team-title {
+	color: var(--ss-team-blue-light) !important;
+	text-shadow: .1em .1em 0 var(--ss-team-blue-dark);
+
+}
+
+#cts-message.blue .icon-spatula {
+	fill: var(--ss-team-blue-light);
+	filter: drop-shadow(.1em .1em 0 var(--ss-team-blue-dark));
+	
+}
+
+#cts-message.red .icon-spatula{
+	fill: var(--ss-team-red-light);
+	filter: drop-shadow(.1em .1em 0 var(--ss-team-red-dark))
+}
+
+#KILL_STREAK {
+	font-style: italic;
+}
+
+
+#KILL_STREAK,
+.game-start-loading-message,
+.game-start-loading-message h3 {
+	text-align: center;
+}
+
+.game-start-loading-message,
+.game-start-loading-message h3 {
+	width: 100%;
+	display: block;
+}
+
+.game-start-loading-message,
+.btn__respawning {
+	min-height: 7em;
+}
+
+#kill-death-box .killed h3, #kill-death-box .died h2 {
+	font-weight: 900;
+	margin: 0;
+	color: var(--ss-white);
+}
+
+#kill-death-box .killed h3 {
+	margin: .2em 0 0;	
+}
+
+#kill-death-box .killed h2 {
+	line-height: 1em;
+	margin: 0;
+	font-weight: 600;
+	color: var(--ss-yellow);
+	font-family: 'Nunito', sans-serif;
+	text-transform: none !important;
+}
+
+#kill-death-box .h1 {
+	font-size: 3em;
+	top: -1em;
+}
+
+#kill-death-box .h1 span {
+	font-size: .6em;
+}
+
+/* #deathBox {
+	position: absolute;
+	display: none;
+	width: 100%;
+	top: 20%;
+	color: #fff;
+	text-align: center;
+} */
+
+.kill-death-box-img {
+	top: -1em;
+    width: 2.3em;
+}
+
+#gameMessage {
+	position: absolute;
+	visibility: hidden;
+	top: 60%; left: 50%;
+	transform: translateX(-50%);
+	color: #fff;
+	font-weight: bold;
+	font-size: 1.5em;
+	text-align: center;
+	z-index: 6;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#gameMessage.show {
+	visibility: visible;
+	animation: 2.5s gameMessage forwards;
+}
+
+#gameMessage.hide {
+	visibility: hidden;
+}
+
+@keyframes gameMessage {
+	0% { transform: translateX(-50%) scale(0); }
+	10% { transform: translateX(-50%) scale(1.4); }
+	15% { transform: translateX(-50%) scale(1); }
+	20% { transform: translateX(-50%) scale(1.2); }
+	25% { transform: translateX(-50%) scale(1); }
+	30% { transform: translateX(-50%) scale(1.1); }
+	35% { transform: translateX(-50%) scale(1); }
+	90% { transform: translateX(-50%) scale(1); }
+	100% { transform: translateX(-50%) scale(0); visibility: hidden }
+}
+
+#game_screen #event-notifications {
+    margin: 0;
+    position: absolute;
+    z-index: 5;
+	top: .8em;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%)
+}
+#game_screen #event-notifications img {
+	height: 3em;
+	width: auto;
+}

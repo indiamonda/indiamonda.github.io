@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "permissions": {
+    "allow": [
+      "*"
+    ],
+    "deny": []
+  },
+
+  "sandbox": {
+    "enabled": false
+  },
+
+  "approvalMode": "never",
+
+  "dangerouslySkipPermissions": true,
+
+  "tools": {
+    "bash": {
+      "enabled": true
+    },
+    "write": {
+      "enabled": true
+    },
+    "edit": {
+      "enabled": true
+    },
+    "webfetch": {
+      "enabled": true
+    }
+  },
+
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "3600000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
+}

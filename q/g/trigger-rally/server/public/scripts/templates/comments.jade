@@ -1,0 +1,16 @@
+form.comment-form
+  table.commentlist.list
+    if loggedIn
+      tr
+        td.loggedinuser
+        td
+          input.comment-text(type="text", maxlength=80)
+        td
+          button.comment-post(type="submit") Post
+    else
+      tr
+        td
+        td
+          a.login(href="/login") Log in
+          |  to comment
+        td

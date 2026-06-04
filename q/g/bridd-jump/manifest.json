@@ -1,0 +1,40 @@
+{
+  "name": "Bridd Jump",
+  "short_name": "Bridd Jump",
+  "description": "Jump from platform to platform and travel as far as possible!",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/game-images/games/bridd-jump.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "infinite-campus.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Play Latest Version",
+      "short_name": "Play",
+      "description": "Play the latest version of Bridd Jump",
+      "url": "./V1.2.2/",
+      "icons": [
+        {
+          "src": "/game-images/games/bridd-jump.png",
+          "sizes": "512x512"
+        }
+      ]
+    }
+  ]
+}
+

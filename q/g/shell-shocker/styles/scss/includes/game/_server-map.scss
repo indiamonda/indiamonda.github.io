@@ -1,0 +1,22 @@
+#readouts, #serverAndMapInfo {
+	display: block; 
+	text-align: right; 
+	color: var(--ss-white);
+	font-weight: bold;
+	clear: both;
+	font-size: 1.3em !important;
+	text-transform: uppercase;
+	line-height: 1em;
+	white-space: nowrap;
+	z-index: 5;
+}
+
+.is-paused #readouts {
+	position: relative;
+	top: 0;
+}
+
+#readouts div {
+	display: inline;
+	margin-left: 0.1em;
+}

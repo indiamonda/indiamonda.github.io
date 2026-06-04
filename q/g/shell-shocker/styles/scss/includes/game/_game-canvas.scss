@@ -1,0 +1,24 @@
+.gameCanvas {
+    background: none;
+    width: 100%;
+	height: 100%;
+	margin: 0;
+	top: auto;
+	right: auto;
+	bottom: auto;
+    position: absolute;
+    pointer-events: none;
+	transition: height .3s ease-in-out, width .3s ease-in-out;
+	overflow: hidden;
+}
+
+.is-paused .gameCanvas canvas {
+    pointer-events: none;
+}
+
+.gameCanvas {
+	transition: margin .3s ease-in-out , width .3s ease-in-out, height .3s ease-in-out, left .3s ease-in-out;
+    transform-origin: left top;
+	transform: translate(0, 0);
+	left: 0;
+}

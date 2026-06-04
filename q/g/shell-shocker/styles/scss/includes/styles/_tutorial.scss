@@ -1,0 +1,146 @@
+/* Tutorial */
+#tutorialPopup {
+	background-image: linear-gradient(to bottom,#5ebbd9, #4fb0d0, #40a5c7, #2e9abe, #178fb5);
+}
+
+#tutorialPopup .popup_sm_content {
+    max-width: none;
+	width: 40em;
+    padding: 2em 2em 0;
+}
+
+.tutorial-keyboard {
+	width: 19em;
+}
+
+.tutorial-pointer {
+	font-size: 75%;
+}
+
+.tutorial-content {
+	grid-template-columns: auto 2fr;
+}
+
+.tutorial-egg {
+	width: 5em;
+}
+
+.tutorial-list li {
+	line-height: 1.2;
+    padding: 0.4em 1.8rem;
+    background-position: 0 center;
+    background-size: 1.3rem;
+    background-repeat: no-repeat;
+    background-image: url(/img/tutorial/ss_tutorial_Star.webp);
+    font-size: 90%;
+}
+
+.tutorial-labels {
+    grid-template-columns: 25em 7em;
+    width: 32em;
+	margin: 1.5em auto;
+}
+
+.tutorial-labels span:not(.tutorial-special-keys) {
+	font-size: 80%;
+    color: var(--ss-vip-yellow);
+    line-height: 1.2;
+    text-align: center;
+}
+
+.tutorial-shift {
+    top: 8.2em;
+    left: 2.3em;
+}
+.tutorial-spacebar {
+    top: 11.5em;
+    left: 9em;
+}
+.tutorial-move-right,
+.tutorial-move-down {
+	top: 10em;
+}
+.tutorial-move-down {
+    left: 11.5em;
+}
+.tutorial-move-right {
+    left: 15.5em;
+}
+.tutorial-move-left {
+	top: 5.7em;
+    left: -0.5em;
+}
+.tutorial-reload, 
+.tutorial-grenade{
+	top: 1.5em;
+}
+.tutorial-grenade {
+	left: 0;
+}
+.tutorial-reload,
+.tutorial-melee,
+.tutorial-jump {
+	left: 24.3em;
+}
+.tutorial-melee {
+    top: 5.5em;
+}
+.tutorial-shoot,
+.tutorial-move-up,
+.tutorial-swap-weapons {
+    top: -1.5em;
+}
+.tutorial-swap-weapons {
+	left: 15em
+}
+.tutorial-shoot {
+    left: 32.3em;
+}
+.tutorial-move-up {
+    left: 9.5em;
+}
+.tutorial-jump {
+	top: 14.5em;
+}
+.tutorial-aim {
+	top: 10.5em;
+    left: -2.4em;
+}
+
+
+.tutorial-key-top {
+	top: 1.1em;
+}
+
+.tutorial-q {
+	left: 5em;
+}
+.tutorial-w {
+	left: 8.2em;
+}
+.tutorial-e {
+	left: 11.5em;
+}
+.tutorial-r {
+	left: 14.6em;
+}
+
+.tutorial-key-bottom {
+	top: 4.4em;
+}
+.tutorial-a {
+    left: 6em;
+}
+.tutorial-f {
+    left: 15.5em;
+}
+.tutorial-s {
+	left: 9.2em;
+}
+.tutorial-d {
+    left: 12.3em;
+}
+.tutorial-mouse {
+    max-width: 100%;
+    height: auto;
+}

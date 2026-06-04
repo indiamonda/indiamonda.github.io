@@ -1,0 +1,57 @@
+[
+    {
+        "id": "default",
+        "backgroundNames": "default_0.png;default_1.png;default_2.png;default_3.png",
+        "iconName": "default_icon.png"
+    },
+    {
+        "id": "american_country",
+        "backgroundNames": "american_country_0.jpg;american_country_1.jpg;american_country_2.jpg;american_country_3.jpg;american_country_4.jpg",
+        "iconName": "american_country_icon.png"
+    },
+    {
+        "id": "american_country2",
+        "backgroundNames": "american_country2_0.jpg;american_country2_1.jpg;american_country2_2.jpg;american_country2_3.jpg;american_country2_4.jpg",
+        "iconName": "american_country2_icon.png"
+    },
+    {
+        "id": "bluesky",
+        "backgroundNames": "bluesky_0.jpg;bluesky_1.jpg;bluesky_2.jpg;bluesky_3.jpg;bluesky_4.jpg",
+        "iconName": "bluesky_icon.png"
+    },
+    {
+        "id": "cat",
+        "backgroundNames": "cat_0.jpg;cat_1.jpg;cat_2.jpg;cat_3.jpg;cat_4.jpg",
+        "iconName": "cat_icon.png"
+    },
+    {
+        "id": "china",
+        "backgroundNames": "china_0.jpg;china_1.jpg;china_2.jpg;china_3.jpg;china_4.jpg",
+        "iconName": "china_icon.png"
+    },
+    {
+        "id": "concert",
+        "backgroundNames": "concert_0.jpg;concert_1.jpg;concert_2.jpg;concert_3.jpg;concert_4.jpg",
+        "iconName": "concert_icon.png"
+    },
+    {
+        "id": "earthday",
+        "backgroundNames": "earthday_0.jpg;earthday_1.jpg;earthday_2.jpg;earthday_3.jpg;earthday_4.jpg",
+        "iconName": "earthday_icon.png"
+    },
+    {
+        "id": "effiel",
+        "backgroundNames": "effiel_0.jpg;effiel_1.jpg;effiel_2.jpg;effiel_3.jpg;effiel_4.jpg",
+        "iconName": "effiel_icon.png"
+    },
+    {
+        "id": "euro",
+        "backgroundNames": "euro_0.jpg;euro_1.jpg;euro_2.jpg;euro_3.jpg;euro_4.jpg",
+        "iconName": "euro_icon.png"
+    },
+    {
+        "id": "independenceday",
+        "backgroundNames": "independenceday_0.jpg;independenceday_1.jpg;independenceday_2.jpg;independenceday_3.jpg;independenceday_4.jpg",
+        "iconName": "independenceday_icon.png"
+    }
+]

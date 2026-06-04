@@ -1,0 +1,330 @@
+#captureContainer {
+	white-space: nowrap;
+	position: absolute;
+	left: 50%;
+	top: .6em;
+	transform: translateX(-50%) scale(var(--paused-ui-scale));
+	padding: 0;
+	font-family: 'Nunito', sans-serif;
+	font-weight: 900;
+}
+ 
+#captureCenter {
+	display: inline-block;
+	text-align: center;
+}
+
+#captureBarContainer {
+	width: 20em;
+	height: 3em;
+	background: rgba(0, 0, 0, 0.7);
+	border-radius: 2em 2em 2em 2em;
+	border: solid 0.5em rgba(255, 255, 255, 0.3);
+	overflow: hidden;
+}
+
+#captureBar {
+	width: 19em;
+	height: 3em;
+	transform-origin: left;
+	transform: scaleX(100%);
+}
+  
+#captureBarText {
+	color: white;
+	font-size: 1.25em;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+.captureCrown {
+	height: 3em;
+}
+
+.captureScoreContainer {
+	display: inline-block;
+	text-align: center;
+}
+  
+.captureScore {
+	color: white;
+	font-size: 1.5em;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#captureBar.empty {
+	visibility: hidden;
+}
+
+#captureBar.contested {
+	animation: contestedBar 300ms infinite alternate;
+}
+
+@keyframes contestedBar {
+	0% { background: var(--ss-team-blue-light) }
+	100% { background: var(--ss-team-red-light) }
+}
+
+#captureBar.takeover {
+	background: white;
+}
+
+#captureBar.blue {
+	background: var(--ss-team-blue-light);
+}
+
+#captureBar.red {
+	background: var(--ss-team-red-light);
+}
+
+#captureBar.blueAbandoned {
+	background: var(--ss-team-blue-dark);
+}
+
+#captureBar.redAbandoned {
+	background: var(--ss-team-red-dark);
+}
+
+#captureIconContainer {
+	position: fixed;
+	transform: translate(-50%, -50%);
+	visibility: hidden;
+}
+
+#captureIconContainer.on {
+	visibility: visible;
+}
+
+#captureInsideContainer {
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+#captureIconCaption {
+	color: white;
+	font-size: 1.5em;
+	font-weight: 900;
+	transform: translateY(-0.2em);
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#captureIcon.empty {
+	fill: black;
+}
+
+#captureIcon.contested {
+	animation: contestedIcon 300ms infinite alternate;
+}
+
+@keyframes contestedIcon {
+	0% { fill: var(--ss-team-blue-light) }
+	100% { fill: var(--ss-team-red-light) }
+}
+
+#captureIcon.takeover {
+	fill: rgb(225, 225, 225);
+}
+
+#captureIcon.blue {
+	fill: var(--ss-team-blue-light);
+}
+
+#captureIcon.red {
+	fill: var(--ss-team-red-light);
+}
+
+#captureIcon.blueAbandoned {
+	fill: var(--ss-team-blue-dark);
+}
+
+#captureIcon.redAbandoned {
+	fill: var(--ss-team-red-dark);
+}
+
+#captureIcon {
+	position: absolute;
+	height: 3em;
+	top: 3.8em;
+	left: 1.1em;
+}
+
+#captureRingBackground {
+	position: absolute;
+	width: 6.5em;
+	height: 6.5em;
+	border: solid .5em black;
+	box-shadow: 0 0 0 0.15em inset rgba(0, 0, 0, 0.5),  0 0 0 0.15em rgba(0, 0, 0, 0.5);
+	border-radius: 7em;
+}
+
+#captureRingContainer {
+	position: relative;
+	width: 6.5em;
+	height: 6.5em;
+	overflow: hidden;
+	transform: translateY(20%);
+}
+
+#captureRing {
+	position: absolute;
+	width: 6.5em;
+	height: 6.5em;
+	border: solid 0.5em red;
+	border-radius: 7em;
+	transform: translateY(-20%);
+}
+
+#captureRing.empty {
+	visibility: hidden;
+}
+
+#captureRing.contested {
+	animation: contestedRing 300ms infinite alternate;
+}
+
+@keyframes contestedRing {
+	0% { border-color: var(--ss-team-blue-light) }
+	100% { border-color: var(--ss-team-red-light) }
+}
+
+#captureRing.takeover {
+	border-color: rgb(225, 225, 225);
+}
+
+#captureRing.blue {
+	border-color: var(--ss-team-blue-light);
+}
+
+#captureRing.red {
+	border-color: var(--ss-team-red-light);
+}
+
+#captureRing.blueAbandoned {
+	border-color: var(--ss-team-blue-dark);
+}
+
+#captureRing.redAbandoned {
+	border-color: var(--ss-team-red-dark);
+}
+
+#bigMessageContainer {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	transform: translateY(-50%);
+	text-align: center;
+	color: white;
+}
+
+#bigMessage {
+	position: absolute;
+	left: 50%;
+	animation: bigMessage 4500ms linear 300ms forwards;
+	visibility: hidden;
+}
+
+.bigMessageText {
+	white-space: nowrap;
+	font-family: 'Sigmar One', sans-serif;
+	font-size: 6em;
+	font-style: italic;
+}
+
+@keyframes bigMessage {
+	0% {
+		visibility: visible;
+		transform: scaleX(0) translateX(50vw);
+		transform-origin: center;
+		opacity: 0;
+	}
+
+	7% {
+		transform: scaleX(1) translateX(-47%);
+		transform-origin: center;
+		opacity: 1;
+	}
+
+	93% {
+		transform: scaleX(1) translateX(-53%);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translateX(-100vw);
+		transform-origin: left;
+		opacity: 0;
+	}
+}
+
+#bigMessageCaption {
+	margin-top: 5.5em;
+	font-size: 1.5em;
+	font-weight: bold;
+	animation: bigMessageCaption 3400ms linear 1000ms forwards;
+	visibility: hidden;
+	color: rgb(255, 192, 50);
+}
+
+@keyframes bigMessageCaption {
+	0% {
+		visibility: visible;
+		opacity: 0;
+		transform: scale(0);
+	}
+
+	5% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	95% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	100% {
+		opacity: 0;
+		transform: scale(0);
+	}
+}
+
+#bigMessageBar {
+	position: absolute;
+	width: 100%;
+	height: 14em;
+	background: white;
+	border-top: solid white 1em;
+	border-bottom: solid white 1em;
+	animation: bigMessageBar 5000ms ease-out forwards;
+	transform-origin: top;
+	box-shadow: 0 0 1em rgb(255, 255, 255);
+}
+
+@keyframes bigMessageBar {
+	0% {
+		transform: scale(0, 0.1) translateY(-50%) perspective(1px) translateZ(0);
+	}
+	
+	5% {
+		transform: scale(1, 0.1) translateY(-50%) perspective(1px) translateZ(0);
+		background: white;
+		border-color: white;
+	}
+
+	10% {
+		transform: scaleY(1) translateY(-50%) perspective(1px) translateZ(0);
+		background: rgba(0, 0, 0, 0.75);
+		border-color: var(--ss-big-message-border-color);
+	}
+
+	95% {
+		transform: scaleY(1) translateY(-50%) perspective(1px) translateZ(0);
+		background: rgba(0, 0, 0, 0.75);
+		border-color: var(--ss-big-message-border-color);
+	}
+
+	100% {
+		transform: scale(1, 0) translateY(-50%) perspective(1px) translateZ(0);
+		background: white;
+		border-color: white;
+	}
+}

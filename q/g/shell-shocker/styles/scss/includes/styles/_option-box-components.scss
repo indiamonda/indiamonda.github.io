@@ -1,0 +1,76 @@
+#showGameModePopup .select-box-wrap {
+	width: 20em;
+}
+
+.btn_dropdown {
+	min-width: 4.5em;
+	text-shadow: none;
+	border-radius: var(--ss-border-radius-sm);
+}
+
+.option-box {
+	padding: var(--ss-space-md) 0;
+    bottom: 4em;
+    right: -50%;
+	z-index: 1;
+	border: var(--ss-common-border-width) solid var(--ss-blue5);
+	box-shadow: 0.26em 0.26em 0 rgb(11 147 189 / 50%);
+}
+
+.option-box ul {
+	/* overflow-y: auto; */
+    max-height: 10em;
+}
+
+.option-box li {
+	grid-template-columns: 1.25em auto;
+	font-size: .71em;
+	font-weight: 700;
+    min-height: 1.5em;
+    padding: 0.3em var(--ss-space-lg);
+}
+
+.fr .option-box li {
+	font-size: .6em;
+}
+
+.option-box li.regions-select {
+	grid-template-columns: 1.25em auto 3.25em;
+}
+
+.option-box li.regions-select div {
+	font-size: unset;
+}
+
+.option-box li:hover {
+	background: rgba(17,146,188, .5);
+}
+
+.option-box-checkmark {
+	width: 1em;
+	height: 1em;
+}
+
+.option-box .selected i, .option-box .selected svg path {
+	color: var(--twitch-yellow);
+	fill: var(--twitch-yellow);
+	-webkit-text-fill-color: var(--twitch-yellow); /* Will override color (regardless of order) */
+	-webkit-text-stroke-width: .12em;
+	-webkit-text-stroke-color: var(--ss-blue5);
+	stroke: var(--ss-blue5);
+}
+
+.option-box.pos-bottom{
+	top: 3.8em;
+	bottom: auto;
+	right: auto;
+	left: 0;
+	width: 100%;
+}
+
+.option-box.pos-right {
+    bottom: auto;
+    top: -0.17em;
+    right: -12em;
+    width: 11.5em;
+}

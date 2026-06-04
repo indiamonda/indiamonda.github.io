@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs title="Google.com" />
+<Content type="html"><![CDATA[
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>Gladiator Fights</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/gru6nny/glad@main/TemplateData/style.css"/>
+    <!-- GameMonetize SDK Entegrasyonu -->
+    <script type="text/javascript">
+        window.SDK_OPTIONS = {
+            gameId: "jp112o3o4hzgrnc7zaewjkrfk282pul8",
+            onEvent: function (a) {
+                switch (a.name) {
+                    case "SDK_GAME_PAUSE":
+                        console.log("Oyun duraklatıldı, ses kapatılıyor...");
+                        if (typeof window.unityInstance !== 'undefined' && window.unityInstance) {
+                            window.unityInstance.SendMessage('AudioManager', 'MuteAudio');
+                        }
+                        break;
+                    case "SDK_GAME_START":
+                        console.log("Reklam bitti, oyun devam ediyor...");
+                        if (typeof window.unityInstance !== 'undefined' && window.unityInstance) {
+                            window.unityInstance.SendMessage('AudioManager', 'UnmuteAudio');
+                        }
+                        break;
+                    case "SDK_READY":
+                        console.log("SDK hazır.");
+                        break;
+                }
+            }
+        };
+        (function (a, b, c) {
+            var d = a.getElementsByTagName(b)[0];
+            a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "https://cdn.jsdelivr.net/gh/testamalame/sef@main/sedk.js", d.parentNode.insertBefore(a, d));
+        })(document, "script", "gamemonetize-sdk");
+    </script>
+    <script>
+        const overlayBackgroundColor = "";
+        const progressBarFillColor = "";
+        const progressBarBackgroundColor = "";
+        const progressBarBorderColor = "";
+    </script>
+</head>
+<body class="dark">
+    <div id="unity-container" class="unity-desktop">
+        <canvas id="unity-canvas"></canvas>
+    </div>
+    <div id="loading-cover" style="display:none;">
+        <div id="unity-loading-bar">
+            <div id="unity-logo"><img src="https://cdn.jsdelivr.net/gh/gru6nny/glad@main/logo.png"/></div>
+            <div id="unity-progress-bar-empty" style="display: none;">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <script>
+        const buildUrl = "https://cdn.jsdelivr.net/gh/gru6nny/glad@main/Build";
+        const loaderUrl = buildUrl + "/d9d605cb1c18b4ed9fb179406f02ceab.loader.js";
+        const config = {
+            dataUrl: buildUrl + "/49a02277aa09ca8e6c8ee4e51eb08f1a.data.unityweb",
+            frameworkUrl: buildUrl + "/c767fe179493036a65a828eba5be027f.framework.js.unityweb",
+            codeUrl: buildUrl + "/ad7994d8fdfb16e3813793705d495bc5.wasm.unityweb",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "DZGames",
+            productName: "Gladiator Fights",
+            productVersion: "1.7",
+        };
+
+        const container = document.querySelector("#unity-container");
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingCover = document.querySelector("#loading-cover");
+        const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+        const progressBarFull = document.querySelector("#unity-progress-bar-full");
+        const spinner = document.querySelector('.spinner');
+
+        let isAdShown = false;
+
+        function showAdOnClick() {
+            if (!isAdShown && typeof sdk !== 'undefined' && typeof sdk.showBanner !== 'undefined') {
+                sdk.showBanner();
+                isAdShown = true;
+                console.log("Reklam çağrıldı.");
+            } else {
+                console.warn("SDK veya showBanner tanımlı değil.");
+            }
+        }
+
+        if (overlayBackgroundColor !== "-" && overlayBackgroundColor !== " " && overlayBackgroundColor !== "")
+            canvas.style.background = overlayBackgroundColor;
+
+        if (progressBarFillColor !== "-" && progressBarFillColor !== " " && progressBarFillColor !== "")
+            progressBarFull.style.background = progressBarFillColor;
+
+        if (progressBarBackgroundColor !== "-" && progressBarBackgroundColor !== " " && progressBarBackgroundColor !== "")
+            progressBarEmpty.style.background = progressBarBackgroundColor;
+
+        if (progressBarBorderColor !== "-" && progressBarBorderColor !== " " && progressBarBorderColor !== "")
+            progressBarEmpty.style.border.color = progressBarBorderColor;
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            container.className = "unity-mobile";
+        }
+
+        canvas.style.backgroundImage = `url('${buildUrl}/4456e21214b3649c45f4f12d7563b00f.jpg')`;
+        canvas.style.backgroundPosition = "center";
+        canvas.style.backgroundSize = "cover";
+        loadingCover.style.display = "";
+
+        const unityLoader = document.createElement("script");
+        unityLoader.src = loaderUrl;
+        unityLoader.onload = async () => {
+            createUnityInstance(canvas, config, (progress) => {
+                spinner.style.display = "none";
+                progressBarEmpty.style.display = "";
+                progressBarFull.style.width = `${100 * progress}%`;
+            }).then((unityInstance) => {
+                window.unityInstance = unityInstance;
+                loadingCover.style.display = "none";
+                // Oyun yüklendiğinde tıklama olayını ekle
+                canvas.addEventListener('pointerdown', showAdOnClick);
+                canvas.addEventListener('touchstart', showAdOnClick);
+            }).catch((message) => {
+                alert(message);
+            });
+        };
+        document.body.appendChild(unityLoader);
+
+        document.addEventListener("pointerdown", () => {
+            container.focus();
+            window.focus();
+            canvas.focus();
+        });
+    </script>
+	
+<!-- Sticky Bottom Center Ad (728x90) with Smooth Slide-Out and Reappearance -->
+<style>
+  /* Container: Bottom center, fixed, with overflow hidden */
+  #ad-container {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(728px, calc(100% - 20px)); /* 728px, 10px margin on mobile */
+    height: 90px;
+    background: rgba(0, 0, 0, 0.90);
+    display: none;
+    z-index: 99999;
+    border-radius: 0; /* Sharp corners */
+    overflow: hidden;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+    transition: transform 0.5s ease-in-out; /* Smooth slide-in/out animation */
+  }
+
+  /* Slide-out animation */
+  #ad-container.hidden {
+    transform: translate(-50%, 100%); /* Slide down out of view */
+  }
+
+  #ad-iframe {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 745px; /* Updated width */
+    height: 90px; /* Updated height */
+    border: 0;
+    display: block;
+    overflow: hidden;
+    pointer-events: auto;
+    box-sizing: content-box;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  #ad-iframe::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Close button with arrow */
+  #close-ad {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: not-allowed;
+    opacity: 0.72;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+  }
+  #close-ad.enabled {
+    cursor: pointer;
+    opacity: 1;
+  }
+  #close-ad::before {
+    content: '↓'; /* Down arrow for bottom ad */
+    margin-right: 4px;
+  }
+
+  /* Right mask for scrollbar */
+  #ad-right-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9));
+    z-index: 99999;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 440px) {
+    #ad-container {
+      width: calc(100% - 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 0; /* Sharp corners on mobile */
+    }
+    #ad-iframe {
+      width: 728px;
+    }
+  }
+</style>
+
+<div id="ad-container" aria-hidden="true" role="dialog" aria-label="Advertisement">
+  <iframe
+    id="ad-iframe"
+    src="https://script.google.com/macros/s/AKfycbyLqfuYNg4HqY0inO1-UyYb5pVvsb0FDxHj6mw418ypqPmoNzUgt0McBC9Q9JfLfFp39Q/exec"
+    width="768px"
+    height="95px"
+    scrolling="no"
+    frameborder="0"
+    sandbox="allow-scripts allow-popups allow-same-origin"
+  ></iframe>
+  <button id="close-ad" disabled>Close (12)</button>
+  <div id="ad-right-mask"></div>
+</div>
+
+<script>
+  (function () {
+    const showDelay = 2000; // 2 seconds delay before first show
+    const countdownStart = 12; // 12 seconds countdown
+    const reappearDelay = 60000; // 25 seconds before reappearance
+    const adContainer = document.getElementById('ad-container');
+    const closeBtn = document.getElementById('close-ad');
+
+    function showAd() {
+      // Show ad with smooth slide-in
+      adContainer.style.display = 'block';
+      adContainer.classList.remove('hidden');
+      adContainer.setAttribute('aria-hidden', 'false');
+
+      // Start countdown
+      let timeLeft = countdownStart;
+      closeBtn.textContent = `Close (${timeLeft})`;
+      closeBtn.disabled = true;
+      closeBtn.classList.remove('enabled');
+
+      const t = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          closeBtn.textContent = `Close (${timeLeft})`;
+        } else {
+          clearInterval(t);
+          closeBtn.disabled = false;
+          closeBtn.classList.add('enabled');
+          closeBtn.textContent = 'Close ↓';
+        }
+      }, 1000);
+    }
+
+    // Initial ad show
+    setTimeout(showAd, showDelay);
+
+    // Close with animation and schedule reappearance
+    closeBtn.addEventListener('click', () => {
+      if (closeBtn.disabled) return;
+      adContainer.classList.add('hidden');
+      adContainer.setAttribute('aria-hidden', 'true');
+      // Schedule reappearance without removing or reloading iframe
+      setTimeout(showAd, reappearDelay);
+    });
+  })();
+</script>
+
+</body>
+</html>
+
+
+
+]]></Content>
+</Module>

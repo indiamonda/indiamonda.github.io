@@ -1,0 +1,25 @@
+#playerChallengeComplete {
+    top: 10%;
+	text-align: center;
+	z-index: 6;
+	color: var(--ss-white);
+}
+
+#playerChallengeImg {
+	width: 6.5em;
+	height: auto;
+}
+
+/* Player challenges */
+.player-challenges-aside {
+	width: 100%;
+}
+.pause-container .player-challenges-aside {
+    justify-self: end;
+    /* height: 16.7em; */
+}
+
+.pause-container .player-challenges-aside,
+.pause-ad-wrap {
+	width: 20em;
+}

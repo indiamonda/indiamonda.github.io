@@ -1,0 +1,221 @@
+/* Display ads */
+
+// Isolate ad containers from the game canvas so ad iframe loads,
+// internal reflows, and paints don't trigger layout/repaint on the
+// Babylon.js canvas. Each container gets its own compositor layer.
+.display-ad-container {
+	contain: layout style paint;
+	will-change: contents;
+}
+
+.respawn-container {
+	margin: 0 auto;
+	z-index: 2000;
+}
+
+.respawn-one {
+    min-height: 300px;
+}
+
+.respawn-one .shellshockers-respawn-banner-pr {
+	margin: 25px auto 0;
+}
+/* .respawn-two, #shellshockers_respawn_banner_2_ad {
+	width: 160px;
+} */
+.respawn-two {
+	min-height: 250px;
+    /* grid-template-rows: calc(var(--ss-space-lg)* 3.7) auto; */
+}
+
+body > #shellshockers_respawn_banner-new {
+	position: absolute;
+}
+
+body > #shellshockers_respawn_banner-new > div{
+	position: absolute;
+}
+
+// #shellshockers_respawn_banner-new_ad {
+//     max-width: 728px;
+//     min-height: 200px;
+//     margin-top: 4em;
+
+// 	.playing-crazy-games & {
+// 		max-width: none;
+// 		width: 728px;
+// 	}
+// }
+
+// Right side ad 336x280
+#shellshockers_respawn_banner_2_ad {
+	width: 336px;
+	height: 280px;
+	overflow: hidden;
+}
+
+// Header ad
+#shellshock-io_respawn_three {
+    min-width: 728px;
+    height: 90px;
+    display: grid;
+    align-items: end;
+	overflow: hidden;
+
+	.playing-crazy-games & {
+		display: none;
+	}
+
+}
+
+.display-ad-header {
+	.playing-crazy-games & {
+		display: none;
+	}
+}
+
+// bottom ad
+#shellshockers_respawn_banner-new_ad {
+	width: 970px;
+	height: 250px;
+	margin-top: -10px;
+	overflow: hidden;
+
+	.playing-crazy-games & {
+		width: 728px;
+		height: 90px;
+
+		@media only screen and (min-width: 1300px) {
+			width: 970px;
+			height: 250px;
+		}
+	}
+}
+
+
+/* #shellshockers_respawn_banner-new_ad,
+#shellshockers_respawn_banner_2_ad {
+	background-color: #fff;
+} */
+
+.crazygames-banner-container > * {
+	margin: 0 auto;
+	display: block;
+}
+.respawn-two {
+	grid-template-rows: calc(var(--ss-space-lg)* 3.7) auto;
+}
+
+.playing-crazy-games #shellshockers_titlescreen_wrap {
+	width: 300px;
+	height: 250px;
+	overflow: hidden;
+}
+
+// @media only screen and (max-width: 1128px)  {
+// 	#shellshockers_respawn_banner-new_ad {
+// 		margin-top: 3em;
+// 	}
+// }
+
+// @media only screen and (max-width: 1128px) {
+// 	.playing-crazy-games .house-small, .playing-crazy-games #shellshockers_titlescreen_wrap {
+// 		width: 250px;
+// 	}
+// }
+
+// @media only screen and (max-width: 950px)  {
+	
+// 	#shellshockers_respawn_banner_2_ad {
+// 		min-width: 160px;
+// 	}
+
+// 	.playing-crazy-games .house-small, .playing-crazy-games #shellshockers_titlescreen_wrap {
+// 		width: 160px;
+// 	}
+// }
+
+/* Crazy games */
+/* smaller screens */
+@media only screen and (max-width: 1128px) and (max-height: 615px) {
+
+	#pausePopupWrap {
+		margin-top: 4em !important;
+	}
+
+	.playing-crazy-games #pausePopupWrap {
+		margin-top: 7em !important;
+	}
+	
+	// .respawn-one {
+	// 	min-height: 200px;
+	// }
+	// #respawn-ad-two {
+	// 	justify-self: end;
+	// }
+	// #shellshockers_respawn_banner_2_ad {
+	// 	min-width: 300px;
+	// }
+
+	// #shellshockers_respawn_banner-new_ad {
+	// 	min-height: 100px;
+	// }
+}
+
+// @media only screen and (min-width: 1300px)  {
+// 	#shellshockers_respawn_banner_2_ad, .respawn-two {
+// 		width: 320px;
+// 		min-height: 625px;
+// 	}
+// 	#shellshockers_respawn_banner-new_ad {
+// 		margin-top: 0em;
+// 	}
+// }
+// @media only screen and (min-width: 1600px)  {
+// 	#shellshockers_respawn_banner-new_ad {
+// 		max-width: 970px;
+// 		margin-top: 0;
+// 		min-height: 300px;
+
+// 		.playing-crazy-games & {
+// 			max-width: none;
+// 			width: 970px;
+// 		}
+// 	}
+
+// }
+
+// #respawn-ad-two {
+// 	/* if larger screens */
+// 	grid-row: 1 / span 2;
+// 	grid-column: -1 / -2;
+
+// }
+
+#respawn-ad-one {
+
+    width: 100%;
+	grid-column: 1 / span 2;
+}
+
+/* Breakpoint for screens with a width of at least 600px and a height of at least 400px */
+@media (max-width: 1300px) {
+	// #respawn-ad-one {
+	// 	grid-column: 1 / span 2;
+	// }
+	// #respawn-ad-two {
+	// 	max-height: 300px;
+	// 	grid-row: auto;
+	// 	grid-column: -1 / -2;
+	// }
+}
+
+.display-ad-header {
+	top: var(--ss-space-md);
+	z-index: 5;
+	grid-column: 1 / span 2;
+	iframe {
+		display: block !important;
+		margin: 0 auto !important;
+	}
+}

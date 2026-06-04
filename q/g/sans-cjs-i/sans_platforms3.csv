@@ -1,0 +1,30 @@
+0.2,CombatZoneResize,239,226,404,391,,,,
+0,CombatZoneSpeed,480,,,,,,,
+0,sanshead,Closedeyes,,,,,,,
+0,sanstext,knowing that one day.      without any warning...,,,,,,,
+0,sanshead,Tired2,,,,,,,
+0,sanstext,it's all going to be reset,,,,,,,
+0,sanshead,Default,,,,,,,
+0,HeartMode,0,,,,,,,
+0,HeartTeleport,320,376,,,,,,
+
+1,BoneVRepeat,241,230,50,0,80,100,50,
+0,BoneVRepeat,406,280,50,2,80,100,50,
+0,BoneVRepeat,241,330,50,0,80,100,50,
+1,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+1.4,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+1,BoneStab,1,50,1.5,5,,,,
+1.4,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+1.4,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+1,BoneStab,0,50,1.5,4,,,,
+1.4,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+1.4,GasterBlaster,1,640,0,450,300,180,0.4,0.33333
+2,EndAttack,,,,,,,,
+0.6,SET,Loop,999,,,,,,
+0,SUB,Loop,$Loop,1,,,,,
+0,BoneH,-120,425,120,0,300,,,
+0,BoneH,-120,435,120,0,300,,,
+0,BoneH,-120,445,120,0,300,,,
+0,BoneH,-120,455,120,0,300,,,
+0,BoneH,-120,465,120,0,300,,,
+1.8,JMPNZ,24,$Loop,,,,,,

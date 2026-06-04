@@ -1,0 +1,33 @@
+.gui-container.modal
+  .modal-blocker
+  .dialog.purchasecredits
+    .dialogpadding
+      form
+        h1 Purchase Credits
+        //- table
+        //-   for option in options
+        //-     tr
+        //-       td
+        //-         .ca-credit
+        //-         |  #{option.credits}
+        //-       td $#{option.price}
+        //-       td
+        //-         .purchaseplus
+        //-           a(href="#")
+        //-             span +
+        //-       td
+        //-         em= option.message
+        for option in options
+          div
+            label
+              input(type="radio", name="credits", value="#{option.credits}")
+              span.ca-credit= option.credits
+              span.muted  for USD
+                //- span.strikethrough #{option.price[0]}
+                |  #{option.price[1]}
+        .checkout-buttons
+          //- img.paypal-logo(src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg")
+          input.checkout(type="image", src="/images/btn_xpressCheckout2.gif", name="paypal", value="paypal")
+          span &nbsp;or&nbsp;
+          button.checkout-stripe(name="stripe", value="stripe") Pay by card&nbsp;
+            img(src="/images/stripe/glossy.png")

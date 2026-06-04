@@ -1,0 +1,12 @@
+{
+"companyName": "faramelgames",
+"productName": "Car Simulator 3D",
+"dataUrl": "3DCarSimulator.data.unityweb",
+"wasmCodeUrl": "3DCarSimulator.wasm.code.unityweb",
+"wasmFrameworkUrl": "3DCarSimulator.wasm.framework.unityweb",
+"TOTAL_MEMORY": 318767104,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}

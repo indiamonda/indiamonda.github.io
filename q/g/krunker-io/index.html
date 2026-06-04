@@ -1,0 +1,2058 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Krunker.io - Free Online Multiplayer FPS Game | Play Now</title>
+    <script>
+      window._startTS = performance.now();
+    </script>
+    <script src="./libs/frvr-sdk.min.js?build=zVvup"></script>
+    <script src="./libs/frvr-channel-web.min.js?build=zVvup"></script>
+    <script>
+      (!(function () {
+        const n = {};
+        let e = 0;
+        window.reportError = function (t, o) {
+          if (e > 20) return;
+          const i =
+            ("string" == typeof t ? t : (t && t.message) || "unknown") +
+            "|" +
+            (o ? o.split("\n")[0] : "");
+          if (((n[i] = (n[i] || 0) + 1), e++, n[i] > 5)) return;
+          const r =
+              "127.0.0.1:8080" !== location.host &&
+              "localhost:8080" !== location.host &&
+              !location.host.startsWith("192.168.") &&
+              "localhost:18080" !== location.host,
+            a = ["krunker.io", "browserfps.com"].includes(location.hostname);
+          fetch(
+            (r && a
+              ? "https://api.krunker.io"
+              : r
+                ? "https://api.beta.krunker.io"
+                : "http://127.0.0.1:5080") + "/report/error",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                error: t,
+                stack: o,
+                channel:
+                  (FRVR && FRVR.channel && FRVR.channel.getId()) || "unknown",
+              }),
+            },
+          ).catch((n) => {
+            console.log("error", n);
+          });
+        };
+      })(),
+        Math.random() < 0.1 &&
+          ((window.onerror = function (n, e, t, o, i) {
+            reportError(n, i?.stack);
+          }),
+          (window.onunhandledrejection = function (n) {
+            reportError(n.reason?.message || n.reason, n.reason?.stack);
+          })),
+        (window.FRVR = window.FRVR || {}),
+        (window.FRVR.config =
+          window.FRVR.config && 0 !== Object.keys(window.FRVR.config).length
+            ? window.FRVR.config
+            : {
+                gameId: "krunker",
+                ads: {
+                  providers: [
+                    {
+                      name: "adsbygoogle-interstitial",
+                      type: "interstitial",
+                      priority: 1,
+                      config: {},
+                    },
+                    {
+                      name: "adsbygoogle-reward",
+                      type: "reward",
+                      priority: 1,
+                      config: {},
+                    },
+                    {
+                      name: "adsbygoogle",
+                      type: "banner",
+                      priority: 1,
+                      config: {
+                        banners: [
+                          {
+                            targetElementId: "krunker-io_728x90",
+                            adUnitId: "2395420432",
+                            format: "728x90",
+                          },
+                          {
+                            targetElementId: "krunker-io_728x90_2",
+                            adUnitId: "2638963013",
+                            format: "728x90",
+                          },
+                          {
+                            targetElementId: "krunker-io_728x90_3",
+                            adUnitId: "6167144480",
+                            format: "728x90",
+                          },
+                          {
+                            targetElementId: "krunker-io_728x90_4",
+                            adUnitId: "8601736132",
+                            format: "728x90",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x250",
+                            adUnitId: "6466527383",
+                            format: "300x250",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x250_2",
+                            adUnitId: "3725364885",
+                            format: "300x250",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x250_3",
+                            adUnitId: "1597344085",
+                            format: "300x250",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x250_4",
+                            adUnitId: "1273910454",
+                            format: "300x250",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x250_5",
+                            adUnitId: "3377329617",
+                            format: "300x250",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x600",
+                            adUnitId: "9152400479",
+                            format: "300x600",
+                          },
+                          {
+                            targetElementId: "krunker-io_300x600_2",
+                            adUnitId: "4323314500",
+                            format: "300x600",
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                  throttling: { maxfrequency: 0 },
+                },
+                abTests: {
+                  register_gift_ad: {
+                    active: !1,
+                    cohorts: ["control", "enabled"],
+                  },
+                },
+                consent: {
+                  providerName: "cookiepro",
+                  config: {
+                    websiteKey: "15b4472b-823a-468e-b5eb-6eeaca5d6de4",
+                  },
+                },
+                tracker: {
+                  trackerChannelId: "krunker_io",
+                  analyticsProviders: {
+                    metapixel: { pixelId: "1361622040527227" },
+                    "google-analytics": {
+                      disallowedEvents: [
+                        "game_play_start",
+                        "game_play_end",
+                        "game_session_start",
+                        "game_session_end",
+                        "session_start",
+                        "win_open",
+                        "fps",
+                        "item_flow",
+                        "session_start",
+                        "session_end",
+                        "btn_click",
+                      ],
+                    },
+                  },
+                },
+                features: { gameId: "GMD0Q8X" },
+                storage: {
+                  cookieMirror: {
+                    keys: [
+                      "__FRVR_auth_access_token",
+                      "__FRVR_auth_refresh_token",
+                    ],
+                    domain: ".krunker.io",
+                  },
+                },
+                auth: { enableAnonymousLogin: !0 },
+              }));
+      const isSocial = document.location.pathname.includes("social.html"),
+        isMsPwa =
+          -1 !==
+            document.referrer.indexOf("app-info://platform/microsoft-store") ||
+          -1 !== window.location.search.indexOf("mspwa") ||
+          -1 !== window.location.search.indexOf("msstart_sdk_init"),
+        userAgent = navigator.userAgent.toString(),
+        isSteamClient =
+          window.isSteamBuild ||
+          (userAgent.includes("io.krunker.steam") &&
+            "io.krunker.steam" != userAgent),
+        isEpicClient = "epic" === window.storePlatform,
+        showCmp = !isMsPwa;
+      function loadingPopup(n) {
+        const e = document.createElement("span");
+        e.textContent = n;
+        const t = e.innerHTML;
+        genericPopup(
+          `\n  \t\t<div style="width:100%;text-align:center">\n  \t\t\t<div class="lds-ring sm">\n  \t\t\t\t<div></div>\n  \t\t\t\t<div></div>\n  \t\t\t\t<div></div>\n  \t\t\t\t<div></div>\n  \t\t\t</div>\n  \t\t\t<div style="font-size:20px;color:rgba(255,255,255,0.5)">${t}</div>\n  \t\t</div>\n  \t`,
+          "loadingPop",
+        );
+      }
+      (showCmp ||
+        (delete window.FRVR.config.tracker, delete window.FRVR.config.consent),
+        (window.paymentsChannelId = isMsPwa ? "microsoft_pwa" : null),
+        (window.canShowExternalLinks = !isMsPwa),
+        (window.canShowPaypal = !isMsPwa),
+        (window.canShowSocialHub = !isMsPwa),
+        (window.canShowMods = !isMsPwa),
+        (window.canConnectExternalAccounts = window.canShowExternalLinks),
+        (window.canShowNFTs = !isMsPwa && !isSteamClient && !isEpicClient),
+        (window.canShowTwitch = window.canShowExternalLinks),
+        (window.canShowKrunkerEngine = window.canShowExternalLinks),
+        (window.forceMergeQueryString = isMsPwa && null != typeof URLPattern),
+        (window.playSelect = () => {}),
+        (window.playTick = () => {}),
+        (window.logBtnFRVR = () => {}),
+        (window.showWindowAfterLoad = 0),
+        (window.windows = []),
+        (window.resetPops = function () {
+          ((popupHolder.style.zIndex = 2147483645),
+            (popupHolder.style.display = "block"),
+            (popupContent.style.display = "none"),
+            (popupContent.style.backgroundColor = "#353535"),
+            (itemViewPop.style.display = "none"),
+            (policePop.style.display = "none"),
+            (bundlePop.style.display = "none"),
+            (premiumPop.style.display = "none"),
+            (spinHistoryPop.style.display = "none"),
+            (genericPop.style.display = "none"));
+        }),
+        (window.genericPopup = function (n, e, t) {
+          return (
+            resetPops(),
+            e && genericPop.setAttribute("class", e),
+            genericPop.setAttribute("style", t || ""),
+            (genericPop.innerHTML = n),
+            (genericPop.style.display = "block"),
+            genericPop
+          );
+        }),
+        (window.showWindow = function (n) {
+          ((window.showWindowAfterLoad = n), loadingPopup());
+        }),
+        (window.clearPops = function () {
+          (resetPops(),
+            (popupHolder.style.zIndex = 2147483647),
+            (popupHolder.style.display = "none"));
+        }),
+        Object.defineProperty(window, "canShowAds", {
+          get: () => !isMsPwa && !isSteamClient && !isEpicClient,
+          set() {},
+        }),
+        Object.defineProperty(window, "useFRVRSDKAds", {
+          get: () => window.canShowAds,
+          set() {},
+        }),
+        Object.defineProperty(window, "useFRVRSDKBannerAds", {
+          get: () => window.canShowAds,
+          set() {},
+        }),
+        window.useFRVRSDKAds ||
+          (window.FRVR.config.ads && delete window.FRVR.config.ads),
+        window.FRVR.init("prod"),
+        window.FRVR.tracker.addExtraFieldFunction(function (n) {
+          ((n.context = "krunker"),
+            (n.app_version = "7.2.5"),
+            window.storePlatform && "standalone" !== window.storePlatform
+              ? (n.channel = window.storePlatform)
+              : isSteamClient
+                ? (n.channel = "steam")
+                : isMsPwa && (n.channel = "microsoft_pwa"));
+        }));
+    </script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-69264675-5"
+    ></script>
+    <script>
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      ((window.dataLayer = window.dataLayer || []),
+        gtag("js", new Date()),
+        gtag("config", "UA-69264675-5"));
+    </script>
+    <script>
+      function _0x13bf9a(t, r, n, W, f) {
+        return _0x1af5(t - 53, W);
+      }
+      function _0x527870(t, r, n, W, f) {
+        return _0x1af5(r - 437, W);
+      }
+      function _0x42628a(t, r, n, W, f) {
+        return _0x1af5(t - -681, r);
+      }
+      function _0x4f3f25(t, r, n, W, f) {
+        return _0x1af5(r - -430, n);
+      }
+      function _0x25cad7(t, r, n, W, f) {
+        return _0x1af5(f - 951, n);
+      }
+      function _0x2cc9() {
+        var t = [
+          "jveyW5umWOVdMmk/WOddVmkUW74",
+          "WQe4u8k9WRe1W6xdQ8oLtKZcMa",
+          "uCkNW7VcGCoiDs/dUW",
+          "W6hcV1/dKq",
+          "sM0dWRX1",
+          "CmowpLBdHq",
+          "cxJdQ8ohacOMaSoDzJBdMa",
+          "W6fbWQPhW6buWP1sqCk9W4/cRq",
+          "W4xcS8kdq8kLf8o3Dmo9qghdOG",
+          "F8oRWOGc",
+          "gmoLW53cPSow",
+          "WP/dN8kmomkBW47dQxddOG",
+          "p1jTWRRcMYalW4PMW4nelq",
+          "D2WqW6ys",
+          "W5WWiSkIW48",
+          "WRuScgrwp1hcLuRdHmk7wG",
+          "W5WSrgae",
+          "gGOGjmkz",
+          "da0xk8oGBSomWPWSdbFdSW",
+          "W70pWO7dPSoR",
+          "WONcJ8koW6TCWOtcSSkTiHLmW7S",
+          "n2XTaCklfSoDWQNcGcKHW5C",
+          "BfiFWQDG",
+          "WPxcL8oQs8kR",
+          "CZBdSCkp",
+          "W6bUfCoMW7y",
+          "ySkoWRtcKq",
+          "phNdJw4",
+          "WO8Tkcu",
+          "W4LKAdtcJWPLW43dHW",
+          "WOedWRLtyenhEM7cJMtdKG",
+          "W6WdW7jvzW",
+          "WO3cISkoW6HyWOxcVCkzlsbMW6i",
+          "mhJcUCoFzXDde1RcRfS1",
+          "W6G/WQO",
+          "W6hdTrpdJq",
+          "W6ddOGhdNCoL",
+          "n2uCymodq8oUWPu",
+          "v1uTWRRdIW",
+          "W4LKA3xdSfjsW7tdJSoHzmky",
+        ];
+        return (_0x2cc9 = function () {
+          return t;
+        })();
+      }
+      function _0x1af5(t, r) {
+        var n = _0x2cc9();
+        return (
+          (_0x1af5 = function (r, W) {
+            var f = n[(r -= 216)];
+            if (void 0 === _0x1af5.CGtBPC) {
+              ((_0x1af5.UPwOiV = function (t, r) {
+                var n,
+                  W,
+                  f = [],
+                  c = 0,
+                  o = "";
+                for (
+                  t = (function (t) {
+                    for (
+                      var r, n, W = "", f = "", c = 0, o = 0;
+                      (n = t.charAt(o++));
+                      ~n && ((r = c % 4 ? 64 * r + n : n), c++ % 4)
+                        ? (W += String.fromCharCode(
+                            255 & (r >> ((-2 * c) & 6)),
+                          ))
+                        : 0
+                    )
+                      n =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=".indexOf(
+                          n,
+                        );
+                    for (var a = 0, e = W.length; a < e; a++)
+                      f +=
+                        "%" + ("00" + W.charCodeAt(a).toString(16)).slice(-2);
+                    return decodeURIComponent(f);
+                  })(t),
+                    W = 0;
+                  W < 256;
+                  W++
+                )
+                  f[W] = W;
+                for (W = 0; W < 256; W++)
+                  ((c = (c + f[W] + r.charCodeAt(W % r.length)) % 256),
+                    (n = f[W]),
+                    (f[W] = f[c]),
+                    (f[c] = n));
+                ((W = 0), (c = 0));
+                for (var a = 0; a < t.length; a++)
+                  ((c = (c + f[(W = (W + 1) % 256)]) % 256),
+                    (n = f[W]),
+                    (f[W] = f[c]),
+                    (f[c] = n),
+                    (o += String.fromCharCode(
+                      t.charCodeAt(a) ^ f[(f[W] + f[c]) % 256],
+                    )));
+                return o;
+              }),
+                (t = arguments),
+                (_0x1af5.CGtBPC = !0));
+            }
+            var c = r + n[0],
+              o = t[c];
+            return (
+              o
+                ? (f = o)
+                : (void 0 === _0x1af5.oxcmAS && (_0x1af5.oxcmAS = !0),
+                  (f = _0x1af5.UPwOiV(f, W)),
+                  (t[c] = f)),
+              f
+            );
+          }),
+          _0x1af5(t, r)
+        );
+      }
+      (!(function () {
+        var t,
+          r,
+          n,
+          W,
+          f = _0x2cc9();
+        function c(t, r, n, W, f) {
+          return _0x1af5(t - -494, W);
+        }
+        function o(t, r, n, W, f) {
+          return _0x1af5(f - 671, n);
+        }
+        for (;;)
+          try {
+            if (
+              265512 ===
+              -parseInt(o(0, 0, "MFu)", 0, 914)) / 1 +
+                -parseInt(o(0, 0, "zulP", 0, 915)) / 2 +
+                parseInt(c(-239, 0, 0, "MFu)")) / 3 +
+                -parseInt(o(0, 0, "j6dF", 0, 887)) / 4 +
+                -parseInt(o(0, 0, "G3IG", 0, 900)) / 5 +
+                (parseInt(c(-274, 0, 0, "zulP")) / 6) *
+                  (-parseInt(o(0, 0, "[4k]", 0, 893)) / 7) +
+                (-parseInt(((n = "3WT["), (W = 1124), _0x1af5(W - 890, n))) /
+                  8) *
+                  (-parseInt(((t = "iGRL"), (r = 178), _0x1af5(r - -45, t))) /
+                    9)
+            )
+              break;
+            f.push(f.shift());
+          } catch (t) {
+            f.push(f.shift());
+          }
+      })(),
+        Object[
+          _0x4f3f25(-179, -193, "ZFTT", -190, -203) +
+            _0x4f3f25(-201, -185, "4PH#", -169, -193) +
+            _0x13bf9a(271, 283, 286, "h!SA", 270)
+        ](
+          Object[
+            _0x42628a(-441, "ZKnI", -448, -443, -456) +
+              _0x4f3f25(-185, -183, "j6dF", -195, -177)
+          ],
+          _0x4f3f25(-183, -194, "VV2X", -193, -193) + "xt",
+          {
+            _0x315e05: !0,
+            set: function (t) {
+              var r = {};
+              r[
+                o(-150, -149, -151, "JA$M", -148) +
+                  o(-157, -164, -169, "6sco", -154)
+              ] = e(-363, -347, -377, "yN*C", -368) + "ts";
+              var n,
+                W,
+                f,
+                c = r;
+              function o(t, r, n, W, f) {
+                return _0x13bf9a(t - -442, r - 49, n - 219, W, f - 253);
+              }
+              function a(t, r, n, W, f) {
+                return _0x25cad7(t - 358, r - 72, W, W - 61, n - -163);
+              }
+              function e(t, r, n, W, f) {
+                return _0x527870(t - 146, t - -1048, n - 318, W, f - 114);
+              }
+              function x(t, r, n, W, f) {
+                return _0x4f3f25(t - 475, t - 1013, f, W - 178, f - 204);
+              }
+              (delete Object[
+                o(-156, -142, -141, "$&Xg", -142) +
+                  e(-360, -345, -347, "[4k]", -369)
+              ][
+                ((n = -658),
+                (W = "4PH#"),
+                (f = -645),
+                _0x42628a(n - -204, W, n - 419, W - 451, f - 391) + "xt")
+              ],
+                (this[a(1017, 1018, 1030, "Qq*U", 1050) + "xt"] = t));
+              var d = {};
+              ((d[
+                e(-357, 0, -376, "$weM", -358) + a(1035, 1046, 1037, "5r8(")
+              ] = !1),
+                (d[x(811, 0, 0, 819, "Wm2v") + e(-394, 0, -403, "MeBM", -392)] =
+                  !1),
+                Object[
+                  o(-170, -171, -171, "h!SA", -162) +
+                    x(829, 0, 0, 840, "MvzS") +
+                    o(-139, -158, -147, "CVLx", -143)
+                ](
+                  this,
+                  c[x(804, 0, 0, 798, "ErtC") + a(1008, 1003, 1014, "h!SA")],
+                  d,
+                ));
+            },
+          },
+        ));
+    </script>
+    <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1,viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Play Krunker.io - the ultimate free browser FPS game! Join millions of players in fast-paced multiplayer battles. No download required, works on any device."
+    />
+    <meta
+      name="keywords"
+      content="krunker,free fps game,online multiplayer,io game,free game,browser fps,roblox,first person shooter,competitive gaming,no download games"
+    />
+    <meta http-equiv="Accept-Ranges" content="none" />
+    <meta
+      property="og:title"
+      content="Krunker.io - Free Online Multiplayer FPS Game"
+    />
+    <meta
+      property="og:image"
+      content="https://assets.krunker.io/promo/og.png"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://krunker.io" />
+    <meta
+      property="og:description"
+      content="Play Krunker.io - the ultimate free browser FPS game! Join millions of players in fast-paced multiplayer battles. No download required, works on any device."
+    />
+    <meta property="og:locale" content="en" />
+    <link rel="alternate" hreflang="en" href="https://krunker.io/" />
+    <link rel="alternate" hreflang="x-default" href="https://krunker.io/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Krunker.io",
+        "description": "Free online multiplayer FPS game",
+        "url": "https://krunker.io",
+        "image": "https://assets.krunker.io/promo/og.png",
+        "genre": ["Action", "Shooter", "Multiplayer"],
+        "gamePlatform": ["Web Browser", "PC", "Mobile"],
+        "operatingSystem": ["Windows", "macOS", "Linux", "iOS", "Android"],
+        "publisher": {
+          "@type": "Organization",
+          "name": "FRVR",
+          "url": "https://frvr.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.5",
+          "ratingCount": "12487"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "FRVR",
+        "url": "https://frvr.com",
+        "logo": "https://frvr.com/images/content/apple-touch-icon.png",
+        "sameAs": [
+          "https://discord.gg/krunker",
+          "https://reddit.com/r/KrunkerIO",
+          "https://twitter.com/krunkerio"
+        ]
+      }
+    </script>
+    <link rel="preload" href="./css/main.css" as="style" />
+    <link rel="preload" href="./libs/howler.min.js" as="script" />
+    <link rel="dns-prefetch" href="//assets.krunker.io" />
+    <link rel="preconnect" href="//www.googletagmanager.com" />
+    <link rel="stylesheet" href="./css/main.css?build=zVvup" />
+    <link rel="stylesheet" href="./css/bundledStyles.css?build=zVvup" />
+    <link rel="stylesheet" href="./css/main_custom.css?build=zVvup" />
+    <link rel="stylesheet" href="./css/flag.css?build=zVvup" />
+    <link rel="stylesheet" href="./css/material-icons.css?build=zVvup" />
+    <link
+      rel="stylesheet"
+      href="./css/material-icons-outlined.css?build=zVvup"
+    />
+    <link
+      rel="stylesheet"
+      href="./css/material-symbols-outlined.css?build=zVvup"
+    />
+    <link rel="stylesheet" href="./css/google-play.css?build=zVvup" />
+    <style>
+      #aHolder {
+        position: absolute;
+        top: calc(100% - 140px);
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 999999999999;
+        pointer-events: none;
+      }
+      #aMerger {
+        text-align: left;
+        display: inline-block !important;
+        min-width: 728px;
+        min-height: 90px;
+        pointer-events: auto;
+      }
+      #aContainer {
+        cursor: pointer;
+        pointer-events: auto;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        max-height: 120px;
+        max-width: 810px;
+        min-width: 728px;
+        min-height: 90px;
+        overflow: hidden;
+        display: inline-block !important;
+        border-radius: 6px;
+      }
+      .endAHolder {
+        display: inline-block;
+        text-align: center;
+        z-index: 214748361;
+        pointer-events: none;
+        margin-left: 10px;
+      }
+      #endAMerger {
+        text-align: left;
+        display: inline-block !important;
+        min-width: 300px;
+        min-height: 250px;
+        pointer-events: auto;
+      }
+      #endAContainer {
+        cursor: pointer;
+        pointer-events: auto;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        max-height: 680px;
+        max-width: 382px;
+        overflow: hidden;
+        border-radius: 6px;
+      }
+    </style>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" sizes="60x60" href="./img/pwa/icon60x60.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="./img/pwa/icon76x76.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="./img/pwa/icon120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="196x196"
+      href="./img/pwa/icon196x196.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="256x256"
+      href="./img/pwa/icon256x256.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="1024x1024"
+      href="./img/pwa/icon1024x1024.png"
+    />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Krunker FRVR" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="google" content="notranslate" />
+    <meta name="theme-color" content="#FFD600" />
+    <link rel="icon" type="image/png" href="./img/pwa/icon32x32.png" />
+    <script type="module" crossorigin src="./static/index-DZiz2LTK.js"></script>
+    <link
+      rel="modulepreload"
+      crossorigin
+      href="./static/modulepreload-polyfill-B5Qt9EMX.js"
+    />
+  </head>
+  <body oncontextmenu="return !1;">
+    <script>
+      !(function () {
+        var e,
+          o =
+            /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino|android|ipad|playbook|silk/i;
+        window._isMobile =
+          ((e = navigator.userAgent) &&
+            e.headers &&
+            "string" == typeof e.headers["user-agent"] &&
+            (e = e.headers["user-agent"]),
+          "string" == typeof e &&
+            (!!(
+              navigator.maxTouchPoints &&
+              navigator.maxTouchPoints > 2 &&
+              /MacIntel/.test(navigator.platform)
+            ) ||
+              o.test(e)));
+      })();
+    </script>
+    <script>
+      window.randInt = function (n, o) {
+        return Math.floor(Math.random() * (o - n + 1)) + n;
+      };
+    </script>
+    <div id="loadingBg1"></div>
+    <div id="loadingBg"></div>
+    <canvas
+      id="game-overlay"
+      oncontextmenu="return !1;"
+      style="position: absolute; pointer-events: none; z-index: 1"
+    ></canvas>
+    <div id="frvrMenuMobileHolder"></div>
+    <div id="uiBase">
+      <script>
+        !(function () {
+          var e = !0,
+            t = window._isMobile ? 0.9 : 0.7;
+          try {
+            ("kro_setngss_uiScaling" in localStorage &&
+              (e = !!localStorage.getItem("kro_setngss_uiScaling")),
+              "kro_setngss_scaleUI" in localStorage &&
+                (t = Number(localStorage.getItem("kro_setngss_scaleUI"))));
+          } catch (e) {}
+          if (e) {
+            t = 1 - (t = Math.min(1, Math.max(0.1, t))) + 1;
+            var i = window.innerHeight,
+              s = window.innerWidth,
+              o = 1700 * t,
+              a = 900 * t,
+              l = s / o,
+              n = i / a,
+              r = document.getElementById("uiBase");
+            r &&
+              (n < l
+                ? ((r.style.transform = "scale(" + n.toFixed(3) + ")"),
+                  (r.style.width = (s / n).toFixed(3) + "px"),
+                  (r.style.height = a + "px"))
+                : ((r.style.transform = "scale(" + l.toFixed(3) + ")"),
+                  (r.style.width = o + "px"),
+                  (r.style.height = (i / l).toFixed(3) + "px")));
+          }
+        })();
+      </script>
+      <div id="errorNotification" class="menuCard" style="display: none">
+        <div>
+          It looks like Krunker ran in to a problem. Please try
+          <a
+            target="_blank"
+            href="https://www.computerhope.com/issues/ch001411.htm"
+            >disabling all of your browser extensions</a
+          >
+          and reloading the page. If the issue persists, please report the issue
+          to us on Reddit or Discord.
+        </div>
+        <br />
+        <div style="text-align: center">
+          <a
+            onclick="errorNotification.style.display = 'none'"
+            style="cursor: pointer"
+            >Hide</a
+          >
+        </div>
+      </div>
+      <div id="aHider">
+        <div id="aHolder">
+          <div id="aMerger">
+            <div id="baseLinks"></div>
+            <div style="height: 10px"></div>
+            <div id="aContainer">
+              <div style="display: none">v1.5.3</div>
+              <div><div align="center" id="krunker-io_728x90"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="consentBlock">
+        <div id="consentShake">
+          <div id="consentWindow">
+            <span style="font-size: 25px">Welcome to Krunker.io</span>
+            <div style="color: rgba(0, 0, 0, 0.6)">
+              This site uses cookies to personalize your experience. To use this
+              site you must agree and read the
+              <a
+                target="_blank"
+                href="https://frvr.com/legal/krunker#TermsofService"
+                >Terms & Conditions.</a
+              >
+              Learn more about cookies
+              <a href="https://cookiesandyou.com/">here.</a>
+            </div>
+            <div>
+              <div
+                class="termsBtn"
+                onclick="checkTerms(0)"
+                style="background-color: #dd4a42"
+              >
+                Decline
+              </div>
+              <div
+                class="termsBtn"
+                onclick="checkTerms(1)"
+                style="background-color: #a6dd42"
+              >
+                Accept
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="fullMenHider">
+        <div id="vignette"></div>
+        <div id="overlay"></div>
+        <div id="imgFlash"></div>
+        <div id="infoHider">
+          <div id="infoHolder" style="display: none">
+            <div id="mapInfoHolder">
+              <div id="termsInfo">
+                <span
+                  class="terms standout"
+                  onclick="((windows[20].tabIndex = 1), showWindow(21))"
+                  onmouseover="SOUND.play('tick_0', 0.1)"
+                  >Contact</span
+                >
+                <span
+                  class="terms"
+                  onclick="
+                    window.canShowExternalLinks
+                      ? openTab('https://frvr.com/legal/krunker#TermsofService')
+                      : showWindow(47)
+                  "
+                  onmouseover="SOUND.play('tick_0', 0.1)"
+                  >Terms</span
+                >
+                <span
+                  class="terms"
+                  onclick="showWindow(35)"
+                  onmouseover="SOUND.play('tick_0', 0.1)"
+                  >Changelog</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="purchaseHolder">
+          <div id="purchaseBack" onclick="purchaseCancel()"></div>
+          <div id="purchaseSelector">
+            <div style="margin-bottom: 10px; text-align: center; color: #fff">
+              Select a secure Payment Method
+            </div>
+            <div
+              style="
+                color: rgba(255, 255, 255, 0.4);
+                font-size: 20px;
+                margin-bottom: 10px;
+                text-align: center;
+              "
+            >
+              Reversing a payment can result in the termination of your krunker
+              account.
+            </div>
+            <div id="xsollaPayB" onclick="XsollaPopup()"></div>
+            <div id="paypal-button"></div>
+            <div
+              id="applePayB"
+              class="pay-button"
+              style="background-color: #424242cc"
+              onclick="XsollaPopup(3175)"
+            >
+              <img
+                src="./img/app_1.png"
+                style="width: 26px; margin-right: 6px; margin-bottom: -2px"
+              />
+              Pay with Apple Pay
+            </div>
+            <div
+              id="androidPayB"
+              class="pay-button"
+              style="background-color: #424242cc"
+              onclick="XsollaPopup(3431)"
+            >
+              <img
+                src="./img/app_0.png"
+                style="width: 26px; margin-right: 6px; margin-bottom: -5px"
+              />
+              Pay with Google Pay
+            </div>
+            <div
+              id="cashPayB"
+              class="pay-button"
+              style="background-color: #3bbb63cc"
+              onclick="XsollaPopup(null, 'paybycash')"
+            >
+              <span
+                class="material-icons"
+                style="
+                  color: #fff;
+                  margin-right: 3px;
+                  font-size: 30px;
+                  vertical-align: bottom;
+                  margin-bottom: -2px;
+                "
+                >local_atm</span
+              >
+              Pay with Cash
+            </div>
+            <div
+              id="cryptoPayB"
+              class="pay-button"
+              style="background-color: #e68e25"
+              onclick="XsollaPopup(2682)"
+            >
+              <img
+                src="./img/btc_icn.png"
+                style="width: 18px; margin-right: 3px; margin-bottom: -3px"
+              />
+              Pay with Crypto
+            </div>
+          </div>
+        </div>
+        <div id="purchaseResponse"><div id="purchaseRespH"></div></div>
+        <div id="menuHolder">
+          <div id="mMenuHolDef">
+            <div id="spinUI">
+              <div id="spinTHold"><div id="spinKR"></div></div>
+              <div id="spinItems"></div>
+              <div id="spinInfo"></div>
+              <div id="spinHolder" class="midHolder">
+                <div id="spinRaysH"><div id="spinRays"></div></div>
+                <div id="spinItem"><div id="spinItemCanvas"></div></div>
+                <div id="spinItemName"></div>
+                <div id="spinButton">
+                  <div id="spinText">
+                    <div id="spinHeader">SPIN</div>
+                    <div id="spinCost"></div>
+                  </div>
+                </div>
+                <canvas id="spinWindow"></canvas>
+              </div>
+            </div>
+            <div id="spinUIBtns">
+              <div
+                id="spinAgainBtn"
+                class="button smallNoS buttonP"
+                style="line-height: 39px !important"
+              ></div>
+              <div id="spinInfoBtn" class="button btnSpinAgain">?</div>
+              <div id="spinEquipBtn" class="button smallNoS buttonG">
+                Equip Item
+              </div>
+              <div id="spinNextBtn" class="button smallNoS buttonG">
+                Next Item
+              </div>
+            </div>
+            <div id="purchaseLoad">
+              <div class="centerV">
+                <div id="purchLoadRing" class="lds-ring">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+                <div id="purchaseLabel"></div>
+              </div>
+            </div>
+            <div id="menuHider">
+              <div id="hiddenClasses" style="display: none"></div>
+              <div id="mapInfoHld" style="display: none">
+                Now Playing:
+                <div id="mapInfo"></div>
+              </div>
+              <div id="menuServerInfoContainer" style="display: none">
+                <div id="menuRegionLabel">...</div>
+                <div class="menuDebugInfo">
+                  <div id="menuFPSDisplay">
+                    <span id="menuFPS" style="color: #9eeb56">0</span> FPS
+                  </div>
+                  <div id="menuPingDisplay">
+                    <i
+                      id="menuPingIcon"
+                      class="material-icons"
+                      style="color: gray"
+                      >signal_cellular_alt</i
+                    ><span id="menuPingText">0</span>
+                  </div>
+                </div>
+              </div>
+              <div id="mapVote" style="display: none"></div>
+              <div id="menuClassContainer">
+                <div id="bubbleContainer">
+                  <div class="speechBox sb1" id="txtBubble"></div>
+                </div>
+                <canvas id="classPreviewCanvas"></canvas>
+                <div id="menuClassNameTag"></div>
+                <div></div>
+                <div id="menuClassContainerInner">
+                  <div id="menuClassContainerInfo">
+                    <div id="menuClassName"></div>
+                    <div id="menuClassSubtext"></div>
+                  </div>
+                  <img id="menuClassIcn" />
+                </div>
+                <div style="margin-top: 8px">
+                  <div
+                    id="customizeButton"
+                    class="button buttonG bigShadowT"
+                    onmouseenter="playTick()"
+                    onclick="(playSelect(0.1), showWindow(3))"
+                  >
+                    Loadout
+                    <span
+                      class="material-icons"
+                      style="font-size: 42px; color: #fff; margin-left: 6px"
+                      >sync</span
+                    >
+                  </div>
+                </div>
+                <div>
+                  <div
+                    id="customizeButton"
+                    class="button buttonG bigShadowT"
+                    onmouseenter="playTick()"
+                    onclick="(playSelect(0.1), showWindow(53))"
+                  >
+                    Customize
+                    <span
+                      class="material-icons"
+                      style="font-size: 42px; color: #fff; margin-left: 6px"
+                      >brush</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div id="mainMenuUIMount"></div>
+            </div>
+          </div>
+          <div id="mMenuHolComp" style="display: none">
+            <div id="compClassPHolder">
+              <div style="display: inline-block" id="compClassHold"></div>
+            </div>
+            <div id="compTScrsB">
+              <div style="display: inline-block">
+                <div
+                  id="compT1Scr"
+                  class="compTScrB"
+                  style="
+                    color: #eb4034;
+                    padding-left: 60px;
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 30% 100%);
+                  "
+                >
+                  0
+                </div>
+                <div
+                  class="compTScrB"
+                  style="
+                    width: 120px;
+                    background: rgba(0, 0, 0, 0.8);
+                    margin-left: -6px;
+                    margin-right: -6px;
+                  "
+                >
+                  <span style="color: #fff; text-shadow: none">VS</span>
+                </div>
+                <div
+                  id="compT2Scr"
+                  class="compTScrB"
+                  style="
+                    color: #3489eb;
+                    padding-right: 60px;
+                    clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
+                  "
+                >
+                  0
+                </div>
+              </div>
+            </div>
+            <div id="compTimBox">Match Pending</div>
+            <div id="cmpDatBox">
+              Krunker Competitive
+              <div id="cmpDatSub"></div>
+            </div>
+            <div id="compBtnLst">
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                onclick="(playSelect(), showWindow(3))"
+                style="background-color: #3489eb"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >cached</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                onclick="(playSelect(), showWindow(53))"
+                style="background-color: #3489eb"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >brush</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                onclick="(playSelect(), showWindow(1))"
+                style="background-color: #3489eb"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >settings</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                id="cmpSpectBtn"
+                style="background-color: #eb4034"
+                onclick="(playSelect(), toggleSpect())"
+              >
+                <span
+                  class="material-icons"
+                  id="cmpSpectTgl"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >visibility_off</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                style="background-color: #ba34eb"
+                onclick="(playSelect(), showWindow(5))"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >account_circle</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                style="background-color: #e87c2a"
+                onclick="(playSelect(), copyInviteLink(1))"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >link</span
+                >
+              </div>
+              <div
+                class="compMenBtnS"
+                onmouseenter="SOUND.play('tick_0', 0.1)"
+                style="background-color: #e82a80"
+                onclick="(playSelect(), openJoinWindow(!1, 1))"
+              >
+                <span
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-bottom: 12px;
+                  "
+                  >travel_explore</span
+                >
+              </div>
+            </div>
+            <img
+              src="https://assets.krunker.io/img/backgrounds/vs_2.png?build=zVvup"
+              id="vsHolder"
+            />
+            <div id="compPlListL"></div>
+            <div id="compPlListR"></div>
+          </div>
+        </div>
+        <div id="menuPopHider">
+          <div id="popupHolder">
+            <div id="popupBack" onclick="clearPops()"></div>
+            <div id="popupContent"></div>
+            <div id="itemViewPop"></div>
+            <div id="policePop"><div id="policePopC"></div></div>
+            <div id="bundlePop"></div>
+            <div id="premiumPop"></div>
+            <div id="claimPop"></div>
+            <div id="twitchPop" class="twitchPop"></div>
+            <div id="spinHistoryPop"></div>
+            <div id="genericPop"></div>
+          </div>
+        </div>
+        <div id="menuWindowHider">
+          <div id="windowHolder" style="display: none">
+            <div id="windowHeader"></div>
+            <div id="windowCloser" onclick="closWind()"></div>
+            <div id="windowCHolder"><div id="menuWindow"></div></div>
+            <div id="menuWindowMusic"></div>
+          </div>
+        </div>
+        <div id="endUI">
+          <div id="endChals"></div>
+          <div id="victorySubHolder"><img id="victorySub" /></div>
+          <div id="endInfo">
+            <div style="margin-top: 30px"></div>
+            <div
+              id="teamTotal0"
+              class="teamTotals"
+              style="margin-right: 15px"
+            ></div>
+            <div id="endTimer"></div>
+            <div
+              id="teamTotal1"
+              class="teamTotals"
+              style="margin-left: 15px"
+            ></div>
+          </div>
+          <div id="endMidHolder" style="display: none">
+            <div
+              class="endAHolder"
+              id="endAHolderL"
+              style="opacity: 0; margin-right: 10px"
+            >
+              <div id="endAMerger">
+                <div id="endAContainer">
+                  <div><div align="center" id="krunker-io_300x600"></div></div>
+                </div>
+              </div>
+            </div>
+            <div id="endTabbedView"></div>
+            <div class="endAHolder" id="endAHolderR" style="opacity: 0">
+              <div id="endAMerger">
+                <div id="endAContainer">
+                  <div>
+                    <div align="center" id="krunker-io_300x600_2"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div></div>
+          <div id="matchVoteHolder"></div>
+          <div id="matchEndSignupIncentives"></div>
+        </div>
+        <div id="aimRecticle">
+          <div id="topBox" class="black"></div>
+          <div id="leftBox" class="black"></div>
+          <img
+            id="recticleImg"
+            src="https://assets.krunker.io/textures/recticle.png?build=zVvup"
+          />
+          <div id="bottomBox" class="black"></div>
+          <div id="rightBox" class="black"></div>
+        </div>
+        <img
+          id="aimDot"
+          src="https://assets.krunker.io/textures/reticles/reticle_0.png?build=zVvup"
+        />
+        <div id="chatUIHolder" style="display: none">
+          <div id="chatUI" style="display: none">
+            <div id="chatBG"></div>
+            <div id="chatHolder">
+              <div id="notificationCenter"></div>
+              <div id="gameAnnouncementEl"></div>
+              <div id="chatList"></div>
+              <div id="emojiPanelHolder"></div>
+              <div id="chatInputHolder">
+                <div class="greyInlineInner">
+                  <div id="chatSwitchHolder">
+                    <div
+                      id="chatSwitch"
+                      class="material-icons"
+                      data-tab="public"
+                      onclick="switchChat(this)"
+                    ></div>
+                  </div>
+                </div>
+                <div class="greyInlineInnerMid">
+                  <input
+                    id="chatInput"
+                    placeholder="Enter Message"
+                    maxlength="70"
+                    autocomplete="off"
+                    onfocus="focusChat(1)"
+                    onblur="focusChat()"
+                  />
+                </div>
+                <div class="greyInlineInner">
+                  <i id="voiceIcon" class="material-icons voiceOff"></i>
+                  <div id="recTimer">[V]</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="blockerDiv"></div>
+        <img id="jumpSIMG" style="display: none" />
+        <div id="jumpSVIDHolder" style="display: none">
+          <video id="jumpSVID"></video>
+        </div>
+        <div id="spectateUI">
+          <div id="spectateHUD">
+            <div id="spec0">
+              <div id="specHeaderTm0">
+                <span id="specNameTm0">Alpha</span>
+                <span id="specScoreTm0">0</span>
+              </div>
+              <div id="specTeam0"></div>
+            </div>
+            <div class="spectateInfo">
+              <div id="specTimer"></div>
+              <div id="specGameInfo"></div>
+            </div>
+            <div id="spec1">
+              <div id="specHeaderTm1">
+                <span id="specScoreTm1">0</span>
+                <span id="specNameTm1">Bravo</span>
+              </div>
+              <div id="specTeam1"></div>
+            </div>
+            <div id="specGMessage"></div>
+          </div>
+          <div id="specNames">Spectating</div>
+          <div id="specStats" style="display: none">
+            <div id="specStatsInner"></div>
+          </div>
+          <div id="specSUS" style="display: none">SUSPECT</div>
+          <div id="specControlHolder">
+            <div class="greyInner" style="padding: 10px">
+              <div class="specControl">
+                Prev<span class="specControlKey">[LM]</span>
+              </div>
+              <div class="specControl">
+                Next<span class="specControlKey">[RM]</span>
+              </div>
+              <div class="specControl">
+                Objective Cam<span class="specControlKey" id="specObjCam"
+                  >[H]</span
+                >
+              </div>
+              <div class="specControl">
+                Free Cam<span class="specControlKey" id="specFreeCam">[F]</span>
+              </div>
+              <div class="specControl">
+                Player/Cam<span class="specControlKey">[1-9]</span>
+              </div>
+              <div class="specControl">
+                <span id="specIns" style="color: inherit">First Person</span
+                ><span class="specControlKey" id="specFirstP">[R]</span>
+              </div>
+              <div class="specControl">
+                Focus<span class="specControlKey" id="specFocus">[.]</span>
+              </div>
+              <div class="specControl">
+                Force Nametags<span class="specControlKey" id="specNamesF"
+                  >[M]</span
+                >
+              </div>
+              <div class="specControl" style="display: none">
+                KPD Vision<span class="specControlKey" id="kpdVision">[=]</span>
+              </div>
+              <div class="specControl">
+                Minimap<span class="specControlKey" id="specMinimap">[-]</span>
+              </div>
+            </div>
+          </div>
+          <div id="specKPDContr">
+            <div id="specKPDTxt"></div>
+            <div id="specKRHid">
+              <div class="specKPDContrI" style="margin-left: 0" id="kpdVoteN">
+                <span style="color: rgba(255, 255, 255, 0.7)">NO</span> [N]
+              </div>
+              <div style="width: 120px; display: inline-block"></div>
+              <div class="specKPDContrI" id="kpdVoteY">
+                <span style="color: rgba(255, 255, 255, 0.7)">YES</span> [Y]
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="gameUI">
+        <div id="customGUIHolder" style="display: none"></div>
+        <div id="gameUIHider">
+          <div id="inGameUI">
+            <div id="midGameUIHider">
+              <div id="centerLeaderDisplay">
+                <div id="leaderContainerD" class="centerLeaderContainer"></div>
+                <div id="leaderContainer0" class="centerLeaderContainer"></div>
+                <div id="leaderContainer1" class="centerLeaderContainer"></div>
+              </div>
+              <div id="topRight">
+                <div id="matchmakingStatusEl"></div>
+                <div id="leaderboardHolder">
+                  <div id="leaderContainer"></div>
+                </div>
+                <div></div>
+                <div class="topRightCounters">
+                  <div id="scoreZoneCount" class="statIcon">
+                    <div class="greyInner">
+                      <i
+                        class="material-icons"
+                        style="color: #fff; font-size: 24px"
+                        >flag</i
+                      >
+                      <span
+                        id="scoreZoneVal"
+                        style="color: rgba(255, 255, 255, 0.6)"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div id="livesCount" class="statIcon">
+                    <div class="greyInner">
+                      <i
+                        class="material-icons"
+                        style="color: #fff; font-size: 24px"
+                        >favorite</i
+                      >
+                      <span
+                        id="livesDisp"
+                        style="color: rgba(255, 255, 255, 0.6)"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div id="killCount" class="statIcon">
+                    <div class="greyInner">
+                      <img src="./img/skull_0.png" id="killsIcon" />
+                      <span id="killsVal">0</span>
+                    </div>
+                  </div>
+                  <div id="deathCount" class="statIcon">
+                    <div class="greyInner">
+                      <img src="./img/skull_1.png" id="deathsIcon" />
+                      <span id="deathsVal">0</span>
+                    </div>
+                  </div>
+                  <div id="streakCount" class="statIcon">
+                    <div class="greyInner">
+                      <img src="./img/skull_2.png" id="streakIcon" />
+                      <span id="streakVal">0</span>
+                    </div>
+                  </div>
+                  <div id="kdCount" class="statIcon">
+                    <div class="greyInner">
+                      <img src="./img/skull_3.png" id="kdIcon" />
+                      <span id="kdVal">0</span>
+                    </div>
+                  </div>
+                  <div id="scoreCount" class="statIcon">
+                    <div class="greyInner">
+                      <i
+                        class="material-icons"
+                        style="color: #ffc147; font-size: 24px"
+                        >star</i
+                      >
+                      <span id="myScoreVal">0</span>
+                    </div>
+                  </div>
+                </div>
+                <div></div>
+                <div id="killFeed"></div>
+              </div>
+              <img id="bloodDisplay" src="./img/blood.png" />
+              <div id="chalDisplay">
+                <div id="chalName" class="centerUIB"></div>
+              </div>
+              <div id="propControlHolder" style="display: none">
+                <div class="greyInner" style="padding: 10px">
+                  <div class="propControl" style="display: none">
+                    Change Prop<span class="propControlKey">[LM]</span>
+                  </div>
+                  <div class="propControl">
+                    Random Prop<span class="propControlKey" id="pickRandProp"
+                      >[M]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Prop Wheel<span class="propControlKey" id="pickProp"
+                      >[P]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Toggle Rotation<span class="propControlKey" id="rotProp"
+                      >[R]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Reset Rotation<span class="propControlKey" id="rotRProp"
+                      >[N]</span
+                    >
+                  </div>
+                  <div class="propControl">Taunts:</div>
+                  <div class="propControl">
+                    Psst<span class="propControlKey" id="taunt0">[1]</span>
+                  </div>
+                  <div class="propControl">
+                    Whistle<span class="propControlKey" id="taunt1">[2]</span>
+                  </div>
+                  <div class="propControl">
+                    Fart<span class="propControlKey" id="taunt2">[3]</span>
+                  </div>
+                  <div class="propControl">
+                    Meme<span class="propControlKey" id="taunt3">[4]</span>
+                  </div>
+                  <div class="propControl">
+                    WTF is This?<span class="propControlKey" id="taunt4"
+                      >[5]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Right Now!<span class="propControlKey" id="taunt5"
+                      >[6]</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div id="stalkerControlHolder" style="display: none">
+                <div class="greyInner" style="padding: 10px">
+                  <div class="propControl">
+                    Leap<span class="propControlKey" id="stalkerLeap"
+                      >[Right Click]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Stick To Wall<span
+                      class="propControlKey"
+                      id="stalkerStickToWall"
+                      >[Space]</span
+                    >
+                  </div>
+                  <div class="propControl">Taunts:</div>
+                  <div class="propControl">
+                    Turn around<span class="propControlKey" id="stalkerTaunt0"
+                      >[1]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    You are next<span class="propControlKey" id="stalkerTaunt1"
+                      >[2]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Look Up<span class="propControlKey" id="stalkerTaunt2"
+                      >[3]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Right Here<span class="propControlKey" id="stalkerTaunt3"
+                      >[4]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    Over Here<span class="propControlKey" id="stalkerTaunt4"
+                      >[5]</span
+                    >
+                  </div>
+                  <div class="propControl">
+                    There's no escape<span
+                      class="propControlKey"
+                      id="stalkerTaunt5"
+                      >[6]</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div id="stalkerLivingInfoHolder" style="display: none">
+                <div class="greyInner" style="padding: 10px">
+                  <div id="stalkerLivingInfoText">
+                    Keep moving or you'll get dizzy.
+                  </div>
+                </div>
+              </div>
+              <div id="botRightHider">
+                <div id="weapHolder"></div>
+                <div id="perkHolder"></div>
+                <div id="bottomRight">
+                  <div id="botRHider">
+                    <div id="bhHolder">
+                      <div class="bhHead"></div>
+                      <div style="display: table; margin: 0 auto">
+                        <div class="bhArm"></div>
+                        <div class="bhBody"></div>
+                        <div class="bhArm"></div>
+                      </div>
+                      <div style="display: table; margin: 0 auto">
+                        <div class="bhLeg"></div>
+                        <div class="bhLeg"></div>
+                      </div>
+                    </div>
+                    <div id="krTagHolder"></div>
+                    <div id="giftTagHolder"></div>
+                    <div id="powerUpHolder">
+                      <div
+                        class="powerupItem"
+                        style="
+                          background-image: url(./img/powerups/0.png);
+                          display: none;
+                        "
+                      >
+                        <div class="powerupTime">0:00</div>
+                      </div>
+                      <div
+                        class="powerupItem"
+                        style="
+                          background-image: url(./img/powerups/1.png);
+                          display: none;
+                        "
+                      >
+                        <div class="powerupTime">0:00</div>
+                      </div>
+                      <div
+                        class="powerupItem"
+                        style="
+                          background-image: url(./img/powerups/2.png);
+                          display: none;
+                        "
+                      >
+                        <div class="powerupTime">0:00</div>
+                      </div>
+                    </div>
+                    <div id="killStreakHolder"></div>
+                    <div id="ammoHolder">
+                      <div class="greyInner">
+                        <div id="ammoVal"></div>
+                        &nbsp;
+                        <div id="ammoMax"></div>
+                        <img
+                          id="ammoIcon"
+                          src="https://assets.krunker.io/textures/ammo_0.png?build=zVvup"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="topMidHold">
+                <div id="roundsDisplay" style="display: none">
+                  <div
+                    class="roundScrV"
+                    id="roundTSc1"
+                    style="border-bottom: 6px solid #eb4034"
+                  >
+                    0
+                  </div>
+                  <div
+                    style="
+                      display: inline-block;
+                      margin: 8px;
+                      margin-top: 8px;
+                      margin-left: 20px;
+                      margin-right: 20px;
+                    "
+                  >
+                    <span id="roundsVal"></span>
+                    <div></div>
+                    <div id="roundSub">Round</div>
+                  </div>
+                  <div
+                    class="roundScrV"
+                    id="roundTSc2"
+                    style="border-bottom: 6px solid #3489eb"
+                  >
+                    0
+                  </div>
+                </div>
+                <div id="gameMessage"></div>
+                <div id="roundMessage"></div>
+              </div>
+              <div id="topLeftHolder">
+                <div id="topLeftMain">
+                  <div id="topLeftMap">
+                    <div id="miniMapOverlay">
+                      <canvas
+                        id="miniMapCanvas"
+                        oncontextmenu="return !1;"
+                        style="pointer-events: none"
+                      ></canvas>
+                    </div>
+                  </div>
+                  <div id="topLeftMatchData">
+                    <div id="timerHolder">
+                      <div id="timerInner">
+                        <img src="./img/timer.png" id="timerIcon" />
+                        <span id="timerVal"></span>
+                      </div>
+                    </div>
+                    <div id="matchInfo"></div>
+                  </div>
+                </div>
+                <div id="topLeftData">
+                  <div class="debugInfo">
+                    <div id="fpsDisplay">
+                      <span id="ingameFPS" style="color: #9eeb56">0</span> FPS
+                    </div>
+                    <div id="pingDisplay">
+                      <span id="pingText" style="color: #9eeb56">0</span> PING
+                    </div>
+                  </div>
+                  <div class="packetInfo">
+                    <div id="ingressDisplay">
+                      <i id="ingressIcon" class="material-icons"
+                        >keyboard_arrow_down</i
+                      >
+                      <span id="ingressPacketCount">0 P/s</span>
+                      <span id="ingressDataSize">0 KB/s</span>
+                    </div>
+                    <div id="egressDisplay">
+                      <i id="egressIcon" class="material-icons"
+                        >keyboard_arrow_up</i
+                      >
+                      <span id="egressPacketCount">0 P/s</span>
+                      <span id="egressDataSize">0 KB/s</span>
+                    </div>
+                    <div id="tickDisplay">
+                      <i id="egressIcon" class="material-icons">sync_alt</i>
+                      <span id="tickPacketCount">0 TPS</span>
+                    </div>
+                  </div>
+                </div>
+                <div id="topLeftBottom">
+                  <div id="teamScores"></div>
+                  <div id="voteToKick">
+                    <div id="voteHeader">Vote Kick</div>
+                    <div id="voteKickInfo"></div>
+                    <div id="voteKickNum">Votes: 0/0</div>
+                    <div id="voteKickName">Kick Guest_1</div>
+                    <div id="voteKickKeys">
+                      <span style="color: #fbc02d" id="kickVoteY">[1]</span> YES
+                      <span style="color: #fbc02d" id="kickVoteN">[2]</span> NO
+                    </div>
+                  </div>
+                  <div id="voteToForfeit">
+                    <div id="voteHeader">Forfeit Match</div>
+                    <div id="voteForfeitInfo"></div>
+                    <div id="voteForfeitNum">Votes: 0/0</div>
+                    <div id="voteForfeitKeys">
+                      Enter <span style="color: #fbc02d">/ff</span> to vote
+                    </div>
+                  </div>
+                  <div id="networkLag">
+                    <div id="networkLagHed">Network Lag Detected!</div>
+                    <div>Make sure you use</div>
+                    <div>Official Client or</div>
+                    <div>Chrome at 60 FPS</div>
+                  </div>
+                  <div id="speakerDisplay"></div>
+                  <div id="skinRewardHolder" style="display: none">
+                    <div class="skinRewDesc">Items Found</div>
+                    <div id="skinRewList"></div>
+                  </div>
+                  <div id="debugStats"></div>
+                </div>
+              </div>
+              <div id="hiddenMsg">
+                You are hidden
+                <i
+                  class="material-icons"
+                  style="
+                    color: #fff;
+                    font-size: 40px;
+                    vertical-align: middle;
+                    margin-top: -5px;
+                  "
+                  >remove_red_eye</i
+                >
+              </div>
+              <div id="speedRunHider">
+                <div id="speedRunHolder" style="display: none">
+                  <div id="speedRunReset">
+                    <div class="greyInner" style="padding: 20px">
+                      <div style="color: #fff">
+                        <span id="speedRunRstKey">[B]</span> Reset to Start
+                      </div>
+                      <div style="color: #fff">
+                        <span id="speedRunRstLKey">[B]</span> Last Checkpoint
+                      </div>
+                    </div>
+                  </div>
+                  <div id="speedRunBox">
+                    <div class="greyInner" style="padding: 10px 20px">
+                      <div id="speedRunInfo"></div>
+                      <div id="speedRunList"></div>
+                      <div id="speedRunTimer"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="interactMsg" class="centerUIB"></div>
+              <div id="reloadMsg" style="display: none"></div>
+              <div id="bottomLeftHolder">
+                <div id="bottomLeftPlayer">
+                  <div id="bottomLeftPlayerLeft">
+                    <img id="bottomLeftClassImg" />
+                  </div>
+                  <div id="bottomLeftPlayerMid">
+                    <div id="bottomLeftTeamHolder">
+                      <div id="bottomLeftTeamType">FFA</div>
+                      <div id="bottomLeftTeamName"></div>
+                    </div>
+                    <div id="bottomLeftHealthBar"></div>
+                  </div>
+                  <div id="bottomLeftPlayerRight">
+                    <img id="bottomLeftChallIcon" />
+                    <div id="bottomLeftHealth"></div>
+                  </div>
+                </div>
+                <div id="zPerksHolder"></div>
+              </div>
+              <img
+                id="hitmarker"
+                src="https://assets.krunker.io/textures/hitmarker_3.png?build=zVvup"
+              />
+            </div>
+            <div class="death-ui-holder" id="deathUIHolder"></div>
+          </div>
+        </div>
+        <div id="instructionsFadeBG"></div>
+        <div id="instructionsUpdateBG"></div>
+        <div id="instructionHolder">
+          <div id="instructionHider">
+            <div id="instructions">
+              <div
+                style="width: 100%; text-align: center; transform: scale(1.4)"
+              >
+                <div class="lds-ring">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+              <div style="color: #fff; width: 50vw" id="loadGamNm"></div>
+            </div>
+          </div>
+          <div id="instructionsUpdate"></div>
+          <div
+            id="instructionsUpdateCredit"
+            onclick="openURL('https://twitter.com/EmpoDesign')"
+          >
+            Art by @EmpoDesign
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="mobileUI">
+      <div id="mobileJoystick"></div>
+      <div id="mobileJump"></div>
+      <div id="mobileCrouch"></div>
+      <div id="mobileEsc"></div>
+      <div id="mobileShoot"></div>
+      <div id="mobileAimShoot"></div>
+      <div id="mobileScope"></div>
+      <div id="mobileReload"></div>
+      <div id="mobileSwap"></div>
+      <div id="mobileKSwap"></div>
+    </div>
+    <div id="app"></div>
+    <script>
+      let isGame = !(
+          document.location.pathname.includes("social.html") ||
+          document.location.pathname.includes("editor.html")
+        ),
+        urlParams = new URLSearchParams(
+          window.location.search.replace("#", "%23").replace("+", "%2B"),
+        ),
+        canStore = "undefined" != typeof Storage;
+      try {
+        window.localStorage.canStore = !0;
+      } catch {
+        canStore = !1;
+      }
+      function updateElement(e, n) {
+        const t = document.getElementById(e);
+        t && n(t);
+      }
+      function newUserCheck() {
+        const e = !!window.getSavedVal("krunker_token"),
+          n = !!window.getSavedVal("krunker_username"),
+          t = !!window.getSavedVal("krunker_id"),
+          a = !!window.getSavedVal("krunker_haslogin"),
+          o = urlParams.has("play"),
+          l = urlParams.has("host");
+        return !(e || n || t || a || o || l);
+      }
+      ((window.saveVal = function (e, n) {
+        canStore && localStorage.setItem(e, n);
+      }),
+        (window.deleteVal = function (e) {
+          canStore && localStorage.removeItem(e);
+        }),
+        (window.getSavedVal = function (e) {
+          return canStore ? localStorage.getItem(e) : null;
+        }),
+        (window.ftueBotMatches = 3),
+        (window.isNewUser = newUserCheck()),
+        (window.hasFullMenu = !0),
+        (window.botMatches = parseInt(window.getSavedVal("ftue_bm")) || 0),
+        (window.isBotFTUE = !1),
+        (window.becomeNewUser = () => (
+          [
+            "krunker_token",
+            "krunker_haslogin",
+            "krunker_id",
+            "krunker_username",
+            "ftue_bm",
+            "ftue_gradual_menu",
+          ].forEach((e) => window.deleteVal(e)),
+          (location.href = location.origin)
+        )),
+        (window.canShowRegisterPopupAd = !1),
+        (window.ftueFixedMapRotation = !1),
+        (window.ftueNewMaps = !0),
+        (window.changeMenu = function (e) {
+          if (window.isNewUser) {
+            if (e) return window.fullMenu();
+            var n = document.getElementById("tlInfHold");
+            (n && (n.style.display = "none"),
+              (subLogoButtons.style.display = "none"),
+              (newsHolder.style.display = "none"),
+              (menuServerInfoContainer.style.display = "none"),
+              window.isBotFTUE ||
+                ((menuClassSubtext.style.display = "none"),
+                (menuClassName.style.display = "none"),
+                (menuClassIcn.style.display = "none")),
+              menuBtnSocial.parentNode.classList.toggle("mIH", !0),
+              menuBtnChall.parentNode.classList.toggle("mIH", !0),
+              menuBtnShop.parentNode.classList.toggle("mIH", !0),
+              (chatHolder.style.display = "none"),
+              (speakerDisplay.style.display = "none"),
+              (spectButton.style.display = "none"),
+              (spectButton.style.opacity = "0"),
+              (expertModeBtn.style.display = "inline-block"));
+          }
+        }),
+        (window.fullMenu = function () {
+          var e = document.getElementById("tlInfHold");
+          (e &&
+            ((e.style.display = ""),
+            e.children[1] && (e.children[1].style.display = "")),
+            (subLogoButtons.style.display = ""),
+            (newsHolder.style.display = ""),
+            (menuServerInfoContainer.style.display = ""),
+            menuClassContainerInner.setAttribute(
+              "onclick",
+              "playSelect(0.1);showWindow(3)",
+            ),
+            (menuClassSubtext.style.display = ""),
+            (menuClassName.style.display = ""),
+            (menuClassIcn.style.display = ""),
+            menuClassIcn.setAttribute(
+              "onclick",
+              "playSelect(0.1);showWindow(3)",
+            ),
+            menuBtnSocial.parentNode.classList.toggle("mIH", !1),
+            menuBtnChall.parentNode.classList.toggle("mIH", !1),
+            menuBtnShop.parentNode.classList.toggle("mIH", !1),
+            (menuBtnSkinManager.parentNode.style.display = "none"),
+            (chatHolder.style.display = ""),
+            (speakerDisplay.style.display = ""),
+            (spectButton.style.display = ""),
+            (spectButton.style.opacity = "1"),
+            (expertModeBtn.style.display = "none"),
+            window.saveVal("ftue_bm", 5),
+            window.saveVal("ftue_gradual_menu", 4));
+        }),
+        (window.expertMode = function () {
+          (window.saveVal("ftue_bm", 5),
+            window.saveVal("ftue_gradual_menu", 4),
+            window.changeMenu(!0),
+            window.isBotFTUE && window.exitBotFTUE(!0));
+        }),
+        isGame && window.changeMenu(window.hasFullMenu));
+    </script>
+    <script type="module" src="./libs/altcha.1.0.6.min.js?build=zVvup"></script>
+    <script
+      async
+      src="//platform.twitter.com/widgets.js"
+      charset="utf-8"
+    ></script>
+    <script async src="https://apis.google.com/js/platform.js"></script>
+    <script src="./libs/howler.min.js?build=zVvup"></script>
+    <script src="./libs/chart.bundle.2.8.0.min.js?build=zVvup"></script>
+    <script async src="./libs/confetti.1.2.0.min.js?build=zVvup"></script>
+    <script src="./libs/Tween.min.js?build=zVvup"></script>
+    <script async src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./libs/zip.js?build=zVvup"></script>
+    <script src="./libs/nipplejs.min.js?build=zVvup"></script>
+    <script src="./libs/purejscarousel.js?build=zVvup"></script>
+    <script src="./libs/fflate.min.js?build=zVvup"></script>
+  </body>
+</html>

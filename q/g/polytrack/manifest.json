@@ -1,0 +1,27 @@
+{
+	"name": "PolyTrack",
+	"icons": [
+		{
+			"src": "images/icons/cover1920x1080.png",
+			"sizes": "1920x1080",
+			"type": "image/png"
+		},
+		{
+			"src": "images/icons/cover512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "images/icons/icon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		}
+	],
+	"background_color": "#28346a",
+	"theme_color": "#28346a",
+	"start_url": "./index.html",
+	"orientation": "landscape",
+	"display_override": ["fullscreen", "standalone", "minimal-ui"],
+	"display": "fullscreen"
+}

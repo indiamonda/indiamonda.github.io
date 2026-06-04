@@ -1,0 +1,377 @@
+#best_streak_container {
+    position: absolute;
+	top: var(--ss-space-sm); left: 50%;
+	padding: 0; margin: 0;
+    transform: translateX(-50%);
+	text-align: center;
+	z-index: 6;
+}
+
+#best_streak_container h1 {
+	margin: 0; padding: 0;
+	display: inline;
+
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 2.5em !important;
+	color: var(--ss-white) !important;
+	font-weight: bold !important;
+	text-transform: lowercase;
+
+	padding-left: 1.25em;
+	padding-top: 0em;
+
+	background-image: url(../img/ico_streak.webp);
+    background-position: left center;
+	background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+#teamScores {
+	top: 0;
+	display: none;
+	z-index: 6;
+}
+
+#teamScores .vs {
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#weaponBox {
+	display: none; 
+	position: absolute; 
+	right: 0.75em; 
+	bottom: 0.5em; 
+	text-align: right;
+}
+
+#grenades {
+	padding-bottom: 0; 
+	margin-bottom: 0;
+}
+
+#grenades img {
+	width: 3.25em;
+	height: auto;
+}
+
+#weaponName {
+	text-align: right;
+	font-family: 'Nunito', sans-serif;
+	font-weight: bold;
+	line-height: 0;
+	display: none;
+}
+
+#ammo {
+	text-align: right;
+	font-size: 3.25em;
+	font-family: 'Nunito', sans-serif;
+	font-weight: bold;
+	line-height: 1em;
+	margin: 0;
+	
+	padding-right: 1.2em;
+	padding-top: 0em;
+	margin-bottom: 0.1em;
+
+	background-image: url(../img/ico_ammo.webp);
+    background-position: right center;
+	background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#hitMarkerContainer {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+
+}
+
+.hitMarker {
+	position: absolute;
+	width: 20em;
+	height: 20em;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 100%;
+	background: radial-gradient(150% 100% at 50% 56%, transparent 52%, red 55%);
+	animation: 2s hitMarker forwards;
+}
+
+@keyframes hitMarker {
+	0% { opacity: 1; }
+	75% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+#healthContainer {
+	position: absolute;
+	left: 50%; bottom: 1em;
+	transform: translateX(-50%);
+	display: inline-block;
+	width: 6em; height: 6em;
+	background: var(--ss-blue5);
+	border-radius: 50%;
+	text-align: center;
+}
+
+#healthContainer.hard-boiled {
+    width: 7.1em;
+    height: 7.1em;
+}
+
+/* #healthContainer {
+    position: absolute;
+    left: 50%;
+    bottom: 1em;
+    transform: translateX(-50%);
+    display: inline-block;
+    width: 6.4em;
+    height: 6.4em;
+    background: var(--ss-blue5);
+    border-radius: 50%;
+	text-align: center;
+} */
+
+#healthHp {
+	font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    color: var(--ss-white);
+    font-size: 1.2em;
+}
+
+
+.healthBar-area {
+	transform-origin: center;
+	transform: rotate(90deg);
+	fill: transparent;
+	transition: all 0.3s ease-in-out;
+	stroke-width: 1em;
+}
+
+.healthBar {
+	stroke: white;
+	stroke-dasharray: 14.4513em;
+}
+
+.healthBar-hardBoiled {
+	stroke: var(--ss-team-blue-light);
+    stroke-dasharray: 18em;
+}
+
+.healthBar-hardBoiled-stroke {
+	stroke: var(--ss-blue5);
+	stroke-dasharray: 15.4em;
+}
+
+.healthYolk {
+	fill: orange;
+}
+
+.healthSvg {
+	width: 100%; height: 100%;
+}
+
+#hardBoiledContainer {
+	position: absolute;
+	left: 50%; bottom: 1em;
+	transform: translateX(-50%);
+	display: inline-block;
+	width: 6em; height: 6em;
+	text-align: center;
+}
+
+#hardBoiledValue {
+	font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    color: var(--ss-white);
+    font-size: 1.6em;
+    transform: translateY(-2.6em);
+}
+
+#hardBoiledShieldContainer {
+	width: 100%;
+	height: 100%;
+}
+
+.hardBoiledShield {
+	position: absolute;
+	transform: translateX(-50%);
+	height: 100%;
+}
+
+.egg-breaker-icon {
+	width: 2em;
+	fill: var(--ss-vip);
+}
+
+.shell-streak-restock-icon {
+	height: 2em;
+}
+
+.egg-breaker-wrap {
+    bottom: 1em;
+    transform: translate(65%, -50%);
+    left: 50%;
+}
+
+.egg-breaker-timer {
+    font-size: .8em;
+    font-weight: 900;
+    color: var(--ss-blue5);
+}
+
+.egg-breaker-container {
+	grid-template-columns: 2em 1fr;
+    position: relative;
+    gap: .3em;
+	height: 2.5em;
+}
+
+.egg-breaker-msg {
+	line-height: 1;
+	color: var(--ss-vip);
+	font-weight: 700;
+    font-size: .7em;
+    align-self: center;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+.egg-breaker-msg .x-two-msg {
+	display: block;
+}
+
+.x-two-msg span {
+	font-size: .5em;
+}
+
+#eggBreakerContainer {
+	position: absolute;
+	left: calc(50% + 9em); bottom: 1em;
+	transform: scale(4) translateY(-3em);
+	transform-origin: 50% 100%;
+	width: 6em; height: 6em;
+}
+
+#eggBreakerContainer.on {
+	visibility: visible;
+	transform: scale(1) translateY(0);
+	transition: 1s;
+}
+
+#eggBreakerContainer.off {
+	visibility: hidden;
+}
+
+#eggBreakerIcon {
+	position: absolute;
+	height: 100%;
+}
+
+#eggBreakerTimer {
+	position: absolute;
+	color: white;
+	text-shadow: var(--ss-yolk) 0 0 0.1em, black 0 0.1em 0.2em;
+	font-size: 2.5em;
+	font-family: 'Nunito', sans-serif;
+	font-weight: 900;
+	text-align: center;
+	width: 100%;
+	top: 24%;
+}
+
+.shell-streak-restock-icon {
+	width: 2em;
+}
+
+.is-paused #shellStreakContainer {
+	transform: scale(.7) translateX(-11em);
+    left: calc(var(--ss-menu-width) + var(--player-score-width) + 5em);
+	top: .5em;
+}
+
+.is-paused.is-vip #shellStreakContainer {
+	transform: scale(.7) translateX(-5em);
+}
+
+.is-vip:not(.is-paused) #shellStreakContainer {
+    left: 16em;
+}
+
+#shellStreakContainer {
+    position: absolute;
+    top: .6em;
+    left: calc(var(--player-score-width) + 2em);
+	z-index: 6;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#shellStreakCaption {
+	font-size: 1.1em;
+	color: var(--ss-white);
+	margin: 0;
+}
+
+#shellStreakCaptionStreak {
+	font-size: 3em;
+	line-height: 0;
+	transition: all 0.15s ease-in-out;
+	transform: scale(1) rotate(0);
+}
+
+#shellStreakCaptionStreak span {
+	font-size: .6em;
+}
+
+.streak-blow-out {
+	transform: scale(1.5) rotate(-22deg);
+}
+
+.streak-blow-out.hard-boiled {
+	transform: scale(1.5) rotate(-22deg);
+	color: var(--ss-blue2);
+}
+
+#shellStreakMessage {
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+	font-size: 1em;
+	margin: 0;
+}
+
+/* #shellStreakContainer.appear {
+    visibility: visible;
+    transform: scale(1);
+	transition: ease-in-out transform 0.5s;
+} */
+
+
+.shellStreakCaptionWrap {
+	line-height: 1;
+    font-size: .9em;
+}
+
+#grenadeThrowContainer {
+	position: absolute;
+	display: flex;
+	visibility: hidden;
+	align-items: flex-end;
+	top: 50%;
+	left: 50%;
+	transform: translate(-6em, -3em);
+	width: 1em;
+	height: 6em;
+	background: rgba(0, 0, 0, 0.25);
+	border-radius: 0.3em;
+	padding: 0.25em;
+}
+
+#grenadeThrow {
+	width: 100%;
+	height: 50%;
+	border-radius: 0.05em;
+	background: white;
+}

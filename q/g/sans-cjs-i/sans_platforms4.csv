@@ -1,0 +1,29 @@
+0,CombatZoneResize,113,231,548,391,TLResume,,
+0,TLPause,,,,,,,
+0,sanshead,Tired2,,,,,,
+0,SansTorso,shrug,,,,,,
+0,SansText,look I gave up trying to      go bak a long time ago.,,,,,,
+0,SansText,Everything is in vain.,,,,,,
+0,sanshead,Default,,,,,,
+0,SansTorso,Default,,,,,,
+0,HeartTeleport,320,376,,,,,
+0,HeartMode,1,,,,,,
+0,Platform,151,336,31,0,120,1,
+0,HeartTeleport,175,327,,,,,
+0,BoneVRepeat,528,366,40,0,60,70,15
+0,BoneVRepeat,283,267,25,3,90,16,85
+0,BoneVRepeat,363,331,20,1,120,16,95
+0,BoneVRepeat,443,248,25,3,100,16,85
+0,BoneVRepeat,548,311,80,2,150,16,150
+0,BoneVRepeat,213,331,20,1,150,23,70
+0,BoneStab,0,30,0,999,,,
+0,BoneStab,2,30,0,999,,,
+9.5,EndAttack,,,,,,,
+0.6,SET,Loop,999,,,,,
+0,SUB,Loop,$Loop,1,,,,
+0,BoneH,-120,425,120,0,300,,
+0,BoneH,-120,435,120,0,300,,
+0,BoneH,-120,445,120,0,300,,
+0,BoneH,-120,455,120,0,300,,
+0,BoneH,-120,465,120,0,300,,
+1.8,JMPNZ,23,$Loop,,,,,

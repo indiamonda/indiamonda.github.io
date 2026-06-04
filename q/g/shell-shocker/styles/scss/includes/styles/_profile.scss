@@ -1,0 +1,75 @@
+/* PROFILE */
+.profile-page-content {
+    border: var(--ss-common-border-width) solid var(--ss-blue5);
+	margin-top: 7em;
+	height: calc(100vh - 10em);
+}
+
+.profile-page-content .ss_smtab {
+	width: 5em;
+}
+
+.profile-page-content .media-tab-container {
+	background: none;
+	grid-template-columns: 1fr 1fr;
+	width: 12em;
+}
+
+.stats-box {
+    margin: 0 auto;
+}
+
+.stat-loading {
+	background-color: var(--ss-blue5);
+    height: 56vh;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    opacity: .8;
+    width: 100%;
+}
+
+.stats-loading {
+	top: var(--ss-space-md);
+}
+
+.profile-name {
+	background: none;
+	border: 0;
+	font-size: 1.6em;
+}
+
+.profile-name:focus {
+	width: 11em;
+	border: 2px solid white;
+}
+
+.account-create-date {
+	font-size: .8em;
+}
+
+.account-create-date strong {
+	font-size: 1em;
+}
+
+@media (max-width: 1701px) {
+	.profile-page-content {
+		min-width: 41em;
+	}
+	.profile-stat-wrap {
+		min-height: 30em;
+		max-height: 30em;
+	}
+}
+
+.profile-no-stats {
+	width: 98%;
+	height: 100%;
+}
+
+.stat-wrapper {
+	&.soldout {
+		width: 100% !important;
+		border: 0 !important;
+	}
+}

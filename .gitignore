@@ -1,0 +1,11 @@
+# JPEXS Free Flash Decompiler — third-party tooling, do NOT push.
+# `jg/g/shady-bears/src/swf/rebuild.sh` re-downloads it on demand.
+# See: jg/g/shady-bears/src/swf/REBUILD.md
+jg/g/shady-bears/src/swf/.ffdec/
+jg/g/shady-bears/src/swf/.ffdec.zip
+jg/g/shady-bears/src/swf/_verify/
+
+# NOTE: jg/g/shady-bears/src/swf/assets/ is INTENTIONALLY tracked.
+# It holds the decompiled+patched AS3 sources that medvedi.swf is rebuilt from.
+# Do NOT add it here — losing it would mean we can never re-import patches
+# against a fresh upstream SWF.

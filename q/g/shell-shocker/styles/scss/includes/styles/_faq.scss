@@ -1,0 +1,44 @@
+/* ----------------------------------------------------------------- FAQ / Feedback -- */
+
+#helpPopup {
+	min-width: 48em;
+}
+
+#feedback_panel {
+	height: 30em;
+	padding: 1em;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+#feedback_panel h1 {
+	background: none;
+	text-align: left;
+	margin: 0;
+	padding: 0;
+}
+
+#feedback_panel h3 {
+    color: var(--ss-blue5);
+}
+
+#feedback_panel hr {
+	border: none;
+	border-top: 2px solid var(--ss-blue4);
+}
+
+#feedback_panel p, #feedback_panel li {
+	color: var(--ss-blue5);
+	font-weight: 600;
+}
+
+#feedback_panel .ss_field {
+	width: 50%;
+	height: 2.5em;
+}
+
+#feedback_panel textarea {
+	width: 100% !important;
+	height: 9em !important;
+	resize: none;
+}

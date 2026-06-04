@@ -1,0 +1,83 @@
+.teamScore {
+	/* position: absolute; */
+	/* width: 12vh;
+	height: 8vh;
+	top: 0.5em;
+	padding: 2vh;
+	box-sizing: border-box;
+	border: solid rgba(0, 0, 0, 0.5);
+	text-shadow: none;
+	text-align: center;
+	z-index: 6; */
+}
+
+/* .teamScore.red {
+	border-radius: 7vh 5vh 5vh 7vh / 4vh 4vh 4vh 4vh;
+	border-right-width: 4vh;
+	transform: translateX(-22vh);
+}
+
+.teamScore.blue {
+	border-radius: 5vh 7vh 7vh 5vh / 4vh 4vh 4vh 4vh;
+	border-left-width: 4vh;
+	transform: translateX(10vh);
+} */
+
+.teamScore.active {
+	opacity: 1;
+}
+
+.teamScore.inactive {
+	opacity: 0.5;
+}
+
+.teamScore .fas {
+	font-size: 3.5em;
+}
+
+.teamScore.red i {
+	color: var(--ss-team-red-light);
+}
+
+.teamScore.red .number {
+	color: var(--ss-team-red-dark);
+}
+
+/* .teamScore.red.inactive {
+	color: #f00;
+} */
+
+.teamScore.blue i {
+	color: var(--ss-team-blue-light);
+}
+
+.teamScore.blue .number {
+	color: var(--ss-team-blue-dark);
+}
+
+/* .teamScore.blue.inactive {
+	color: #0af;
+	background: rgba(0, 32, 64, 0.7);
+} */
+
+.teamScore .number {
+	margin: 0;
+    font-size: 1.5em;
+    top: .6em;
+}
+
+.teamLetter.red {
+	position: absolute;
+	font-size: 3vh;
+	right: -0.9em;
+	font-weight: bold;
+	color: var(--ss-team-red-dark);
+}
+
+.teamLetter.blue {
+	position: absolute;
+	font-size: 3vh;
+	left: -0.9em;
+	font-weight: bold;
+	color: var(--ss-team-blue-dark);
+}

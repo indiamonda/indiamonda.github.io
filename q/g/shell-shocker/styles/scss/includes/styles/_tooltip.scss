@@ -1,0 +1,105 @@
+/**
+ * Tooltip Styles
+ */
+
+/* Add this attribute to the element that needs a tooltip */
+.tool-tip {
+	/* position: relative; */
+	z-index: 2;
+	cursor: pointer;
+	margin: 0 .2em;
+	transition: opacity ease-in-out .3s;
+  }
+  
+  /* Hide the tooltip content by default */
+.tool-tip > span,
+.tool-tip .tool-tip--bubble {
+	transition: opacity ease-in-out .3s;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+.tool-tip > span,
+.tool-tip div.tool-tip--bubble {
+	position: absolute;
+	min-height: 2rem;
+	width: 20em;
+	font-weight: 600;
+	line-height: 1.3;
+	display: block;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 5.5em;
+  }
+
+
+  .steam .tool-tip div.tool-tip--bubble {
+	left: -212%;
+  }
+
+  .steam .tool-tip div.tool-tip--bubble:after {
+    left: 82.5%;
+  }
+
+  .twitch .tool-tip div.tool-tip--bubble {
+	left: -6.3em;
+  }
+  .twitch .tool-tip div.tool-tip--bubble:after {
+	left: 95.5%;
+    top: 94%;
+  }
+
+  .tool-tip > span strong,
+  .tool-tip .tool-tip--bubble strong {
+	  font-weight: 800;
+	  display: block !important;
+	  font-size: 1em;
+  }
+  
+  /* Triangle hack to make tooltip look like a speech bubble */
+  .tool-tip > span:after,
+  .tool-tip div.tool-tip--bubble:after {
+	background: 0;
+	position: absolute;
+	left: 50%;
+	-webkit-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+	width: 0;
+    border-top: 1rem solid var(--ss-white);
+    border-right: 0.4rem solid transparent;
+    border-left: 0.4rem solid transparent;
+	content: " ";
+	font-size: 0;
+	line-height: 0;
+	filter: drop-shadow(4px 4px 0 var(--ss-blue2));
+  }
+  
+/* Show tooltip content on hover */
+.tool-tip.active > span,
+.tool-tip:hover span,
+.tool-tip:hover,
+
+.tool-tip.active .tool-tip--bubble,
+.tool-tip.active .tool-tip--bubble:after,
+
+.tool-tip:hover .tool-tip--bubble,
+.tool-tip:hover .tool-tip--bubble:after,
+.tool-tip .tool-tip--bubble:after,
+.tool-tip .tool-tip--bubble:hover {
+	visibility: visible;
+	opacity: 1;
+}
+
+.tool-tip--right > span {
+    bottom: 60%;
+    left: 215%;
+	z-index: 300;
+}
+
+.tool-tip--right span:after {
+	bottom: auto;
+    top: 18px;
+    left: -16px;
+	-webkit-transform: rotate(65deg);
+	transform: rotate(65deg);
+}

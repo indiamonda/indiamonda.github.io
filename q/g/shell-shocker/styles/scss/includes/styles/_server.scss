@@ -1,0 +1,53 @@
+/* ----------------------------------------------------------------- Server Stuff -- */
+
+#region_list_item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: var(--ss-space-sm);
+	font-weight: bold;
+}
+
+.regionName {
+	width: 13em;
+	padding: 0 var(--ss-space-sm) 0 var(--ss-space-xl);
+	text-align: left;
+	white-space: nowrap;
+}
+
+.regionPingWrap {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 10.75em;
+	margin: 0;
+	padding: var(--ss-space-xs) var(--ss-space-sm);
+	background: var(--ss-blue4);
+}
+
+.pingBar {
+	display: inline-block;
+	height: 0.75em;
+	border-radius: 0.25em;
+}
+
+.redPing {
+	background-color: var(--ss-red);
+}
+
+.yellowPing {
+	background-color: var(--ss-yolk);
+}
+
+.greenPing {
+	background-color: var(--ss-green1);
+}
+
+.orangePing {
+	background-color: var(--ss-orange1);
+}
+
+.regionPingNumber {
+	width: 3em;
+	text-align: right;
+}

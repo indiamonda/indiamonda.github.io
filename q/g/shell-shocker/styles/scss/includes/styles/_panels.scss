@@ -1,0 +1,54 @@
+/* ----------------------------------------------------------------- Panels -- */
+.front_panel {
+	margin: 0 auto;
+	min-width: 21.2em;
+	max-width: 21.2em;
+}
+
+.front_panel-events img {
+    height: auto;
+    width: 10em;
+	margin: 0 auto;
+	transition: opacity .2s ease-in-out;
+}
+
+.front_panel-events button {
+	max-width: none;
+    padding-right: 4em !important;
+}
+
+.front_panel-events button span,
+.front_panel-events button i {
+	font-size: 1em;
+}
+
+.front_panel-events button img {
+    width: 2em;
+    right: 0.5em;
+	top: -0.8em;
+    transform: rotate(20deg);
+}
+
+.front_panel-events img.events-twitch-drop:hover {
+	opacity: .8;
+	cursor: pointer;
+}
+
+.front_panel {
+	border: var(--ss-space-sm) solid var(--ss-blue3);
+	margin-top: 0.6em;
+	background-image: var(--ss-blueblend1);
+	padding: var(--ss-space-lg);
+}
+
+.front_panel button:disabled,
+.front_panel button[disabled],
+.ss_bigtab:disabled {
+	background: var(--ss-blue5) !important;
+	border-color: var(--ss-blue5);
+	color: #333;
+	box-shadow: none !important;
+	text-shadow: none;
+	cursor: not-allowed;
+	opacity: .3;
+  }

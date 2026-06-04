@@ -1,0 +1,168 @@
+/* ----------------------------------------------------------------- Account -- */
+
+#account_panel {
+	position: absolute;
+	padding: var(--ss-space-md);
+	padding-right: var(--home-screen-r-padding);
+	z-index: 5;
+	top: 0;
+	right: 0;
+	height: var(---ss-account-panel-height);
+}
+
+.game-screen {
+	#account_panel {
+		pointer-events: none;
+	}
+
+	&.is-paused {
+		#account_panel {
+			pointer-events: all;
+		}
+	}
+}
+
+.home-screen #account_panel,
+.home-screen .secondary-aside {
+	padding-right: 0;
+}
+
+#account_bottom {
+	margin-top: var(--ss-space-sm);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+#account_bottom .ss_select, #account_left .ss_select {
+	width: 100%;
+}
+
+.account_icon {
+	margin: 0 0 0 var(--ss-space-sm);
+	height: 2.3em;
+	background: var(--ss-white);
+}
+
+.account_icon.account_icon-item {
+	background: var(--ss-pink);
+}
+
+.attention_btn {
+	position: absolute;
+	right: .3em;
+	top: -.5em;
+	font-size: .4em;
+	border: 0;
+}
+
+.account_icon:hover {
+	background: var(--ss-blue1);
+}
+.account_eggs {
+	display: flex;
+	height: 2.3em;
+	text-align: right;
+	padding: 0.05em var(--ss-space-lg) 0 var(--ss-space-md);
+	text-shadow: none;
+	position: relative;
+}
+
+.egg_icon {
+	height: 1.6em;
+	margin: var(--ss-space-micro) var(--ss-space-sm) 0 0;
+}
+
+.egg_count {
+	width: auto;
+	font-size: 1.7em;
+	font-weight: bold;
+	color: var(--ss-white);
+}
+
+.egg_count {
+    display: inline-block;
+    // transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.egg_count_formatted {
+    opacity: 1;
+}
+
+.egg_count_total {
+    position: absolute;
+    // transition: transform .25s ease-in-out;
+    opacity: 0;
+	white-space: nowrap;
+	visibility: hidden;
+    // transform: scale(0);
+}
+
+.egg_count_container.has_egg_count_total:hover .egg_count_formatted {
+	position: absolute;
+    opacity: 0;
+}
+
+.egg_count_container.has_egg_count_total:hover .egg_count_total {
+    opacity: 1;
+	position: relative;
+	visibility: visible;
+    // transform: scale(1);
+}
+
+#loginButton {
+	margin-left: var(--ss-space-sm);
+	width: 7em;
+}
+
+#account_loggedin {
+	background: var(--ss-blue2);
+	color: var(--ss-white) !important;
+	text-align: center;
+	margin-top: -0.1em;
+	padding: 0.1em 1em;
+	font-weight: bold;
+}
+
+#player_photo {
+	margin-left: var(--ss-space-sm);
+}
+
+#player_photo img {
+	width: auto;
+	height: auto;
+	max-width: 3em;
+	max-height: 3em;
+}
+
+.account-panel-twitch {
+    bottom: 0em;
+    right: -.3em;
+	width: 1.2em;
+    height: 1.2em;
+    text-align: center;
+	color: var(--ss-white);
+	background-color: var(--ss-twitch);
+}
+
+.account-panel-twitch:hover {
+	opacity: .8;
+	cursor: pointer;
+}
+
+.account-panel-twitch i {
+	font-size: .8em;
+}
+/* events */
+
+.double-eggs img {
+	height: calc(var(--ss-account-panel-height) - 1em);
+}
+
+#account_panel {
+	.svg-icon {
+		fill: var(--ss-blue1);
+		width: 1.5em;
+		height: 1.5em;
+	}
+}

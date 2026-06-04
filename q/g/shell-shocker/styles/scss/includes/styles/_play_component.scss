@@ -1,0 +1,146 @@
+/* ----------------------------------------------------------------- Play Panel -- */
+#stats_panel {
+	width: 24.5em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.stats-container {
+	max-height: 55vh;
+	padding-bottom: 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.stat-wrapper {
+	max-width: 98%;
+}
+
+.stat-wrapper p {
+    margin: 0;
+	font-size: .9em;
+}
+
+.stat-wrapper .stat:nth-child(even) > div {
+	background-color: #77cbe6;
+}
+
+.stat-wrapper .stat:nth-child(odd) > div {
+	background-color: var(--ss-blue3);
+}
+
+#stat_item {
+	flex: 0 0 48%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	background-color: var(--ss-blue0);
+	margin: 0 0 var(--ss-space-sm) 0;
+	color: var(--ss-white);
+	font-weight: bold;
+    flex: 0 0 10em;
+}
+
+#stat_item h4 {
+	font-size: 0.8em;
+	font-weight: bold;
+	margin: 0.4em var(--ss-space-md);
+	padding: 0;
+	color: var(--ss-blue2);
+	font-family: 'Nunito', sans-serif;
+}
+
+.stat_stat {
+	color: var(--ss-blue5);
+	margin-right: var(--ss-space-md);
+	font-size: 1.2em;
+}
+
+.stats-grid {
+	grid-template-columns: 35% 1fr 1fr;
+}
+
+.stats-grid-other {
+	grid-template-columns: 10em 1fr 1fr;
+}
+
+.stat-grid-main-header {
+	border-bottom: .2em solid var(--ss-blue3);
+}
+
+.stat-grid-main-header h3 {
+	margin: 0;
+	padding: 0;
+}
+
+#play_game {
+	width: 100%;
+    margin-top: var(--ss-account-panel-height);
+	height: calc(100vh - var(--ss-account-panel-height));
+	/* z-index: 2; */
+}
+
+#play_game h3 {
+	margin: var(--ss-space-sm) 0 0 0;
+}
+
+#play_game .front_panel {
+	margin: 0 auto;
+}
+
+.play-panel-region-select {
+	width: 6em;
+	top: 0;
+}
+
+#panel_front_play {
+	height: 35.5em;
+	/* margin-top: -7.3em; */
+}
+#panel_front_egg {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	background-size: contain;
+	width: 28.8em;
+	min-width: 25.8em;
+	padding-bottom: 1.5em;
+    height: 80vh;
+}
+
+#panel_front_play #event-notifications img {
+	width: 10em;
+}
+
+.play-panel-btn-group {
+	margin-bottom: calc(var(--ss-space-lg)*3);
+	bottom: -1em;
+
+	button {
+		width: 6em;
+		white-space: normal;
+	}
+	
+	button span {
+		font-size: .5em;
+	}
+	
+	button.play-button span {
+		font-size: .7em;
+	}
+}
+
+@media screen and (max-width: 1128px) {
+	.playing-crazy-games {
+		.play-panel-btn-group {
+				left: 18em;
+		}
+
+		.is-vip {
+			.play-panel-btn-group {
+				left: 50%;
+			}
+		}
+	}
+}

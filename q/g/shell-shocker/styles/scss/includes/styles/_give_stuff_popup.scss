@@ -1,0 +1,212 @@
+/** ---------------------------------------------- VIP Club */
+
+.vip-club-cta,
+#subStorePopup,
+#giveStuffPopup.vip,
+#vipEnded.vip,
+#giveStuffPopup.vip .grid-item {
+	border-color: var(--ss-yolk);
+}
+
+.give-stuff-icon img {
+	width: 10em;
+	position: absolute;
+	top: -5.5em;
+	left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.popup-title-vip {
+	color: var(--ss-white);
+	text-shadow: 0 0 10px var(--ss-black);
+}
+
+.popup-title-twitch {
+	color: purple;
+}
+
+#giveStuffPopup.twitchDrops .items-container,
+.popup-items-vip {
+	margin-bottom: .5em;
+    overflow-x: auto;
+    overflow-y: hidden;
+	max-width: 33em;
+}
+
+#giveStuffPopup.vip .grid-item .equip-item-banner {
+	display: none;
+}
+
+#giveStuffPopup.vip .grid-item {
+	background: var(--ss-blue1);
+    height: 10em;
+	min-width: 10em;
+	width: 10em;
+	padding: 1em;
+	margin: 0 .5em 1em;
+    border:  var(--ss-space-sm) var(--ss-yolk) solid;
+}
+
+#subStorePopup,
+#giveStuffPopup.vip,
+#vipEnded.vip {
+	background-size: cover;
+	background-position: 50% 0;
+}
+
+#giveStuffPopup.vip,
+#vipEnded.vip {
+	background: var(--ss-vip-store-bg);
+}
+
+.giveStuffPopup-content.twitchDrops,
+#giveStuffPopup.twitchDrops footer {
+	padding: var(--ss-space-xxl);
+}
+
+.giveStuffPopup-content .items-container:not(.popup-items-vip) .centered {
+	top: -3em;
+    left: auto;
+    transform: none;
+	position: relative;
+}
+
+.twitchDrops .giveStuffPopup-content .items-container:not(.popup-items-vip) .centered {
+	width: 6em !important;
+    height: auto !important;
+    top: 39%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.twitchDrops .giveStuffPopup-content .item-name {
+	bottom: 0.5em !important;
+    color: white !important;
+    font-size: .8em !important;
+}
+
+.twitchDrops .egg-give-stuff > img {
+    width: 7.5em;
+}
+
+.twitchDrops .egg-give-stuff h2 {
+	margin: -1.3em 0 0 0;
+}
+
+.twitch-btn-wrap {
+	z-index: 5;
+    top: 12.7em;
+    left: var(--ss-aside-panel-width);
+}
+
+.twitch-btn {
+    font-size: 1em;
+    width: 14.5em;
+}
+
+.twitch-btn-status {
+	margin-left: .5em;
+}
+
+.twitch-btn img {
+    left: -1em;
+    width: 4em;
+    top: -2em;
+    transform: rotate(346deg);
+}
+
+.giveStuffPopup-content #popup_title {
+	margin: 1em 0 4em;
+}
+
+#giveStuffPopup.twitchDrops #popup_title {
+	margin: 0;
+}
+
+.giveStuffPopup-content .item-tag-vipitem .equip-vip-icon {
+    position: absolute;
+    top: 0;
+    left: 0.3em;
+    height: 3em;
+    width: 3em;
+}
+
+.giveStuffPopup-content .common-box-shadow {
+	box-shadow: none;
+}
+
+#giveStuffPopup.twitchDrops {
+	padding: 0;
+	background: var(--twitch-lt-purple);
+	border-color: var(--twitch-yellow);
+}
+
+#giveStuffPopup.twitchDrops {
+	background-image: url('../img/twitch-drops/twitch-reward-popup-bg.png');
+	background-size: cover;
+}
+
+#giveStuffPopup.twitchDrops .items-container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#giveStuffPopup:not(.twitchDrops) .items-container .grid-item {
+	margin: 0 auto;
+}
+
+#giveStuffPopup.twitchDrops .grid-item {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#giveStuffPopup.twitchDrops .egg-give-stuff,
+#giveStuffPopup.twitchDrops .grid-item {
+    width: 9em;
+    height: 9em;
+    max-width: 9em;
+    max-height: 9em;
+    min-width: 9em;
+    min-height: 9em;
+	border: 0.5em solid;
+	margin-bottom: 1em;
+	border-radius: var(--ss-space-lg);
+	background-color: var(--twitch-dk-pink);
+}
+
+#giveStuffPopup.twitchDrops footer {
+	padding-bottom: 1em;
+	background-color: var(--twitch-yellow);
+}
+
+#giveStuffPopup.twitchDrops #popup_title,
+#giveStuffPopup.twitchDrops footer {
+	padding-top: 1em;
+}
+
+#giveStuffPopup.twitchDrops #popup_title
+
+#giveStuffPopup.twitchDrops footer p {
+	color: var(--twitch-dk-purple);
+}
+
+#giveStuffPopup.twitchDrops .twitch-btn {
+	font-size: 1em;
+}
+
+#giveStuffPopup .item-name {
+	position: absolute;
+    bottom: 0.75em;
+    transform: translate(-50%, 0);
+    left: 50%;
+    font-size: 1em;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+	line-height: 1;
+	color: var(--ss-blue5);
+}
+
+#giveStuffPopup .equip-item-banner {
+	display: none;
+}

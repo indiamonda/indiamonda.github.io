@@ -1,0 +1,37 @@
+/* Firebase signin */
+.firebaseui-card-header {
+	display: none !important;
+}
+.firebaseui-container .mdl-shadow--2dp, .firebaseui-container .mdl-card, .firebaseui-container{
+	box-shadow: none !important;
+	background: none !important;
+}
+
+#firebaseui-auth-container {
+	width: 24em;
+}
+#firebaseSignInPopup #btn_horizontal{
+	display: none !important;
+}
+.firebaseui-form-actions {
+	display: flex !important;
+	justify-content: center;
+}
+
+.mdl-card {
+	min-height: auto !important;
+}
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .mdl-textfield__label {
+	color: var(--ss-white) !important;
+	top: 0 !important;
+	font-size: 16px !important;
+}
+
+.firebaseui-card-actions {
+	padding: 0;
+}
+
+.firebaseui-input-floating-button {
+    top: 27px !important;
+    width: 36px !important;
+}

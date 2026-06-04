@@ -1,0 +1,200 @@
+@import
+'includes/game/game-canvas',
+'includes/game/hud',
+'includes/game/messages',
+'includes/game/challenges',
+'includes/game/player-list',
+'includes/game/chat',
+'includes/game/server-map',
+'includes/game/scope',
+'includes/game/cts',
+'includes/game/kotc',
+'includes/game/teams',
+'includes/game/pause-screen',
+'includes/game/display-ad';
+
+#options_panel {
+    position: absolute;
+    padding: var(--ss-space-md);
+    padding-left: var(--ss-main-sidebar-width);
+    z-index: 4;
+    top: 0;
+    left: 0;
+    height: var(---ss-account-panel-height);
+}
+
+.is-paused #captureContainer, .is-paused #best_streak_container {
+    transform: translateX(-50%) scale(var(--paused-ui-scale));
+}
+
+.is-paused .player-list-wrapper {
+	transform: scale(var(--paused-ui-scale));
+    top: 0;
+    position: absolute;
+	left: calc(var(--ss-menu-width) + 1em);
+}
+
+.is-paused.is-vip .player-list-wrapper {
+	transform: scale(var(--paused-ui-vip-scale));
+    top: 0;
+    position: absolute;
+}
+
+.is-paused .pause-ui-element {
+	background-color: #5B9DB3;
+    border: var(--ss-common-border-width) solid var(--ss-blue5);
+    bottom: 0;
+    width: var(--ss-chat-wrapper-width);
+	height: var(--ss--chat-height);
+	left: 0;
+}
+
+.is-paused #announcement_message.has-announcement {
+	height: 16.5em;
+}
+
+
+/* CrazyGames */
+@media (max-height: 660px) and (max-width: 1128px) {
+	.is-paused:not(.is-vip) .pause-popup--container {
+		top: 3em;
+	}
+}
+
+#killTicker {
+	position: absolute;
+	text-align: right;
+	right: 1em;
+	top: 10em;
+	height: 7em;
+	transform-origin: top right;
+	text-shadow: var(--ss-space-micro) var(--ss-space-micro) var(--ss-shadow);
+}
+
+#spectate {
+	display: none;
+	position: absolute;
+	right: 1em;
+	bottom: 1em;
+	text-align: center;
+	padding: 0.5em 1em 0.5em 1em;
+	border-radius: 0.3em;
+	font-weight: bold;
+	color: var(--ss-white);
+	background: rgba(0, 0, 0, 0.3);
+}
+
+#spectate h1 {
+	font-size: 2em;
+	color: var(--ss-white);
+}
+
+#serverAndMapInfo h5, #readouts h5 {
+	color: var(--ss-blue1);
+}
+
+.is-paused #serverAndMapInfo  {
+	position: relative;
+}
+
+#inGameUI {
+	position: absolute;
+	top: 4em;
+	right: .5em;
+    top: 5em;
+    padding: 1em;
+	background-color: rgba(12,87,111, 50%);
+    border: var(--ss-common-border-width) solid var(--ss-blue5);
+	pointer-events: none;
+}
+
+#game_screen:not(.is-paused) #inGameUI {
+	top: 2.5em;
+}
+
+/* .is-paused:not(.is-vip) #inGameUI {
+	right: 1.5em;
+    top: 5em;
+    padding: 1em;
+} */
+
+.is-vip #inGameUI.pause-ui-element {
+	position: absolute;
+	right: 2em;
+	top: 4em;
+	background: none;
+	border: 0;
+}
+
+#inGameUI .title {
+    font-size: .8em;
+	color: #f7ef1d;
+}
+
+#inGameUI .name {
+    font-size: .6em;
+	line-height: 1;
+    margin: 0 0 0.5em;
+	padding: 0;
+	/* text-shadow: 0.1em 0.1em 0.2em var(--ss-blue5);
+	font-weight: 700; */
+}
+/* 
+.is-paused #inGameUI {
+    right: 3em;
+    top: 7em;
+} */
+
+#game_account_panel {
+	z-index: 6;
+	width: auto;
+	position: absolute;
+	top: var(--ss-space-sm);
+	right: var(--ss-space-sm);
+}
+
+#chickenBadge {
+	position: absolute;
+    bottom: 3em;
+	right: 3em;
+}
+
+#chickenBadge img {
+	width: 8em;
+}
+
+
+#inGameScaler, #inGameScaler .pause-btn-group {
+	margin-right: 1em;
+}
+#inGameScaler {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: baseline;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/** start refactoring css */
+.w-shrinkauto {
+	flex: 1 0 auto;
+}
+
+.cta-welcome-bundle {
+	img {
+		max-width: 100%;
+
+		&:hover {
+			cursor: pointer;
+			opacity: 0.8;
+		}
+	}
+
+	left: 1em;
+    bottom: 14.9em;
+	width: 13.8em;
+}
