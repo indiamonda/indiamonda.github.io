@@ -101,6 +101,20 @@ When adding `<script src="/js/gg-detect.js"></script>` to HTML files via sed rep
 
 **Special case for index.html**: The main page head (line 2960) should have a NORMAL script tag, NOT escaped. Only the script tags inside JavaScript string literals (lines 4932, 5646) should be escaped as `<\/script>`. The `replace_all: true` approach accidentally normalized all three — had to fix line 2960 back to normal `</script>` after the fact.
 
+## Round and Wound - Latest Fixes
+- Errors at lines 1383/1384 (340 errors from text.txt)
+- **Root cause**: Game JS code (lines 1383-1384) contained `<script src="/js/gg-detect.js"></script>` inside JS string literals
+- HTML parser saw these as real closing script tags, breaking out of the game code script
+- **Fix applied**: Escaped 2 `</script>` → `<\/script>` inside the JS strings (positions 471741, 1092745)
+- **Also fixed**: Empty CSS ruleset `#loading { }` at pos 60323 (line 1249 originally)
+- Verified: 89 script blocks now parse correctly via `new Function()`
+- Real `<script src="/js/gg-detect.js"></script>` in `<head>` (pos 62109) was NOT escaped — only the 2 inside JS strings
+
+### Game Code Structure (1.86MB of JS)
+- Loader code: ~50KB (jqrg-loader)
+- Game code on lines 1383-1384 (1MB+ total, single-line)
+- Many `<script data="...">decodeChunk(65536)</script>` blocks (TurboWarp packager output)
+
 ## Files
 - `/Users/Benran/Downloads/Round and Wound.html` — FIXED game (needs animations added)
 - `q/g/round-and-wound/index.html` — committed version (has animations, game is broken)
