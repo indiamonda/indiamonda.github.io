@@ -1020,7 +1020,17 @@
       'student.medwayschools.org',
       'arcatasd.org',
       'indyde.org',
-      'jcpsnj.org'
+      'jcpsnj.org',
+      'forsythk12.org',
+      'seattleschools.org',
+      'students.lindenps.org',
+      'student.acsssd.net',
+      'thegodsofpika.com',
+      'glencoveschools.org',
+      'theslender.org',
+      'educ.dpcdsb.org',
+      'students.cnusd.k12.ca.us',
+      'student.minaret.vic.edu.au'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
