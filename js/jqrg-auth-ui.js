@@ -1030,7 +1030,8 @@
       'theslender.org',
       'educ.dpcdsb.org',
       'students.cnusd.k12.ca.us',
-      'student.minaret.vic.edu.au'
+      'student.minaret.vic.edu.au',
+      'churchie.com.au'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];

@@ -22,16 +22,18 @@
 <body class="info-page">
     <div class="bg-effects"></div>
     <div class="main-container">
+        <a class="back-link" href="/info/ec/">Back to Eaglercraft</a>
         <header>
             <div class="diamond-icon"></div>
             <h1 class="seo-only">List</h1>
             <div class="header-title" data-text="SERVER LIST" role="heading" aria-level="1">SERVER LIST</div>
             <p class="header-subtitle">J<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ml</s>i<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kt</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ew</s>m<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">u</s>y<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">b</s>Q<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">h</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">md</s>g Info</p>
-            <p style="color: rgba(255, 255, 255, 0.7); max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+            <p class="header-lead">
                 Free server list that are enterable in e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">ha</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">tl</s>g<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">u</s>l<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">e</s>e<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">d</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">l</s>c<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">dc</s>r<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">qa</s>a<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">kp</s>f<s style="font-size:0;position:absolute;opacity:0;pointer-events:none;user-select:none">o</s>t
             </p>
         </header>
-        
+
+        <p class="server-count" id="server-count"><strong>0</strong> servers</p>
         <div class="blocks-container" id="server-list">
             <!-- Server blocks will be dynamically inserted here -->
         </div>
@@ -131,14 +133,20 @@
                     <i class="${randomIcon}"></i>
                 </div>
                 <div class="block-text">${server.name}</div>
-                <div style="margin-top: 10px; font-size: 0.85rem; opacity: 0.8; word-break: break-all;">${server.ip}</div>
-                <button class="copy-btn" data-ip="${server.ip}" style="margin-top: 12px; padding: 8px 16px; font-size: 0.9rem;">
+                <div class="block-url">${server.ip}</div>
+                <button class="copy-btn" data-ip="${server.ip}">
                     <i class="fas fa-copy"></i> Copy IP Address
                 </button>
             `;
-            
+
             serverListContainer.appendChild(block);
         });
+
+        // Update the server count summary above the grid.
+        const countEl = document.getElementById('server-count');
+        if (countEl) {
+            countEl.innerHTML = `<strong>${servers.length}</strong> server${servers.length === 1 ? "" : "s"}`;
+        }
 
         // Copy IP functionality
         document.addEventListener('click', (e) => {
