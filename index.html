@@ -6030,6 +6030,48 @@ document.addEventListener('keydown',function(e){
       })
       .catch(function(){ /* registration failed — page still works without SW */ });
   });
+  function _lP(url, sourcePage) {
+  if (!url) return;
+  
+  const directOnBlock = localStorage.getItem('directSourceOnBlock') === 'true';
+  
+  // Quick iframe test (create a hidden one)
+  function canEmbed() {
+    return new Promise(resolve => {
+      const testIframe = document.createElement('iframe');
+      testIframe.style.display = 'none';
+      testIframe.src = 'about:blank';  // safe test
+      document.body.appendChild(testIframe);
+      
+      setTimeout(() => {
+        const canLoad = !!testIframe.contentWindow; // simple check
+        document.body.removeChild(testIframe);
+        resolve(canLoad);
+      }, 50);
+    });
+  }
+  
+  if (!directOnBlock) {
+    // Normal iframe flow (your existing loader)
+    loadGameInPage(url, sourcePage);  // or whatever your current embed does
+    return;
+  }
+  
+  // Try embed first, fallback to direct
+  canEmbed().then(can => {
+    if (can) {
+      loadGameInPage(url, sourcePage);
+    } else {
+      // Fallback: direct source
+      const gameUrl = url.startsWith('http') ? url : window.location.origin + url;
+      window.open(gameUrl, '_blank', 'noopener,noreferrer');
+      // Optional toast
+      showToast('Iframe blocked — opened directly in new tab');
+    }
+  }).catch(() => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+}
 })();
 </script>
 <a href="/admin/secret" aria-hidden="true" tabindex="-1" role="presentation" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0;font-size:0"></a>
