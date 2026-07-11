@@ -5,78 +5,160 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 | Page Not Found</title>
 
-  <!-- Scripts -->
   <script src="/js/mainPageCloak.js"></script>
   <script src="/js/openGame.js"></script>
   <script src="/js/panicKey.js"></script>
   <script src="/js/style.js"></script>
   <script src="/js/cursor.js"></script>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/css/main.css" />
   <link rel="icon" type="image/ico" href="https://indiamonda.github.io/info.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    :root {
+      --bg-deep: #050202;
+      --bg-dark: #0c0505;
+      --panel-dark: #120707;
+      --accent-red: #ff2a2a;
+      --accent-glow: #ff5555;
+      --accent-crimson: #990000;
+      --text-main: #ffffff;
+      --text-muted: #a39494;
+      --border-glow: rgba(255, 42, 42, 0.25);
+      --border-dim: rgba(255, 42, 42, 0.1);
+      --font-mono: 'Courier New', Courier, monospace;
+    }
+
     body.error-page {
       margin: 0;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0d1117;
-      color: #e6edf3;
+      background-color: var(--bg-deep);
+      color: var(--text-main);
       font-family: 'Josefin Sans', sans-serif;
       overflow: hidden;
+      position: relative;
     }
 
+    /* Moving background digital grid effect */
+    body.error-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(var(--border-dim) 1px, transparent 1px),
+                  linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
+      animation: matrixGridScroll 30s linear infinite;
+    }
+
+    /* Ambient crimson glowing orbs */
     .bg-effects {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03), transparent 40%);
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at 15% 20%, rgba(255, 42, 42, 0.08), transparent 45%),
+                  radial-gradient(circle at 85% 80%, rgba(153, 0, 0, 0.06), transparent 45%);
       z-index: 0;
+      pointer-events: none;
+      animation: ambientPulse 8s ease-in-out infinite alternate;
     }
 
     .container {
-      width: 435px;
+      width: 480px;
       text-align: center;
-      padding: 50px 40px;
-      background: rgba(13, 17, 23, 0.85);
-      border: 1px solid #30363d;
+      padding: 60px 45px;
+      background: rgba(18, 7, 7, 0.85);
+      border: 1px solid var(--border-glow);
       border-radius: 16px;
-      box-shadow: 0 0 50px rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 42, 42, 0.05);
+      backdrop-filter: blur(12px);
       z-index: 1;
-      animation: fadeIn 0.6s ease;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: slideUpReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Top running structural accent line */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
     }
 
     .visual-heading-1 {
-      display:block;
-      font-size: 90px;
+      display: block;
+      font-size: 110px;
       margin: 0;
-      letter-spacing: -3px;
-      background: linear-gradient(90deg, #58a6ff, #8b5cf6);
+      letter-spacing: -4px;
+      background: linear-gradient(180deg, #ffffff 30%, var(--accent-red));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight:700;line-height:1;
+      font-weight: 800;
+      line-height: 0.95;
+      position: relative;
+      animation: subtleGlitch 4s linear infinite;
     }
 
     .visual-heading-2 {
-      display:block;
-      margin: 10px 0 25px;
-      font-weight: 400;
-      color: #8b949e;
-      font-size:20px;line-height:1.3;
+      display: block;
+      margin: 15px 0 35px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 22px;
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
+
+    /* Interactive Terminal Segment for Professional Finish */
+    .terminal-subpanel {
+      background: rgba(5, 2, 2, 0.6);
+      border: 1px solid rgba(255, 42, 42, 0.1);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-glow);
+      text-align: left;
+      margin-bottom: 35px;
+    }
+
+    .terminal-row {
+      display: flex;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .terminal-prompt {
+      color: var(--accent-crimson);
+    }
+
+    .terminal-msg {
+      color: var(--text-main);
+    }
+
     /* Visually hidden semantic <h1> used for SEO + AI metadata. */
-    .seo-only{
-      position:absolute!important;left:-9999px!important;top:auto!important;
-      width:1px!important;height:1px!important;overflow:hidden!important;
-      clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;
-      font-size:0!important;line-height:0!important;color:transparent!important;
-      opacity:0!important;pointer-events:none!important;user-select:none!important;
+    .seo-only {
+      position: absolute!important; left: -9999px!important; top: auto!important;
+      width: 1px!important; height: 1px!important; overflow: hidden!important;
+      clip: rect(0,0,0,0)!important; clip-path: inset(50%)!important;
+      font-size: 0!important; line-height: 0!important; color: transparent!important;
+      opacity: 0!important; pointer-events: none!important; user-select: none!important;
     }
 
     .buttons {
@@ -87,91 +169,332 @@
     }
 
     .btn {
-      padding: 12px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
       font-size: 14px;
-      border-radius: 10px;
+      font-weight: 600;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
-      transition: 0.25s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
     }
 
     .btn-primary {
-      background: #9c41f6;
+      background: var(--accent-crimson);
       color: white;
+      border: 1px solid var(--accent-red);
+      box-shadow: 0 0 15px rgba(255, 42, 42, 0.2);
     }
 
     .btn-primary:hover {
-      background: #c68cff;
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(46,160,67,0.5);
+      background: var(--accent-red);
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(255, 42, 42, 0.5);
     }
 
     .btn-secondary {
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
+      background: rgba(255, 255, 255, 0.02);
+      color: #e6edf3;
+      border: 1px solid rgba(255, 42, 42, 0.15);
     }
 
     .btn-secondary:hover {
-      background: #30363d;
-      transform: scale(1.05);
+      background: rgba(255, 42, 42, 0.08);
+      border-color: var(--accent-red);
+      transform: translateY(-2px);
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* Fullscreen Overlay Terminal Box */
+    .terminal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 2, 2, 0.96);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
     }
 
-    @media (max-width: 500px) {
+    .terminal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .terminal-box {
+      width: 600px;
+      max-width: 90%;
+      background: #040202;
+      border: 1px solid var(--accent-red);
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(255, 42, 42, 0.25);
+      font-family: var(--font-mono);
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .terminal-overlay.active .terminal-box {
+      transform: scale(1);
+    }
+
+    .terminal-header {
+      background: #120707;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 42, 42, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .td-r { background: #ef4444; }
+    .td-y { background: #eab308; }
+    .td-g { background: #22c55e; }
+
+    .terminal-title {
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-left: 10px;
+      letter-spacing: 1px;
+    }
+
+    .terminal-screen {
+      padding: 24px;
+      height: 320px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .haxer-line {
+      color: var(--accent-glow);
+    }
+
+    .system-line {
+      color: var(--text-muted);
+    }
+
+    .input-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      margin-top: auto;
+    }
+
+    .terminal-input {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      flex: 1;
+    }
+
+    /* High-Performance Fluid Layout Animations */
+    @keyframes matrixGridScroll {
+      from { background-position: 0 0; }
+      to { background-position: 50px 50px; }
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    @keyframes slideUpReveal {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes subtleGlitch {
+      0%, 95%, 100% { transform: skew(0deg); filter: blur(0); }
+      96% { transform: skew(-2deg); filter: drop-shadow(2px 0 var(--accent-red)); }
+      97% { transform: skew(3deg); }
+      98% { transform: skew(-1deg); filter: blur(0.5px); }
+      99% { transform: skew(1deg); }
+    }
+
+    @media (max-width: 520px) {
       .container {
-        padding: 30px 20px;
+        padding: 40px 24px;
+        margin: 15px;
       }
 
       .visual-heading-1 {
-        font-size: 60px;
+        font-size: 80px;
       }
 
       .visual-heading-2 {
-        font-size: 16px;
+        font-size: 18px;
+        margin-bottom: 25px;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
 
-<!-- JQRG_CLOUD_INJECT_BEGIN --><script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><!-- JQRG_CLOUD_INJECT_END -->
-<script src="/js/gg-detect.js"></script>
+  <script src="/js/jqrg-cloud.js" defer></script><script src="/js/jqrg-auth-ui.js" defer></script><script src="/js/gg-detect.js"></script>
 </head>
 
 <body class="error-page">
   <div class="bg-effects"></div>
 
-  <div class="container">
+  <div class="container" id="mainContainer">
     <h1 class="seo-only">Not Found</h1>
     <div class="visual-heading-1" role="heading" aria-level="1">404</div>
-    <div class="visual-heading-2" role="heading" aria-level="2">Page Not Found</div>
+    <div class="visual-heading-2" role="heading" aria-level="2">Routing Failure</div>
+
+    <div class="terminal-subpanel">
+      <div class="terminal-row">
+        <span class="terminal-prompt">></span>
+        <span class="terminal-msg">STATUS: ROUTE_NOT_FOUND</span>
+      </div>
+      <div class="terminal-row">
+        <span class="terminal-prompt">></span>
+        <span class="terminal-msg">ERR_CODE: 0x8894A2DF_LOST</span>
+      </div>
+    </div>
 
     <div class="buttons">
       <button class="btn btn-primary" id="backHomeBtn">
-        ⬅ Back to Home
+        <i class="fa-solid fa-house-nodes"></i> Return to Core
       </button>
 
-      <button class="btn btn-secondary" onclick="location.href='https://indiamonda.github.io/suggest-games/'">
-        Suggest a New Game!
+      <button class="btn btn-secondary" id="suggestGameBtn">
+        <i class="fa-solid fa-gamepad"></i> Suggest a New Game!
       </button>
     </div>
   </div>
 
+  <div class="terminal-overlay" id="terminalOverlay">
+    <div class="terminal-box">
+      <div class="terminal-header">
+        <div class="terminal-dot td-r"></div>
+        <div class="terminal-dot td-y"></div>
+        <div class="terminal-dot td-g"></div>
+        <div class="terminal-title">haxer@secure_tunnel:~</div>
+      </div>
+      <div class="terminal-screen" id="terminalScreen">
+        <div class="system-line">[SYSTEM]: Secure messaging pipeline connected successfully.</div>
+      </div>
+      <div class="input-line" id="inputLine" style="display: none; padding: 0 24px 24px 24px;">
+        <span>haxer@tunnel:~$</span>
+        <input type="text" class="terminal-input" id="terminalTextInput" autocomplete="off" autofocus>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Handle core navigation back home mapping
     document.getElementById('backHomeBtn').onclick = () => {
       window.location.href = 'https://indiamonda.github.io/';
     };
-    try { if (window.self !== window.top) document.querySelector('.buttons').style.display = 'none'; } catch (_) {}
+
+    // Safe dynamic placement inside external iframe controls
+    try { 
+      if (window.self !== window.top) {
+        document.querySelector('.buttons').style.display = 'none'; 
+      }
+    } catch (_) {}
+
+    // Interactive Terminal Communications Logic Matrix
+    const suggestBtn = document.getElementById('suggestGameBtn');
+    const container = document.getElementById('mainContainer');
+    const overlay = document.getElementById('terminalOverlay');
+    const screen = document.getElementById('terminalScreen');
+    const inputLine = document.getElementById('inputLine');
+    const textInput = document.getElementById('terminalTextInput');
+
+    suggestBtn.onclick = () => {
+      // Fade out main wrapper view panel smoothly
+      container.style.opacity = '0';
+      container.style.transform = 'translateY(-20px)';
+      
+      setTimeout(() => {
+        container.style.display = 'none';
+        overlay.classList.add('active');
+        executeTerminalSequence();
+      }, 500);
+    };
+
+    function appendTerminalText(text, className = '') {
+      const line = document.createElement('div');
+      line.className = className;
+      line.innerText = text;
+      screen.appendChild(line);
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    function executeTerminalSequence() {
+      // Simulate remote user message stream patterns
+      setTimeout(() => {
+        appendTerminalText("haxer: Hey there... looks like you slipped offline.", "haxer-line");
+      }, 1000);
+
+      setTimeout(() => {
+        appendTerminalText("haxer: You wanted to suggest a game? I can open a path for that.", "haxer-line");
+      }, 2500);
+
+      setTimeout(() => {
+        appendTerminalText("haxer: But first, I need verification. Ready to proceed? (yes / no)", "haxer-line");
+        inputLine.style.display = 'flex';
+        textInput.focus();
+      }, 4000);
+    }
+
+    // Monitor input command routing configurations
+    textInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const value = textInput.value.trim().toLowerCase();
+        if (!value) return;
+
+        appendTerminalText(`haxer@tunnel:~$ ${textInput.value}`, "system-line");
+        textInput.value = '';
+        inputLine.style.display = 'none';
+
+        if (value === 'yes') {
+          setTimeout(() => {
+            appendTerminalText("[SYSTEM]: Access granted. Redirecting to repository endpoint...", "system-line");
+          }, 500);
+          setTimeout(() => {
+            window.location.href = 'https://guthib.com/';
+          }, 1500);
+        } else if (value === 'no') {
+          setTimeout(() => {
+            appendTerminalText("[SYSTEM]: Request denied. Dropping connection to matrix routing...", "system-line");
+          }, 500);
+          setTimeout(() => {
+            window.location.href = 'https://r33b.net/';
+          }, 1500);
+        } else {
+          setTimeout(() => {
+            appendTerminalText("haxer: Invalid confirmation argument. State choice explicitly: (yes / no)", "haxer-line");
+            inputLine.style.display = 'flex';
+            textInput.focus();
+          }, 500);
+        }
+      }
+    });
   </script>
 </body>
 </html>
