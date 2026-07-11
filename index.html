@@ -4697,6 +4697,10 @@ function openSettings(){
       '<span class="setting-label">Toolbar Position</span>'+
       buildCycle('cyc-toolbar',[{value:'left',label:'Left'},{value:'top',label:'Top'},{value:'right',label:'Right'},{value:'bottom',label:'Bottom'}],localStorage.getItem('gameToolbarPosition')||'left',"localStorage.setItem('gameToolbarPosition',value);applyToolbarPos()")+
     '</div>'+
+    '<div class="setting-row">'+
+  '<span class="setting-label">Direct Source if Iframe Blocked</span>'+
+  '<div class="toggle-switch'+(localStorage.getItem('directSourceOnBlock')==='true'?' active':'')+'" onclick="this.classList.toggle(\'active\');localStorage.setItem(\'directSourceOnBlock\',this.classList.contains(\'active\'))"></div>'+
+'</div>'+
     '<hr class="setting-divider">'+
 
     '<div class="setting-section-title" id="ss-cloak">'+_t(_('VGFiIENsb2Fr'))+'</div>'+
