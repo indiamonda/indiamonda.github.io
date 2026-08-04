@@ -3482,23 +3482,20 @@ body.ui-hidden .top-bar > .tb-actions > *:not(.hide-ui-btn) *::after{
     </div>
     <div class="modal-body" id="announcement-body">
       <p id="ann-welcome"></p>
-      <p style="font-weight:500">A note from the site owner</p>
-      <p>I had been asked for a question, how much money do I earn from this website?</p>
-      <p>Money earning needs a route, Google won't give me money just because I created a site. To get money, many game website chose these two paths:</p>
-      <ol style="margin:8px 0 12px 20px;opacity:.85;line-height:1.7">
-        <li>Display Ads</li>
-        <li>Display Ads and need payment to remove them.</li>
-        <li>Require the users to pay the money.</li>
-      </ol>
-      <p>I was one of the users, I was annoyed by these. In some websites that was used to be featured, you have to watch a 30-second long video before playing a game, and it opens a new tab of ads when you click on the search bar. Some unblockers have ads that pretends to be a virus and forcing you to pay for the computer protection.</p>
-      <p>On this site, I don't have any of the ads, and I removed the payment requirement for the Absolute Unlinewize, which is the most powerful unblocked unblocked currently existing, I even blocked the ad IP for games such as Tag and Tomb of the Mask.</p>
-      <p>At the same time, the server, the chat app, the unblockers, the AIs all cost money.</p>
-      <p><strong>I earn zero money, I lose money every single day.</strong></p>
-      <p>I am already overdue of money because I don't have any more money in my card. The website might go down if I don't get money soon.</p>
-      <p>If you see yourself as an ally of unblocking, and you wish the website to continue to live on, please donate some funds. I really appreciate it.</p>
-      <div style="display:flex;justify-content:center;margin-top:18px">
-        <button class="setting-btn" style="background:var(--accent-purple);color:#fff;padding:10px 22px;font-size:15px;font-weight:500" onclick="if(window.JqrgAiChat&amp;&amp;window.JqrgAiChat.showPremiumModal){window.JqrgAiChat.showPremiumModal()}else{alert('Premium required')}">Donate</button>
-      </div>
+      <p>More information and updates can be found
+        <a href="https://docs.google.com/document/d/1Xv3x76SwL2CkZPIJq0uMNBt_YQNRfWrR5H5mXILuxfw/edit?tab=t.w5htvyo8czbl" target="_blank" style="color:var(--accent-purple);text-decoration:underline">here</a>.</p>
+      <hr style="border:1px solid var(--border-light);margin:16px 0">
+      <p style="font-weight:500">Latest updates:</p>
+      <ul style="margin:8px 0 12px 20px;opacity:.85;line-height:1.7">
+        <li>Fixed Eaglercraft 1.5.2, 1.8.8, 1.8.8 WASM, 1.12.2, 1.12.2 WASM, added h*cks to 1.12.2 WASM by <a href="https://www.codeberg.org/googledocs/">codeberg.org/googledocs</a></li>  
+        <li>Update google cloaks</li>
+        <li>Added Osu</li>
+        <li>Absolute Unlinewize no longer requires payment</li>
+      </ul>
+      <p style="font-weight:500">History:</p>
+      <ul style="margin:8px 0 0 20px;opacity:.85;line-height:1.7">
+        <li>Added in total <b>128</b> interactive demos</li>
+        </ul>
     </div>
       </div>
     </div>
@@ -4827,7 +4824,7 @@ document.addEventListener('click',function(e){
   if(e.target===modal) closeSettings();
 });
 
-var hasBigAnnouncement=true;
+var hasBigAnnouncement=false;
 function openAnnouncement(){
   document.getElementById('announcement-modal').classList.add('open');
 }

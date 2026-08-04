@@ -1031,7 +1031,15 @@
       'educ.dpcdsb.org',
       'students.cnusd.k12.ca.us',
       'student.minaret.vic.edu.au',
-      'churchie.com.au'
+      'churchie.com.au',
+      'pausd.us',
+      'asdk12.net',
+      'denipl.com',
+      'schools.sfx.vic.edu.au',
+      'student.mfis.nsw.edu.au',
+      'judd.kent.sch.uk',
+      'proton.me',
+      'ddsbstudent.ca'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
