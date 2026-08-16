@@ -1,0 +1,41 @@
+- generic [active] [ref=f27e1]:
+  - generic [ref=f27e2]:
+    - generic [ref=f27e3]:
+      - heading "2048" [level=1] [ref=f27e4]
+      - generic [ref=f27e5]:
+        - generic [ref=f27e6]: 0 Score
+        - generic [ref=f27e7]: 0 Best
+    - generic [ref=f27e8]:
+      - paragraph [ref=f27e9]:
+        - text: Join the numbers and get to the
+        - strong [ref=f27e10]: 2048 tile!
+      - generic [ref=f27e11] [cursor=pointer]: New Game
+    - paragraph [ref=f27e34]:
+      - strong [ref=f27e35]: "How to play:"
+      - text: Use your
+      - strong [ref=f27e36]: arrow keys
+      - text: to move the tiles. When two tiles with the same number touch, they
+      - strong [ref=f27e37]: merge into one!
+    - separator [ref=f27e38]
+    - paragraph [ref=f27e39]:
+      - strong [ref=f27e40]: "Note:"
+      - text: This site is the official version of 2048. You can play it on your phone via
+      - link "http://git.io/2048." [ref=f27e41] [cursor=pointer]:
+        - /url: http://git.io/2048
+      - text: All other apps or sites are derivatives or fakes, and should be used with caution.
+    - separator [ref=f27e42]
+    - paragraph [ref=f27e43]:
+      - text: Created by
+      - link "Gabriele Cirulli." [ref=f27e44] [cursor=pointer]:
+        - /url: http://gabrielecirulli.com
+      - text: Based on
+      - link "1024 by Veewo Studio" [ref=f27e45] [cursor=pointer]:
+        - /url: https://itunes.apple.com/us/app/1024!/id823499224
+      - text: and conceptually similar to
+      - link "Threes by Asher Vollmer." [ref=f27e46] [cursor=pointer]:
+        - /url: http://asherv.com/threes/
+  - progressbar "Loading game" [ref=f27e47]:
+    - generic [ref=f27e48]:
+      - generic [ref=f27e49]: 23%
+      - generic [ref=f27e52]: 1276KB / --KB
+    - generic: Buffering... now with extra buffering.
