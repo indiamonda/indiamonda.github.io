@@ -4,7 +4,7 @@ const ALLOWED_ORIGINS = [
   'https://chat.jimmyqrg.com',
   'https://lausd.schoology.com',
   'https://unlinewize.jimmyqrg.com',
-  'https://abs-unlinewize.jimmyqrg.com',
+  'https://ulw-app.fly.dev',
   'https://mcraft.fly.dev',
   'https://rammerhead.fly.dev',
   'https://ulw-app.fly.dev',
