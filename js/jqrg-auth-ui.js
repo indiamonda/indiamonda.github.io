@@ -1047,7 +1047,9 @@
       'student.bmg.vic.edu.au',
       'nsseo.org',
       'student.mfis.nsw.edu.au',
-      'comsewogue.k12.ny.us'
+      'comsewogue.k12.ny.us',
+      'palmdalesd.org',
+      'perrytonisd.com'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
