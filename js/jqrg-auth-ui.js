@@ -180,6 +180,8 @@
       '}',
       '.jqrg-verify-info{font-size:12px;color:rgba(255,255,255,.7);line-height:1.4;padding:8px 10px;background:rgba(136,65,214,.12);border-radius:8px;border-left:3px solid #8841d6;margin-bottom:8px}',
       '.jqrg-verify-info strong{color:rgba(255,255,255,.9)}',
+      '.jqrg-verify-info.ok{color:#7affa0;background:rgba(122,255,160,.08);border-left-color:#34d399}',
+      '.jqrg-verify-info.ok strong{color:#b8ffd0}',
       '.jqrg-verify-row{display:flex;flex-direction:column;gap:6px}',
       '.jqrg-verify-row label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:rgba(255,255,255,.75)}',
       '.jqrg-verify-resend{background:none;border:0;color:#a78bfa;font-size:12px;cursor:pointer;padding:2px 0;text-decoration:underline;text-align:left}',
@@ -863,7 +865,7 @@
     }
     function stepBlockedReset() {
       clear(); H('Set a new password');
-      P('Your organization blocks external emails \u2014 email verification has been skipped. Set a new password below.');
+      P('Your organization blocks external emails, so we\u2019ve skipped email verification. Set a new password below.');
       var pwIn = INP({ type: 'password', placeholder: 'New password (6+ chars)' });
       var err = ERR();
       var sub = BTN('Recover & sign in', true);
@@ -1020,7 +1022,6 @@
       'student.medwayschools.org',
       'arcatasd.org',
       'indyde.org',
-      'jcpsnj.org',
       'forsythk12.org',
       'seattleschools.org',
       'students.lindenps.org',
@@ -1046,28 +1047,34 @@
       'student.hampton.k12.va.us',
       'student.bmg.vic.edu.au',
       'nsseo.org',
-      'student.mfis.nsw.edu.au',
       'comsewogue.k12.ny.us',
       'palmdalesd.org',
       'perrytonisd.com'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
-    /** Email domains allowed to register without verification (any address @domain). */
+    /** Email domains the owner allow-listed to skip verification (any address @domain). */
     var VERIFY_SKIP_DOMAINS = ['jcpsnj.org'];
+    function domainOf(email) {
+      return ((email || '').split('@')[1] || '').toLowerCase();
+    }
     function isBlockedDomain(email) {
-      var d = (email || '').split('@')[1];
-      return d && BLOCKED_DOMAINS.indexOf(d.toLowerCase()) !== -1;
+      var d = domainOf(email);
+      return d && BLOCKED_DOMAINS.indexOf(d) !== -1;
     }
     function isVerifySkipDomain(email) {
-      var d = (email || '').split('@')[1];
-      return d && VERIFY_SKIP_DOMAINS.indexOf(d.toLowerCase()) !== -1;
+      var d = domainOf(email);
+      return d && VERIFY_SKIP_DOMAINS.indexOf(d) !== -1;
     }
-    function shouldSkipEmailVerify(email) {
+    /** Returns 'bypass' if the address/domain is allow-listed to skip verification,
+     *  'blocked' if the organization blocks external mail (so we skip too), or null
+     *  if normal email verification is required. */
+    function emailVerifyReason(email) {
       var e = (email || '').trim().toLowerCase();
-      if (e && VERIFY_SKIP_EMAILS.indexOf(e) !== -1) return true;
-      if (isVerifySkipDomain(email)) return true;
-      return isBlockedDomain(email);
+      if (e && VERIFY_SKIP_EMAILS.indexOf(e) !== -1) return 'bypass';
+      if (isVerifySkipDomain(email)) return 'bypass';
+      if (isBlockedDomain(email)) return 'blocked';
+      return null;
     }
 
     var err = h('div', { class: 'jqrg-auth-error' });
@@ -1080,8 +1087,10 @@
       h('strong', null, 'ikunbeautiful@gmail.com'),
       '. The code is valid for 2 minutes.'
     ]);
+    var skipInfo = h('div', { class: 'jqrg-verify-info ok', style: 'display:none' },
+      'Good news \u2014 email verification isn\u2019t required for your email address. Just finish the form below and your account will be created right away.');
     var blockedInfo = h('div', { class: 'jqrg-verify-info', style: 'display:none;color:#fbbf24' },
-      'Your organization blocks external emails \u2014 email verification has been skipped.');
+      'Your organization blocks external emails, so we\u2019ve skipped email verification for you.');
     var codeInput = h('input', { type: 'text', name: 'email_code', inputmode: 'numeric', pattern: '[0-9]{6}', maxlength: '6', autocomplete: 'one-time-code', placeholder: '000000', style: 'font-size:1.2rem;letter-spacing:.35em;text-align:center;font-weight:700' });
     var resendTimer = h('span', null, '60');
     var resendBtn = h('button', { type: 'button', class: 'jqrg-verify-resend', disabled: 'disabled' }, ['Resend code (', resendTimer, 's)']);
@@ -1127,13 +1136,19 @@
       }, 1000);
     }
 
-    function activateBlockedSkip() {
+    function activateBlockedSkip(reason) {
       emailSkipped = true;
       emailCodeSent = true;
       sendCodeBtn.style.display = 'none';
       cantReceiveBtn.style.display = 'none';
       verifyRow.style.display = 'none';
-      blockedInfo.style.display = '';
+      skipInfo.style.display = 'none';
+      blockedInfo.style.display = 'none';
+      if (reason === 'blocked') {
+        blockedInfo.style.display = '';
+      } else {
+        skipInfo.style.display = '';
+      }
     }
 
     function doSendCode() {
@@ -1142,10 +1157,11 @@
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         err.textContent = 'Please enter a valid email address.'; return;
       }
-      if (shouldSkipEmailVerify(email)) { activateBlockedSkip(); return; }
+      var reason = emailVerifyReason(email);
+      if (reason) { activateBlockedSkip(reason); return; }
       sendCodeBtn.disabled = true; sendCodeBtn.textContent = 'Sending\u2026';
       Cloud.sendVerifyCode(email).then(function (resp) {
-        if (resp && resp.skipped) { activateBlockedSkip(); return; }
+        if (resp && resp.skipped) { activateBlockedSkip('blocked'); return; }
         emailCodeSent = true;
         sendCodeBtn.style.display = 'none';
         verifyInfo.style.display = '';
@@ -1184,7 +1200,10 @@
       var pw2 = form.elements['pw2'].value;
       if (!/^[a-z0-9]{1,32}$/.test(username)) { err.textContent = 'Username must be 1-32 lowercase letters or numbers.'; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
-      if (!emailSkipped && shouldSkipEmailVerify(email)) { activateBlockedSkip(); }
+      if (!emailSkipped) {
+        var reason = emailVerifyReason(email);
+        if (reason) activateBlockedSkip(reason);
+      }
       if (!emailSkipped) {
         if (!emailCodeSent) { err.textContent = 'Please send and enter the email verification code first.'; return; }
         if (!code || code.length !== 6) { err.textContent = 'Please enter the 6-digit verification code.'; return; }
@@ -1233,14 +1252,16 @@
           emailCodeSent = false;
           emailSkipped = false;
           verifyInfo.style.display = 'none';
+          skipInfo.style.display = 'none';
           blockedInfo.style.display = 'none';
           verifyRow.style.display = 'none';
           sendCodeBtn.style.display = '';
           cantReceiveMsg.style.display = 'none';
           if (resendInterval) { clearInterval(resendInterval); resendInterval = null; }
         }
-        if (shouldSkipEmailVerify(val)) {
-          activateBlockedSkip();
+        var reason = emailVerifyReason(val);
+        if (reason) {
+          activateBlockedSkip(reason);
         } else {
           sendCodeBtn.style.display = '';
           cantReceiveBtn.style.display = val ? '' : 'none';
@@ -1251,6 +1272,7 @@
     form.appendChild(cantReceiveBtn);
     form.appendChild(cantReceiveMsg);
     form.appendChild(verifyRow);
+    form.appendChild(skipInfo);
     form.appendChild(blockedInfo);
     form.appendChild(h('label', null, [
       'Display name (optional)',
