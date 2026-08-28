@@ -865,7 +865,7 @@
     }
     function stepBlockedReset() {
       clear(); H('Set a new password');
-      P('Your organization blocks external emails, so we\u2019ve skipped email verification. Set a new password below.');
+      P('Email verification was skipped for your email address. Set a new password below.');
       var pwIn = INP({ type: 'password', placeholder: 'New password (6+ chars)' });
       var err = ERR();
       var sub = BTN('Recover & sign in', true);
@@ -1018,6 +1018,7 @@
       'panthers.pequannock.org',
       'pickettk12.net',
       'student.sfx.vic.edu.au',
+      'student.vic.sfx.edu.au',
       'go.tahomasd.us',
       'student.medwayschools.org',
       'arcatasd.org',
@@ -1034,11 +1035,21 @@
       'student.minaret.vic.edu.au',
       'churchie.com.au',
       'pausd.us',
+      'acsd.org',
+      'acsd.org.com',
+      'agustibarbera.cat',
+      'ahschools.us',
       'asdk12.net',
       'denipl.com',
+      's.acsdsc.org',
       'schools.sfx.vic.edu.au',
+      'sstrojans.org',
+      'stratfordschools.net',
       'student.mfis.nsw.edu.au',
       'judd.kent.sch.uk',
+      'lompocschools.org',
+      'lwsd.org',
+      'my.cuhsd.org',
       'proton.me',
       'ddsbstudent.ca',
       'fommie.com',
@@ -1048,6 +1059,7 @@
       'student.bmg.vic.edu.au',
       'nsseo.org',
       'comsewogue.k12.ny.us',
+      'cross.edu.pl',
       'palmdalesd.org',
       'perrytonisd.com'
     ];
@@ -1080,6 +1092,7 @@
     var err = h('div', { class: 'jqrg-auth-error' });
     var emailCodeSent = false;
     var emailSkipped = false;
+    var forceCodeFlow = false;
     var resendInterval = null;
 
     var verifyInfo = h('div', { class: 'jqrg-verify-info', style: 'display:none' }, [
@@ -1091,6 +1104,8 @@
       'Good news \u2014 email verification isn\u2019t required for your email address. Just finish the form below and your account will be created right away.');
     var blockedInfo = h('div', { class: 'jqrg-verify-info', style: 'display:none;color:#fbbf24' },
       'Your organization blocks external emails, so we\u2019ve skipped email verification for you.');
+    var serverSkipInfo = h('div', { class: 'jqrg-verify-info ok', style: 'display:none' },
+      'Email verification was skipped for your email address \u2014 just finish the form below and your account will be created right away.');
     var codeInput = h('input', { type: 'text', name: 'email_code', inputmode: 'numeric', pattern: '[0-9]{6}', maxlength: '6', autocomplete: 'one-time-code', placeholder: '000000', style: 'font-size:1.2rem;letter-spacing:.35em;text-align:center;font-weight:700' });
     var resendTimer = h('span', null, '60');
     var resendBtn = h('button', { type: 'button', class: 'jqrg-verify-resend', disabled: 'disabled' }, ['Resend code (', resendTimer, 's)']);
@@ -1144,8 +1159,11 @@
       verifyRow.style.display = 'none';
       skipInfo.style.display = 'none';
       blockedInfo.style.display = 'none';
+      serverSkipInfo.style.display = 'none';
       if (reason === 'blocked') {
         blockedInfo.style.display = '';
+      } else if (reason === 'server') {
+        serverSkipInfo.style.display = '';
       } else {
         skipInfo.style.display = '';
       }
@@ -1157,11 +1175,11 @@
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         err.textContent = 'Please enter a valid email address.'; return;
       }
-      var reason = emailVerifyReason(email);
+      var reason = (!forceCodeFlow) ? emailVerifyReason(email) : null;
       if (reason) { activateBlockedSkip(reason); return; }
       sendCodeBtn.disabled = true; sendCodeBtn.textContent = 'Sending\u2026';
       Cloud.sendVerifyCode(email).then(function (resp) {
-        if (resp && resp.skipped) { activateBlockedSkip('blocked'); return; }
+        if (resp && resp.skipped) { activateBlockedSkip('server'); return; }
         emailCodeSent = true;
         sendCodeBtn.style.display = 'none';
         verifyInfo.style.display = '';
@@ -1226,7 +1244,20 @@
         });
       }).catch(function (e) {
         syncPromptInFlight = false;
-        err.textContent = (e && e.message) || 'Sign-up failed.';
+        var msg = (e && e.message) || 'Sign-up failed.';
+        if (msg.indexOf('Verification code is required') !== -1) {
+          // Server still requires a code for this address (skip lists drifted).
+          // Fall back to the normal code flow instead of leaving the user stuck.
+          emailSkipped = false; emailCodeSent = false; forceCodeFlow = true;
+          skipInfo.style.display = 'none';
+          serverSkipInfo.style.display = 'none';
+          blockedInfo.style.display = 'none';
+          verifyRow.style.display = 'none';
+          sendCodeBtn.style.display = '';
+          err.textContent = 'We couldn\u2019t skip verification for this email \u2014 send a code below and enter it to finish signing up.';
+        } else {
+          err.textContent = msg;
+        }
         submit.disabled = false; submit.textContent = 'Create account';
       });
     }});
@@ -1254,15 +1285,23 @@
           verifyInfo.style.display = 'none';
           skipInfo.style.display = 'none';
           blockedInfo.style.display = 'none';
+          serverSkipInfo.style.display = 'none';
           verifyRow.style.display = 'none';
+          forceCodeFlow = false;
           sendCodeBtn.style.display = '';
           cantReceiveMsg.style.display = 'none';
           if (resendInterval) { clearInterval(resendInterval); resendInterval = null; }
         }
         var reason = emailVerifyReason(val);
         if (reason) {
-          activateBlockedSkip(reason);
+          if (forceCodeFlow) {
+            sendCodeBtn.style.display = '';
+            cantReceiveBtn.style.display = '';
+          } else {
+            activateBlockedSkip(reason);
+          }
         } else {
+          forceCodeFlow = false;
           sendCodeBtn.style.display = '';
           cantReceiveBtn.style.display = val ? '' : 'none';
         }
@@ -1273,6 +1312,7 @@
     form.appendChild(cantReceiveMsg);
     form.appendChild(verifyRow);
     form.appendChild(skipInfo);
+    form.appendChild(serverSkipInfo);
     form.appendChild(blockedInfo);
     form.appendChild(h('label', null, [
       'Display name (optional)',
