@@ -1193,7 +1193,7 @@
 <script src="UnityProgress.js"></script>
 <script src="runtime.js"></script>
 <script>
-    var gameInstance = UnityLoader.instantiate("gameContainer", "https://cdn.jsdelivr.net/gh/gertdoro/UnityExplorer@cffa09e09790018403c996d37adb6c4450e8f6c6/Runtime/birds/birds.json", {
+    var gameInstance = UnityLoader.instantiate("gameContainer", "birds.json", {
         onProgress: UnityProgress,
         Module: {
             onRuntimeInitialized: function () {
