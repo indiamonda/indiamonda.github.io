@@ -150,7 +150,7 @@ h1{font-size:20px;font-weight:700;letter-spacing:.3px;background:linear-gradient
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+<script src="/js/vendor/gif.js"></script>
 <script>
 (function () {
   /* ── helpers ── */
@@ -236,7 +236,7 @@ h1{font-size:20px;font-weight:700;letter-spacing:.3px;background:linear-gradient
         quality: opts.quality || 10,
         width: opts.width,
         height: opts.height,
-        workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+        workerScript: '/js/vendor/gif.worker.js',
         repeat: opts.loop === false ? -1 : 0
       });
       frames.forEach(function (f) {

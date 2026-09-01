@@ -571,10 +571,10 @@
   function loadMobileNetClassify(dataUrl) {
     if (!__jqrgTfMobilenetPromise) {
       __jqrgTfMobilenetPromise = loadScriptOnce(
-        'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js'
+        '/js/vendor/tf.min.js'
       ).then(function () {
         return loadScriptOnce(
-          'https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.js'
+          '/js/vendor/mobilenet.js'
         );
       });
     }
@@ -2026,8 +2026,8 @@
    * ==================================================================*/
   var katexLoading = null;
   var KATEX_CDNS = [
-    { css: 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
-      js:  'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js' },
+    { css: '/js/vendor/katex.min.css',
+      js:  '/js/vendor/katex.min.js' },
     { css: 'https://unpkg.com/katex@0.16.11/dist/katex.min.css',
       js:  'https://unpkg.com/katex@0.16.11/dist/katex.min.js' },
     { css: 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css',
@@ -2903,7 +2903,7 @@
     if (tesseractLoaded) return tesseractLoaded;
     tesseractLoaded = new Promise(function (resolve, reject) {
       var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+      s.src = '/js/vendor/tesseract.min.js';
       s.onload = function () { resolve(window.Tesseract); };
       s.onerror = function () { tesseractLoaded = null; reject(new Error('Failed to load Tesseract.js')); };
       document.head.appendChild(s);
@@ -2914,7 +2914,10 @@
   function extractTextFromImage(dataUrl) {
     return loadTesseract().then(function (Tesseract) {
       return Tesseract.recognize(dataUrl, 'eng', {
-        logger: function () {}
+        logger: function () {},
+        workerPath: '/js/vendor/tesseract.worker.min.js',
+        langPath: '/js/vendor',
+        corePath: '/js/vendor'
       }).then(function (result) {
         return (result.data && result.data.text || '').trim();
       });
