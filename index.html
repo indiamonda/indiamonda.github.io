@@ -3272,6 +3272,33 @@ body.ui-hidden .top-bar > .tb-actions > *:not(.hide-ui-btn) *::after{
       </div>
     </div>
   </div>
+  <style>
+.home-chat-banner{display:flex;align-items:center;gap:16px;margin:16px 0 0;padding:18px 20px;border-radius:18px;background:linear-gradient(120deg,rgba(16,185,129,.14),rgba(6,182,212,.12) 55%,rgba(176,122,255,.1));border:1px solid rgba(52,211,153,.28);color:#fff;text-decoration:none;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease}
+.home-chat-banner:hover{transform:translateY(-3px);border-color:rgba(52,211,153,.5);box-shadow:0 16px 40px rgba(0,0,0,.35),0 0 30px rgba(52,211,153,.15)}
+.home-chat-banner-icon{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#059669,#10b981 55%,#22d3ee);box-shadow:0 8px 20px rgba(16,185,129,.4);flex-shrink:0}
+.home-chat-banner-icon svg{width:24px;height:24px;color:#fff}
+.home-chat-banner-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.home-chat-banner-title{display:flex;align-items:center;gap:8px;font-size:16.5px;font-weight:700;letter-spacing:.2px}
+.home-chat-banner-live{font-size:10px;font-weight:800;letter-spacing:.8px;padding:3px 8px;border-radius:999px;background:rgba(52,211,153,.18);border:1px solid rgba(52,211,153,.5);color:#34d399;text-transform:uppercase}
+.home-chat-banner-desc{font-size:13px;opacity:.72;line-height:1.4}
+.home-chat-banner-cta{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:13.5px;font-weight:600;color:#fff;flex-shrink:0;transition:background .25s ease,border-color .25s ease}
+.home-chat-banner-cta svg{width:14px;height:14px;transition:transform .25s ease}
+.home-chat-banner:hover .home-chat-banner-cta{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3)}
+.home-chat-banner:hover .home-chat-banner-cta svg{transform:translateX(3px)}
+@media (max-width:600px){.home-chat-banner{flex-wrap:wrap;gap:12px;padding:14px}.home-chat-banner-cta{width:100%;justify-content:center}}
+</style>
+  <a class="home-chat-banner" href="https://chat.jimmyqrg.com" target="_blank" rel="noopener" aria-label="Open JimmyQrg Chat">
+    <span class="home-chat-banner-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </span>
+    <span class="home-chat-banner-copy">
+      <span class="home-chat-banner-title">JimmyQrg Chat <span class="home-chat-banner-live">Live</span></span>
+      <span class="home-chat-banner-desc">The live group chat &mdash; jump in and talk with everyone.</span>
+    </span>
+    <span class="home-chat-banner-cta">Open chat
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </span>
+  </a>
 
   <template data-auth-required="recent-section"><div class="home-section recent-1-section">
     <div class="home-section-head">
@@ -3487,6 +3514,8 @@ body.ui-hidden .top-bar > .tb-actions > *:not(.hide-ui-btn) *::after{
       <hr style="border:1px solid var(--border-light);margin:16px 0">
       <p style="font-weight:500">Latest updates:</p>
       <ul style="margin:8px 0 12px 20px;opacity:.85;line-height:1.7">
+        <li>Browser Quest is now live and fully playable &mdash; fixed the broken connection (now on browser-quest.fly.dev)</li>
+        <li>Venory now knows the full game library &mdash; every game on the site, with details</li>
         <li>Fixed Eaglercraft 1.5.2, 1.8.8, 1.8.8 WASM, 1.12.2, 1.12.2 WASM, added h*cks to 1.12.2 WASM by <a href="https://www.codeberg.org/googledocs/">codeberg.org/googledocs</a></li>  
         <li>Update google cloaks</li>
         <li>Added Osu</li>
@@ -3939,7 +3968,7 @@ var _D1=[
   {n:_('QnJpZGQgSnVtcA=='),img:_("YnJpZGQtanVtcA=="),url:_("L3EvZy9icmlkZC1qdW1wL1YxLjMuMS8="),tags:["featured","touch","jqrg"]},
   {n:_('QnJvdGF0bw=='),img:_("YnJvdGF0bw=="),url:_("L2pnL2cvYnJvdGF0by8="),tags:["featured","touch"]},
   {n:_('QnVja3Nob3QgUm91bGV0dGU='),img:_("YnVja3Nob3Qtcm91bGV0dGU="),url:_("L2pnL2cvYnVja3Nob3Qtcm91bGV0dGUv"),tags:["featured"]},
-  {n:_('QnJvd3NlciBRdWVzdA=='),img:_("YnJvd3Nlci1xdWVzdA=="),url:_("L3EvZy9icm93c2VyLXF1ZXN0Lw=="),tags:["featured"]},
+  {n:_('QnJvd3NlciBRdWVzdA=='),img:_("YnJvd3Nlci1xdWVzdA=="),url:_("aHR0cHM6Ly9icm93c2VyLXF1ZXN0LmZseS5kZXY="),tags:["featured"],wo:true},
   {n:_('Q2FuZHkgSnVtcA=='),img:_("Y2FuZHktanVtcA=="),url:_("L3EvZy9jYW5keS1qdW1wLw=="),tags:["touch"]},
   {n:_('Q2FzZSBDbGlja2Vy'),img:_("Y3Nnbw=="),url:_("L3EvZy9jc2dvLw=="),tags:["touch"]},
   {n:_('Q2F0R3VuIElzbGFuZA=='),img:_("Y2F0Z3VuLWlzbGFuZA=="),url:_("L3EvZy9jYXRndW4taXNsYW5kLw=="),tags:["jqrg"]},
