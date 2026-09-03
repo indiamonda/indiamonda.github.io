@@ -1066,7 +1066,11 @@
       'schoolstvusd.org',
       'clovis-schools.org',
       'hci.edu.sg',
-      'gctschools.net'
+      'gctschools.net',
+      'wakefieldschools.org',
+      'st.cabarrus.k12.nc.us',
+      'wcusd200.org',
+      'student.myscps.us'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
