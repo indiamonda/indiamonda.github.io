@@ -1061,7 +1061,12 @@
       'comsewogue.k12.ny.us',
       'cross.edu.pl',
       'palmdalesd.org',
-      'perrytonisd.com'
+      'perrytonisd.com',
+      'mvisd.org',
+      'schoolstvusd.org',
+      'clovis-schools.org',
+      'hci.edu.sg',
+      'gctschools.net'
     ];
     /** Exact addresses allowed to register without a verification code (in addition to BLOCKED_DOMAINS). */
     var VERIFY_SKIP_EMAILS = ['jlsniperelite4@outlook.com'];
